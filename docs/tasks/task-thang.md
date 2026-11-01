@@ -1,0 +1,58 @@
+# Kế Hoạch & Bảng Theo Dõi Task — Thắng
+
+> **Thành viên:** Thắng (Thắng VLQ)  
+> **Vai trò:** **Kiến Trúc Hệ Thống, Quản Trị Dự Án & Tổng Hợp Sản Phẩm** (MVVM Skeleton, DI & Router, Hồ Sơ Tài Liệu docs/, Feature Freeze, Tổng Hợp Report, Slides, Video, Rà Soát Nộp Bài)  
+> **Tổng task:** 28 tasks | **Đã hoàn thành:** 0/28 (0%)
+
+---
+
+## 1. Trách Nhiệm Trọng Tâm
+1. **Kiến Trúc Ứng Dụng & Tài Liệu Kỹ Thuật Ban Đầu:**
+   - Đưa tài liệu Lab 2 vào kết nối, viết [`docs/design-traceability.md`](../design-traceability.md) trước khi tiến hành code tính năng.
+   - Chủ trì họp thống nhất Service Interfaces và tên ViewModels; dựng cấu trúc thư mục `lib/` và cơ chế DI với Provider.
+   - Soạn thảo [`docs/architecture.md`](../architecture.md) đạt chuẩn Mục 5 (Mermaid diagram phân tầng phụ thuộc 1 chiều, Sequence diagram cho full flow, bảng ánh xạ ViewModel $\leftrightarrow$ Service).
+   - Triển khai cơ chế Routing theo Auth State (`AuthGate`: signed-out $\to$ Sign-in, signed-in $\to$ Home) và xử lý nút Back hợp lý ở mọi nơi.
+2. **Kiểm Soát Chất Lượng & Đóng Gói (Feature Freeze & AI Review):**
+   - Thực hiện kiểm thử thủ công mọi failure case của 6 dịch vụ Firebase (tắt mạng, từ chối quyền, hủy tác vụ) và ghi nhận vào bảng.
+   - Thiết lập mốc **Feature Freeze (Milestone M5)**: gắn tag `v1.0-rc`, thông báo toàn nhóm dừng thêm tính năng để chuyển sang giai đoạn kiểm thử ARTEMIS.
+   - Chủ trì tổng hợp [`docs/code-review.md`](../code-review.md) từ PR của cả 4 thành viên (đảm bảo $\ge 5$ findings, $\ge 2$ nhóm loại lỗi, $\ge 3$ fixes liên kết commit, kê khai AI tools).
+3. **Tổng Hợp Báo Cáo, Slides, Video & Nộp Bài:**
+   - Biên tập và đóng gói file Báo cáo tổng thể `report/Lab03_<StudentID>.pdf` (8–12 trang).
+   - Thiết kế và dàn trang bộ Slide thuyết trình `slides/Lab03_<StudentID>_slides.pdf` (12–15 slide).
+   - Biên tập và upload Video Demo tổng thể (5–10 phút), quay màn hình thiết bị thật kết hợp đối chiếu Firebase Console.
+   - Hoàn thiện `README.md` gốc, quét bảo mật không để lộ API keys/keystores, kiểm tra mở link ở chế độ ẩn danh và nộp bài chính thức.
+
+---
+
+## 2. Bảng Danh Sách 28 Task Chi Tiết
+
+| ID | Giai đoạn | Tên Task | Hỗ trợ | Phụ thuộc | Đầu ra / Bằng chứng | Tiêu chí (Điểm) | Ưu tiên | Tuần | Hạn | Trạng thái | Ghi chú |
+|:---|:---|:---|:---:|:---:|:---|:---|:---:|:---:|:---:|:---:|:---|
+| **S0-3-VLQ** | 0. Chuẩn bị | Cài trên máy: Flutter stable, FlutterFire CLI, Android device/emulator, ADB | — | — | `flutter doctor` không lỗi | — | Cao | 1 | | Chưa bắt đầu | Chuẩn bị máy |
+| **S0-6** | 0. Chuẩn bị | Đưa đầu vào Lab 2 vào kết nối: link Figma, `persona.md`, `user-flow.md`, `DESIGN.md`, `screen-spec.md`, `flutter-handoff.md` | Hoàng | — | Tài liệu Lab 2 truy cập được | Fidelity 0.5 | Cao | 1 | | Chưa bắt đầu | Kế thừa Lab 2 |
+| **S1-1** | 1. Plan | Viết `docs/design-traceability.md` từ `screen-spec.md` & `flutter-handoff.md`: screen ($\ge 8$), flows (3 flows), components $\to$ routes, widgets | Hoàng | S0-6 | `docs/design-traceability.md` | Flows 1.0; Fidelity 0.5 | Cao | 1 | | Chưa bắt đầu | Viết trước khi code |
+| **S2-1** | 2. Architect | Chủ trì họp chốt interface các service (Auth, Storage, Messaging, Analytics, Crash, RemoteConfig, Data) & tên ViewModel | Hoàng, Charlie, Thái An | S1-1, S1-2 | Danh sách interface thống nhất | Layer 0.5 | Cao | 1 | | Chưa bắt đầu | Đường găng cốt lõi |
+| **S2-2** | 2. Architect | Dựng khung `lib/` (models, services, firebase, viewmodels, screens, widgets, theme, utils) + DI bằng Provider | — | S2-1 | Skeleton chạy được | Layer 0.5; State 0.25 | Cao | 1 | | Chưa bắt đầu | Đã hoàn thành barebone |
+| **S2-5** | 2. Architect | Viết `docs/architecture.md`: thư mục (1 dòng/folder), Mermaid layer diagram, sequence diagram 1 flow, bảng VM–service | — | S2-2 | `docs/architecture.md` | Layer 0.5 | Trung bình | 2 | | Chưa bắt đầu | Khớp với code thực |
+| **S3-6** | 3. Integrate | Routing theo auth state (signed out $\to$ Sign-in, signed in $\to$ Home); nút Back hoạt động chính xác ở mọi nơi | Charlie | S3-3, S2-4 | Router + AuthGate | Flows 1.0 | Cao | 2 | | Chưa bắt đầu | Không để dead-ends |
+| **S5-10** | 5. Instrument | Thử nghiệm thủ công mọi failure case của 6 dịch vụ (ngắt mạng, từ chối quyền, hủy thao tác) và ghi kết quả | Hoàng, Charlie, Thái An | S5-9 | Bảng kiểm tra failure cases | States 0.75; Firebase 2.0 | Cao | 3 | | Chưa bắt đầu | Kiểm thử độ bền |
+| **S6-1** | 6. Test | **Feature freeze:** Chốt bản build ổn định, gắn git tag (`v1.0-rc`), thông báo toàn nhóm (chỉ sửa bug sau mốc này) | — | S4-17, S5-10 | Git tag release candidate | Test quality 0.5 | Cao | 3 | | Chưa bắt đầu | Mốc Milestone M5 |
+| **S6-12** | 6. Test | Sửa lỗi ứng dụng / bổ sung thuộc tính Semantics khi kiểm thử ARTEMIS phát hiện lỗi (thuộc phạm vi của mình) | — | S6-9 | Fix commit | Test quality 0.5 | Trung bình | 4 | | Chưa bắt đầu | Fix theo log ARTEMIS |
+| **S7-1-VLQ** | 7. Review | Mở PR cho phần của mình; chạy $\ge 1$ công cụ AI review (CodeRabbit/Copilot/SonarCloud); lưu output | — | S6-1 | PR + output trong `evidence/review/` | Review 0.5 | Cao | 4 | | Chưa bắt đầu | AI review trên PR |
+| **S7-2-VLQ** | 7. Review | Ghi $\ge 1-2$ findings (file:dòng, loại, tóm tắt), quyết định Accept/Modify/Reject kèm lý do; kê khai AI tools | — | S7-1-VLQ | Dòng ghi trong `code-review.md` | Findings 0.25 | Cao | 4 | | Chưa bắt đầu | Lý do định lượng |
+| **S7-3-VLQ** | 7. Review | Sửa $\ge 1$ finding đã chấp nhận; commit riêng ghi ID finding; dẫn link commit vào bảng | — | S7-2-VLQ | Fix commit liên kết | Fixes 0.25 | Cao | 4 | | Chưa bắt đầu | Commit chuẩn format |
+| **S7-4** | 7. Review | Tổng hợp `docs/code-review.md`: $\ge 5$ findings, $\ge 2$ loại, đầy đủ quyết định + link commit, mục Disclosure AI tools | Hoàng, Charlie, Thái An | S7-2-VLQ, S7-2-HD, S7-2-CM, S7-2-TA | `docs/code-review.md` | Review 0.5 | Cao | 4 | | Chưa bắt đầu | Mốc Milestone M7 |
+| **S8-1** | 8. Report | Báo cáo: tổng quan + Lab 2 recap (persona, 3 flow, success criterion); traceability & deviations; MVVM; design system; lessons | — | S4-17, S2-5, S7-4 | Phần báo cáo của Thắng | Cả rubric | Cao | 4 | | Chưa bắt đầu | Phần đầu báo cáo |
+| **S8-5** | 8. Report | Ghép hoàn chỉnh `report/Lab03_<StudentID>.pdf` (8–12 trang); mọi claim “chạy được” đều có ảnh/link bằng chứng | Hoàng, Charlie, Thái An | S8-1, S8-2, S8-3, S8-4 | `report/Lab03_<StudentID>.pdf` | Mọi tiêu chí | Cao | 4 | | Chưa bắt đầu | Không để thiếu ảnh |
+| **S8-9** | 8. Report | Soạn Slide: Topic/Persona/Success criterion, kiến trúc MVVM, design system in code, code review, lessons | — | S8-1 | Phần slide của Thắng | Slides 1.0 | Cao | 4 | | Chưa bắt đầu | Slide mở đầu |
+| **S8-10** | 8. Report | Ghép hoàn chỉnh `slides/Lab03_<StudentID>_slides.pdf` (12–15 trang, mỗi slide 1 thông điệp, link docs/ thay vì copy) | Hoàng, Charlie, Thái An | S8-6, S8-7, S8-8, S8-9 | `slides/Lab03_<StudentID>_slides.pdf` | Slides 1.0 | Cao | 4 | | Chưa bắt đầu | 12-15 slides |
+| **S8-14** | 8. Report | Quay video: Phần mở đầu giới thiệu dự án, trình bày 1 finding code review và cách sửa | — | S7-3-VLQ | Clip của Thắng | Video 1.0 | Cao | 4 | | Chưa bắt đầu | Mở đầu video |
+| **S8-15** | 8. Report | Biên tập & ghép Video demo 5–10 phút (quay thật, không dựng kết quả); upload YouTube/Drive; đặt link public | Hoàng, Charlie, Thái An | S8-11, S8-12, S8-13, S8-14 | Link video công khai | Video 1.0 | Cao | 4 | | Chưa bắt đầu | 5-10 phút |
+| **S8-16** | 8. Report | Hoàn thiện `README.md`: topic, API, cách chạy app và test, pinned versions, AI tools, link video, deliverable map | Hoàng, Charlie, Thái An | S8-15 | `README.md` | Mục 9 | Cao | 4 | | Chưa bắt đầu | Đầy đủ bản đồ file |
+| **S8-17-VLQ** | 8. Report | Cập nhật worklog cá nhân `docs/worklog-thang.md` để đối chiếu lịch sử Git | — | S8-16 | `docs/worklog-thang.md` | Mục 11 | Thấp | 4 | | Chưa bắt đầu | Tùy chọn kiểm tra |
+| **S9-1** | 9. Nộp bài | Kiểm tra quét bảo mật: Không có secret trong repo (service account, API key, keystore); kiểm tra toàn bộ git log | — | S8-16 | Rà soát sạch sẽ | Mục 9, 11 | Cao | 4 | | Chưa bắt đầu | Quét git history |
+| **S9-2** | 9. Nộp bài | Đối chiếu Project ID trên các ảnh chụp console với file `google-services.json` (bắt buộc phải trùng khớp) | Charlie | S8-5 | Khớp project ID | Mục 11 | Cao | 4 | | Chưa bắt đầu | Tiêu chí chính chủ |
+| **S9-3** | 9. Nộp bài | Mở repo, báo cáo PDF, slide PDF, video link bằng cửa sổ ẩn danh (incognito); sửa quyền truy cập nếu bị chặn | — | S8-16 | Mở thành công cả 4 | Access rule | Cao | 4 | | Chưa bắt đầu | Tránh điểm 0 |
+| **S9-4** | 9. Nộp bài | Kiểm tra lịch sử Git: Commit rải đều theo thời gian, đúng thứ tự các giai đoạn; đạt số commit/ngày tối thiểu | — | S8-16 | `git log` đạt chuẩn | Mục 11 | Cao | 4 | | Chưa bắt đầu | Không commit dồn |
+| **S9-5-VLQ** | 9. Nộp bài | Luyện vấn đáp 5 phút: chạy 1 test ARTEMIS, đổi 1 giá trị Remote Config live, giải thích 1 ViewModel và 1 review | — | S8-16 | Sẵn sàng vấn đáp | Mục 11 | Cao | 4 | | Chưa bắt đầu | Nắm vững toàn bộ |
+| **S9-6** | 9. Nộp bài | Nộp bài chính thức: Điền link repo GitHub, nộp Report PDF, Slide PDF, link video demo | — | S9-1..S9-4 | Đã nộp thành công | — | Cao | 4 | | Chưa bắt đầu | Hoàn tất môn học |

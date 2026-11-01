@@ -1,0 +1,65 @@
+# Miscellaneous
+*.class
+*.log
+*.pyc
+*.swp
+.DS_Store
+.atom/
+.build/
+.buildlog/
+.history
+.svn/
+.swiftpm/
+migrate_working_dir/
+
+# IntelliJ related
+*.iml
+*.ipr
+*.iws
+.idea/
+
+# VS Code
+.vscode/
+
+# Flutter/Dart/Pub related
+**/doc/api/
+**/ios/Flutter/.last_build_id
+.dart_tool/
+.flutter-plugins-dependencies
+.pub-cache/
+.pub/
+/build/
+/coverage/
+
+# Android build artifacts & keystores
+/android/app/debug
+/android/app/profile
+/android/app/release
+*.keystore
+*.jks
+key.properties
+
+# Secrets & Environment variables (Handout Section 9 & 11)
+# Do NOT commit service-account keys, API secrets or keystores.
+# Android google-services.json may be committed as access is controlled by security rules.
+*.env
+*.env.*
+!*.env.example
+secrets/
+service-account*.json
+firebase-adminsdk*.json
+
+# Python & ARTEMIS E2E testing
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.venv/
+venv/
+env/
+.uv/
+
+# Symbolication & Obfuscation
+app.*.symbols
+app.*.map.json
+.widget_preview/
