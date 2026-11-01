@@ -7,9 +7,10 @@
 ---
 
 ## 1. Trách Nhiệm Trọng Tâm
-1. **Dữ Liệu Thật & ViewModels Chuẩn MVVM:**
-   - Chốt nguồn dữ liệu thật (Firestore hoặc REST API); tuyệt đối **không dùng dữ liệu hard-coded hoặc mock data** trong bản nộp cuối.
-   - Xây dựng Data Models (`lib/models/`) và triển khai `DataService` phía sau interface; bắt exception và chuyển hóa thành application errors dễ hiểu.
+1. **Dữ Liệu Thật & ViewModels Chuẩn MVVM (Đón đầu Final Assignment):**
+   - Chốt chuẩn hóa 100% bằng **Cloud Firestore** (`users`, `recipes`, `meal_plans`); tuyệt đối **không dùng dữ liệu hard-coded hoặc mock data**.
+   - Xây dựng Data Models (`lib/models/`) đón đầu Assignment: `UserModel` (có sẵn `role: 'user'`), `MealPlan` (có sẵn `status: 'draft'`).
+   - Triển khai `DataService` kết nối Firestore phía sau interface; bắt exception và chuyển hóa thành application errors dễ hiểu.
    - Xây dựng các ViewModels (`lib/viewmodels/`) với **explicit state model** (`loading`, `empty`, `error`, `data`) cho mọi màn hình nạp dữ liệu. Đảm bảo toàn bộ business logic (lọc, tính đạm, validate) nằm trong ViewModel/Service, **tuyệt đối không để trong hàm `build()`**.
 2. **Triển Khai 3 User Flows & 10 Màn Hình Lab 2:**
    - **Flow 1 (S01, S02, S03, S04, S10):** Lập và lưu thực đơn 7 ngày. Xử lý `S03 Loading` $\to$ `S04 Result`; xử lý `Generation Error` và `Save Error` có nút `Retry` và `Back`.
@@ -31,9 +32,9 @@
 | ID | Giai đoạn | Tên Task | Hỗ trợ | Phụ thuộc | Đầu ra / Bằng chứng | Tiêu chí (Điểm) | Ưu tiên | Tuần | Hạn | Trạng thái | Ghi chú |
 |:---|:---|:---|:---:|:---:|:---|:---|:---:|:---:|:---:|:---:|:---|
 | **S0-3-HD** | 0. Chuẩn bị | Cài trên máy: Flutter stable, FlutterFire CLI, Android device/emulator, ADB | — | — | `flutter doctor` không lỗi | — | Cao | 1 | | Chưa bắt đầu | Chuẩn bị máy |
-| **S1-2** | 1. Plan | Chốt nguồn dữ liệu (REST API / Firestore), kiểm tra quota/rate-limit, liệt kê nội dung từng màn theo `screen-spec.md` | Thắng | S0-1 | Bản ghi chú nguồn dữ liệu | Data 0.75 | Cao | 1 | | Chưa bắt đầu | Cấm mock data |
+| **S1-2** | 1. Plan | Chốt nguồn dữ liệu Cloud Firestore (chuẩn hóa schema `users`, `recipes`, `meal_plans` đón đầu Assignment), cấm mock data | Thắng | S0-1 | Bản schema Firestore | Data 0.75 | Cao | 1 | | Chưa bắt đầu | Firestore 100% |
 | **S1-5** | 1. Plan | Thiết kế bổ sung màn Sign-in & Profile (kèm Firebase demo area) trên Figma Page 03 & nối prototype Page 06 | Charlie | S0-6 | Figma Page 03/06 cập nhật | Fidelity 0.5; Flows 1.0 | Cao | 1 | | Chưa bắt đầu | Giữ design system |
-| **S4-1** | 4. Features | Xây dựng Data Models + `DataService` sau interface; chuyển exception thành app errors; KHÔNG mock data | — | S2-1, S1-2 | `lib/models/`, `lib/services/` | Data 0.75 | Cao | 2 | | Chưa bắt đầu | Quy tắc MVVM |
+| **S4-1** | 4. Features | Xây dựng Data Models (User role, MealPlan status) + `DataService` Firestore sau interface; chuyển exception thành app errors | — | S2-1, S1-2 | `lib/models/`, `lib/services/` | Data 0.75 | Cao | 2 | | Chưa bắt đầu | Data Firestore 100% |
 | **S4-2** | 4. Features | Xây dựng ViewModels + explicit state model (loading/empty/error/data); tách triệt để logic ra khỏi hàm `build()` | — | S4-1 | `lib/viewmodels/` | Layer 0.5; State 0.25 | Cao | 2 | | Chưa bắt đầu | Quản lý state |
 | **S4-3** | 4. Features | Cung cấp dữ liệu thực đơn đang xem (getter/model) để Charlie tích hợp module sinh file PDF | Charlie | S4-2 | API nội bộ cho `ReportService` | Data 0.75 | Cao | 2 | | Chưa bắt đầu | Kết nối với PDF |
 | **S4-4** | 4. Features | **Flow 1 (S01, S02, S03, S04, S10):** Lập & lưu thực đơn 7 ngày; Loading $\to$ S04; Error tại S03/S04 có Retry + Back | Thắng | S4-2, S2-4 | Flow 1 chạy end-to-end | Flows 1.0 | Cao | 2 | | Chưa bắt đầu | Mốc Milestone M3 |

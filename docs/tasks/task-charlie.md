@@ -12,9 +12,9 @@
    - Xây dựng 9 widget dùng chung trong `lib/widgets/` (Button, TextField, Card, Navigation, AppBar, Dialog, Loading, Empty, Error) với đầy đủ variants/states, touch target $\ge 48$ dp, Semantics label.
 2. **Firebase Auth, Storage, FCM & Demo Screens:**
    - Cấu hình Firebase (`flutterfire configure`), nạp `google-services.json`, đăng ký mã SHA-1 của cả 4 máy thành viên.
-   - Triển khai Google Sign-In & Sign-Out (không crash khi hủy/mất mạng, xóa data khi sign-out).
+   - Triển khai Google Sign-In & Sign-Out (không crash khi hủy/mất mạng, xóa data khi sign-out); ghi nhận user vào Firestore `users/{uid}` với `role: 'user'` mặc định.
    - Thiết lập `firebase/storage.rules` (chỉ user đọc/ghi trong thư mục `reports/{uid}/...`).
-   - Viết `ReportService` (sinh PDF thực đơn) và `StorageService` (upload có thanh tiến trình và hiển thị download URL).
+   - Viết `ReportService` (sinh PDF thực đơn độc lập lưu local) và `StorageService` (upload có thanh tiến trình và hiển thị download URL phục vụ Lab 3).
    - Tích hợp FCM (nhận thông báo ở cả 3 trạng thái: foreground, background, terminated; mở màn hình liên quan khi chạm).
    - Dựng màn hình Sign-in và màn hình Profile kèm **Firebase Demo Area**.
 3. **Testing, AI Review & Bàn giao:**
@@ -34,7 +34,7 @@
 | **S2-4** | 2. Architect | Xây dựng 9 widget dùng chung (Button, TextField, Card, Navigation, AppBar, Dialog, Loading, Empty, Error) có variants/states, Semantics, $\ge 48$ dp | Hoàng | S2-3 | Thư mục `lib/widgets/` | Fidelity 0.5; A11y 0.25 | Cao | 2 | | Chưa bắt đầu | Nền tảng cho UI |
 | **S3-1** | 3. Integrate | Chạy `flutterfire configure`, tích hợp `google-services.json`; ghim phiên bản trong `pubspec.yaml` | — | S0-4, S2-2 | Firebase khởi tạo được | Firebase 2.0 | Cao | 2 | | Chưa bắt đầu | Ghim version |
 | **S3-2** | 3. Integrate | Đăng ký SHA-1 (debug) của máy cả 4 thành viên vào Firebase project console | Thắng, Hoàng, Thái An | S3-1 | Mọi máy đăng nhập được | Auth 0.25 | Cao | 2 | | Chưa bắt đầu | Lấy SHA-1 qua Gradle |
-| **S3-3** | 3. Integrate | Xây dựng `AuthService` + Google Sign-In; xử lý hủy đăng nhập / mất mạng có thông báo rõ ràng (không crash) | — | S3-2, S2-1 | Sign-in chạy mượt mà | Auth 0.25 | Cao | 2 | | Chưa bắt đầu | Không gọi SDK ở UI |
+| **S3-3** | 3. Integrate | Xây dựng `AuthService` + Google Sign-In; lưu doc `users/{uid}` có `role: 'user'`; xử lý hủy/mất mạng rõ ràng (không crash) | — | S3-2, S2-1 | Sign-in chạy mượt mà | Auth 0.25 | Cao | 2 | | Chưa bắt đầu | Gắn role user Firestore |
 | **S3-4** | 3. Integrate | Dựng màn hình Sign-in (Google) theo thiết kế bổ sung ở S1-5, sử dụng 100% widget design system | Thắng | S2-4, S1-5 | Màn hình Sign-in | Flows 1.0 | Cao | 2 | | Chưa bắt đầu | Chuẩn tokens |
 | **S3-5** | 3. Integrate | Xử lý Sign-out: xóa toàn bộ dữ liệu người dùng cục bộ, điều hướng quay về màn hình Sign-in | — | S3-3 | Sign-out chạy được | Auth 0.25 | Cao | 2 | | Chưa bắt đầu | Xóa session |
 | **S3-7** | 3. Integrate | Viết `firebase/storage.rules`: mỗi user chỉ đọc/ghi `reports/{uid}/...`; deploy rules lên console | — | S3-1 | `firebase/storage.rules` | Storage 0.25 | Cao | 2 | | Chưa bắt đầu | Rule bảo mật per-user |

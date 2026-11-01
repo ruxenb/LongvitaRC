@@ -1,7 +1,114 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:provider/provider.dart';
 
-void main() {
-  runApp(const LongvitaApp());
+// Services & Interfaces
+import 'services/i_auth_service.dart';
+import 'services/auth_service.dart';
+import 'services/i_data_service.dart';
+import 'services/data_service.dart';
+import 'services/i_report_service.dart';
+import 'services/report_service.dart';
+
+// Firebase Helpers
+import 'firebase/analytics_service.dart';
+import 'firebase/crashlytics_service.dart';
+import 'firebase/remote_config_service.dart';
+import 'firebase/storage_service.dart';
+import 'firebase/notification_service.dart';
+
+// ViewModels
+import 'viewmodels/auth_viewmodel.dart';
+import 'viewmodels/meal_plan_viewmodel.dart';
+import 'viewmodels/ingredient_viewmodel.dart';
+import 'viewmodels/profile_viewmodel.dart';
+
+// Theme & Screens
+import 'theme/app_theme.dart';
+import 'screens/auth_gate.dart';
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // Initialize Firebase (safely catching if unconfigured in local test environments)
+  try {
+    await Firebase.initializeApp();
+  } catch (e) {
+    debugPrint('Firebase.initializeApp warning (skipping if in mock/test): $e');
+  }
+
+  // Create Firebase singletons
+  final analytics = AnalyticsService();
+  final crashlytics = CrashlyticsService();
+  final remoteConfig = RemoteConfigService();
+  final storage = StorageService();
+  final notification = NotificationService();
+
+  // Try background init for Remote Config & FCM
+  try {
+    await remoteConfig.initialize();
+    await notification.initialize();
+  } catch (e) {
+    debugPrint('Services background initialization note: $e');
+  }
+
+  // Create Service instances
+  final IAuthService authService = AuthService();
+  final IDataService dataService = DataService();
+  final IReportService reportService = ReportService();
+
+  runApp(
+    MultiProvider(
+      providers: [
+        // Service Dependencies (Injected via Interface)
+        Provider<IAuthService>.value(value: authService),
+        Provider<IDataService>.value(value: dataService),
+        Provider<IReportService>.value(value: reportService),
+
+        // Firebase Service Singletons
+        Provider<AnalyticsService>.value(value: analytics),
+        Provider<CrashlyticsService>.value(value: crashlytics),
+        Provider<RemoteConfigService>.value(value: remoteConfig),
+        Provider<StorageService>.value(value: storage),
+        Provider<NotificationService>.value(value: notification),
+
+        // MVVM ViewModels
+        ChangeNotifierProvider<AuthViewModel>(
+          create: (_) => AuthViewModel(
+            authService: authService,
+            analytics: analytics,
+            crashlytics: crashlytics,
+          ),
+        ),
+        ChangeNotifierProvider<MealPlanViewModel>(
+          create: (_) => MealPlanViewModel(
+            dataService: dataService,
+            analytics: analytics,
+            crashlytics: crashlytics,
+            remoteConfig: remoteConfig,
+          ),
+        ),
+        ChangeNotifierProvider<IngredientViewModel>(
+          create: (_) => IngredientViewModel(
+            analytics: analytics,
+            crashlytics: crashlytics,
+          ),
+        ),
+        ChangeNotifierProvider<ProfileViewModel>(
+          create: (_) => ProfileViewModel(
+            authService: authService,
+            storageService: storage,
+            notificationService: notification,
+            reportService: reportService,
+            remoteConfigService: remoteConfig,
+            crashlyticsService: crashlytics,
+            analyticsService: analytics,
+          ),
+        ),
+      ],
+      child: const LongvitaApp(),
+    ),
+  );
 }
 
 class LongvitaApp extends StatelessWidget {
@@ -10,15 +117,10 @@ class LongvitaApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Longvita',
-      theme: ThemeData(
-        useMaterial3: true,
-      ),
-      home: const Scaffold(
-        body: Center(
-          child: Text('Longvita - Barebone Ready'),
-        ),
-      ),
+      title: 'Longvita — Longevity Nutrition',
+      debugShowCheckedModeBanner: false,
+      theme: AppTheme.lightTheme,
+      home: const AuthGate(),
     );
   }
 }

@@ -1,0 +1,83 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Deny all by default
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Helper functions
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isOwner(uid) {
+      return isAuthenticated() && request.auth.uid == uid;
+    }
+
+    function getUserData() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data;
+    }
+
+    function hasRole(role) {
+      return isAuthenticated() && getUserData().role == role;
+    }
+
+    function isStaffOrAdmin() {
+      return isAuthenticated() && (getUserData().role == 'staff' || getUserData().role == 'admin');
+    }
+
+    // Collection: users/{uid}
+    match /users/{uid} {
+      // Allow user to read their own profile, or staff/admin
+      allow read: if isOwner(uid) || isStaffOrAdmin();
+      
+      // On first sign in, user can create their profile with role = 'user'
+      allow create: if isOwner(uid) 
+                    && request.resource.data.role == 'user';
+      
+      // Only Admin can change roles. Users cannot change their own role.
+      allow update: if (hasRole('admin')) 
+                    || (isOwner(uid) && request.resource.data.role == resource.data.role);
+                    
+      allow delete: if hasRole('admin');
+    }
+
+    // Collection: recipes/{id}
+    match /recipes/{id} {
+      // Anyone signed in can read longevity recipes
+      allow read: if isAuthenticated();
+      
+      // Only staff/admin can create, update, or archive recipes
+      allow create, update, delete: if isStaffOrAdmin();
+    }
+
+    // Collection: meal_plans/{id}
+    match /meal_plans/{id} {
+      // Owner or staff can read
+      allow read: if isAuthenticated() && (resource.data.uid == request.auth.uid || isStaffOrAdmin());
+      
+      // User creates new plan with status = 'draft'
+      allow create: if isAuthenticated() 
+                    && request.resource.data.uid == request.auth.uid
+                    && (request.resource.data.status == 'draft' || request.resource.data.status == 'submitted');
+      
+      // User can update while in 'draft' or change to 'submitted'
+      // Staff can update status to 'approved' or 'rejected'
+      allow update: if (isAuthenticated() && resource.data.uid == request.auth.uid && resource.data.status == 'draft')
+                    || isStaffOrAdmin();
+                    
+      allow delete: if isAuthenticated() && resource.data.uid == request.auth.uid && resource.data.status == 'draft';
+    }
+
+    // Collection: announcements/{id}
+    match /announcements/{id} {
+      // All authenticated users can read announcements
+      allow read: if isAuthenticated();
+      
+      // Only staff and admin can publish announcements
+      allow create, update, delete: if isStaffOrAdmin();
+    }
+  }
+}

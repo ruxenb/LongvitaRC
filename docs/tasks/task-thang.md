@@ -9,8 +9,8 @@
 ## 1. Trách Nhiệm Trọng Tâm
 1. **Kiến Trúc Ứng Dụng & Tài Liệu Kỹ Thuật Ban Đầu:**
    - Đưa tài liệu Lab 2 vào kết nối, viết [`docs/design-traceability.md`](../design-traceability.md) trước khi tiến hành code tính năng.
-   - Chủ trì họp thống nhất Service Interfaces và tên ViewModels; dựng cấu trúc thư mục `lib/` và cơ chế DI với Provider.
-   - Soạn thảo [`docs/architecture.md`](../architecture.md) đạt chuẩn Mục 5 (Mermaid diagram phân tầng phụ thuộc 1 chiều, Sequence diagram cho full flow, bảng ánh xạ ViewModel $\leftrightarrow$ Service).
+   - Chủ trì họp thống nhất Service Interfaces và tên ViewModels; dựng cấu trúc thư mục `lib/` theo nguyên tắc Core-Package-Ready (cô lập models, services, theme, widgets để sẵn sàng tách sang `packages/core` cho Assignment) và cơ chế DI với Provider.
+   - Soạn thảo [`docs/architecture.md`](../architecture.md) đạt chuẩn Mục 5 + Forward-compatibility (Mermaid diagram phân tầng phụ thuộc 1 chiều, Sequence diagram cho full flow, bảng ánh xạ ViewModel $\leftrightarrow$ Service, lộ trình chuyển tiếp Assignment).
    - Triển khai cơ chế Routing theo Auth State (`AuthGate`: signed-out $\to$ Sign-in, signed-in $\to$ Home) và xử lý nút Back hợp lý ở mọi nơi.
 2. **Kiểm Soát Chất Lượng & Đóng Gói (Feature Freeze & AI Review):**
    - Thực hiện kiểm thử thủ công mọi failure case của 6 dịch vụ Firebase (tắt mạng, từ chối quyền, hủy tác vụ) và ghi nhận vào bảng.
@@ -32,7 +32,7 @@
 | **S0-6** | 0. Chuẩn bị | Đưa đầu vào Lab 2 vào kết nối: link Figma, `persona.md`, `user-flow.md`, `DESIGN.md`, `screen-spec.md`, `flutter-handoff.md` | Hoàng | — | Tài liệu Lab 2 truy cập được | Fidelity 0.5 | Cao | 1 | | Chưa bắt đầu | Kế thừa Lab 2 |
 | **S1-1** | 1. Plan | Viết `docs/design-traceability.md` từ `screen-spec.md` & `flutter-handoff.md`: screen ($\ge 8$), flows (3 flows), components $\to$ routes, widgets | Hoàng | S0-6 | `docs/design-traceability.md` | Flows 1.0; Fidelity 0.5 | Cao | 1 | | Chưa bắt đầu | Viết trước khi code |
 | **S2-1** | 2. Architect | Chủ trì họp chốt interface các service (Auth, Storage, Messaging, Analytics, Crash, RemoteConfig, Data) & tên ViewModel | Hoàng, Charlie, Thái An | S1-1, S1-2 | Danh sách interface thống nhất | Layer 0.5 | Cao | 1 | | Chưa bắt đầu | Đường găng cốt lõi |
-| **S2-2** | 2. Architect | Dựng khung `lib/` (models, services, firebase, viewmodels, screens, widgets, theme, utils) + DI bằng Provider | — | S2-1 | Skeleton chạy được | Layer 0.5; State 0.25 | Cao | 1 | | Chưa bắt đầu | Đã hoàn thành barebone |
+| **S2-2** | 2. Architect | Dựng khung `lib/` theo nguyên tắc Core-Package-Ready (models, services, theme, widgets tách biệt viewmodels/screens) + DI Provider | — | S2-1 | Skeleton chạy được | Layer 0.5; State 0.25 | Cao | 1 | | Chưa bắt đầu | Sẵn sàng packages/core |
 | **S2-5** | 2. Architect | Viết `docs/architecture.md`: thư mục (1 dòng/folder), Mermaid layer diagram, sequence diagram 1 flow, bảng VM–service | — | S2-2 | `docs/architecture.md` | Layer 0.5 | Trung bình | 2 | | Chưa bắt đầu | Khớp với code thực |
 | **S3-6** | 3. Integrate | Routing theo auth state (signed out $\to$ Sign-in, signed in $\to$ Home); nút Back hoạt động chính xác ở mọi nơi | Charlie | S3-3, S2-4 | Router + AuthGate | Flows 1.0 | Cao | 2 | | Chưa bắt đầu | Không để dead-ends |
 | **S5-10** | 5. Instrument | Thử nghiệm thủ công mọi failure case của 6 dịch vụ (ngắt mạng, từ chối quyền, hủy thao tác) và ghi kết quả | Hoàng, Charlie, Thái An | S5-9 | Bảng kiểm tra failure cases | States 0.75; Firebase 2.0 | Cao | 3 | | Chưa bắt đầu | Kiểm thử độ bền |

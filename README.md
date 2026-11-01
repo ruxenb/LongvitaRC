@@ -50,14 +50,16 @@ PRM393_Lab03_<StudentID>/
 ├── pubspec.yaml                       # Quản lý dependencies và asset declarations
 ├── analysis_options.yaml              # Cấu hình bộ linter tiêu chuẩn cho Flutter/Dart
 ├── .gitignore                         # Loại bỏ secret, keystore, env; cho phép google-services.json
-├── lib/                               # Tầng kiến trúc MVVM (Section 5)
-│   ├── models/                        # Plain Dart data classes (MealPlan, Recipe, Ingredient...)
-│   ├── services/                      # Service interfaces & data/network implementations
-│   ├── firebase/                      # Mã cấu hình & wrappers các dịch vụ Firebase
+├── lib/                               # Tầng kiến trúc MVVM (Core-Package-Ready đón đầu Assignment)
+│   ├── # --- Cụm Shared Core (sẵn sàng chuyển thành packages/core khi lên Assignment) ---
+│   ├── models/                        # Plain Dart data classes (User có role, MealPlan có status, Recipe, Ingredient...)
+│   ├── services/                      # Service interfaces & Cloud Firestore services (DataService, AuthService, ReportService)
+│   ├── firebase/                      # Wrappers dịch vụ Firebase (Crashlytics, Analytics, Remote Config)
+│   ├── theme/                         # Tokens: ColorScheme, TextTheme, AppSpacing, AppRadius
+│   ├── widgets/                       # 9 component dùng chung theo tokens Lab 2
+│   ├── # --- Cụm Mobile App (sẽ chuyển thành mobile/ khi lên Assignment) ---
 │   ├── viewmodels/                    # ViewModels quản lý explicit state model (ViewState)
 │   ├── screens/                       # 10 màn hình Lab 2 + SignInScreen + ProfileScreen
-│   ├── widgets/                       # 9 component dùng chung theo tokens Lab 2
-│   ├── theme/                         # Tokens: ColorScheme, TextTheme, AppSpacing, AppRadius
 │   ├── utils/                         # Hàm bổ trợ & tiện ích
 │   └── main.dart                      # Điểm vào chính của ứng dụng Flutter & MultiProvider setup
 ├── e2e_test/                          # Bộ kiểm thử E2E Google ARTEMIS (Section 7)

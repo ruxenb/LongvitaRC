@@ -10,20 +10,20 @@
 
 Ứng dụng kế thừa 10 màn hình chuẩn từ Lab 2 (`S01`–`S10`) và bổ sung 2 màn hình phục vụ yêu cầu Lab 3 (`Sign-in` và `Profile` kèm Firebase Demo Area):
 
-| Screen ID | Tên màn hình Lab 2 | Flutter Route | Widget chính | Nguồn dữ liệu (Data Source) | Trạng thái triển khai |
+| Screen ID | Tên màn hình Lab 2 | Flutter Route | Widget chính | Nguồn dữ liệu (Data Source — Cloud Firestore) | Trạng thái triển khai |
 |:---:|:---|:---|:---|:---|:---:|
-| **AUTH** | Sign-In *(bổ sung Lab 3)* | `/sign-in` | `SignInScreen` | Firebase Auth (Google Sign-In) | ⏳ Sẵn sàng code |
-| **S01** | Home Dashboard | `/home` | `HomeScreen` | Firestore / Remote Config / Local Cache | ⏳ Sẵn sàng code |
-| **S02** | Food Preferences | `/preferences` | `PreferencesScreen` | Local State / User Profile Firestore | ⏳ Sẵn sàng code |
-| **S03** | Create Meal Plan | `/create-plan` | `CreatePlanScreen` | REST API / Firestore Calculation Engine | ⏳ Sẵn sàng code |
-| **S04** | Weekly Meal Plan | `/weekly-plan` | `WeeklyPlanScreen` | Firestore `meal_plans` / REST API | ⏳ Sẵn sàng code |
-| **S05** | Recipe Details | `/recipe-details` | `RecipeDetailsScreen` | Firestore `recipes` / Book Database | ⏳ Sẵn sàng code |
-| **S06** | Meal Alternatives | `/alternatives` | `MealAlternativesScreen` | Firestore `recipes` (lọc theo đạm & calo) | ⏳ Sẵn sàng code |
-| **S07** | Ingredient Summary | `/ingredient-summary` | `IngredientSummaryScreen` | MealPlan Data Aggregator | ⏳ Sẵn sàng code |
-| **S08** | Shopping List | `/shopping-list` | `ShoppingListScreen` | Local Persistent Storage / Firestore | ⏳ Sẵn sàng code |
-| **S09** | Book Knowledge | `/book-knowledge` | `BookKnowledgeScreen` | Trích dẫn sách *La dieta della longevità* | ⏳ Sẵn sàng code |
-| **S10** | Saved Plans | `/saved-plans` | `SavedPlansScreen` | Firestore `meal_plans` (per-user) | ⏳ Sẵn sàng code |
-| **PROF** | Profile & Firebase Demo *(bổ sung)* | `/profile` | `ProfileScreen` | Firebase Auth, Storage, FCM, RC, Crashlytics | ⏳ Sẵn sàng code |
+| **AUTH** | Sign-In *(bổ sung Lab 3)* | `/sign-in` | `SignInScreen` | Firebase Auth (Google Sign-In) $\to$ `users/{uid}` (`role: 'user'`) | ⏳ Sẵn sàng code |
+| **S01** | Home Dashboard | `/home` | `HomeScreen` | Firestore `recipes`, `announcements` / Remote Config | ⏳ Sẵn sàng code |
+| **S02** | Food Preferences | `/preferences` | `PreferencesScreen` | Firestore `users/{uid}` preferences & Local State | ⏳ Sẵn sàng code |
+| **S03** | Create Meal Plan | `/create-plan` | `CreatePlanScreen` | Firestore Calculation Engine (đọc `recipes` lọc đạm/calo) | ⏳ Sẵn sàng code |
+| **S04** | Weekly Meal Plan | `/weekly-plan` | `WeeklyPlanScreen` | Firestore `meal_plans/{id}` (`status: 'draft'`) | ⏳ Sẵn sàng code |
+| **S05** | Recipe Details | `/recipe-details` | `RecipeDetailsScreen` | Firestore `recipes/{id}` | ⏳ Sẵn sàng code |
+| **S06** | Meal Alternatives | `/alternatives` | `MealAlternativesScreen` | Firestore `recipes` (lọc theo gram đạm & calo tương đương) | ⏳ Sẵn sàng code |
+| **S07** | Ingredient Summary | `/ingredient-summary` | `IngredientSummaryScreen` | MealPlan Data Aggregator (tổng hợp nguyên liệu 7 ngày) | ⏳ Sẵn sàng code |
+| **S08** | Shopping List | `/shopping-list` | `ShoppingListScreen` | Local Cache & Firestore Checklist Sync | ⏳ Sẵn sàng code |
+| **S09** | Book Knowledge | `/book-knowledge` | `BookKnowledgeScreen` | Trích dẫn sách *La dieta della longevità* (Firestore / Static) | ⏳ Sẵn sàng code |
+| **S10** | Saved Plans | `/saved-plans` | `SavedPlansScreen` | Firestore `meal_plans` (lọc `uid == currentUser.uid`) | ⏳ Sẵn sàng code |
+| **PROF** | Profile & Firebase Demo *(bổ sung)* | `/profile` | `ProfileScreen` | Firebase Auth, Storage (Lab 3 PDF), FCM, RC, Crashlytics | ⏳ Sẵn sàng code |
 
 ---
 
