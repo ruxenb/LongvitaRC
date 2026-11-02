@@ -109,6 +109,27 @@ class FakeAnalytics implements AnalyticsService {
       events.add(name);
 
   @override
+  Future<void> logLogout() async => events.add('logout');
+
+  @override
+  Future<void> logExportReport({
+    String topic = 'longevity_meal_plan',
+    required int fileSizeKb,
+    required int hasShoppingList,
+  }) async =>
+      events.add('export_report:$fileSizeKb:$hasShoppingList');
+
+  @override
+  Future<void> logGenerateMealPlan({
+    required String targetAgeGroup,
+    required int mealsPerDay,
+    required int eatingWindowHours,
+    required int fishMealsCount,
+  }) async =>
+      events.add('generate_meal_plan:$targetAgeGroup:$mealsPerDay:'
+          '$eatingWindowHours:$fishMealsCount');
+
+  @override
   dynamic noSuchMethod(Invocation invocation) => Future<void>.value();
 }
 

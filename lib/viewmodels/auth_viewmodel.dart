@@ -108,7 +108,7 @@ class AuthViewModel extends BaseViewModel {
     _signOutInFlight = true;
     try {
       await authService.signOut();
-      await analytics.logEvent('logout');
+      await analytics.logLogout();
     } catch (e, s) {
       await crashlytics.recordError(e, s, reason: 'Sign-out failed');
     } finally {

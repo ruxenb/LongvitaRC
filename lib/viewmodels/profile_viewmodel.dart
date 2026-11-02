@@ -106,7 +106,11 @@ class ProfileViewModel extends BaseViewModel implements SessionScoped {
         _lastUploadedUrl = downloadUrl;
         _exportState = ViewStateSuccess(downloadUrl);
         notifyListeners();
-        await analyticsService.logExportReport(format: 'pdf');
+        await analyticsService.logExportReport(
+          fileSizeKb: (pdfBytes.length / 1024).ceil(),
+          // ReportService does not include a shopping list section yet.
+          hasShoppingList: 0,
+        );
       } else {
         _exportState = const ViewStateError('Tải lên thất bại. Vui lòng thử lại.');
         notifyListeners();

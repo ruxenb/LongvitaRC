@@ -253,6 +253,44 @@ void main() {
       await upload;
       expect(profile.lastUploadedUrl, lateUrl);
       expect(profile.exportState, isA<ViewStateSuccess<String>>());
+      expect(session.analytics.events, contains('export_report:1:0'),
+          reason: 'file size comes from the real PDF bytes');
+    });
+  });
+
+  group('Analytics contract', () {
+    test('generate_meal_plan is skipped without an eating window', () async {
+      final plans = plansWith(HeldData());
+      await session.signIn('uid-a');
+
+      await plans.generatePlan(uid: 'uid-a', weightKg: 60, age: 30);
+
+      expect(plans.activePlan, isNotNull);
+      expect(session.analytics.events.where((e) => e.startsWith('generate')),
+          isEmpty,
+          reason: 'no invented eating_window_hours');
+    });
+
+    test('generate_meal_plan uses real values when the window is known',
+        () async {
+      final plans = plansWith(HeldData());
+      await session.signIn('uid-a');
+
+      await plans.generatePlan(
+          uid: 'uid-a', weightKg: 60, age: 70, eatingWindowHours: 12);
+
+      // The fixture plan has one legume meal and no fish.
+      expect(session.analytics.events,
+          contains('generate_meal_plan:over_65:3:12:0'));
+    });
+
+    test('sign-out logs the logout event', () async {
+      profileWith();
+      await session.signIn('uid-a');
+
+      await session.vm.signOut();
+
+      expect(session.analytics.events, contains('logout'));
     });
   });
 

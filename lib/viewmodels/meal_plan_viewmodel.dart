@@ -49,6 +49,7 @@ class MealPlanViewModel extends BaseViewModel implements SessionScoped {
     required double weightKg,
     required int age,
     int mealsPerDay = 3,
+    int? eatingWindowHours,
   }) async {
     final epoch = _epoch.current;
     _currentPlanState = const ViewStateLoading('Đang tính toán dinh dưỡng trường thọ...');
@@ -77,12 +78,20 @@ class MealPlanViewModel extends BaseViewModel implements SessionScoped {
         );
       }
 
-      await analytics.logGenerateMealPlan(
-        targetAge: age,
-        weightKg: weightKg,
-        fishCount: 2,
-      );
-      if (_epoch.isStale(epoch)) return;
+      // The event plan requires eating_window_hours, which only preferences
+      // input (S02) can provide. Without it the event is skipped, not faked.
+      if (eatingWindowHours != null) {
+        await analytics.logGenerateMealPlan(
+          targetAgeGroup: age > 65 ? 'over_65' : 'under_65',
+          mealsPerDay: mealsPerDay,
+          eatingWindowHours: eatingWindowHours,
+          fishMealsCount: _activePlan!.days
+              .expand((day) => day.meals)
+              .where((meal) => meal.category == 'ca')
+              .length,
+        );
+        if (_epoch.isStale(epoch)) return;
+      }
 
       _currentPlanState = ViewStateSuccess(_activePlan!);
     } catch (e, s) {
