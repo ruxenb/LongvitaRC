@@ -2,7 +2,7 @@
 
 > **Thành viên:** Thắng (Thắng VLQ)  
 > **Vai trò:** **Technical Architect & Co-Lead** (MVVM Skeleton, DI & Router, Hồ Sơ Tài Liệu docs/, Feature Freeze, Tổng Hợp Report, Slides, Video, Hỗ Trợ Leader Nộp Bài)  
-> **Tổng task:** 28 tasks | **Đã hoàn thành:** 0/28 (0%)
+> **Tổng task:** 28 tasks | **Đã hoàn thành:** 5/28 (18%)
 
 ---
 
@@ -28,13 +28,13 @@
 
 | ID | Giai đoạn | Tên Task | Hỗ trợ | Phụ thuộc | Đầu ra / Bằng chứng | Tiêu chí (Điểm) | Ưu tiên | Tuần | Hạn | Trạng thái | Ghi chú |
 |:---|:---|:---|:---:|:---:|:---|:---|:---:|:---:|:---:|:---:|:---|
-| **S0-3-VLQ** | 0. Chuẩn bị | Cài trên máy: Flutter stable, FlutterFire CLI, Android device/emulator, ADB | — | — | `flutter doctor` không lỗi | — | Cao | 1 | | Chưa bắt đầu | Chuẩn bị máy |
-| **S0-6** | 0. Chuẩn bị | Đưa đầu vào Lab 2 vào kết nối: link Figma, `persona.md`, `user-flow.md`, `DESIGN.md`, `screen-spec.md`, `flutter-handoff.md` | Hoàng | — | Tài liệu Lab 2 truy cập được | Fidelity 0.5 | Cao | 1 | | Chưa bắt đầu | Kế thừa Lab 2 |
-| **S1-1** | 1. Plan | Viết `docs/design-traceability.md` từ `screen-spec.md` & `flutter-handoff.md`: screen ($\ge 8$), flows (3 flows), components $\to$ routes, widgets | Hoàng | S0-6 | `docs/design-traceability.md` | Flows 1.0; Fidelity 0.5 | Cao | 1 | | Chưa bắt đầu | Viết trước khi code |
-| **S2-1** | 2. Architect | Chủ trì họp chốt interface các service (Auth, Storage, Messaging, Analytics, Crash, RemoteConfig, Data) & tên ViewModel | Hoàng, Charlie, Thái An | S1-1, S1-2 | Danh sách interface thống nhất | Layer 0.5 | Cao | 1 | | Chưa bắt đầu | Đường găng cốt lõi |
-| **S2-2** | 2. Architect | Dựng khung `lib/` theo nguyên tắc Core-Package-Ready (models, services, theme, widgets tách biệt viewmodels/screens) + DI Provider | — | S2-1 | Skeleton chạy được | Layer 0.5; State 0.25 | Cao | 1 | | Chưa bắt đầu | Sẵn sàng packages/core |
-| **S2-5** | 2. Architect | Viết `docs/architecture.md`: thư mục (1 dòng/folder), Mermaid layer diagram, sequence diagram 1 flow, bảng VM–service | — | S2-2 | `docs/architecture.md` | Layer 0.5 | Trung bình | 2 | | Chưa bắt đầu | Khớp với code thực |
-| **S3-6** | 3. Integrate | Routing theo auth state (signed out $\to$ Sign-in, signed in $\to$ Home); nút Back hoạt động chính xác ở mọi nơi | Charlie | S3-3, S2-4 | Router + AuthGate | Flows 1.0 | Cao | 2 | | Chưa bắt đầu | Không để dead-ends |
+| **S0-3-VLQ** | 0. Chuẩn bị | Cài trên máy: Flutter stable, FlutterFire CLI, Android device/emulator, ADB | — | — | `flutter doctor` không lỗi | — | Cao | 1 | | Bị chặn | Flutter 3.47.9 OK; thiếu Android SDK/ADB và Android device |
+| **S0-6** | 0. Chuẩn bị | Đưa đầu vào Lab 2 vào kết nối: link Figma, `persona.md`, `user-flow.md`, `DESIGN.md`, `screen-spec.md`, `flutter-handoff.md` | Hoàng | — | Tài liệu Lab 2 truy cập được | Fidelity 0.5 | Cao | 1 | | Đã hoàn thành | README ghi repo Lab 2, checkout và Figma export |
+| **S1-1** | 1. Plan | Viết `docs/design-traceability.md` từ `screen-spec.md` & `flutter-handoff.md`: screen ($\ge 8$), flows (3 flows), components $\to$ routes, widgets | Hoàng | S0-6 | `docs/design-traceability.md` | Flows 1.0; Fidelity 0.5 | Cao | 1 | | Đã hoàn thành | 12 màn, 3 flows, component mapping và deviation log |
+| **S2-1** | 2. Architect | Chủ trì họp chốt interface các service (Auth, Storage, Messaging, Analytics, Crash, RemoteConfig, Data) & tên ViewModel | Hoàng, Charlie, Thái An | S1-1, S1-2 | Danh sách interface thống nhất | Layer 0.5 | Cao | 1 | | Đã hoàn thành | `docs/service-contracts.md`; baseline đã merge vào main |
+| **S2-2** | 2. Architect | Dựng khung `lib/` theo nguyên tắc Core-Package-Ready (models, services, theme, widgets tách biệt viewmodels/screens) + DI Provider | — | S2-1 | Skeleton chạy được | Layer 0.5; State 0.25 | Cao | 1 | | Đã hoàn thành | Models/services/firebase/viewmodels/screens + MultiProvider |
+| **S2-5** | 2. Architect | Viết `docs/architecture.md`: thư mục (1 dòng/folder), Mermaid layer diagram, sequence diagram 1 flow, bảng VM–service | — | S2-2 | `docs/architecture.md` | Layer 0.5 | Trung bình | 2 | | Đã hoàn thành | Tài liệu đồng bộ code tại commit ae35f07 |
+| **S3-6** | 3. Integrate | Routing theo auth state (signed out $\to$ Sign-in, signed in $\to$ Home); nút Back hoạt động chính xác ở mọi nơi | Charlie | S3-3, S2-4 | Router + AuthGate | Flows 1.0 | Cao | 2 | | Đang làm | AuthGate có sẵn; chờ đủ routes/screens để kiểm tra Back/dead-end |
 | **S5-10** | 5. Instrument | Thử nghiệm thủ công mọi failure case của 6 dịch vụ (ngắt mạng, từ chối quyền, hủy thao tác) và ghi kết quả | Hoàng, Charlie, Thái An | S5-9 | Bảng kiểm tra failure cases | States 0.75; Firebase 2.0 | Cao | 3 | | Chưa bắt đầu | Kiểm thử độ bền |
 | **S6-1** | 6. Test | **Feature freeze:** Chốt bản build ổn định, gắn git tag (`v1.0-rc`), thông báo toàn nhóm (chỉ sửa bug sau mốc này) | — | S4-17, S5-10 | Git tag release candidate | Test quality 0.5 | Cao | 3 | | Chưa bắt đầu | Mốc Milestone M5 |
 | **S6-12** | 6. Test | Sửa lỗi ứng dụng / bổ sung thuộc tính Semantics khi kiểm thử ARTEMIS phát hiện lỗi (thuộc phạm vi của mình) | — | S6-9 | Fix commit | Test quality 0.5 | Trung bình | 4 | | Chưa bắt đầu | Fix theo log ARTEMIS |
@@ -49,7 +49,7 @@
 | **S8-14** | 8. Report | Quay video: Phần mở đầu giới thiệu dự án, trình bày 1 finding code review và cách sửa | — | S7-3-VLQ | Clip của Thắng | Video 1.0 | Cao | 4 | | Chưa bắt đầu | Mở đầu video |
 | **S8-15** | 8. Report | Biên tập & ghép Video demo 5–10 phút (quay thật, không dựng kết quả); upload YouTube/Drive; đặt link public | Hoàng, Charlie, Thái An | S8-11, S8-12, S8-13, S8-14 | Link video công khai | Video 1.0 | Cao | 4 | | Chưa bắt đầu | 5-10 phút |
 | **S8-16** | 8. Report | Hoàn thiện `README.md`: topic, API, cách chạy app và test, pinned versions, AI tools, link video, deliverable map | Hoàng, Charlie, Thái An | S8-15 | `README.md` | Mục 9 | Cao | 4 | | Chưa bắt đầu | Đầy đủ bản đồ file |
-| **S8-17-VLQ** | 8. Report | Cập nhật worklog cá nhân `docs/worklog-thang.md` để đối chiếu lịch sử Git | — | S8-16 | `docs/worklog-thang.md` | Mục 11 | Thấp | 4 | | Chưa bắt đầu | Tùy chọn kiểm tra |
+| **S8-17-VLQ** | 8. Report | Cập nhật worklog cá nhân `docs/worklog-thang.md` để đối chiếu lịch sử Git | — | S8-16 | `docs/worklog-thang.md` | Mục 11 | Thấp | 4 | | Đang làm | Đã khởi tạo; tiếp tục cập nhật đến cuối dự án |
 | **S9-1** | 9. Nộp bài | Kiểm tra quét bảo mật: Không có secret trong repo (service account, API key, keystore); kiểm tra toàn bộ git log | — | S8-16 | Rà soát sạch sẽ | Mục 9, 11 | Cao | 4 | | Chưa bắt đầu | Quét git history |
 | **S9-2** | 9. Nộp bài | Đối chiếu Project ID trên các ảnh chụp console với file `google-services.json` (bắt buộc phải trùng khớp) | Charlie | S8-5 | Khớp project ID | Mục 11 | Cao | 4 | | Chưa bắt đầu | Tiêu chí chính chủ |
 | **S9-3** | 9. Nộp bài | Mở repo, báo cáo PDF, slide PDF, video link bằng cửa sổ ẩn danh (incognito); sửa quyền truy cập nếu bị chặn | — | S8-16 | Mở thành công cả 4 | Access rule | Cao | 4 | | Chưa bắt đầu | Tránh điểm 0 |

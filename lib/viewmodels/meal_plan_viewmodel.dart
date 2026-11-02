@@ -82,7 +82,7 @@ class MealPlanViewModel extends BaseViewModel implements SessionScoped {
       // input (S02) can provide. Without it the event is skipped, not faked.
       if (eatingWindowHours != null) {
         await analytics.logGenerateMealPlan(
-          targetAgeGroup: age > 65 ? 'over_65' : 'under_65',
+          targetAgeGroup: age >= 65 ? 'over_65' : 'under_65',
           mealsPerDay: mealsPerDay,
           eatingWindowHours: eatingWindowHours,
           fishMealsCount: _activePlan!.days
