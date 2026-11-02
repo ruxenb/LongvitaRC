@@ -46,4 +46,32 @@ Code `2d547c7` / HEAD báo cáo `f1f397e` đã được kiểm độc lập: ana
 5. **FCM contract còn mở:** route intent của `meal_plan`/`announcement` (Thắng); history local theo UID hay Firestore/schema/rules (Hoàng/Thắng); token theo user hay topic và cách xử lý tin thiếu `recipient_uid` (Thái An/Thắng). Hiện tin không recipient chờ người login kế, chưa được team chốt cho production.
 6. **Charlie/team:** mời đủ thành viên Firebase, nhận SHA-1/SHA-256 và kiểm Google Sign-in trên từng máy; quyền Console và SHA/Auth là các đầu việc riêng. Đồng thời chốt ngôn ngữ UI và font Roboto cho PDF.
 
+## Đề xuất contract FCM (S4-12), chưa được duyệt
+
+Phần này cần Thắng, Hoàng, Thái An trả lời trước khi nối router, history và thử push thật. Code đã theo đề xuất dưới đây ở `lib/models/app_notification.dart` và `lib/firebase/notification_inbox.dart`; đổi được khi nhóm chốt.
+
+**Payload, các trường trong `data`:**
+
+| Trường | Bắt buộc | Ý nghĩa |
+|---|---|---|
+| `message_id` | Có, nếu thiếu thì dùng ID của FCM | Khóa chống trùng |
+| `schema_version` | Khi có target | Hiện là `"1"` |
+| `target_type`, `target_id` | Khi tin cần mở một màn | Hiện nhận `meal_plan`, `announcement`. Không nhận route string từ push |
+| `recipient_uid` | Khi tin dành riêng một user | Khác user đang đăng nhập thì tin bị bỏ |
+
+**Hành vi hiện có:**
+- Target sai hoặc thiếu: tin vẫn vào inbox, không điều hướng.
+- Trùng `message_id` trong một phiên: tin được chấp nhận đầu tiên thắng.
+- Đăng xuất: xóa inbox và tin đang chờ. Tin đến khi chưa đăng nhập chờ tới lần đăng nhập kế.
+- Router lấy đích bằng `NotificationService.takePendingTarget()`, mỗi tin một lần. Handler nền không điều hướng và chưa lưu gì.
+
+**Câu hỏi cần trả lời:**
+
+| Câu hỏi | Ai |
+|---|---|
+| `meal_plan`, `announcement` mở màn nào; router gọi `takePendingTarget()` khi nào; đích lỗi hiển thị ra sao | Thắng |
+| Lịch sử lưu local theo UID hay Firestore; nếu Firestore thì schema, rules, read state, retention | Hoàng, Thắng |
+| Gửi theo token từng user hay topic chung; có lưu token theo UID, xóa khi đăng xuất không | Thái An, Thắng |
+| Tin **không có** `recipient_uid` hiện đến người đăng nhập kế tiếp: có chấp nhận không | Thái An, Thắng |
+
 Sau review: tiếp tục S4-10 với active plan/local/open/share, S4-12 routing/history/token/push thật, S4-13 Profile/demo cùng Hoàng; S3-7/S4-11 khi DEC-01 rõ. Giữ nguyên ba fix regression đã xác nhận và các task owners.
