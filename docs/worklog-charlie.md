@@ -83,6 +83,15 @@ Task S8-17-CM. Ghi theo commit và evidence thật, cập nhật dần. Trạng 
 - **Kết quả:** `login` có `method=google`, `logout` có; mỗi lần thao tác một event, không gửi trùng.
 - **Còn vướng:** `export_report` chờ upload thật (DEC-01), `generate_meal_plan` chờ màn S02.
 
+### Storage không chờ Blaze (S3-7, S4-11) — nhánh `feature/charlie-storage-01`
+
+- **Vấn đề:** nhóm cần tiến độ gấp, nhưng Storage cần Blaze và DEC-01 chưa chốt.
+- **Quyết định:** làm đủ code và test trên Storage Emulator, ghi rõ đây là bằng chứng emulator. Khi có Blaze chỉ cần deploy rules và chụp Console. Không bật billing.
+- **Đã làm:** lỗi có kiểu, hủy thật, 14 test rules, đăng xuất hủy upload và xóa PDF trên máy, ghi chú PDF chuyển xuống chân trang.
+- **Lỗi tìm được khi chạy thật:** khi mất mạng, SDK chờ tới lần thử lại kế tiếp mới hủy, nên nút Hủy trông như không có tác dụng trong hàng chục giây. Sửa bằng cách báo đã hủy ngay và bỏ qua kết quả về sau. Test giả không phát hiện được.
+- **Kiểm tra:** 223/223 test, rules 55/55. Rules mở toang làm đúng 9 ca fail. Emulator: upload thành công và file trùng byte, hủy, mất mạng, thử lại không tạo file mới, bị từ chối, đăng xuất giữa chừng.
+- **Còn vướng:** chưa deploy, chưa có file trên project thật (DEC-01). Tiến độ tăng dần chưa thấy trên thiết bị vì file quá nhỏ.
+
 ### Nháp báo cáo Auth (S8-3) — `docs/report-drafts/s8-3-firebase-auth.md`
 
 - **Đã làm:** phần Auth, gồm luồng, xử lý lỗi, kiểm thử, bằng chứng, giới hạn. Mỗi ca lỗi ghi rõ đã kiểm trên emulator hay chỉ bằng fake.
