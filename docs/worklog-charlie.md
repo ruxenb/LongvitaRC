@@ -50,3 +50,11 @@ Task S8-17-CM. Ghi theo commit và evidence thật, cập nhật dần. Trạng 
 
 - Mở PR vào `main`. Chưa có output AI review.
 - Tài liệu làm việc nội bộ giữ ở local, không đưa vào cây file chia sẻ.
+
+### Lưu, mở và chia sẻ PDF (S4-10) — nhánh `feature/charlie-pdf-01`
+
+- **Đã làm:** lưu PDF trên máy trước khi upload, export ID giữ nguyên khi thử lại, mở và chia sẻ qua service riêng dùng gói `printing` có sẵn.
+- **Quyết định:** làm trên nhánh riêng để PR #1 không to thêm. Hai nút mở và chia sẻ đặt tạm trên Home để test được trên Android, sẽ chuyển sang Profile ở S4-13.
+- **Lỗi tìm được khi chạy thật:** upload thất bại gây `Unhandled Exception` vì stream tiến độ không có xử lý lỗi. Test giả không phát hiện được. Đã sửa trong `StorageService` và chạy lại trên emulator.
+- **Kiểm tra:** 150/150 test. Emulator: file được lưu, upload lỗi vẫn còn file, mở được màn xem trước, mở được cửa sổ chia sẻ.
+- **Còn vướng:** chưa có plan thật từ S4-3; project chưa có Storage nên upload thành công chưa chạy thật; cần chốt chính sách giữ file.
