@@ -2,13 +2,16 @@
 name = "longvita-artemis-e2e"
 version = "0.1.0"
 description = "Automated E2E testing for Longvita Android App with Google ARTEMIS"
-readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
+    "artemis-client @ git+https://github.com/google/artemis.git@351ca8422f7b5b54e80a9c1ce03a222e02415b6b#subdirectory=packages/artemis-client",
     "pytest>=8.3.0",
     "pytest-asyncio>=0.24.0",
     "python-dotenv>=1.0.1",
 ]
+
+[tool.uv]
+package = false
 
 [tool.pytest.ini_options]
 asyncio_mode = "auto"

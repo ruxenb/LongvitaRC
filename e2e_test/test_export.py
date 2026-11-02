@@ -1,0 +1,29 @@
+"""S6-7: export a PDF and upload it, then open it through the native viewer.
+
+Needs a working Storage: the real project once DEC-01 allows it, or a debug build
+with STORAGE_EMULATOR_HOST and the local emulator. State which one in the run notes.
+"""
+
+
+async def test_tc08_export_uploads_and_shows_url(run_case):
+    output = await run_case(
+        "Open the Longvita app signed in. On the home screen tap 'Tạo thực đơn mẫu ngay' "
+        "and wait for the success message. Open 'Hồ sơ', scroll to 'Báo cáo PDF', and tap "
+        "'Xuất báo cáo PDF'. Wait until the export finishes.",
+        "The result message under the export button, and the full download URL if shown.",
+    )
+
+    assert "Đã tải PDF lên Cloud Storage" in output
+    assert "reports" in output
+    assert ".pdf" in output
+
+
+async def test_tc08b_saved_pdf_opens_in_the_native_viewer(run_case):
+    output = await run_case(
+        "Open the Longvita app signed in. Create a meal plan with 'Tạo thực đơn mẫu ngay' "
+        "if none exists, open 'Hồ sơ', and tap 'Xuất báo cáo PDF'. When it finishes tap "
+        "'Mở PDF đã lưu'.",
+        "The name of the system screen that opened, and any heading readable in the PDF.",
+    )
+
+    assert "LONGVITA" in output.upper()
