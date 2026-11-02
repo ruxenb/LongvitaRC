@@ -1,6 +1,6 @@
 # Longvita — Cloud-Enabled Mobile App
 
-> **Đối chiếu 02/11/2026:** Theo xác nhận người dùng, **Lab 3 chính là Assignment** đang triển khai, kế thừa Figma Lab 2. Bộ [tài liệu điều phối đã cập nhật](docs/coordination/README.md) hợp nhất Guide v5, handouts và code baseline; giữ 112 task IDs/owners. Audit này dựa trên baseline `ae35f07` (khi đó code còn là skeleton/integration dashboard). Trạng thái phần Charlie sau đó xem [báo cáo tiến độ](docs/coordination/dev-reports/CHARLIE-PROGRESS-20261102.md); nhóm vẫn chưa có evidence đủ sáu Firebase services hoặc E2E. Các mục mô tả chuyển tiếp bên dưới là kiến trúc dự kiến trong cùng Assignment, không phải một bài riêng.
+> **Cập nhật 02/11/2026:** **Lab 3 chính là Assignment** đang triển khai, kế thừa thiết kế Lab 2. Xem [bàn giao kỹ thuật và tiến độ Charlie](docs/tasks/charlie-progress.md) cho phạm vi nhánh, kiểm chứng và các quyết định cần team review. Giữ 112 task IDs/owners; các phần mobile/web/shared-core là cùng sản phẩm. Nhánh hiện chưa chứng minh đủ sáu Firebase services hoặc toàn bộ E2E.
 >
 > **Firebase project:** `longvita-8da7e`, app Android `vn.edu.fpt.longvita` (S0-4). Chưa mời đủ thành viên và SHA.
 >

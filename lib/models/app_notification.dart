@@ -1,5 +1,5 @@
 /// In-app form of a push message. See the payload proposal in
-/// docs/coordination/dev-reports/FCM-CONTRACT-PROPOSAL.md.
+/// docs/tasks/charlie-progress.md (FCM contracts pending team approval).
 ///
 /// A push never carries a route: it names a target type and id, and the
 /// router decides where that leads. Target types are a proposal until the

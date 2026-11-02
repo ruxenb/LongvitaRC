@@ -1,6 +1,6 @@
 # Architecture Document — Longvita (Lab 3 & Final Assignment Bridge)
 
-> **Trạng thái đối chiếu 02/11/2026:** Tài liệu này mô tả kiến trúc mục tiêu và skeleton tại `ae35f07`, chưa xác nhận cloud/runtime đầy đủ. Phần bootstrap/Auth/session sau đó xem [CHARLIE-AUTH-01](coordination/dev-reports/CHARLIE-AUTH-01.md). Lab 3 chính là Assignment; web/shared-core được tích hợp trong cùng sản phẩm. Xem [đối chiếu hiện trạng và contracts](coordination/LONGVITA_LAB3_IMPLEMENTATION_PLAN.md), nhất là bootstrap/config, UI gọi service, sample fallback và Storage DEC-01.
+> **Trạng thái 02/11/2026:** Các sơ đồ bên dưới mô tả kiến trúc mục tiêu từ skeleton ban đầu. Bootstrap/Auth/session đã có implementation và kiểm chứng nêu trong [bàn giao Charlie](tasks/charlie-progress.md); không suy ra mọi flow/cloud service đã hoàn tất. Lab 3 chính là Assignment; web/shared-core được tích hợp trong cùng sản phẩm. Contract Auth/router/session và các quyết định schema/Storage còn cần owners review.
 
 > **Mô hình kiến trúc:** MVVM (Model - View - ViewModel) với Provider Dependency Injection  
 > **Người phụ trách:** Thắng VLQ (Kiến trúc & Tích hợp) | **Phê duyệt:** Thái An (Team Leader)  

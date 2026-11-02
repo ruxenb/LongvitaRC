@@ -1,6 +1,6 @@
 # Test Plan — Google ARTEMIS Automated E2E Testing (Lab 3)
 
-> **Trạng thái 02/11/2026: PLANNED - chưa có ARTEMIS raw runs để xác minh.** Các kết quả 3/3 điền sẵn ở bản mẫu đã được trả về Planned. Widget/unit tests pass không phải E2E. Dùng [QA/evidence plan thống nhất](coordination/LONGVITA_LAB3_QA_AND_EVIDENCE_PLAN.md), giữ TC-01..11 và mở rộng coverage; thiếu SDK/device phải fail setup, không dùng Dummy SUCCESS.
+> **Trạng thái 02/11/2026: PLANNED - chưa có ARTEMIS raw runs để xác minh.** Các kết quả 3/3 điền sẵn ở bản mẫu đã được trả về Planned. Widget/unit tests pass không phải E2E; giữ TC-01..11 và mở rộng coverage, mỗi formal case >=3 runs với observed-value assertions và raw evidence. Thiếu SDK/device phải fail setup, không dùng Dummy SUCCESS. Kiểm chứng local của nhánh Charlie được ghi riêng tại [bàn giao kỹ thuật](tasks/charlie-progress.md).
 
 > **Tài liệu:** Kế hoạch kiểm thử tự động toàn diện bằng Agent AI Google ARTEMIS.  
 > **Người phụ trách:** Thái An (Instrument & Testing)  

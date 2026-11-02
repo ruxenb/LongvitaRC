@@ -67,3 +67,8 @@ env/
 app.*.symbols
 app.*.map.json
 .widget_preview/
+
+# Local assistant workspace; project handoff stays in docs/tasks/.
+/docs/coordination/
+/AGENTS.md
+/CLAUDE.md

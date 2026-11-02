@@ -1,6 +1,6 @@
 # Design Traceability Matrix — Longvita (Lab 3)
 
-> **Quyết định user/team 02/11/2026:** Figma Lab 2 là bản tham chiếu đóng băng. Cải thiện UI trực tiếp trong code; ghi khác biệt, lý do, screenshots và trạng thái review trong repo. Không sửa/đồng bộ Figma hoặc bắt tạo node mới. Code/runtime được PM/user chấp nhận là baseline hiện hành. Xem [UI contract](coordination/FIGMA_IMPLEMENTATION_CONTRACT.md). Bảng/template bên dưới là nguồn truy vết ban đầu, không tự chứng minh triển khai hiện tại; gói UI-01 mới ở [Ready for PM review](coordination/dev-reports/CHARLIE-UI-01.md), chưa Accepted. Quyết định team không phải xác nhận giảng viên đổi rubric.
+> **Quyết định team 02/11/2026:** Figma Lab 2 là bản tham chiếu đóng băng. Cải thiện UI trực tiếp trong code; ghi khác biệt, lý do, screenshots và trạng thái review tại repo. Không sửa/đồng bộ Figma hoặc bắt tạo node mới. Bảng/template bên dưới là nguồn truy vết ban đầu, không tự chứng minh implementation hiện tại; xem [bàn giao Charlie](tasks/charlie-progress.md) cho UI/theme/widgets và phần còn cần nghiệm thu. Quyết định team không phải xác nhận giảng viên đổi rubric.
 
 > **Tài liệu:** Truy vết thiết kế từ Lab 2 (Figma & `screen-spec.md`) sang Flutter App.  
 > **Người phụ trách:** Thắng VLQ (Architect) & Hoàng DV | **Phê duyệt:** Thái An (Team Leader)  
