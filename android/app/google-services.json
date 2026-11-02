@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "1041459198085",
+    "project_id": "longvita-8da7e",
+    "storage_bucket": "longvita-8da7e.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1041459198085:android:33939d119fc3892d8e11ec",
+        "android_client_info": {
+          "package_name": "vn.edu.fpt.longvita"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1041459198085-qhs7ugfn9ae8khu4jb2nq26qrr9e3bpu.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "vn.edu.fpt.longvita",
+            "certificate_hash": "2baa67bc4f6bfd1dab3ebfc5e557a9bb1ed035ec"
+          }
+        },
+        {
+          "client_id": "1041459198085-09p0r8qb6eups8u9kofcu7qqc3as801e.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAZIYexmzf-lwnUT3PFvcR60fXtLB5zNAY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1041459198085-09p0r8qb6eups8u9kofcu7qqc3as801e.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

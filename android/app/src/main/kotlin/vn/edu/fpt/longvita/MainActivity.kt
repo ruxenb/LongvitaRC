@@ -1,4 +1,4 @@
-package vn.edu.fpt.longvita.longvita
+package vn.edu.fpt.longvita
 
 import io.flutter.embedding.android.FlutterActivity
 

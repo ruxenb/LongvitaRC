@@ -59,6 +59,10 @@ venv/
 env/
 .uv/
 
+# Firebase rules tests
+/firebase/node_modules/
+/firebase/.firebase/
+
 # Symbolication & Obfuscation
 app.*.symbols
 app.*.map.json

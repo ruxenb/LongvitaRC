@@ -1,0 +1,297 @@
+
+> test:rules
+> firebase emulators:exec --only firestore --project demo-longvita "node --test tests/*.test.js"
+
+i  emulators: Starting emulators: firestore
+i  emulators: Detected demo project ID "demo-longvita", emulated services will use a demo configuration and attempts to access non-emulated services for this project will fail.
+i  firestore: Firestore Emulator logging to firestore-debug.log
++  firestore: Firestore Emulator was started in standard edition.
++  firestore: Firestore Emulator UI websocket is running on 9150.
+i  Running script: node --test tests/*.test.js
+[2026-11-02T07:32:29.869Z]  @firebase/firestore: Firestore (13.1.0): GrpcConnection RPC 'Write' stream 0x1204297f error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'create' @ L7, false for 'update' @ L7
+▶ default deny
+  ✔ unknown collection is denied for every role (1077.226ms)
+✔ default deny (2605.8788ms)
+[2026-11-02T07:32:30.112Z]  @firebase/firestore: Firestore (13.1.0): GrpcConnection RPC 'Write' stream 0x12042985 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'create' @ L7, false for 'create' @ L37, false for 'update' @ L7, false for 'update' @ L41
+▶ users
+  ▶ anonymous
+    ✔ denied: read and create (240.6904ms)
+  ✔ anonymous (240.9863ms)
+  ▶ user
+    ✔ allowed: first sign-in creates own profile exactly as AuthService writes it (382.2254ms)
+[2026-11-02T07:32:30.735Z]  @firebase/firestore: Firestore (13.1.0): GrpcConnection RPC 'Write' stream 0x12042990 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'create' @ L7, false for 'create' @ L37, false for 'update' @ L7, evaluation error at L41:24 for 'update' @ L41, false for 'create' @ L7, false for 'create' @ L37
+[2026-11-02T07:32:30.780Z]  @firebase/firestore: Firestore (13.1.0): GrpcConnection RPC 'Write' stream 0x12042991 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'create' @ L7, false for 'create' @ L37, false for 'update' @ L7, evaluation error at L41:24 for 'update' @ L41, false for 'create' @ L7, false for 'create' @ L37
+[2026-11-02T07:32:30.822Z]  @firebase/firestore: Firestore (13.1.0): GrpcConnection RPC 'Write' stream 0x12042992 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'create' @ L7, false for 'create' @ L37, false for 'update' @ L7, evaluation error at L41:24 for 'update' @ L41, false for 'create' @ L7, false for 'create' @ L37
+    ✔ denied: creating a profile with an elevated role or for someone else (327.0972ms)
+    ✖ denied: creating a profile with a bad shape (160.9669ms)
+    ✔ allowed: read and edit own display fields (257.2229ms)
+[2026-11-02T07:32:31.395Z]  @firebase/firestore: Firestore (13.1.0): GrpcConnection RPC 'Write' stream 0x120429a3 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'update' @ L7, evaluation error at L41:24 for 'update' @ L41, false for 'update' @ L7, false for 'update' @ L41
+    ✖ denied: changing own role, email or createdAt (196.5323ms)
+[2026-11-02T07:32:31.656Z]  @firebase/firestore: Firestore (13.1.0): GrpcConnection RPC 'Write' stream 0x120429aa error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'update' @ L7, evaluation error at L41:24 for 'update' @ L41, false for 'update' @ L7, false for 'update' @ L41
+[2026-11-02T07:32:31.695Z]  @firebase/firestore: Firestore (13.1.0): GrpcConnection RPC 'Write' stream 0x120429ab error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'delete' @ L7, evaluation error at L44:24 for 'delete' @ L44, false for 'delete' @ L7, false for 'delete' @ L44
+[2026-11-02T07:32:31.732Z]  @firebase/firestore: Firestore (13.1.0): GrpcConnection RPC 'Write' stream 0x120429ac error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'delete' @ L7, evaluation error at L44:24 for 'delete' @ L44, false for 'delete' @ L7, false for 'delete' @ L44
+    ✔ denied: reading, editing or deleting another user (294.4704ms)
+  ✖ user (1620.2822ms)
+  ▶ staff
+    ✔ allowed: read any user (177.9029ms)
+[2026-11-02T07:32:32.135Z]  @firebase/firestore: Firestore (13.1.0): GrpcConnection RPC 'Write' stream 0x120429b6 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'update' @ L7, evaluation error at L41:24 for 'update' @ L41, false for 'update' @ L7, false for 'update' @ L41
+[2026-11-02T07:32:32.174Z]  @firebase/firestore: Firestore (13.1.0): GrpcConnection RPC 'Write' stream 0x120429b7 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'update' @ L7, evaluation error at L41:24 for 'update' @ L41, false for 'update' @ L7, false for 'update' @ L41
+[2026-11-02T07:32:32.210Z]  @firebase/firestore: Firestore (13.1.0): GrpcConnection RPC 'Write' stream 0x120429b8 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'delete' @ L7, evaluation error at L44:24 for 'delete' @ L44, false for 'delete' @ L7, false for 'delete' @ L44
+    ✔ denied: changing roles, own or others (298.781ms)
+  ✔ staff (477.2345ms)
+  ▶ admin
+    ✔ allowed: change another user role, read and delete (231.675ms)
+    ✖ denied: changing own role (AUD-11) (171.6478ms)
+    ✖ denied: invalid role or editing other fields of another user (176.9629ms)
+  ✖ admin (581.2104ms)
+✖ users (2920.4857ms)
+[2026-11-02T07:32:33.030Z]  @firebase/firestore: Firestore (13.1.0): GrpcConnection RPC 'Write' stream 0x120429d0 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'create' @ L7, false for 'create' @ L53, false for 'update' @ L7, false for 'update' @ L53
+▶ recipes
+  ✔ anonymous denied: read and write (237.7787ms)
+  ✔ user allowed: read and query (296.2759ms)
+[2026-11-02T07:32:33.478Z]  @firebase/firestore: Firestore (13.1.0): GrpcConnection RPC 'Write' stream 0x120429dd error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'create' @ L7, evaluation error at L53:40 for 'create' @ L53, false for 'update' @ L7, evaluation error at L53:40 for 'update' @ L53, false for 'create' @ L7, false for 'create' @ L53
+[2026-11-02T07:32:33.520Z]  @firebase/firestore: Firestore (13.1.0): GrpcConnection RPC 'Write' stream 0x120429de error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'update' @ L7, evaluation error at L53:40 for 'update' @ L53, false for 'update' @ L7, false for 'update' @ L53
+[2026-11-02T07:32:33.561Z]  @firebase/firestore: Firestore (13.1.0): GrpcConnection RPC 'Write' stream 0x120429df error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'delete' @ L7, evaluation error at L53:40 for 'delete' @ L53, false for 'delete' @ L7, false for 'delete' @ L53
+  ✔ user denied: create, update, delete (234.7649ms)
+  ✔ staff allowed: create, update, delete (274.4735ms)
+  ✖ staff denied: bad shape (166.5857ms)
+  ✖ admin allowed: create and delete; denied: bad shape (233.5243ms)
+✖ recipes (1444.6524ms)
+[2026-11-02T07:32:34.545Z]  @firebase/firestore: Firestore (13.1.0): GrpcConnection RPC 'Write' stream 0x120429fe error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'create' @ L7, false for 'create' @ L62, false for 'update' @ L7, false for 'update' @ L68
+▶ meal_plans
+  ▶ anonymous
+    ✔ denied: read and create (308.8464ms)
+  ✔ anonymous (310.1378ms)
+  ▶ owner
+    ✔ allowed: create draft, read own, query own (334.9589ms)
+    ✔ allowed: saveMealPlan merge with the full payload while draft (230.4506ms)
+    ✔ allowed: draft -> submitted, delete draft (281.4204ms)
+[2026-11-02T07:32:35.639Z]  @firebase/firestore: Firestore (13.1.0): GrpcConnection RPC 'Write' stream 0x12042a22 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'create' @ L7, false for 'create' @ L62, false for 'update' @ L7, evaluation error at L68:24 for 'update' @ L68, false for 'create' @ L7, false for 'create' @ L62
+    ✖ denied: create for someone else, as non-draft, or with a review (271.8461ms)
+    ✖ denied: changing uid, createdAt or review on a draft (AUD-11) (215.7361ms)
+    ✖ denied: self-approving or skipping a status (AUD-11) (238.6527ms)
+    ✖ denied: bad shape on update (AUD-11) (227.3334ms)
+[2026-11-02T07:32:36.533Z]  @firebase/firestore: Firestore (13.1.0): GrpcConnection RPC 'Write' stream 0x12042a43 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'update' @ L7, evaluation error at L68:24 for 'update' @ L68, false for 'update' @ L7, false for 'update' @ L68
+[2026-11-02T07:32:36.563Z]  @firebase/firestore: Firestore (13.1.0): GrpcConnection RPC 'Write' stream 0x12042a44 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'update' @ L7, evaluation error at L68:24 for 'update' @ L68, false for 'update' @ L7, false for 'update' @ L68
+[2026-11-02T07:32:36.589Z]  @firebase/firestore: Firestore (13.1.0): GrpcConnection RPC 'Write' stream 0x12042a45 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'update' @ L7, evaluation error at L68:24 for 'update' @ L68, false for 'update' @ L7, false for 'update' @ L68
+[2026-11-02T07:32:36.612Z]  @firebase/firestore: Firestore (13.1.0): GrpcConnection RPC 'Write' stream 0x12042a46 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'delete' @ L7, evaluation error at L71:24 for 'delete' @ L71, false for 'delete' @ L7, false for 'delete' @ L71
+    ✔ denied: editing, resetting or deleting after submit (263.1356ms)
+  ✖ owner (2065.034ms)
+[2026-11-02T07:32:36.884Z]  @firebase/firestore: Firestore (13.1.0): GrpcConnection RPC 'Write' stream 0x12042a4f error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'update' @ L7, evaluation error at L68:24 for 'update' @ L68, false for 'update' @ L7, false for 'update' @ L68
+[2026-11-02T07:32:36.917Z]  @firebase/firestore: Firestore (13.1.0): GrpcConnection RPC 'Write' stream 0x12042a50 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'delete' @ L7, evaluation error at L71:24 for 'delete' @ L71, false for 'delete' @ L7, false for 'delete' @ L71
+  ▶ other user
+    ✔ denied: read, update, delete (351.7402ms)
+  ✔ other user (352.0884ms)
+  ▶ staff
+    ✔ allowed: read, approve and reject submitted plans (548.2215ms)
+    ✖ denied: rejecting without a reason (191.0585ms)
+    ✖ denied: reviewing a plan not in submitted, or changing the plan content (165.338ms)
+  ✖ staff (905.3855ms)
+  ▶ admin
+    ✔ allowed: read, approve and reject submitted plans (341.6486ms)
+    ✖ denied: rejecting without a reason (210.9008ms)
+    ✖ denied: reviewing a plan not in submitted, or changing the plan content (177.2083ms)
+  ✖ admin (730.6362ms)
+✖ meal_plans (4364.0822ms)
+[2026-11-02T07:32:38.781Z]  @firebase/firestore: Firestore (13.1.0): GrpcConnection RPC 'Write' stream 0x12042a92 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'create' @ L7, false for 'create' @ L80, false for 'update' @ L7, false for 'update' @ L80
+▶ announcements
+  ✔ anonymous denied: read and write (179.6845ms)
+  ✔ user allowed: read and stream (175.299ms)
+[2026-11-02T07:32:39.128Z]  @firebase/firestore: Firestore (13.1.0): GrpcConnection RPC 'Write' stream 0x12042a9f error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'create' @ L7, evaluation error at L80:40 for 'create' @ L80, false for 'update' @ L7, evaluation error at L80:40 for 'update' @ L80, false for 'create' @ L7, false for 'create' @ L80
+[2026-11-02T07:32:39.157Z]  @firebase/firestore: Firestore (13.1.0): GrpcConnection RPC 'Write' stream 0x12042aa0 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'update' @ L7, evaluation error at L80:40 for 'update' @ L80, false for 'update' @ L7, false for 'update' @ L80
+[2026-11-02T07:32:39.183Z]  @firebase/firestore: Firestore (13.1.0): GrpcConnection RPC 'Write' stream 0x12042aa1 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'delete' @ L7, evaluation error at L80:40 for 'delete' @ L80, false for 'delete' @ L7, false for 'delete' @ L80
+  ✔ user denied: create, update, delete (226.1158ms)
+  ✔ staff allowed: create, edit text, delete (211.978ms)
+  ✖ staff denied: posing as admin, bad shape, changing author or date (195.4555ms)
+  ✖ admin allowed: create; denied: posing as staff (195.9339ms)
+✖ announcements (1185.8936ms)
+ℹ tests 41
+ℹ suites 14
+ℹ pass 25
+ℹ fail 16
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 13029.4354
+
+✖ failing tests:
+
+test at tests\firestore.rules.test.js:123:5
+✖ denied: creating a profile with a bad shape (160.9669ms)
+  Error: Expected request to fail, but it succeeded.
+      at C:\Users\phamv\OneDrive\Desktop\PRM\Assignment\LongvitaRC\firebase\node_modules\@firebase\rules-unit-testing\dist\index.cjs.js:576:31
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async TestContext.<anonymous> (C:\Users\phamv\OneDrive\Desktop\PRM\Assignment\LongvitaRC\firebase\tests\firestore.rules.test.js:124:7)
+      at async Test.run (node:internal/test_runner/test:1404:7)
+      at async Suite.processPendingSubtests (node:internal/test_runner/test:969:7)
+
+test at tests\firestore.rules.test.js:135:5
+✖ denied: changing own role, email or createdAt (196.5323ms)
+  Error: Expected request to fail, but it succeeded.
+      at C:\Users\phamv\OneDrive\Desktop\PRM\Assignment\LongvitaRC\firebase\node_modules\@firebase\rules-unit-testing\dist\index.cjs.js:576:31
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async TestContext.<anonymous> (C:\Users\phamv\OneDrive\Desktop\PRM\Assignment\LongvitaRC\firebase\tests\firestore.rules.test.js:137:7)
+      at async Test.run (node:internal/test_runner/test:1404:7)
+      at async Suite.processPendingSubtests (node:internal/test_runner/test:969:7)
+
+test at tests\firestore.rules.test.js:168:5
+✖ denied: changing own role (AUD-11) (171.6478ms)
+  Error: Expected request to fail, but it succeeded.
+      at C:\Users\phamv\OneDrive\Desktop\PRM\Assignment\LongvitaRC\firebase\node_modules\@firebase\rules-unit-testing\dist\index.cjs.js:576:31
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async TestContext.<anonymous> (C:\Users\phamv\OneDrive\Desktop\PRM\Assignment\LongvitaRC\firebase\tests\firestore.rules.test.js:169:7)
+      at async Test.run (node:internal/test_runner/test:1404:7)
+      at async Suite.processPendingSubtests (node:internal/test_runner/test:969:7)
+
+test at tests\firestore.rules.test.js:172:5
+✖ denied: invalid role or editing other fields of another user (176.9629ms)
+  Error: Expected request to fail, but it succeeded.
+      at C:\Users\phamv\OneDrive\Desktop\PRM\Assignment\LongvitaRC\firebase\node_modules\@firebase\rules-unit-testing\dist\index.cjs.js:576:31
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async TestContext.<anonymous> (C:\Users\phamv\OneDrive\Desktop\PRM\Assignment\LongvitaRC\firebase\tests\firestore.rules.test.js:173:7)
+      at async Test.run (node:internal/test_runner/test:1404:7)
+      at async Suite.processPendingSubtests (node:internal/test_runner/test:969:7)
+
+test at tests\firestore.rules.test.js:207:3
+✖ staff denied: bad shape (166.5857ms)
+  Error: Expected request to fail, but it succeeded.
+      at C:\Users\phamv\OneDrive\Desktop\PRM\Assignment\LongvitaRC\firebase\node_modules\@firebase\rules-unit-testing\dist\index.cjs.js:576:31
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async TestContext.<anonymous> (C:\Users\phamv\OneDrive\Desktop\PRM\Assignment\LongvitaRC\firebase\tests\firestore.rules.test.js:208:5)
+      at async Test.run (node:internal/test_runner/test:1404:7)
+      at async Suite.processPendingSubtests (node:internal/test_runner/test:969:7)
+
+test at tests\firestore.rules.test.js:213:3
+✖ admin allowed: create and delete; denied: bad shape (233.5243ms)
+  Error: Expected request to fail, but it succeeded.
+      at C:\Users\phamv\OneDrive\Desktop\PRM\Assignment\LongvitaRC\firebase\node_modules\@firebase\rules-unit-testing\dist\index.cjs.js:576:31
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async TestContext.<anonymous> (C:\Users\phamv\OneDrive\Desktop\PRM\Assignment\LongvitaRC\firebase\tests\firestore.rules.test.js:216:5)
+      at async Test.run (node:internal/test_runner/test:1404:7)
+      at async Suite.processPendingSubtests (node:internal/test_runner/test:969:7)
+
+test at tests\firestore.rules.test.js:253:5
+✖ denied: create for someone else, as non-draft, or with a review (271.8461ms)
+  Error: Expected request to fail, but it succeeded.
+      at C:\Users\phamv\OneDrive\Desktop\PRM\Assignment\LongvitaRC\firebase\node_modules\@firebase\rules-unit-testing\dist\index.cjs.js:576:31
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async TestContext.<anonymous> (C:\Users\phamv\OneDrive\Desktop\PRM\Assignment\LongvitaRC\firebase\tests\firestore.rules.test.js:255:7)
+      at async Test.run (node:internal/test_runner/test:1404:7)
+      at async Suite.processPendingSubtests (node:internal/test_runner/test:969:7)
+
+test at tests\firestore.rules.test.js:260:5
+✖ denied: changing uid, createdAt or review on a draft (AUD-11) (215.7361ms)
+  Error: Expected request to fail, but it succeeded.
+      at C:\Users\phamv\OneDrive\Desktop\PRM\Assignment\LongvitaRC\firebase\node_modules\@firebase\rules-unit-testing\dist\index.cjs.js:576:31
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async TestContext.<anonymous> (C:\Users\phamv\OneDrive\Desktop\PRM\Assignment\LongvitaRC\firebase\tests\firestore.rules.test.js:261:7)
+      at async Test.run (node:internal/test_runner/test:1404:7)
+      at async Suite.processPendingSubtests (node:internal/test_runner/test:969:7)
+
+test at tests\firestore.rules.test.js:266:5
+✖ denied: self-approving or skipping a status (AUD-11) (238.6527ms)
+  Error: Expected request to fail, but it succeeded.
+      at C:\Users\phamv\OneDrive\Desktop\PRM\Assignment\LongvitaRC\firebase\node_modules\@firebase\rules-unit-testing\dist\index.cjs.js:576:31
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async TestContext.<anonymous> (C:\Users\phamv\OneDrive\Desktop\PRM\Assignment\LongvitaRC\firebase\tests\firestore.rules.test.js:267:7)
+      at async Test.run (node:internal/test_runner/test:1404:7)
+      at async Suite.processPendingSubtests (node:internal/test_runner/test:969:7)
+
+test at tests\firestore.rules.test.js:272:5
+✖ denied: bad shape on update (AUD-11) (227.3334ms)
+  Error: Expected request to fail, but it succeeded.
+      at C:\Users\phamv\OneDrive\Desktop\PRM\Assignment\LongvitaRC\firebase\node_modules\@firebase\rules-unit-testing\dist\index.cjs.js:576:31
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async TestContext.<anonymous> (C:\Users\phamv\OneDrive\Desktop\PRM\Assignment\LongvitaRC\firebase\tests\firestore.rules.test.js:273:7)
+      at async Test.run (node:internal/test_runner/test:1404:7)
+      at async Suite.processPendingSubtests (node:internal/test_runner/test:969:7)
+
+test at tests\firestore.rules.test.js:310:7
+✖ denied: rejecting without a reason (191.0585ms)
+  Error: Expected request to fail, but it succeeded.
+      at C:\Users\phamv\OneDrive\Desktop\PRM\Assignment\LongvitaRC\firebase\node_modules\@firebase\rules-unit-testing\dist\index.cjs.js:576:31
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async TestContext.<anonymous> (C:\Users\phamv\OneDrive\Desktop\PRM\Assignment\LongvitaRC\firebase\tests\firestore.rules.test.js:311:9)
+      at async Test.run (node:internal/test_runner/test:1404:7)
+      at async Suite.processPendingSubtests (node:internal/test_runner/test:969:7)
+
+test at tests\firestore.rules.test.js:317:7
+✖ denied: reviewing a plan not in submitted, or changing the plan content (165.338ms)
+  Error: Expected request to fail, but it succeeded.
+      at C:\Users\phamv\OneDrive\Desktop\PRM\Assignment\LongvitaRC\firebase\node_modules\@firebase\rules-unit-testing\dist\index.cjs.js:576:31
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async TestContext.<anonymous> (C:\Users\phamv\OneDrive\Desktop\PRM\Assignment\LongvitaRC\firebase\tests\firestore.rules.test.js:318:9)
+      at async Test.run (node:internal/test_runner/test:1404:7)
+      at async Suite.processPendingSubtests (node:internal/test_runner/test:969:7)
+
+test at tests\firestore.rules.test.js:310:7
+✖ denied: rejecting without a reason (210.9008ms)
+  Error: Expected request to fail, but it succeeded.
+      at C:\Users\phamv\OneDrive\Desktop\PRM\Assignment\LongvitaRC\firebase\node_modules\@firebase\rules-unit-testing\dist\index.cjs.js:576:31
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async TestContext.<anonymous> (C:\Users\phamv\OneDrive\Desktop\PRM\Assignment\LongvitaRC\firebase\tests\firestore.rules.test.js:311:9)
+      at async Test.run (node:internal/test_runner/test:1404:7)
+      at async Suite.processPendingSubtests (node:internal/test_runner/test:969:7)
+
+test at tests\firestore.rules.test.js:317:7
+✖ denied: reviewing a plan not in submitted, or changing the plan content (177.2083ms)
+  Error: Expected request to fail, but it succeeded.
+      at C:\Users\phamv\OneDrive\Desktop\PRM\Assignment\LongvitaRC\firebase\node_modules\@firebase\rules-unit-testing\dist\index.cjs.js:576:31
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async TestContext.<anonymous> (C:\Users\phamv\OneDrive\Desktop\PRM\Assignment\LongvitaRC\firebase\tests\firestore.rules.test.js:318:9)
+      at async Test.run (node:internal/test_runner/test:1404:7)
+      at async Suite.processPendingSubtests (node:internal/test_runner/test:969:7)
+
+test at tests\firestore.rules.test.js:355:3
+✖ staff denied: posing as admin, bad shape, changing author or date (195.4555ms)
+  Error: Expected request to fail, but it succeeded.
+      at C:\Users\phamv\OneDrive\Desktop\PRM\Assignment\LongvitaRC\firebase\node_modules\@firebase\rules-unit-testing\dist\index.cjs.js:576:31
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async TestContext.<anonymous> (C:\Users\phamv\OneDrive\Desktop\PRM\Assignment\LongvitaRC\firebase\tests\firestore.rules.test.js:356:5)
+      at async Test.run (node:internal/test_runner/test:1404:7)
+      at async Suite.processPendingSubtests (node:internal/test_runner/test:969:7)
+
+test at tests\firestore.rules.test.js:362:3
+✖ admin allowed: create; denied: posing as staff (195.9339ms)
+  Error: Expected request to fail, but it succeeded.
+      at C:\Users\phamv\OneDrive\Desktop\PRM\Assignment\LongvitaRC\firebase\node_modules\@firebase\rules-unit-testing\dist\index.cjs.js:576:31
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async TestContext.<anonymous> (C:\Users\phamv\OneDrive\Desktop\PRM\Assignment\LongvitaRC\firebase\tests\firestore.rules.test.js:364:5)
+      at async Test.run (node:internal/test_runner/test:1404:7)
+      at async Suite.processPendingSubtests (node:internal/test_runner/test:969:7)
+!  Script exited unsuccessfully (code 1)
+i  emulators: Shutting down emulators.
+i  firestore: Stopping Firestore Emulator
+!  Firestore Emulator has exited upon receiving signal: SIGINT
+i  hub: Stopping emulator hub
+i  logging: Stopping Logging Emulator
+
+Error: Script "node --test tests/*.test.js" exited with code 1
