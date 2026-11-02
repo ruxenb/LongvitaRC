@@ -1,7 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+
+import '../models/auth_state.dart';
 import '../models/user_model.dart';
+import 'auth_error_mapper.dart';
 import 'i_auth_service.dart';
 
 class AuthService implements IAuthService {
@@ -20,74 +24,116 @@ class AuthService implements IAuthService {
         _googleSignIn = googleSignIn ?? GoogleSignIn();
 
   @override
-  UserModel? get currentUser => _cachedUser;
+  Stream<String?> get authUidChanges =>
+      _auth.authStateChanges().map((user) {
+        if (user == null || user.uid != _cachedUser?.uid) _cachedUser = null;
+        return user?.uid;
+      });
 
   @override
-  Stream<UserModel?> get authStateChanges {
-    return _auth.authStateChanges().asyncMap((firebaseUser) async {
-      if (firebaseUser == null) {
-        _cachedUser = null;
-        return null;
-      }
-      return await fetchUserProfile(firebaseUser.uid);
-    });
+  String? get currentUid => _auth.currentUser?.uid;
+
+  @override
+  UserModel? get currentUser {
+    final cached = _cachedUser;
+    return cached != null && cached.uid == currentUid ? cached : null;
   }
 
   @override
-  Future<UserModel?> fetchUserProfile(String uid) async {
+  Future<AuthSignInResult> signInWithGoogle() async {
+    final GoogleSignInAccount? account;
     try {
-      final doc = await _firestore.collection('users').doc(uid).get();
-      if (doc.exists && doc.data() != null) {
-        _cachedUser = UserModel.fromMap(doc.data()!, doc.id);
-        return _cachedUser;
+      account = await _googleSignIn.signIn();
+    } on PlatformException catch (e) {
+      final failure = AuthErrorMapper.fromGoogle(e);
+      return failure.kind == AuthFailureKind.cancelled
+          ? const AuthSignInCancelled()
+          : AuthSignInFailed(failure);
+    }
+    if (account == null) return const AuthSignInCancelled();
+
+    try {
+      final tokens = await account.authentication;
+      final credential = GoogleAuthProvider.credential(
+        accessToken: tokens.accessToken,
+        idToken: tokens.idToken,
+      );
+      final result = await _auth.signInWithCredential(credential);
+      final uid = result.user?.uid;
+      if (uid == null) {
+        return const AuthSignInFailed(
+            AuthFailure(AuthFailureKind.credential, code: 'no-user'));
       }
-      final currentAuth = _auth.currentUser;
-      if (currentAuth != null && currentAuth.uid == uid) {
-        final newUser = UserModel(
-          uid: uid,
-          email: currentAuth.email ?? '',
-          displayName: currentAuth.displayName ?? 'Người dùng Longvita',
-          photoUrl: currentAuth.photoURL,
-          role: 'user', // Default role for app users
-          createdAt: DateTime.now(),
-        );
-        await _firestore.collection('users').doc(uid).set(newUser.toMap(), SetOptions(merge: true));
-        _cachedUser = newUser;
-        return _cachedUser;
-      }
-      return null;
-    } catch (_) {
-      return null;
+      return AuthSignInSucceeded(uid);
+    } on FirebaseAuthException catch (e) {
+      await _signOutGoogleQuietly();
+      return AuthSignInFailed(AuthErrorMapper.fromFirebaseAuth(e));
+    } on PlatformException catch (e) {
+      await _signOutGoogleQuietly();
+      return AuthSignInFailed(AuthErrorMapper.fromGoogle(e));
+    } catch (e) {
+      await _signOutGoogleQuietly();
+      return AuthSignInFailed(
+          AuthFailure(AuthFailureKind.unknown, cause: e));
     }
   }
 
   @override
-  Future<UserModel?> signInWithGoogle() async {
-    final googleUser = await _googleSignIn.signIn();
-    if (googleUser == null) {
-      // User cancelled the picker
-      return null;
+  Future<UserModel> loadProfile(String uid) async {
+    final doc = _firestore.collection('users').doc(uid);
+
+    final DocumentSnapshot<Map<String, dynamic>> snapshot;
+    try {
+      snapshot = await doc.get();
+    } on FirebaseException catch (e) {
+      throw AuthErrorMapper.fromFirestore(e, writing: false);
     }
 
-    final googleAuth = await googleUser.authentication;
-    final credential = GoogleAuthProvider.credential(
-      accessToken: googleAuth.accessToken,
-      idToken: googleAuth.idToken,
+    final data = snapshot.data();
+    if (snapshot.exists && data != null) {
+      try {
+        return _cachedUser = UserModel.fromMap(data, snapshot.id);
+      } catch (e) {
+        throw AuthFailure(AuthFailureKind.profileRead,
+            code: 'invalid-profile', cause: e);
+      }
+    }
+
+    // First sign-in: create the profile with the default role. Rules only
+    // allow the owner to create it with role 'user'.
+    final firebaseUser = _auth.currentUser;
+    if (firebaseUser == null || firebaseUser.uid != uid) {
+      throw const AuthFailure(AuthFailureKind.profileRead,
+          code: 'signed-out-during-load');
+    }
+    final newUser = UserModel(
+      uid: uid,
+      email: firebaseUser.email ?? '',
+      displayName: firebaseUser.displayName ?? 'Người dùng Longvita',
+      photoUrl: firebaseUser.photoURL,
+      role: 'user',
+      createdAt: DateTime.now(),
     );
-
-    final userCredential = await _auth.signInWithCredential(credential);
-    final user = userCredential.user;
-    if (user == null) return null;
-
-    return await fetchUserProfile(user.uid);
+    try {
+      await doc.set(newUser.toMap(), SetOptions(merge: true));
+    } on FirebaseException catch (e) {
+      throw AuthErrorMapper.fromFirestore(e, writing: true);
+    }
+    return _cachedUser = newUser;
   }
 
   @override
   Future<void> signOut() async {
     _cachedUser = null;
-    await Future.wait([
-      _googleSignIn.signOut(),
-      _auth.signOut(),
-    ]);
+    await _signOutGoogleQuietly();
+    await _auth.signOut();
+  }
+
+  /// Clears the cached Google account so the picker shows next time. A
+  /// failure here must not block the Firebase sign-out.
+  Future<void> _signOutGoogleQuietly() async {
+    try {
+      await _googleSignIn.signOut();
+    } catch (_) {}
   }
 }

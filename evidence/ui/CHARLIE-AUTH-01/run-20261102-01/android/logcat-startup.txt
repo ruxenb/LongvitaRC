@@ -1,0 +1,10 @@
+11-02 12:28:16.903  4212  4269 I flutter : [IMPORTANT:flutter/shell/platform/android/android_context_gl_impeller.cc(104)] Using the Impeller rendering backend (OpenGLES).
+11-02 12:28:17.012  4212  4275 I flutter : The Dart VM service is listening on http://127.0.0.1:33181/eVWBLSwuSz4=/
+11-02 12:28:19.511  4212  4212 I flutter : Firebase start-up failed: not-configured PlatformException(java.lang.Exception: Failed to load FirebaseOptions from resource. Check that you have defined val
+11-02 12:28:19.511  4212  4212 I flutter : 	at io.flutter.plugins.firebase.core.FlutterFirebaseCorePlugin.lambda$optionsFromResource$5(FlutterFirebaseCorePlugin.java:222)
+11-02 12:28:19.511  4212  4212 I flutter : 	at io.flutter.plugins.firebase.core.FlutterFirebaseCorePlugin.$r8$lambda$UKjIMRLnh50mCq5Rg7c5X1_2d5w(Unknown Source:0)
+11-02 12:28:19.511  4212  4212 I flutter : 	at io.flutter.plugins.firebase.core.FlutterFirebaseCorePlugin$$ExternalSyntheticLambda3.run(D8$$SyntheticClass:0)
+11-02 12:28:19.511  4212  4212 I flutter : 	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1145)
+11-02 12:28:19.511  4212  4212 I flutter : 	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:644)
+11-02 12:28:19.511  4212  4212 I flutter : 	at java.lang.Thread.run(Thread.java:1012)
+11-02 12:28:19.511  4212  4212 I flutter : , null)

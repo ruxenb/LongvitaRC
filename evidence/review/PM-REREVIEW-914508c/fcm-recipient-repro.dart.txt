@@ -1,0 +1,37 @@
+import 'package:flutter_test/flutter_test.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:longvita/firebase/notification_service.dart';
+import 'fcm/notification_service_test.dart' show FakeGateway, payload;
+
+void main() {
+  test('PM-FCM-01: a rejected recipient must not replace an accepted raw message', () async {
+    final gateway = FakeGateway();
+    final service = NotificationService(gateway: gateway)..bindUser('uid-b');
+    addTearDown(() async {
+      await gateway.foreground.close();
+      await gateway.opened.close();
+    });
+    await service.initialize();
+    gateway.foreground.add(RemoteMessage(
+      messageId: 'fcm-b',
+      data: payload(id: 'shared-id', recipient: 'uid-b'),
+      notification: const RemoteNotification(title: 'Message for B'),
+    ));
+    await Future<void>.delayed(Duration.zero);
+    expect(service.messages.single.data['recipient_uid'], 'uid-b');
+
+    // A stale/private message has the same application message id, but it
+    // must be rejected without mutating B's previously accepted entry.
+    gateway.foreground.add(RemoteMessage(
+      messageId: 'fcm-a-late',
+      data: payload(id: 'shared-id', recipient: 'uid-a'),
+      notification: const RemoteNotification(title: 'Private message for A'),
+    ));
+    await Future<void>.delayed(Duration.zero);
+    expect(service.inbox.single.recipientUid, 'uid-b');
+    expect(service.messages.single.data['recipient_uid'], 'uid-b',
+      reason: 'raw compatibility getter must obey the same recipient filter as inbox');
+    expect(service.messages.single.notification?.title, 'Message for B');
+  });
+}
+

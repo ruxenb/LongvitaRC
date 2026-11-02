@@ -59,7 +59,16 @@ venv/
 env/
 .uv/
 
+# Firebase rules tests
+/firebase/node_modules/
+/firebase/.firebase/
+
 # Symbolication & Obfuscation
 app.*.symbols
 app.*.map.json
 .widget_preview/
+
+# Local assistant workspace; project handoff stays in docs/tasks/.
+/docs/coordination/
+/AGENTS.md
+/CLAUDE.md

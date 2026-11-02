@@ -1,5 +1,11 @@
 # Longvita — Cloud-Enabled Mobile App
 
+> **Cập nhật 02/11/2026:** **Lab 3 chính là Assignment** đang triển khai, kế thừa thiết kế Lab 2. Xem [bàn giao kỹ thuật và tiến độ Charlie](docs/tasks/charlie-progress.md) cho phạm vi nhánh, kiểm chứng và các quyết định cần team review. Giữ 112 task IDs/owners; các phần mobile/web/shared-core là cùng sản phẩm. Nhánh hiện chưa chứng minh đủ sáu Firebase services hoặc toàn bộ E2E.
+>
+> **Firebase project:** `longvita-8da7e`, app Android `vn.edu.fpt.longvita` (S0-4). Chưa mời đủ thành viên và SHA.
+>
+> SDK máy kiểm tra: Flutter 3.47.6/Dart 3.13.5; bảng tool bên dưới ghi baseline team, cần chốt khi ghim. `pubspec.lock` là resolved package versions; `^` trong pubspec không phải exact pin. Storage/Spark, application ID và rubric khác nhau đang được ghi trong DEC-01..04.
+
 > **Môn học:** PRM393 — Mobile Programming (Lab 3: Cloud-Enabled Mobile App)  
 > **Chủ đề (kế thừa Lab 2):** Longvita — Ứng dụng hỗ trợ chuyển đổi kiến thức dinh dưỡng trường thọ (*La dieta della longevità* — TS. Valter Longo) thành thực đơn 7 ngày, công thức chi tiết và danh sách mua sắm.  
 > **Nền tảng mục tiêu:** Android Device / Emulator  
@@ -41,7 +47,7 @@ Tuân thủ yêu cầu bắt buộc của Handout Mục 3 & 9 về việc ghim p
 | **Dart SDK** | `3.13.2` | Đi kèm với Flutter 3.47.2 |
 | **Android SDK Platform** | API 34 (Android 14) / Min SDK 21 | Cấu hình trong `android/app/build.gradle.kts` |
 | **Python** | `3.12+` | Dành cho Google ARTEMIS Test Suite |
-| **Google ARTEMIS** | Commit `HEAD` (Apache 2.0) | Pinned commit trên repo `google/artemis` |
+| **Google ARTEMIS** | Chưa pin full commit SHA (Apache 2.0) | Chốt full SHA của `google/artemis`; HEAD không phải pin |
 | **Firebase Packages** | Core `3.15.2`, Auth `5.7.0`, Storage `12.4.10`, Messaging `15.2.10`, Analytics `11.6.0`, Crashlytics `4.3.10`, RemoteConfig `5.5.0`, Firestore `5.6.12` | Quản lý trong `pubspec.yaml` |
 | **State Management** | `provider: ^6.1.2` | MVVM Architecture Dependency Injection |
 

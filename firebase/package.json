@@ -1,0 +1,13 @@
+{
+  "name": "longvita-firebase-tests",
+  "private": true,
+  "description": "Security Rules tests for Longvita. Runs on the local emulator with a demo project, never on the real project.",
+  "scripts": {
+    "test:rules": "firebase emulators:exec --only firestore --project demo-longvita \"node --test tests/*.test.js\""
+  },
+  "devDependencies": {
+    "@firebase/rules-unit-testing": "^6.0.0",
+    "firebase": "^13.1.0",
+    "firebase-tools": "^15.34.2"
+  }
+}

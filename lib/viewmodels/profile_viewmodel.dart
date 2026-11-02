@@ -11,8 +11,9 @@ import '../firebase/remote_config_service.dart';
 import '../firebase/crashlytics_service.dart';
 import '../firebase/analytics_service.dart';
 import 'base_viewmodel.dart';
+import 'session_scoped.dart';
 
-class ProfileViewModel extends BaseViewModel {
+class ProfileViewModel extends BaseViewModel implements SessionScoped {
   final IAuthService authService;
   final StorageService storageService;
   final NotificationService notificationService;
@@ -24,6 +25,7 @@ class ProfileViewModel extends BaseViewModel {
   double _uploadProgress = 0.0;
   String? _lastUploadedUrl;
   ViewState<String> _exportState = const ViewStateIdle();
+  final SessionEpoch _epoch = SessionEpoch();
 
   ProfileViewModel({
     required this.authService,
@@ -41,6 +43,25 @@ class ProfileViewModel extends BaseViewModel {
   ViewState<String> get exportState => _exportState;
   List<RemoteMessage> get notifications => notificationService.messages;
 
+  /// Notification permission is requested after sign-in, not at app start,
+  /// so the first screen a new user (and ARTEMIS TC-01) sees is Sign-in
+  /// rather than the Android 13 permission dialog.
+  @override
+  void onSessionStarted(UserModel user) {
+    notificationService.bindUser(user.uid);
+    notificationService.initialize();
+  }
+
+  @override
+  void clearSession() {
+    _epoch.advance();
+    _uploadProgress = 0.0;
+    _lastUploadedUrl = null;
+    _exportState = const ViewStateIdle();
+    notificationService.clearHistory();
+    notifyListeners();
+  }
+
   // Remote config properties for UI display
   int get maxRecommendations => remoteConfigService.maxRecommendations;
   bool get enableScore => remoteConfigService.enableLongevityScore;
@@ -54,6 +75,7 @@ class ProfileViewModel extends BaseViewModel {
       return;
     }
 
+    final epoch = _epoch.current;
     _exportState = const ViewStateLoading('Đang khởi tạo tài liệu PDF...');
     _uploadProgress = 0.0;
     notifyListeners();
@@ -62,6 +84,7 @@ class ProfileViewModel extends BaseViewModel {
       // 1. Generate PDF on local device
       final Uint8List pdfBytes =
           await reportService.generateMealPlanPdf(plan);
+      if (_epoch.isStale(epoch)) return;
 
       _exportState = const ViewStateLoading('Đang tải PDF lên Cloud Storage...');
       notifyListeners();
@@ -73,30 +96,35 @@ class ProfileViewModel extends BaseViewModel {
         fileName: fileName,
         bytes: pdfBytes,
         onProgress: (progress) {
+          if (_epoch.isStale(epoch)) return;
           _uploadProgress = progress;
           notifyListeners();
         },
       );
+      if (_epoch.isStale(epoch)) return;
 
       if (downloadUrl != null) {
         _lastUploadedUrl = downloadUrl;
-        final hasShoppingList = plan.days
-            .expand((day) => day.meals)
-            .any((recipe) => recipe.ingredients.isNotEmpty);
-        await analyticsService.logExportReport(
-          fileSizeKb: (pdfBytes.lengthInBytes / 1024).ceil(),
-          hasShoppingList: hasShoppingList ? 1 : 0,
-        );
         _exportState = ViewStateSuccess(downloadUrl);
+        notifyListeners();
+        await analyticsService.logExportReport(
+          fileSizeKb: (pdfBytes.length / 1024).ceil(),
+          // ReportService does not include a shopping list section yet.
+          hasShoppingList: 0,
+        );
       } else {
         _exportState = const ViewStateError('Tải lên thất bại. Vui lòng thử lại.');
+        notifyListeners();
       }
     } catch (e, s) {
+      // A failure of the previous session must not be reported under the
+      // user id of the current one.
+      if (_epoch.isStale(epoch)) return;
+      _exportState = ViewStateError('Lỗi trong quá trình xuất PDF', e);
+      notifyListeners();
       await crashlyticsService.recordError(e, s,
           reason: 'Failed to export and upload PDF');
-      _exportState = ViewStateError('Lỗi trong quá trình xuất PDF', e);
     }
-    notifyListeners();
   }
 
   void testCrashlytics() {

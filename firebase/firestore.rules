@@ -1,7 +1,7 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    
+
     // Deny all by default
     match /{document=**} {
       allow read, write: if false;
@@ -28,19 +28,84 @@ service cloud.firestore {
       return isAuthenticated() && (getUserData().role == 'staff' || getUserData().role == 'admin');
     }
 
+    function isNonEmptyString(value) {
+      return value is string && value.size() > 0;
+    }
+
+    function isOptionalString(value) {
+      return value == null || value is string;
+    }
+
+    function changedKeys() {
+      return request.resource.data.diff(resource.data).affectedKeys();
+    }
+
+    // Data shapes mirror toMap() of the models in lib/models/
+    function isValidUser(data) {
+      return data.keys().hasOnly(['email', 'displayName', 'photoUrl', 'role', 'createdAt'])
+          && data.keys().hasAll(['email', 'displayName', 'role', 'createdAt'])
+          && data.email is string
+          && isNonEmptyString(data.displayName)
+          && isOptionalString(data.get('photoUrl', null))
+          && data.role in ['user', 'staff', 'admin']
+          && data.createdAt is string;
+    }
+
+    function isValidRecipe(data) {
+      return data.keys().hasOnly(['name', 'description', 'category', 'proteinGrams', 'calories',
+                                  'ingredients', 'instructions', 'imageUrl', 'sourceNote'])
+          && data.keys().hasAll(['name', 'description', 'category', 'proteinGrams', 'calories',
+                                 'ingredients', 'instructions', 'sourceNote'])
+          && isNonEmptyString(data.name)
+          && data.description is string
+          && isNonEmptyString(data.category)
+          && data.proteinGrams is number
+          && data.calories is number
+          && data.ingredients is list
+          && data.instructions is list
+          && isOptionalString(data.get('imageUrl', null))
+          && data.sourceNote is string;
+    }
+
+    function isValidMealPlan(data) {
+      return data.keys().hasOnly(['uid', 'title', 'targetCalories', 'targetProteinGrams', 'status',
+                                  'reviewerReason', 'days', 'createdAt'])
+          && data.keys().hasAll(['uid', 'title', 'targetCalories', 'targetProteinGrams', 'status',
+                                 'days', 'createdAt'])
+          && data.uid is string
+          && isNonEmptyString(data.title)
+          && data.targetCalories is number
+          && data.targetProteinGrams is number
+          && data.status in ['draft', 'submitted', 'approved', 'rejected']
+          && isOptionalString(data.get('reviewerReason', null))
+          && data.days is list
+          && data.createdAt is string;
+    }
+
+    function isValidAnnouncement(data) {
+      return data.keys().hasOnly(['title', 'content', 'authorRole', 'createdAt'])
+          && data.keys().hasAll(['title', 'content', 'authorRole', 'createdAt'])
+          && isNonEmptyString(data.title)
+          && isNonEmptyString(data.content)
+          && data.authorRole == getUserData().role
+          && data.createdAt is string;
+    }
+
     // Collection: users/{uid}
     match /users/{uid} {
       // Allow user to read their own profile, or staff/admin
       allow read: if isOwner(uid) || isStaffOrAdmin();
-      
+
       // On first sign in, user can create their profile with role = 'user'
-      allow create: if isOwner(uid) 
-                    && request.resource.data.role == 'user';
-      
-      // Only Admin can change roles. Users cannot change their own role.
-      allow update: if (hasRole('admin')) 
-                    || (isOwner(uid) && request.resource.data.role == resource.data.role);
-                    
+      allow create: if isOwner(uid)
+                    && request.resource.data.role == 'user'
+                    && isValidUser(request.resource.data);
+
+      // Owners edit their own display fields. Only an Admin changes roles, and never their own.
+      allow update: if isValidUser(request.resource.data)
+                    && ((isOwner(uid) && changedKeys().hasOnly(['displayName', 'photoUrl']))
+                        || (hasRole('admin') && !isOwner(uid) && changedKeys().hasOnly(['role'])));
+
       allow delete: if hasRole('admin');
     }
 
@@ -48,26 +113,45 @@ service cloud.firestore {
     match /recipes/{id} {
       // Anyone signed in can read longevity recipes
       allow read: if isAuthenticated();
-      
+
       // Only staff/admin can create, update, or archive recipes
-      allow create, update, delete: if isStaffOrAdmin();
+      allow create, update: if isStaffOrAdmin() && isValidRecipe(request.resource.data);
+      allow delete: if isStaffOrAdmin();
     }
 
     // Collection: meal_plans/{id}
     match /meal_plans/{id} {
       // Owner or staff can read
       allow read: if isAuthenticated() && (resource.data.uid == request.auth.uid || isStaffOrAdmin());
-      
+
       // User creates new plan with status = 'draft'
-      allow create: if isAuthenticated() 
+      allow create: if isAuthenticated()
                     && request.resource.data.uid == request.auth.uid
-                    && (request.resource.data.status == 'draft' || request.resource.data.status == 'submitted');
-      
-      // User can update while in 'draft' or change to 'submitted'
-      // Staff can update status to 'approved' or 'rejected'
-      allow update: if (isAuthenticated() && resource.data.uid == request.auth.uid && resource.data.status == 'draft')
-                    || isStaffOrAdmin();
-                    
+                    && request.resource.data.status == 'draft'
+                    && request.resource.data.get('reviewerReason', null) == null
+                    && isValidMealPlan(request.resource.data);
+
+      // Owner: edit while 'draft' or change to 'submitted'; uid, createdAt and the review stay locked
+      function isOwnerDraftUpdate() {
+        return isOwner(resource.data.uid)
+            && resource.data.status == 'draft'
+            && request.resource.data.status in ['draft', 'submitted']
+            && changedKeys().hasOnly(['title', 'targetCalories', 'targetProteinGrams', 'status', 'days']);
+      }
+
+      // Staff/admin: 'submitted' -> 'approved' or 'rejected'; a rejection must carry a reason
+      function isStaffReview() {
+        return isStaffOrAdmin()
+            && resource.data.status == 'submitted'
+            && changedKeys().hasOnly(['status', 'reviewerReason'])
+            && (request.resource.data.status == 'approved'
+                || (request.resource.data.status == 'rejected'
+                    && isNonEmptyString(request.resource.data.get('reviewerReason', null))));
+      }
+
+      allow update: if isValidMealPlan(request.resource.data)
+                    && (isOwnerDraftUpdate() || isStaffReview());
+
       allow delete: if isAuthenticated() && resource.data.uid == request.auth.uid && resource.data.status == 'draft';
     }
 
@@ -75,9 +159,13 @@ service cloud.firestore {
     match /announcements/{id} {
       // All authenticated users can read announcements
       allow read: if isAuthenticated();
-      
+
       // Only staff and admin can publish announcements
-      allow create, update, delete: if isStaffOrAdmin();
+      allow create: if isStaffOrAdmin() && isValidAnnouncement(request.resource.data);
+      allow update: if isStaffOrAdmin()
+                    && isValidAnnouncement(request.resource.data)
+                    && changedKeys().hasOnly(['title', 'content']);
+      allow delete: if isStaffOrAdmin();
     }
   }
 }

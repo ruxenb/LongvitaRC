@@ -1,5 +1,7 @@
 # AI-Assisted Code Review Record — Longvita (Lab 3)
 
+> **TEMPLATE / VÍ DỤ - chưa phải kết quả PR review đã xác minh (02/11/2026).** Bảng khung CR-xx ở mục 1 chưa có nội dung; các dòng EX-xx, tên tool, file:line và commit mẫu ở mục 2 chỉ minh họa format, không được tính vào >=5 findings hoặc >=3 fix commits. **Số findings PR có raw evidence đã xác minh: 0**. Chỉ điền kết quả khi có PR/tool output/file:line, quyết định và fix links thật. Các lỗi regression đã sửa và kiểm chứng ở [bàn giao Charlie](tasks/charlie-progress.md) không tự thay bộ evidence Stage 7.
+
 > **Tài liệu:** Sổ ghi nhận kết quả đánh giá mã nguồn bằng công cụ Trí tuệ Nhân tạo (AI-Assisted Code Review).  
 > **Chủ trì nghiệm thu:** Thái An (Team Leader) & Thắng VLQ (Technical Architect) | **Thành viên tham gia:** Cả 4 thành viên (Thái An, Thắng, Hoàng, Charlie).  
 > **Nguyên tắc cốt lõi:** *AI tìm kiếm và phát hiện; Con người đánh giá, quyết định và chịu trách nhiệm.*  
@@ -37,7 +39,9 @@
 
 ---
 
-## 3. Bản Kê Khai Sử Dụng Công Cụ Trí Tuệ Nhân Tạo (AI Tools Disclosure)
+## 3. Danh Mục Tool Trong Mẫu - Cần Xác Nhận Trước Disclosure
+
+Các dòng dưới đây được giữ làm mẫu kế hoạch; không xác nhận mọi thành viên đã dùng các tool này. Chỉ chuyển sang disclosure thực tế khi có mục đích/output hoặc worklog. Ngày 02/11, Charlie dùng Codex (đọc repo/PDF, review, Markdown điều phối) và Claude Code (viết code, test, báo cáo Dev); chưa chạy ARTEMIS, CodeRabbit, Copilot, SonarCloud hoặc model API.
 
 | Tên Công Cụ AI | Phiên bản / Môi trường | Mục đích sử dụng cụ thể trong dự án Lab 3 | Thành viên sử dụng |
 |:---|:---|:---|:---:|
@@ -45,4 +49,4 @@
 | **GitHub Copilot** | Copilot Chat & Completion | Gợi ý cú pháp Dart, hỗ trợ viết các hàm sinh file PDF (`pdf` package) và các test assertions trong ARTEMIS. | Charlie, Hoàng |
 | **CodeRabbit AI** | GitHub PR App | Tự động review mã nguồn trên từng Pull Request của nhánh tính năng trước khi merge vào nhánh chính. | Cả nhóm |
 | **SonarCloud** | Cloud Scanner | Quét phân tích tĩnh (Static Analysis), phát hiện Code Smells, trùng lặp mã và các vấn đề về maintainability. | Thắng |
-| **Google ARTEMIS** | Pinned Commit `main` | AI Testing Agent tự động lái thiết bị Android từ câu lệnh tự nhiên để kiểm thử E2E các luồng nghiệp vụ. | Thái An |
+| **Google ARTEMIS** | Chưa pin full SHA | AI Testing Agent tự động lái thiết bị Android từ câu lệnh tự nhiên để kiểm thử E2E các luồng nghiệp vụ. | Thái An |

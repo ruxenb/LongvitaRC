@@ -3,9 +3,11 @@ import '../models/meal_plan_model.dart';
 import '../models/view_state.dart';
 import '../firebase/analytics_service.dart';
 import '../firebase/crashlytics_service.dart';
+import '../models/user_model.dart';
 import 'base_viewmodel.dart';
+import 'session_scoped.dart';
 
-class IngredientViewModel extends BaseViewModel {
+class IngredientViewModel extends BaseViewModel implements SessionScoped {
   final AnalyticsService analytics;
   final CrashlyticsService crashlytics;
 
@@ -22,6 +24,20 @@ class IngredientViewModel extends BaseViewModel {
   ViewState<List<IngredientModel>> get state => _state;
   List<IngredientModel> get ingredients => List.unmodifiable(_ingredients);
   bool get canUndo => _recentlyDeleted != null;
+
+  @override
+  void onSessionStarted(UserModel user) {}
+
+  /// Drops the previous user's ingredient list and Undo buffer when the
+  /// session ends (CHARLIE-AUTH-01).
+  @override
+  void clearSession() {
+    _ingredients = [];
+    _recentlyDeleted = null;
+    _recentlyDeletedIndex = null;
+    _state = const ViewStateIdle();
+    notifyListeners();
+  }
 
   void aggregateFromMealPlan(MealPlanModel plan) {
     _state = const ViewStateLoading('Đang tổng hợp danh sách nguyên liệu...');

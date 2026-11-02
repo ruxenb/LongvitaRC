@@ -1,9 +1,13 @@
 # Kế Hoạch Task & Điều Phối Dự Án — PRM393 Lab 3
 
+> **Cập nhật 02/11/2026:** Lab 3 = Assignment. Giữ nguyên 112 IDs và bốn owner; không lấy bảng 0% bên dưới làm bằng chứng code chưa tồn tại hoặc đã hoàn tất. [Bàn giao Charlie](charlie-progress.md) ghi phạm vi implementation, checks và dependency cần team review. Owner chỉ cập nhật Done/Verified khi có commit/run/Console tương ứng.
+
+> **Chốt UI của team 02/11/2026:** Giữ Figma làm tham chiếu đóng băng, cải thiện UI trong code và lưu traceability/evidence ở repo; không sửa/đồng bộ Figma. Câu “Sync Figma”/“cập nhật Figma” trong phân công gốc áp dụng theo chính sách này; giữ IDs/owners, không coi là giảng viên đã đổi rubric.
+
 > **Dự án:** Longvita — Cloud-Enabled Mobile App (Dinh dưỡng trường thọ)  
 > **Công nghệ:** Flutter + Firebase + Google ARTEMIS + AI Code Review  
 > **Hình thức làm bài:** Nhóm 4 người (*Handout ghi “Individual”, cần giảng viên xác nhận tại task S0-1*)  
-> **Tổng số task:** 112 tasks | **Tiến độ đã đồng bộ:** 12/112 (11%)
+> **Tổng số task:** 112 tasks | **Tiến độ đã đồng bộ:** 12/112 (11%). **Charlie (02/11): 6 chờ nghiệm thu / 9 đang thực hiện / 2 skeleton / 12 chưa bắt đầu**; [progress](charlie-progress.md). Leader tổng hợp phần còn lại; không dùng số 0% từ bảng baseline làm tiến độ hiện tại của Charlie.
 
 ---
 
@@ -12,7 +16,7 @@
 | Thành viên | Tài khoản / MSSV | Vai trò chính trong Lab 3 | Tổng task | Đã xong | Tiến độ | File task cá nhân |
 |:---|:---|:---|:---:|:---:|:---:|:---|
 | **Thái An** | Thái An | **Team Leader & QA Lead**: Điều phối chung, Analytics, Crashlytics, Remote Config, ARTEMIS | 29 | 7 | 24% | [`task-thai-an.md`](task-thai-an.md) |
-| **Charlie** | CharlieMinh | **Design System in Code + Firebase**: Auth, Storage, FCM, Common Widgets, Profile | 29 | 0 | 0% | [`task-charlie.md`](task-charlie.md) |
+| **Charlie** | CharlieMinh | **Design System in Code + Firebase**: Auth, Storage, FCM, Common Widgets, Profile | 29 | Chờ nghiệm thu | 6 review / 9 đang làm / 2 skeleton / 12 chưa bắt đầu | [`task-charlie.md`](task-charlie.md) |
 | **Hoàng** | Hoàng DV (YAHsaveme) | **Dữ liệu & UI Flows**: DataService, 3 Flows (S01–S10), States, A11y, Sync Figma | 26 | 0 | 0% | [`task-hoang.md`](task-hoang.md) |
 | **Thắng** | Thắng VLQ | **Technical Architect & Co-Lead**: MVVM Skeleton, Router, Docs, Report, Slides, Video | 28 | 5 | 18% | [`task-thang.md`](task-thang.md) |
 | **TỔNG CỘNG** | | | **112** | **12** | **11%** | |
@@ -20,6 +24,8 @@
 ---
 
 ## 2. Tiến Độ Theo Giai Đoạn (Workflow 10 Bước)
+
+> **Bảng số lượng/trạng thái giai đoạn bên dưới là baseline lúc chia việc, chưa tổng hợp lại từ tiến độ từng owner.** Trạng thái mới của 29 task Charlie nằm trong file cá nhân/master/progress đã đồng bộ; leader cập nhật roll-up toàn nhóm trước khi dùng bảng này để báo cáo. Không đánh giá Charlie chưa làm gì từ các ô 0% cũ.
 
 Quy trình phát triển tuân thủ nghiêm ngặt theo thứ tự handout mục 4: *Plan → Architect → Integrate → Features → Instrument → Test → Review → Report → Nộp bài*.
 

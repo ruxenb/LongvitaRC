@@ -1,0 +1,2762 @@
+diff --git a/lib/firebase/firebase_bootstrap.dart b/lib/firebase/firebase_bootstrap.dart
+new file mode 100644
+index 0000000..137893a
+--- /dev/null
++++ b/lib/firebase/firebase_bootstrap.dart
+@@ -0,0 +1,71 @@
++import 'package:firebase_core/firebase_core.dart';
++import 'package:flutter/services.dart';
++
++/// Result of starting Firebase before any SDK service is created.
++sealed class BootstrapResult {
++  const BootstrapResult();
++}
++
++class BootstrapReady extends BootstrapResult {
++  const BootstrapReady();
++}
++
++class BootstrapFailed extends BootstrapResult {
++  /// Short code for the report/log, e.g. `not-configured`, `network`.
++  final String code;
++  final Object error;
++  final StackTrace? stackTrace;
++
++  const BootstrapFailed(this.code, this.error, [this.stackTrace]);
++
++  /// True when the app was built without Firebase configuration
++  /// (google-services.json / FirebaseOptions), as opposed to a transient
++  /// failure that a retry can fix.
++  bool get isConfigurationMissing => code == 'not-configured';
++}
++
++/// Initialises Firebase (S3-1). Services that touch `*.instance` must only
++/// be created after [BootstrapReady]; on failure the app shows a startup
++/// error with retry instead of continuing as if Firebase were ready.
++class FirebaseBootstrap {
++  final Future<FirebaseApp> Function() _initializeApp;
++
++  /// [initializeApp] defaults to `Firebase.initializeApp()`, which reads the
++  /// native Android config generated from `android/app/google-services.json`.
++  /// Pass `() => Firebase.initializeApp(options: DefaultFirebaseOptions...)`
++  /// once `flutterfire configure` has generated `firebase_options.dart`.
++  FirebaseBootstrap({Future<FirebaseApp> Function()? initializeApp})
++      : _initializeApp = initializeApp ?? (() => Firebase.initializeApp());
++
++  Future<BootstrapResult> initialize() async {
++    try {
++      if (Firebase.apps.isEmpty) await _initializeApp();
++      return const BootstrapReady();
++    } on FirebaseException catch (e, s) {
++      return BootstrapFailed(
++          _isMissingConfig('${e.code} ${e.message}') ? 'not-configured' : e.code,
++          e,
++          s);
++    } on PlatformException catch (e, s) {
++      // Android reports a missing google-services config as
++      // PlatformException(code: "java.lang.Exception: Failed to load
++      // FirebaseOptions from resource...", message: "Exception").
++      return BootstrapFailed(
++          _isMissingConfig('${e.code} ${e.message}') ? 'not-configured' : 'platform',
++          e,
++          s);
++    } catch (e, s) {
++      return BootstrapFailed(
++          _isMissingConfig(e.toString()) ? 'not-configured' : 'unknown', e, s);
++    }
++  }
++
++  static bool _isMissingConfig(String? message) {
++    final text = (message ?? '').toLowerCase();
++    return text.contains('google-services') ||
++        text.contains('failed to load firebaseoptions') ||
++        text.contains('no firebase app') ||
++        text.contains('values.xml') ||
++        text.contains('firebaseoptions');
++  }
++}
+diff --git a/ui01-snapshot/lib/firebase/notification_service.dart b/lib/firebase/notification_service.dart
+index 30383bb..00256d0 100644
+--- a/ui01-snapshot/lib/firebase/notification_service.dart
++++ b/lib/firebase/notification_service.dart
+@@ -4,13 +4,17 @@ import 'package:flutter/foundation.dart';
+ class NotificationService {
+   final FirebaseMessaging _fcm;
+   final List<RemoteMessage> _messages = [];
++  bool _initialized = false;
+ 
+   NotificationService({FirebaseMessaging? fcm})
+       : _fcm = fcm ?? FirebaseMessaging.instance;
+ 
+   List<RemoteMessage> get messages => List.unmodifiable(_messages);
+ 
++  /// Requests permission and attaches listeners once per app process.
+   Future<void> initialize() async {
++    if (_initialized) return;
++    _initialized = true;
+     try {
+       final settings = await _fcm.requestPermission(
+         alert: true,
+@@ -33,6 +37,9 @@ class NotificationService {
+     } catch (_) {}
+   }
+ 
++  /// Drops the in-app history of the previous user on sign-out.
++  void clearHistory() => _messages.clear();
++
+   Future<String?> getToken() async {
+     try {
+       return await _fcm.getToken();
+diff --git a/ui01-snapshot/lib/main.dart b/lib/main.dart
+index d35297a..a3718d6 100644
+--- a/ui01-snapshot/lib/main.dart
++++ b/lib/main.dart
+@@ -1,5 +1,4 @@
+ import 'package:flutter/material.dart';
+-import 'package:firebase_core/firebase_core.dart';
+ import 'package:provider/provider.dart';
+ 
+ // Services & Interfaces
+@@ -11,6 +10,7 @@ import 'services/i_report_service.dart';
+ import 'services/report_service.dart';
+ 
+ // Firebase Helpers
++import 'firebase/firebase_bootstrap.dart';
+ import 'firebase/analytics_service.dart';
+ import 'firebase/crashlytics_service.dart';
+ import 'firebase/remote_config_service.dart';
+@@ -27,18 +27,22 @@ import 'viewmodels/profile_viewmodel.dart';
+ import 'theme/app_theme.dart';
+ import 'theme/app_typography.dart';
+ import 'screens/auth_gate.dart';
++import 'screens/startup_gate.dart';
+ 
+-void main() async {
++void main() {
+   WidgetsFlutterBinding.ensureInitialized();
+   AppTypography.registerFontLicenses();
+ 
+-  // Initialize Firebase (safely catching if unconfigured in local test environments)
+-  try {
+-    await Firebase.initializeApp();
+-  } catch (e) {
+-    debugPrint('Firebase.initializeApp warning (skipping if in mock/test): $e');
+-  }
++  final bootstrap = FirebaseBootstrap();
++  runApp(StartupGate(
++    initialize: bootstrap.initialize,
++    buildReadyApp: buildAppScope,
++  ));
++}
+ 
++/// Creates services and ViewModels. Only called after Firebase started
++/// successfully, because the services wrap SDK singletons.
++Future<Widget> buildAppScope() async {
+   // Create Firebase singletons
+   final analytics = AnalyticsService();
+   final crashlytics = CrashlyticsService();
+@@ -46,70 +50,65 @@ void main() async {
+   final storage = StorageService();
+   final notification = NotificationService();
+ 
+-  // Try background init for Remote Config & FCM
+-  try {
+-    await remoteConfig.initialize();
+-    await notification.initialize();
+-  } catch (e) {
+-    debugPrint('Services background initialization note: $e');
+-  }
++  // Remote Config falls back to in-app defaults internally. FCM permission
++  // is requested after sign-in (ProfileViewModel.onSessionStarted).
++  await remoteConfig.initialize();
+ 
+   // Create Service instances
+   final IAuthService authService = AuthService();
+   final IDataService dataService = DataService();
+   final IReportService reportService = ReportService();
+ 
+-  runApp(
+-    MultiProvider(
+-      providers: [
+-        // Service Dependencies (Injected via Interface)
+-        Provider<IAuthService>.value(value: authService),
+-        Provider<IDataService>.value(value: dataService),
+-        Provider<IReportService>.value(value: reportService),
++  // ViewModels holding per-user data are created up front so AuthViewModel
++  // can clear them when a session ends.
++  final mealPlanViewModel = MealPlanViewModel(
++    dataService: dataService,
++    analytics: analytics,
++    crashlytics: crashlytics,
++    remoteConfig: remoteConfig,
++  );
++  final ingredientViewModel = IngredientViewModel(
++    analytics: analytics,
++    crashlytics: crashlytics,
++  );
++  final profileViewModel = ProfileViewModel(
++    authService: authService,
++    storageService: storage,
++    notificationService: notification,
++    reportService: reportService,
++    remoteConfigService: remoteConfig,
++    crashlyticsService: crashlytics,
++    analyticsService: analytics,
++  );
++  final authViewModel = AuthViewModel(
++    authService: authService,
++    analytics: analytics,
++    crashlytics: crashlytics,
++    sessionScoped: [mealPlanViewModel, ingredientViewModel, profileViewModel],
++  );
++
++  return MultiProvider(
++    providers: [
++      // Service Dependencies (Injected via Interface)
++      Provider<IAuthService>.value(value: authService),
++      Provider<IDataService>.value(value: dataService),
++      Provider<IReportService>.value(value: reportService),
+ 
+-        // Firebase Service Singletons
+-        Provider<AnalyticsService>.value(value: analytics),
+-        Provider<CrashlyticsService>.value(value: crashlytics),
+-        Provider<RemoteConfigService>.value(value: remoteConfig),
+-        Provider<StorageService>.value(value: storage),
+-        Provider<NotificationService>.value(value: notification),
++      // Firebase Service Singletons
++      Provider<AnalyticsService>.value(value: analytics),
++      Provider<CrashlyticsService>.value(value: crashlytics),
++      Provider<RemoteConfigService>.value(value: remoteConfig),
++      Provider<StorageService>.value(value: storage),
++      Provider<NotificationService>.value(value: notification),
+ 
+-        // MVVM ViewModels
+-        ChangeNotifierProvider<AuthViewModel>(
+-          create: (_) => AuthViewModel(
+-            authService: authService,
+-            analytics: analytics,
+-            crashlytics: crashlytics,
+-          ),
+-        ),
+-        ChangeNotifierProvider<MealPlanViewModel>(
+-          create: (_) => MealPlanViewModel(
+-            dataService: dataService,
+-            analytics: analytics,
+-            crashlytics: crashlytics,
+-            remoteConfig: remoteConfig,
+-          ),
+-        ),
+-        ChangeNotifierProvider<IngredientViewModel>(
+-          create: (_) => IngredientViewModel(
+-            analytics: analytics,
+-            crashlytics: crashlytics,
+-          ),
+-        ),
+-        ChangeNotifierProvider<ProfileViewModel>(
+-          create: (_) => ProfileViewModel(
+-            authService: authService,
+-            storageService: storage,
+-            notificationService: notification,
+-            reportService: reportService,
+-            remoteConfigService: remoteConfig,
+-            crashlyticsService: crashlytics,
+-            analyticsService: analytics,
+-          ),
+-        ),
+-      ],
+-      child: const LongvitaApp(),
+-    ),
++      // MVVM ViewModels
++      ChangeNotifierProvider<AuthViewModel>.value(value: authViewModel),
++      ChangeNotifierProvider<MealPlanViewModel>.value(value: mealPlanViewModel),
++      ChangeNotifierProvider<IngredientViewModel>.value(
++          value: ingredientViewModel),
++      ChangeNotifierProvider<ProfileViewModel>.value(value: profileViewModel),
++    ],
++    child: const LongvitaApp(),
+   );
+ }
+ 
+diff --git a/lib/models/auth_state.dart b/lib/models/auth_state.dart
+new file mode 100644
+index 0000000..7b77ea1
+--- /dev/null
++++ b/lib/models/auth_state.dart
+@@ -0,0 +1,108 @@
++import 'user_model.dart';
++
++/// Why an authentication step did not complete. Each kind maps to a
++/// different message and recovery in the UI.
++enum AuthFailureKind {
++  /// The user closed the Google account picker.
++  cancelled,
++
++  /// No connection or the backend was unreachable.
++  network,
++
++  /// App/Firebase/Google configuration problem (package name, SHA,
++  /// OAuth client, missing google-services). Not fixable by the user.
++  configuration,
++
++  /// Google or Firebase rejected the credential (disabled account,
++  /// invalid/expired token, provider conflict).
++  credential,
++
++  /// Signed in, but `users/{uid}` could not be read (rules, offline).
++  profileRead,
++
++  /// Signed in, but the first-sign-in `users/{uid}` document could not be
++  /// written.
++  profileWrite,
++
++  /// Anything not classified above.
++  unknown,
++}
++
++/// A classified auth error. [code] keeps the SDK code for logs/reports.
++class AuthFailure implements Exception {
++  final AuthFailureKind kind;
++  final String? code;
++  final Object? cause;
++
++  const AuthFailure(this.kind, {this.code, this.cause});
++
++  bool get isProfileFailure =>
++      kind == AuthFailureKind.profileRead ||
++      kind == AuthFailureKind.profileWrite;
++
++  @override
++  String toString() => 'AuthFailure($kind, code: $code, cause: $cause)';
++}
++
++/// Result of the Google + Firebase credential step. Loading the Longvita
++/// profile is a separate step so a profile failure is never reported as a
++/// cancelled sign-in.
++sealed class AuthSignInResult {
++  const AuthSignInResult();
++}
++
++class AuthSignInSucceeded extends AuthSignInResult {
++  final String uid;
++  const AuthSignInSucceeded(this.uid);
++}
++
++class AuthSignInCancelled extends AuthSignInResult {
++  const AuthSignInCancelled();
++}
++
++class AuthSignInFailed extends AuthSignInResult {
++  final AuthFailure failure;
++  const AuthSignInFailed(this.failure);
++}
++
++/// Session state owned by `AuthViewModel` and read by the router.
++sealed class AuthState {
++  const AuthState();
++}
++
++/// Waiting for the first Firebase auth event after app start.
++class AuthInitializing extends AuthState {
++  const AuthInitializing();
++}
++
++/// No Firebase user. [notice] explains the last attempt (cancel/failure);
++/// null after a normal start or sign-out.
++class AuthSignedOut extends AuthState {
++  final AuthFailure? notice;
++  const AuthSignedOut({this.notice});
++}
++
++/// Google picker / credential exchange in progress.
++class AuthSigningIn extends AuthState {
++  const AuthSigningIn();
++}
++
++/// Firebase user exists; the `users/{uid}` profile is loading.
++class AuthLoadingProfile extends AuthState {
++  final String uid;
++  const AuthLoadingProfile(this.uid);
++}
++
++/// Firebase user exists but the profile failed. The user can retry or sign
++/// out; protected screens stay closed.
++class AuthProfileError extends AuthState {
++  final String uid;
++  final AuthFailure failure;
++  const AuthProfileError(this.uid, this.failure);
++}
++
++/// Signed in with a loaded profile.
++class AuthSignedIn extends AuthState {
++  final UserModel user;
++  const AuthSignedIn(this.user);
++}
+diff --git a/ui01-snapshot/lib/screens/auth_gate.dart b/lib/screens/auth_gate.dart
+index bdd463d..d76d5da 100644
+--- a/ui01-snapshot/lib/screens/auth_gate.dart
++++ b/lib/screens/auth_gate.dart
+@@ -1,25 +1,70 @@
+ import 'package:flutter/material.dart';
+ import 'package:provider/provider.dart';
+-import '../models/view_state.dart';
++
++import '../models/auth_state.dart';
+ import '../viewmodels/auth_viewmodel.dart';
+ import '../widgets/state_views.dart';
++import '../theme/app_spacing.dart';
++import 'auth_recovery_screen.dart';
+ import 'home_screen.dart';
+ import 'sign_in_screen.dart';
+ 
+-class AuthGate extends StatelessWidget {
++/// Routes by [AuthState] (S3-6, owner Thắng; auth states from S3-3).
++///
++/// Only [AuthSignedIn] reaches protected content. When the session ends,
++/// routes pushed above this gate are removed so Back cannot return to
++/// protected screens of the previous user.
++class AuthGate extends StatefulWidget {
+   const AuthGate({super.key});
+ 
++  @override
++  State<AuthGate> createState() => _AuthGateState();
++}
++
++class _AuthGateState extends State<AuthGate> {
++  bool _wasSignedIn = false;
++
+   @override
+   Widget build(BuildContext context) {
+-    final authViewModel = context.watch<AuthViewModel>();
+-    final state = authViewModel.state;
++    final state = context.watch<AuthViewModel>().state;
++
++    final signedIn = state is AuthSignedIn;
++    if (_wasSignedIn && !signedIn) {
++      WidgetsBinding.instance.addPostFrameCallback((_) {
++        if (mounted) Navigator.of(context).popUntil((route) => route.isFirst);
++      });
++    }
++    _wasSignedIn = signedIn;
+ 
+     return switch (state) {
+-      ViewStateLoading() => const Scaffold(
+-          body: LoadingView(message: 'Đang kiểm tra thông tin đăng nhập...'),
++      AuthInitializing() => const _GateLoading(
++          title: 'Đang kiểm tra phiên đăng nhập',
++        ),
++      AuthLoadingProfile() => const _GateLoading(
++          title: 'Đang tải hồ sơ của bạn',
+         ),
+-      ViewStateSuccess() => const HomeScreen(),
+-      _ => const SignInScreen(),
++      AuthSignedOut() || AuthSigningIn() => const SignInScreen(),
++      AuthProfileError(:final failure) => AuthRecoveryScreen(failure: failure),
++      AuthSignedIn() => const HomeScreen(),
+     };
+   }
+ }
++
++class _GateLoading extends StatelessWidget {
++  final String title;
++  const _GateLoading({required this.title});
++
++  @override
++  Widget build(BuildContext context) {
++    return Scaffold(
++      body: SafeArea(
++        child: Center(
++          child: Padding(
++            padding: const EdgeInsets.all(AppSpacing.pageMargin),
++            child: LoadingView(title: title),
++          ),
++        ),
++      ),
++    );
++  }
++}
+diff --git a/lib/screens/auth_messages.dart b/lib/screens/auth_messages.dart
+new file mode 100644
+index 0000000..5f7566f
+--- /dev/null
++++ b/lib/screens/auth_messages.dart
+@@ -0,0 +1,41 @@
++import '../models/auth_state.dart';
++
++/// User-facing copy for each [AuthFailureKind]. Kept in one place so the
++/// wording (pending DEC-05 on UI language) changes in one file.
++class AuthMessages {
++  AuthMessages._();
++
++  static String signInNotice(AuthFailure failure) => switch (failure.kind) {
++        AuthFailureKind.cancelled =>
++          'Bạn đã đóng cửa sổ chọn tài khoản. Đăng nhập lại khi bạn sẵn sàng.',
++        AuthFailureKind.network =>
++          'Không có kết nối mạng. Kiểm tra mạng rồi thử lại.',
++        AuthFailureKind.configuration =>
++          'Thiết bị này chưa được cấu hình đăng nhập Google cho Longvita. '
++              'Vui lòng báo nhóm phát triển.',
++        AuthFailureKind.credential =>
++          'Google chưa xác nhận được tài khoản này. '
++              'Thử lại hoặc chọn tài khoản khác.',
++        AuthFailureKind.profileRead ||
++        AuthFailureKind.profileWrite ||
++        AuthFailureKind.unknown =>
++          'Đăng nhập chưa thành công. Vui lòng thử lại.',
++      };
++
++  static String profileErrorTitle(AuthFailure failure) =>
++      failure.kind == AuthFailureKind.profileWrite
++          ? 'Chưa tạo được hồ sơ'
++          : 'Chưa tải được hồ sơ';
++
++  static String profileErrorMessage(AuthFailure failure) =>
++      switch (failure.kind) {
++        AuthFailureKind.network =>
++          'Bạn đã đăng nhập, nhưng mất kết nối khi tải hồ sơ Longvita. '
++              'Kiểm tra mạng rồi thử lại.',
++        AuthFailureKind.profileWrite =>
++          'Bạn đã đăng nhập, nhưng hồ sơ Longvita chưa được tạo. '
++              'Thử lại, hoặc đăng xuất rồi đăng nhập lại.',
++        _ => 'Bạn đã đăng nhập, nhưng hồ sơ Longvita chưa tải được. '
++            'Thử lại, hoặc đăng xuất rồi đăng nhập lại.',
++      };
++}
+diff --git a/lib/screens/auth_recovery_screen.dart b/lib/screens/auth_recovery_screen.dart
+new file mode 100644
+index 0000000..c1677bf
+--- /dev/null
++++ b/lib/screens/auth_recovery_screen.dart
+@@ -0,0 +1,40 @@
++import 'package:flutter/material.dart';
++import 'package:provider/provider.dart';
++
++import '../models/auth_state.dart';
++import '../viewmodels/auth_viewmodel.dart';
++import '../widgets/longvita_widgets.dart';
++import 'auth_messages.dart';
++
++/// Shown when Firebase has a signed-in user but `users/{uid}` could not be
++/// read or created. Protected screens stay closed; the user can retry the
++/// profile or sign out, so the app is never stuck on Sign-in for no reason.
++class AuthRecoveryScreen extends StatelessWidget {
++  final AuthFailure failure;
++
++  const AuthRecoveryScreen({super.key, required this.failure});
++
++  @override
++  Widget build(BuildContext context) {
++    final vm = context.read<AuthViewModel>();
++    return Scaffold(
++      appBar: const AppTopBar(),
++      body: SafeArea(
++        top: false,
++        child: Center(
++          child: SingleChildScrollView(
++            padding: const EdgeInsets.all(AppSpacing.pageMargin),
++            child: ErrorView(
++              title: AuthMessages.profileErrorTitle(failure),
++              message: AuthMessages.profileErrorMessage(failure),
++              retryLabel: 'Thử lại',
++              onRetry: vm.retryProfile,
++              backLabel: 'Đăng xuất',
++              onBack: vm.signOut,
++            ),
++          ),
++        ),
++      ),
++    );
++  }
++}
+diff --git a/ui01-snapshot/lib/screens/sign_in_screen.dart b/lib/screens/sign_in_screen.dart
+index c8acadd..7bf441b 100644
+--- a/ui01-snapshot/lib/screens/sign_in_screen.dart
++++ b/lib/screens/sign_in_screen.dart
+@@ -1,96 +1,175 @@
+ import 'package:flutter/material.dart';
+ import 'package:provider/provider.dart';
+-import '../models/view_state.dart';
+-import '../theme/app_colors.dart';
+-import '../theme/app_spacing.dart';
++
++import '../models/auth_state.dart';
+ import '../viewmodels/auth_viewmodel.dart';
+-import '../widgets/app_button.dart';
++import '../widgets/longvita_widgets.dart';
++import 'auth_messages.dart';
+ 
++/// Sign-in (S3-4). No approved Figma frame exists (S1-5), so the layout is
++/// composed from the Longvita design system: brand, Heading/L, Body, an
++/// outcome notice and one primary Google action. All logic lives in
++/// [AuthViewModel].
+ class SignInScreen extends StatelessWidget {
+   const SignInScreen({super.key});
+ 
+   @override
+   Widget build(BuildContext context) {
+-    final authViewModel = context.watch<AuthViewModel>();
+-    final isLoading = authViewModel.state is ViewStateLoading;
++    final vm = context.watch<AuthViewModel>();
++    final state = vm.state;
++    final signingIn = state is AuthSigningIn;
++    final notice = state is AuthSignedOut ? state.notice : null;
+ 
+     return Scaffold(
+       body: SafeArea(
+-        child: Padding(
+-          padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
+-          child: Column(
+-            mainAxisAlignment: MainAxisAlignment.center,
+-            crossAxisAlignment: CrossAxisAlignment.stretch,
+-            children: [
+-              const Spacer(),
+-              // App Brand / Logo
+-              Container(
+-                width: 80,
+-                height: 80,
+-                decoration: const BoxDecoration(
+-                  color: AppColors.primaryContainer,
+-                  shape: BoxShape.circle,
+-                ),
+-                child: const Icon(
+-                  Icons.eco_rounded,
+-                  size: 48,
+-                  color: AppColors.primary,
+-                ),
++        child: LayoutBuilder(
++          builder: (context, constraints) => SingleChildScrollView(
++            padding: const EdgeInsets.all(AppSpacing.pageMargin),
++            child: ConstrainedBox(
++              constraints: BoxConstraints(
++                minHeight: constraints.maxHeight - AppSpacing.pageMargin * 2,
+               ),
+-              const SizedBox(height: AppSpacing.lg),
+-              Text(
+-                'Longvita',
+-                style: Theme.of(context).textTheme.displayLarge?.copyWith(
+-                      color: AppColors.primary,
++              child: IntrinsicHeight(
++                child: Column(
++                  crossAxisAlignment: CrossAxisAlignment.stretch,
++                  children: [
++                    Semantics(
++                      header: true,
++                      child: Text(
++                        'Longvita',
++                        style: AppTypography.brand
++                            .copyWith(color: AppColors.actionPrimary),
++                      ),
+                     ),
+-                textAlign: TextAlign.center,
+-              ),
+-              const SizedBox(height: AppSpacing.xs),
+-              Text(
+-                'Dinh Dưỡng Trường Thọ',
+-                style: Theme.of(context).textTheme.titleLarge?.copyWith(
+-                      color: AppColors.secondary,
++                    const Spacer(),
++                    Align(
++                      alignment: Alignment.centerLeft,
++                      child: ExcludeSemantics(
++                        child: Container(
++                          width: 64,
++                          padding: const EdgeInsets.all(AppSpacing.s16),
++                          decoration: const BoxDecoration(
++                            color: AppColors.bgSelected,
++                            borderRadius: AppRadius.roundedFull,
++                          ),
++                          child: const Icon(AppIcons.spa,
++                              size: AppSizes.icon,
++                              color: AppColors.actionPrimary),
++                        ),
++                      ),
+                     ),
+-                textAlign: TextAlign.center,
+-              ),
+-              const SizedBox(height: AppSpacing.sm),
+-              Text(
+-                'Ứng dụng phương pháp dinh dưỡng trường thọ của TS. Valter Longo thành thực đơn 7 ngày khoa học.',
+-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+-                      color: AppColors.outline,
++                    const SizedBox(height: AppSpacing.s24),
++                    const Text(
++                      'Thực đơn trường thọ cho cả tuần',
++                      style: AppTypography.headingL,
++                    ),
++                    const SizedBox(height: AppSpacing.s12),
++                    Text(
++                      'Đăng nhập để lưu thực đơn, danh sách đi chợ '
++                      'và báo cáo của bạn trên mọi lần mở ứng dụng.',
++                      style: AppTypography.body
++                          .copyWith(color: AppColors.textSecondary),
++                    ),
++                    const Spacer(),
++                    const SizedBox(height: AppSpacing.s24),
++                    if (notice != null) ...[
++                      _SignInNotice(
++                        failure: notice,
++                        onDismiss: vm.clearNotice,
++                      ),
++                      const SizedBox(height: AppSpacing.s16),
++                    ],
++                    AppButton(
++                      key: const Key('sign-in-google'),
++                      text: notice == null ||
++                              notice.kind == AuthFailureKind.cancelled
++                          ? 'Đăng nhập bằng Google'
++                          : 'Thử lại với Google',
++                      loadingText: 'Đang mở tài khoản Google…',
++                      icon: AppIcons.arrowForward,
++                      isLoading: signingIn,
++                      onPressed: vm.isBusy ? null : vm.signInWithGoogle,
+                     ),
+-                textAlign: TextAlign.center,
++                  ],
++                ),
+               ),
+-              const Spacer(),
+-              // Error feedback if any
+-              if (authViewModel.state is ViewStateError) ...[
+-                Container(
+-                  padding: const EdgeInsets.all(AppSpacing.md),
+-                  decoration: BoxDecoration(
+-                    color: AppColors.error.withAlpha(20),
+-                    borderRadius: AppRadius.rounded12,
+-                    border: Border.all(color: AppColors.error),
+-                  ),
++            ),
++          ),
++        ),
++      ),
++    );
++  }
++}
++
++/// Outcome of the last attempt. A cancel is informational (no error
++/// colour); failures use feedback/error with an icon and text, never colour
++/// alone.
++class _SignInNotice extends StatelessWidget {
++  final AuthFailure failure;
++  final VoidCallback onDismiss;
++
++  const _SignInNotice({required this.failure, required this.onDismiss});
++
++  @override
++  Widget build(BuildContext context) {
++    final isCancel = failure.kind == AuthFailureKind.cancelled;
++    final message = AuthMessages.signInNotice(failure);
++
++    return Semantics(
++      liveRegion: true,
++      container: true,
++      label: message,
++      child: Container(
++        padding: const EdgeInsets.fromLTRB(
++            AppSpacing.s16, AppSpacing.s12, AppSpacing.s4, AppSpacing.s12),
++        decoration: BoxDecoration(
++          color: isCancel ? AppColors.bgSelected : AppColors.bgSurface,
++          borderRadius: AppRadius.rounded12,
++        ),
++        foregroundDecoration: isCancel
++            ? null
++            : BoxDecoration(
++                border: Border.all(color: AppColors.feedbackError),
++                borderRadius: AppRadius.rounded12,
++              ),
++        child: Row(
++          crossAxisAlignment: CrossAxisAlignment.start,
++          children: [
++            Padding(
++              padding: const EdgeInsets.only(top: AppSpacing.s12),
++              child: ExcludeSemantics(
++                child: Icon(
++                  isCancel ? AppIcons.infoOutline : AppIcons.errorOutline,
++                  size: AppSizes.icon,
++                  color: isCancel
++                      ? AppColors.actionPrimary
++                      : AppColors.feedbackError,
++                ),
++              ),
++            ),
++            const SizedBox(width: AppSpacing.s12),
++            Expanded(
++              child: Padding(
++                padding: const EdgeInsets.symmetric(vertical: AppSpacing.s12),
++                child: ExcludeSemantics(
+                   child: Text(
+-                    (authViewModel.state as ViewStateError).message,
+-                    style: const TextStyle(color: AppColors.error, fontSize: 13),
+-                    textAlign: TextAlign.center,
++                    message,
++                    style: AppTypography.supporting.copyWith(
++                      color: isCancel
++                          ? AppColors.textPrimary
++                          : AppColors.feedbackError,
++                    ),
+                   ),
+                 ),
+-                const SizedBox(height: AppSpacing.md),
+-              ],
+-              // Google Sign-In Button
+-              AppButton(
+-                text: 'Đăng nhập với Google',
+-                icon: Icons.login_rounded,
+-                isLoading: isLoading,
+-                onPressed: () async {
+-                  await authViewModel.signInWithGoogle();
+-                },
+               ),
+-              const SizedBox(height: AppSpacing.xl),
+-            ],
+-          ),
++            ),
++            AppIconButton(
++              icon: AppIcons.close,
++              semanticLabel: 'Ẩn thông báo',
++              color: AppColors.textSecondary,
++              onPressed: onDismiss,
++            ),
++          ],
+         ),
+       ),
+     );
+diff --git a/lib/screens/startup_gate.dart b/lib/screens/startup_gate.dart
+new file mode 100644
+index 0000000..8599c58
+--- /dev/null
++++ b/lib/screens/startup_gate.dart
+@@ -0,0 +1,99 @@
++import 'package:flutter/material.dart';
++
++import '../firebase/firebase_bootstrap.dart';
++import '../theme/app_theme.dart';
++import '../widgets/longvita_widgets.dart';
++
++/// Runs Firebase start-up before the dependency tree exists (S3-1).
++///
++/// Shows a loading state, then either [buildReadyApp] or a start-up error
++/// with retry. A failed start never continues into screens that would call
++/// Firebase SDK singletons.
++class StartupGate extends StatefulWidget {
++  final Future<BootstrapResult> Function() initialize;
++
++  /// Builds the provider tree and app. Called once, after success.
++  final Future<Widget> Function() buildReadyApp;
++
++  const StartupGate({
++    super.key,
++    required this.initialize,
++    required this.buildReadyApp,
++  });
++
++  @override
++  State<StartupGate> createState() => _StartupGateState();
++}
++
++class _StartupGateState extends State<StartupGate> {
++  Widget? _ready;
++  BootstrapFailed? _failure;
++  bool _running = false;
++
++  @override
++  void initState() {
++    super.initState();
++    _start();
++  }
++
++  Future<void> _start() async {
++    if (_running) return;
++    setState(() {
++      _running = true;
++      _failure = null;
++    });
++    final result = await widget.initialize();
++    if (!mounted) return;
++    switch (result) {
++      case BootstrapReady():
++        final app = await widget.buildReadyApp();
++        if (!mounted) return;
++        setState(() {
++          _ready = app;
++          _running = false;
++        });
++      case BootstrapFailed():
++        debugPrint('Firebase start-up failed: ${result.code} ${result.error}');
++        setState(() {
++          _failure = result;
++          _running = false;
++        });
++    }
++  }
++
++  @override
++  Widget build(BuildContext context) {
++    final ready = _ready;
++    if (ready != null) return ready;
++
++    final failure = _failure;
++    return MaterialApp(
++      debugShowCheckedModeBanner: false,
++      theme: AppTheme.lightTheme,
++      home: Scaffold(
++        body: SafeArea(
++          child: Center(
++            child: SingleChildScrollView(
++              padding: const EdgeInsets.all(AppSpacing.pageMargin),
++              child: failure == null
++                  ? const LoadingView(
++                      title: 'Đang khởi động Longvita',
++                      message: 'Đang kết nối dịch vụ đám mây…',
++                    )
++                  : ErrorView(
++                      title: 'Không thể khởi động ứng dụng',
++                      message: failure.isConfigurationMissing
++                          ? 'Bản cài đặt này chưa có cấu hình Firebase. '
++                              'Vui lòng dùng bản build đã cấu hình dự án.'
++                          : 'Không kết nối được dịch vụ đám mây. '
++                              'Kiểm tra kết nối mạng rồi thử lại.',
++                      retryLabel: 'Thử lại',
++                      onRetry: _running ? null : _start,
++                    ),
++            ),
++          ),
++        ),
++      ),
++    );
++  }
++}
+diff --git a/lib/services/auth_error_mapper.dart b/lib/services/auth_error_mapper.dart
+new file mode 100644
+index 0000000..569daf0
+--- /dev/null
++++ b/lib/services/auth_error_mapper.dart
+@@ -0,0 +1,56 @@
++import 'package:firebase_auth/firebase_auth.dart';
++import 'package:flutter/services.dart';
++
++import '../models/auth_state.dart';
++
++/// Maps SDK exceptions to [AuthFailure]. Pure functions so the mapping is
++/// unit-tested without Firebase.
++class AuthErrorMapper {
++  AuthErrorMapper._();
++
++  /// `google_sign_in` (Android) reports through [PlatformException].
++  /// `sign_in_failed` usually wraps ApiException 10 (DEVELOPER_ERROR: package
++  /// name / SHA / OAuth client mismatch) or 12500.
++  static AuthFailure fromGoogle(PlatformException e) {
++    final code = e.code;
++    final details = '${e.message ?? ''} ${e.details ?? ''}';
++    if (code == 'sign_in_canceled' || details.contains('12501')) {
++      return AuthFailure(AuthFailureKind.cancelled, code: code, cause: e);
++    }
++    if (code == 'network_error') {
++      return AuthFailure(AuthFailureKind.network, code: code, cause: e);
++    }
++    if (code == 'sign_in_failed' &&
++        (details.contains('ApiException: 10') || details.contains('12500'))) {
++      return AuthFailure(AuthFailureKind.configuration, code: code, cause: e);
++    }
++    return AuthFailure(AuthFailureKind.credential, code: code, cause: e);
++  }
++
++  static AuthFailure fromFirebaseAuth(FirebaseAuthException e) {
++    final kind = switch (e.code) {
++      'network-request-failed' || 'too-many-requests' => AuthFailureKind.network,
++      'operation-not-allowed' ||
++      'app-not-authorized' ||
++      'invalid-api-key' ||
++      'unauthorized-domain' =>
++        AuthFailureKind.configuration,
++      _ => AuthFailureKind.credential,
++    };
++    return AuthFailure(kind, code: e.code, cause: e);
++  }
++
++  /// Firestore errors on `users/{uid}`. [writing] selects profileWrite vs
++  /// profileRead; connectivity problems become [AuthFailureKind.network] so
++  /// the UI can suggest checking the connection.
++  static AuthFailure fromFirestore(FirebaseException e, {required bool writing}) {
++    if (e.code == 'unavailable' || e.code == 'deadline-exceeded') {
++      return AuthFailure(AuthFailureKind.network, code: e.code, cause: e);
++    }
++    return AuthFailure(
++      writing ? AuthFailureKind.profileWrite : AuthFailureKind.profileRead,
++      code: e.code,
++      cause: e,
++    );
++  }
++}
+diff --git a/ui01-snapshot/lib/services/auth_service.dart b/lib/services/auth_service.dart
+index 4ba8859..c9df1d1 100644
+--- a/ui01-snapshot/lib/services/auth_service.dart
++++ b/lib/services/auth_service.dart
+@@ -1,7 +1,11 @@
+ import 'package:cloud_firestore/cloud_firestore.dart';
+ import 'package:firebase_auth/firebase_auth.dart';
++import 'package:flutter/services.dart';
+ import 'package:google_sign_in/google_sign_in.dart';
++
++import '../models/auth_state.dart';
+ import '../models/user_model.dart';
++import 'auth_error_mapper.dart';
+ import 'i_auth_service.dart';
+ 
+ class AuthService implements IAuthService {
+@@ -20,74 +24,116 @@ class AuthService implements IAuthService {
+         _googleSignIn = googleSignIn ?? GoogleSignIn();
+ 
+   @override
+-  UserModel? get currentUser => _cachedUser;
++  Stream<String?> get authUidChanges =>
++      _auth.authStateChanges().map((user) {
++        if (user == null || user.uid != _cachedUser?.uid) _cachedUser = null;
++        return user?.uid;
++      });
+ 
+   @override
+-  Stream<UserModel?> get authStateChanges {
+-    return _auth.authStateChanges().asyncMap((firebaseUser) async {
+-      if (firebaseUser == null) {
+-        _cachedUser = null;
+-        return null;
+-      }
+-      return await fetchUserProfile(firebaseUser.uid);
+-    });
++  String? get currentUid => _auth.currentUser?.uid;
++
++  @override
++  UserModel? get currentUser {
++    final cached = _cachedUser;
++    return cached != null && cached.uid == currentUid ? cached : null;
+   }
+ 
+   @override
+-  Future<UserModel?> fetchUserProfile(String uid) async {
++  Future<AuthSignInResult> signInWithGoogle() async {
++    final GoogleSignInAccount? account;
+     try {
+-      final doc = await _firestore.collection('users').doc(uid).get();
+-      if (doc.exists && doc.data() != null) {
+-        _cachedUser = UserModel.fromMap(doc.data()!, doc.id);
+-        return _cachedUser;
+-      }
+-      final currentAuth = _auth.currentUser;
+-      if (currentAuth != null && currentAuth.uid == uid) {
+-        final newUser = UserModel(
+-          uid: uid,
+-          email: currentAuth.email ?? '',
+-          displayName: currentAuth.displayName ?? 'Người dùng Longvita',
+-          photoUrl: currentAuth.photoURL,
+-          role: 'user', // Default role for app users
+-          createdAt: DateTime.now(),
+-        );
+-        await _firestore.collection('users').doc(uid).set(newUser.toMap(), SetOptions(merge: true));
+-        _cachedUser = newUser;
+-        return _cachedUser;
++      account = await _googleSignIn.signIn();
++    } on PlatformException catch (e) {
++      final failure = AuthErrorMapper.fromGoogle(e);
++      return failure.kind == AuthFailureKind.cancelled
++          ? const AuthSignInCancelled()
++          : AuthSignInFailed(failure);
++    }
++    if (account == null) return const AuthSignInCancelled();
++
++    try {
++      final tokens = await account.authentication;
++      final credential = GoogleAuthProvider.credential(
++        accessToken: tokens.accessToken,
++        idToken: tokens.idToken,
++      );
++      final result = await _auth.signInWithCredential(credential);
++      final uid = result.user?.uid;
++      if (uid == null) {
++        return const AuthSignInFailed(
++            AuthFailure(AuthFailureKind.credential, code: 'no-user'));
+       }
+-      return null;
+-    } catch (_) {
+-      return null;
++      return AuthSignInSucceeded(uid);
++    } on FirebaseAuthException catch (e) {
++      await _signOutGoogleQuietly();
++      return AuthSignInFailed(AuthErrorMapper.fromFirebaseAuth(e));
++    } on PlatformException catch (e) {
++      await _signOutGoogleQuietly();
++      return AuthSignInFailed(AuthErrorMapper.fromGoogle(e));
++    } catch (e) {
++      await _signOutGoogleQuietly();
++      return AuthSignInFailed(
++          AuthFailure(AuthFailureKind.unknown, cause: e));
+     }
+   }
+ 
+   @override
+-  Future<UserModel?> signInWithGoogle() async {
+-    final googleUser = await _googleSignIn.signIn();
+-    if (googleUser == null) {
+-      // User cancelled the picker
+-      return null;
+-    }
++  Future<UserModel> loadProfile(String uid) async {
++    final doc = _firestore.collection('users').doc(uid);
+ 
+-    final googleAuth = await googleUser.authentication;
+-    final credential = GoogleAuthProvider.credential(
+-      accessToken: googleAuth.accessToken,
+-      idToken: googleAuth.idToken,
+-    );
++    final DocumentSnapshot<Map<String, dynamic>> snapshot;
++    try {
++      snapshot = await doc.get();
++    } on FirebaseException catch (e) {
++      throw AuthErrorMapper.fromFirestore(e, writing: false);
++    }
+ 
+-    final userCredential = await _auth.signInWithCredential(credential);
+-    final user = userCredential.user;
+-    if (user == null) return null;
++    final data = snapshot.data();
++    if (snapshot.exists && data != null) {
++      try {
++        return _cachedUser = UserModel.fromMap(data, snapshot.id);
++      } catch (e) {
++        throw AuthFailure(AuthFailureKind.profileRead,
++            code: 'invalid-profile', cause: e);
++      }
++    }
+ 
+-    return await fetchUserProfile(user.uid);
++    // First sign-in: create the profile with the default role. Rules only
++    // allow the owner to create it with role 'user'.
++    final firebaseUser = _auth.currentUser;
++    if (firebaseUser == null || firebaseUser.uid != uid) {
++      throw const AuthFailure(AuthFailureKind.profileRead,
++          code: 'signed-out-during-load');
++    }
++    final newUser = UserModel(
++      uid: uid,
++      email: firebaseUser.email ?? '',
++      displayName: firebaseUser.displayName ?? 'Người dùng Longvita',
++      photoUrl: firebaseUser.photoURL,
++      role: 'user',
++      createdAt: DateTime.now(),
++    );
++    try {
++      await doc.set(newUser.toMap(), SetOptions(merge: true));
++    } on FirebaseException catch (e) {
++      throw AuthErrorMapper.fromFirestore(e, writing: true);
++    }
++    return _cachedUser = newUser;
+   }
+ 
+   @override
+   Future<void> signOut() async {
+     _cachedUser = null;
+-    await Future.wait([
+-      _googleSignIn.signOut(),
+-      _auth.signOut(),
+-    ]);
++    await _signOutGoogleQuietly();
++    await _auth.signOut();
++  }
++
++  /// Clears the cached Google account so the picker shows next time. A
++  /// failure here must not block the Firebase sign-out.
++  Future<void> _signOutGoogleQuietly() async {
++    try {
++      await _googleSignIn.signOut();
++    } catch (_) {}
+   }
+ }
+diff --git a/ui01-snapshot/lib/services/i_auth_service.dart b/lib/services/i_auth_service.dart
+index 9310511..30d5942 100644
+--- a/ui01-snapshot/lib/services/i_auth_service.dart
++++ b/lib/services/i_auth_service.dart
+@@ -1,9 +1,30 @@
++import '../models/auth_state.dart';
+ import '../models/user_model.dart';
+ 
++/// Authentication contract (S2-1 / S3-3).
++///
++/// Signing in and loading the Longvita profile are separate steps so each
++/// failure is reported as what it is:
++/// - [signInWithGoogle] returns cancelled / failed / succeeded and never
++///   throws for expected SDK errors.
++/// - [loadProfile] reads or creates `users/{uid}` (role `user` on first
++///   sign-in) and throws [AuthFailure] instead of returning null.
+ abstract class IAuthService {
+-  Stream<UserModel?> get authStateChanges;
++  /// Firebase auth uid, or null when signed out. Emits the current value on
++  /// listen.
++  Stream<String?> get authUidChanges;
++
++  /// Firebase auth uid right now, or null.
++  String? get currentUid;
++
++  /// Profile loaded by the last successful [loadProfile] for [currentUid].
+   UserModel? get currentUser;
+-  Future<UserModel?> signInWithGoogle();
++
++  Future<AuthSignInResult> signInWithGoogle();
++
++  /// Throws [AuthFailure] (profileRead / profileWrite / network).
++  Future<UserModel> loadProfile(String uid);
++
++  /// Signs out of Google and Firebase. Never deletes cloud data.
+   Future<void> signOut();
+-  Future<UserModel?> fetchUserProfile(String uid);
+ }
+diff --git a/ui01-snapshot/lib/viewmodels/auth_viewmodel.dart b/lib/viewmodels/auth_viewmodel.dart
+index 7789ce3..879247e 100644
+--- a/ui01-snapshot/lib/viewmodels/auth_viewmodel.dart
++++ b/lib/viewmodels/auth_viewmodel.dart
+@@ -1,90 +1,201 @@
+ import 'dart:async';
+-import '../models/user_model.dart';
+-import '../models/view_state.dart';
+-import '../services/i_auth_service.dart';
++
+ import '../firebase/analytics_service.dart';
+ import '../firebase/crashlytics_service.dart';
++import '../models/auth_state.dart';
++import '../models/user_model.dart';
++import '../services/i_auth_service.dart';
+ import 'base_viewmodel.dart';
++import 'session_scoped.dart';
+ 
++/// Owns the auth session state ([AuthState]) that `AuthGate` routes on.
++///
++/// - The Firebase auth stream is the source of truth for signed-in/out.
++/// - A Firebase user only reaches [AuthSignedIn] after `users/{uid}` loads;
++///   a profile failure becomes [AuthProfileError] with retry/sign-out
++///   instead of being shown as a cancelled sign-in.
++/// - Ending a session clears every [SessionScoped] participant and the
++///   Analytics/Crashlytics user identifiers.
+ class AuthViewModel extends BaseViewModel {
+   final IAuthService authService;
+   final AnalyticsService analytics;
+   final CrashlyticsService crashlytics;
++  final List<SessionScoped> _sessionScoped;
++
++  StreamSubscription<String?>? _authSubscription;
++  AuthState _state = const AuthInitializing();
+ 
+-  StreamSubscription<UserModel?>? _authSubscription;
+-  UserModel? _currentUser;
+-  ViewState<UserModel?> _state = const ViewStateIdle();
++  /// Uid whose session data is currently held by participants.
++  String? _sessionUid;
++
++  /// Guards against overlapping profile loads for the same uid.
++  Future<void>? _profileLoad;
++  String? _profileLoadUid;
++
++  /// Set while the Google picker is open so repeated taps are ignored.
++  bool _signInInFlight = false;
++  bool _signOutInFlight = false;
+ 
+   AuthViewModel({
+     required this.authService,
+     required this.analytics,
+     required this.crashlytics,
+-  }) {
+-    _init();
++    Iterable<SessionScoped> sessionScoped = const [],
++  }) : _sessionScoped = List.of(sessionScoped) {
++    _authSubscription = authService.authUidChanges.listen(
++      _onAuthUid,
++      onError: (Object e, StackTrace s) {
++        crashlytics.recordError(e, s, reason: 'Auth state stream error');
++        _setState(AuthSignedOut(
++            notice: AuthFailure(AuthFailureKind.unknown, cause: e)));
++      },
++    );
+   }
+ 
+-  ViewState<UserModel?> get state => _state;
+-  UserModel? get currentUser => _currentUser;
+-  bool get isAuthenticated => _currentUser != null;
+-
+-  void _init() {
+-    _state = const ViewStateLoading('Đang kiểm tra phiên đăng nhập...');
+-    _authSubscription = authService.authStateChanges.listen((user) {
+-      _currentUser = user;
+-      if (user != null) {
+-        analytics.setUserId(user.uid);
+-        crashlytics.setUserId(user.uid);
+-        crashlytics.setCustomKey('user_role', user.role);
+-        _state = ViewStateSuccess(user);
+-      } else {
+-        _state = const ViewStateEmpty(message: 'Chưa đăng nhập');
+-      }
+-      notifyListeners();
+-    }, onError: (e, s) {
+-      crashlytics.recordError(e, s, reason: 'Auth state stream error');
+-      _state = ViewStateError('Lỗi xác thực người dùng', e);
+-      notifyListeners();
+-    });
++  AuthState get state => _state;
++
++  UserModel? get currentUser =>
++      _state is AuthSignedIn ? (_state as AuthSignedIn).user : null;
++
++  bool get isAuthenticated => _state is AuthSignedIn;
++
++  /// True while a sign-in, profile load or sign-out is running.
++  bool get isBusy =>
++      _state is AuthSigningIn ||
++      _state is AuthLoadingProfile ||
++      _state is AuthInitializing;
++
++  /// Registers a participant created after this ViewModel.
++  void registerSessionScoped(SessionScoped participant) {
++    _sessionScoped.add(participant);
++    final user = currentUser;
++    if (user != null) participant.onSessionStarted(user);
+   }
+ 
+-  Future<bool> signInWithGoogle() async {
+-    _state = const ViewStateLoading('Đang kết nối tài khoản Google...');
+-    notifyListeners();
++  Future<void> signInWithGoogle() async {
++    if (_signInInFlight || _state is! AuthSignedOut) return;
++    _signInInFlight = true;
++    _setState(const AuthSigningIn());
+ 
+     try {
+-      final user = await authService.signInWithGoogle();
+-      if (user != null) {
+-        _currentUser = user;
+-        await analytics.logLogin(method: 'google');
+-        _state = ViewStateSuccess(user);
+-        notifyListeners();
+-        return true;
+-      } else {
+-        _state = const ViewStateEmpty(message: 'Đăng nhập bị hủy');
+-        notifyListeners();
+-        return false;
++      final result = await authService.signInWithGoogle();
++      switch (result) {
++        case AuthSignInSucceeded(:final uid):
++          await analytics.logLogin(method: 'google');
++          // The auth stream also reports this uid; both paths share one load.
++          await _loadProfile(uid);
++        case AuthSignInCancelled():
++          _setState(const AuthSignedOut(
++              notice: AuthFailure(AuthFailureKind.cancelled)));
++        case AuthSignInFailed(:final failure):
++          await crashlytics.recordError(failure, StackTrace.current,
++              reason: 'Google sign-in failed (${failure.kind.name})');
++          _setState(AuthSignedOut(notice: failure));
+       }
+-    } catch (e, s) {
+-      await crashlytics.recordError(e, s, reason: 'Google Sign-In failed');
+-      _state = ViewStateError('Không thể đăng nhập bằng Google. Vui lòng thử lại.', e);
+-      notifyListeners();
+-      return false;
++    } finally {
++      _signInInFlight = false;
+     }
+   }
+ 
+-  Future<void> signOut() async {
+-    _state = const ViewStateLoading('Đang đăng xuất...');
+-    notifyListeners();
++  /// Retries the profile load from [AuthProfileError].
++  Future<void> retryProfile() async {
++    final current = _state;
++    if (current is AuthProfileError) await _loadProfile(current.uid);
++  }
+ 
++  Future<void> signOut() async {
++    if (_signOutInFlight || _state is AuthInitializing) return;
++    _signOutInFlight = true;
+     try {
+       await authService.signOut();
+-      _currentUser = null;
+       await analytics.logEvent('logout');
+-      _state = const ViewStateEmpty(message: 'Đã đăng xuất');
+     } catch (e, s) {
+-      await crashlytics.recordError(e, s, reason: 'Sign-Out failed');
+-      _state = ViewStateError('Lỗi khi đăng xuất', e);
++      await crashlytics.recordError(e, s, reason: 'Sign-out failed');
++    } finally {
++      _signOutInFlight = false;
++    }
++    // Clear locally even if the SDK call failed: the user asked to leave.
++    _endSession();
++    _setState(const AuthSignedOut());
++  }
++
++  /// Dismisses the cancel/failure notice on the sign-in screen.
++  void clearNotice() {
++    if (_state case AuthSignedOut(notice: _?)) {
++      _setState(const AuthSignedOut());
++    }
++  }
++
++  void _onAuthUid(String? uid) {
++    if (uid == null) {
++      _endSession();
++      // A signed-out state keeps its cancel/failure notice; an attempt in
++      // progress reports its own outcome.
++      if (_state is! AuthSignedOut && _state is! AuthSigningIn) {
++        _setState(const AuthSignedOut());
++      }
++      return;
++    }
++    if (_sessionUid != null && _sessionUid != uid) _endSession();
++    final current = _state;
++    if (current is AuthSignedIn && current.user.uid == uid) return;
++    _loadProfile(uid);
++  }
++
++  Future<void> _loadProfile(String uid) {
++    if (_profileLoad != null && _profileLoadUid == uid) return _profileLoad!;
++    _profileLoadUid = uid;
++    return _profileLoad = _doLoadProfile(uid).whenComplete(() {
++      if (_profileLoadUid == uid) {
++        _profileLoad = null;
++        _profileLoadUid = null;
++      }
++    });
++  }
++
++  Future<void> _doLoadProfile(String uid) async {
++    _setState(AuthLoadingProfile(uid));
++    try {
++      final user = await authService.loadProfile(uid);
++      if (authService.currentUid != uid) return; // signed out meanwhile
++      _startSession(user);
++      _setState(AuthSignedIn(user));
++    } on AuthFailure catch (failure, s) {
++      if (authService.currentUid != uid) return;
++      await crashlytics.recordError(failure, s,
++          reason: 'Profile load failed (${failure.kind.name})');
++      _setState(AuthProfileError(uid, failure));
++    } catch (e, s) {
++      if (authService.currentUid != uid) return;
++      await crashlytics.recordError(e, s, reason: 'Profile load failed');
++      _setState(AuthProfileError(
++          uid, AuthFailure(AuthFailureKind.unknown, cause: e)));
++    }
++  }
++
++  void _startSession(UserModel user) {
++    _sessionUid = user.uid;
++    analytics.setUserId(user.uid);
++    crashlytics.setUserId(user.uid);
++    crashlytics.setCustomKey('user_role', user.role);
++    for (final participant in _sessionScoped) {
++      participant.onSessionStarted(user);
+     }
++  }
++
++  void _endSession() {
++    if (_sessionUid == null) return;
++    _sessionUid = null;
++    analytics.setUserId(null);
++    crashlytics.setUserId('');
++    crashlytics.setCustomKey('user_role', 'signed_out');
++    for (final participant in _sessionScoped) {
++      participant.clearSession();
++    }
++  }
++
++  void _setState(AuthState next) {
++    _state = next;
+     notifyListeners();
+   }
+ 
+diff --git a/ui01-snapshot/lib/viewmodels/ingredient_viewmodel.dart b/lib/viewmodels/ingredient_viewmodel.dart
+index b62bb04..30f0556 100644
+--- a/ui01-snapshot/lib/viewmodels/ingredient_viewmodel.dart
++++ b/lib/viewmodels/ingredient_viewmodel.dart
+@@ -3,9 +3,11 @@ import '../models/meal_plan_model.dart';
+ import '../models/view_state.dart';
+ import '../firebase/analytics_service.dart';
+ import '../firebase/crashlytics_service.dart';
++import '../models/user_model.dart';
+ import 'base_viewmodel.dart';
++import 'session_scoped.dart';
+ 
+-class IngredientViewModel extends BaseViewModel {
++class IngredientViewModel extends BaseViewModel implements SessionScoped {
+   final AnalyticsService analytics;
+   final CrashlyticsService crashlytics;
+ 
+@@ -23,6 +25,20 @@ class IngredientViewModel extends BaseViewModel {
+   List<IngredientModel> get ingredients => List.unmodifiable(_ingredients);
+   bool get canUndo => _recentlyDeleted != null;
+ 
++  @override
++  void onSessionStarted(UserModel user) {}
++
++  /// Drops the previous user's ingredient list and Undo buffer when the
++  /// session ends (CHARLIE-AUTH-01).
++  @override
++  void clearSession() {
++    _ingredients = [];
++    _recentlyDeleted = null;
++    _recentlyDeletedIndex = null;
++    _state = const ViewStateIdle();
++    notifyListeners();
++  }
++
+   void aggregateFromMealPlan(MealPlanModel plan) {
+     _state = const ViewStateLoading('Đang tổng hợp danh sách nguyên liệu...');
+     notifyListeners();
+diff --git a/ui01-snapshot/lib/viewmodels/meal_plan_viewmodel.dart b/lib/viewmodels/meal_plan_viewmodel.dart
+index 7e047f0..b5e1ef3 100644
+--- a/ui01-snapshot/lib/viewmodels/meal_plan_viewmodel.dart
++++ b/lib/viewmodels/meal_plan_viewmodel.dart
+@@ -5,9 +5,11 @@ import '../services/i_data_service.dart';
+ import '../firebase/analytics_service.dart';
+ import '../firebase/crashlytics_service.dart';
+ import '../firebase/remote_config_service.dart';
++import '../models/user_model.dart';
+ import 'base_viewmodel.dart';
++import 'session_scoped.dart';
+ 
+-class MealPlanViewModel extends BaseViewModel {
++class MealPlanViewModel extends BaseViewModel implements SessionScoped {
+   final IDataService dataService;
+   final AnalyticsService analytics;
+   final CrashlyticsService crashlytics;
+@@ -28,6 +30,18 @@ class MealPlanViewModel extends BaseViewModel {
+   ViewState<List<MealPlanModel>> get savedPlansState => _savedPlansState;
+   MealPlanModel? get activePlan => _activePlan;
+ 
++  @override
++  void onSessionStarted(UserModel user) {}
++
++  /// Drops the previous user's plans when the session ends (CHARLIE-AUTH-01).
++  @override
++  void clearSession() {
++    _currentPlanState = const ViewStateIdle();
++    _savedPlansState = const ViewStateIdle();
++    _activePlan = null;
++    notifyListeners();
++  }
++
+   Future<void> generatePlan({
+     required String uid,
+     required double weightKg,
+diff --git a/ui01-snapshot/lib/viewmodels/profile_viewmodel.dart b/lib/viewmodels/profile_viewmodel.dart
+index 7751de0..f982a23 100644
+--- a/ui01-snapshot/lib/viewmodels/profile_viewmodel.dart
++++ b/lib/viewmodels/profile_viewmodel.dart
+@@ -11,8 +11,9 @@ import '../firebase/remote_config_service.dart';
+ import '../firebase/crashlytics_service.dart';
+ import '../firebase/analytics_service.dart';
+ import 'base_viewmodel.dart';
++import 'session_scoped.dart';
+ 
+-class ProfileViewModel extends BaseViewModel {
++class ProfileViewModel extends BaseViewModel implements SessionScoped {
+   final IAuthService authService;
+   final StorageService storageService;
+   final NotificationService notificationService;
+@@ -41,6 +42,23 @@ class ProfileViewModel extends BaseViewModel {
+   ViewState<String> get exportState => _exportState;
+   List<RemoteMessage> get notifications => notificationService.messages;
+ 
++  /// Notification permission is requested after sign-in, not at app start,
++  /// so the first screen a new user (and ARTEMIS TC-01) sees is Sign-in
++  /// rather than the Android 13 permission dialog.
++  @override
++  void onSessionStarted(UserModel user) {
++    notificationService.initialize();
++  }
++
++  @override
++  void clearSession() {
++    _uploadProgress = 0.0;
++    _lastUploadedUrl = null;
++    _exportState = const ViewStateIdle();
++    notificationService.clearHistory();
++    notifyListeners();
++  }
++
+   // Remote config properties for UI display
+   int get maxRecommendations => remoteConfigService.maxRecommendations;
+   bool get enableScore => remoteConfigService.enableLongevityScore;
+diff --git a/lib/viewmodels/session_scoped.dart b/lib/viewmodels/session_scoped.dart
+new file mode 100644
+index 0000000..be1c634
+--- /dev/null
++++ b/lib/viewmodels/session_scoped.dart
+@@ -0,0 +1,15 @@
++import '../models/user_model.dart';
++
++/// Implemented by ViewModels/services that hold data of the signed-in user.
++///
++/// `AuthViewModel` calls [clearSession] whenever the session ends (sign-out,
++/// token revoked, or a different uid signs in) so user B never sees user A's
++/// local state. Implementations drop in-memory data, cancel per-user
++/// listeners and reset identifiers; they must not delete cloud records.
++abstract interface class SessionScoped {
++  /// Called once the profile of [user] is loaded.
++  void onSessionStarted(UserModel user);
++
++  /// Called when the session of the previous user ends.
++  void clearSession();
++}
+diff --git a/ui01-snapshot/lib/widgets/app_badge.dart b/lib/widgets/app_badge.dart
+index e0e5127..754f219 100644
+--- a/ui01-snapshot/lib/widgets/app_badge.dart
++++ b/lib/widgets/app_badge.dart
+@@ -42,6 +42,7 @@ class AppBadge extends StatelessWidget {
+     final text = label ?? defaultLabel(kind);
+ 
+     return Semantics(
++      container: true,
+       label: text,
+       child: ExcludeSemantics(
+         child: Container(
+diff --git a/ui01-snapshot/lib/widgets/app_button.dart b/lib/widgets/app_button.dart
+index 0768a70..55d8fe0 100644
+--- a/ui01-snapshot/lib/widgets/app_button.dart
++++ b/lib/widgets/app_button.dart
+@@ -136,6 +136,7 @@ class _AppButtonState extends State<AppButton>
+     ];
+ 
+     return Semantics(
++      container: true,
+       button: true,
+       enabled: _enabled,
+       label: label,
+diff --git a/ui01-snapshot/lib/widgets/app_card.dart b/lib/widgets/app_card.dart
+index 88f0e19..5d7b371 100644
+--- a/ui01-snapshot/lib/widgets/app_card.dart
++++ b/lib/widgets/app_card.dart
+@@ -63,6 +63,7 @@ class _AppCardState extends State<AppCard> {
+     }
+ 
+     return Semantics(
++      container: true,
+       button: true,
+       label: widget.semanticLabel,
+       onTap: widget.onTap,
+diff --git a/ui01-snapshot/lib/widgets/app_icon_button.dart b/lib/widgets/app_icon_button.dart
+index 5c0336f..0cb3a35 100644
+--- a/ui01-snapshot/lib/widgets/app_icon_button.dart
++++ b/lib/widgets/app_icon_button.dart
+@@ -42,6 +42,7 @@ class _AppIconButtonState extends State<AppIconButton> {
+     final pressed = enabled && (_pressed || widget.debugForcePressed);
+ 
+     return Semantics(
++      container: true,
+       button: true,
+       enabled: enabled,
+       label: widget.semanticLabel,
+diff --git a/ui01-snapshot/lib/widgets/app_navigation_bar.dart b/lib/widgets/app_navigation_bar.dart
+index da7515b..8a62f50 100644
+--- a/ui01-snapshot/lib/widgets/app_navigation_bar.dart
++++ b/lib/widgets/app_navigation_bar.dart
+@@ -86,6 +86,7 @@ class _NavigationItem extends StatelessWidget {
+         selected ? AppColors.actionOnPrimary : AppColors.textSecondary;
+ 
+     return Semantics(
++      container: true,
+       button: true,
+       selected: selected,
+       label: destination.label,
+diff --git a/ui01-snapshot/lib/widgets/app_supporting.dart b/lib/widgets/app_supporting.dart
+index 60627fd..58112b8 100644
+--- a/ui01-snapshot/lib/widgets/app_supporting.dart
++++ b/lib/widgets/app_supporting.dart
+@@ -48,6 +48,7 @@ class AppCheckboxRow extends StatelessWidget {
+     }
+ 
+     return Semantics(
++      container: true,
+       checked: checked,
+       enabled: enabled,
+       label: label,
+@@ -110,6 +111,7 @@ class AppDaySelector extends StatelessWidget {
+         selected ? AppColors.actionOnPrimary : AppColors.textPrimary;
+ 
+     return Semantics(
++      container: true,
+       button: true,
+       selected: selected,
+       label: semanticLabel ?? '$day $date',
+@@ -240,6 +242,7 @@ class AppSnackBarContent extends StatelessWidget {
+           if (actionLabel != null) ...[
+             const SizedBox(width: AppSpacing.s8),
+             Semantics(
++              container: true,
+               button: true,
+               label: actionLabel,
+               onTap: onAction,
+diff --git a/ui01-snapshot/lib/widgets/state_views.dart b/lib/widgets/state_views.dart
+index c513332..1e0328c 100644
+--- a/ui01-snapshot/lib/widgets/state_views.dart
++++ b/lib/widgets/state_views.dart
+@@ -59,6 +59,7 @@ class LoadingView extends StatelessWidget {
+   @override
+   Widget build(BuildContext context) {
+     return Semantics(
++      container: true,
+       liveRegion: true,
+       label: [title, message].whereType<String>().join('. '),
+       child: ExcludeSemantics(
+@@ -249,6 +250,7 @@ class ErrorView extends StatelessWidget {
+   @override
+   Widget build(BuildContext context) {
+     return Semantics(
++      container: true,
+       liveRegion: true,
+       child: _StatePanel(
+         children: [
+diff --git a/test/auth/auth_error_mapper_test.dart b/test/auth/auth_error_mapper_test.dart
+new file mode 100644
+index 0000000..2efcaa2
+--- /dev/null
++++ b/test/auth/auth_error_mapper_test.dart
+@@ -0,0 +1,95 @@
++import 'package:firebase_auth/firebase_auth.dart';
++import 'package:flutter/services.dart';
++import 'package:flutter_test/flutter_test.dart';
++import 'package:longvita/models/auth_state.dart';
++import 'package:longvita/services/auth_error_mapper.dart';
++
++void main() {
++  group('Google Sign-In', () {
++    test('sign_in_canceled is a cancel', () {
++      final f = AuthErrorMapper.fromGoogle(
++          PlatformException(code: 'sign_in_canceled'));
++      expect(f.kind, AuthFailureKind.cancelled);
++    });
++
++    test('network_error is network', () {
++      final f =
++          AuthErrorMapper.fromGoogle(PlatformException(code: 'network_error'));
++      expect(f.kind, AuthFailureKind.network);
++    });
++
++    test('ApiException 10 (DEVELOPER_ERROR: SHA/package) is configuration',
++        () {
++      final f = AuthErrorMapper.fromGoogle(PlatformException(
++        code: 'sign_in_failed',
++        message: 'com.google.android.gms.common.api.ApiException: 10: ',
++      ));
++      expect(f.kind, AuthFailureKind.configuration);
++      expect(f.code, 'sign_in_failed');
++    });
++
++    test('other sign_in_failed is a credential failure', () {
++      final f = AuthErrorMapper.fromGoogle(PlatformException(
++          code: 'sign_in_failed', message: 'ApiException: 8: '));
++      expect(f.kind, AuthFailureKind.credential);
++    });
++  });
++
++  group('Firebase Auth', () {
++    test('network-request-failed is network', () {
++      expect(
++        AuthErrorMapper.fromFirebaseAuth(
++                FirebaseAuthException(code: 'network-request-failed'))
++            .kind,
++        AuthFailureKind.network,
++      );
++    });
++
++    test('operation-not-allowed (provider disabled) is configuration', () {
++      expect(
++        AuthErrorMapper.fromFirebaseAuth(
++                FirebaseAuthException(code: 'operation-not-allowed'))
++            .kind,
++        AuthFailureKind.configuration,
++      );
++    });
++
++    test('user-disabled / invalid-credential are credential', () {
++      for (final code in ['user-disabled', 'invalid-credential']) {
++        expect(
++          AuthErrorMapper.fromFirebaseAuth(FirebaseAuthException(code: code))
++              .kind,
++          AuthFailureKind.credential,
++          reason: code,
++        );
++      }
++    });
++  });
++
++  group('Firestore profile', () {
++    FirebaseException fs(String code) =>
++        FirebaseException(plugin: 'cloud_firestore', code: code);
++
++    test('permission-denied read is profileRead', () {
++      final f =
++          AuthErrorMapper.fromFirestore(fs('permission-denied'), writing: false);
++      expect(f.kind, AuthFailureKind.profileRead);
++      expect(f.isProfileFailure, isTrue);
++    });
++
++    test('permission-denied write is profileWrite', () {
++      expect(
++        AuthErrorMapper.fromFirestore(fs('permission-denied'), writing: true)
++            .kind,
++        AuthFailureKind.profileWrite,
++      );
++    });
++
++    test('unavailable is network, not a cancelled sign-in', () {
++      expect(
++        AuthErrorMapper.fromFirestore(fs('unavailable'), writing: false).kind,
++        AuthFailureKind.network,
++      );
++    });
++  });
++}
+diff --git a/test/auth/auth_fakes.dart b/test/auth/auth_fakes.dart
+new file mode 100644
+index 0000000..a5482d7
+--- /dev/null
++++ b/test/auth/auth_fakes.dart
+@@ -0,0 +1,195 @@
++// Test-only fakes for CHARLIE-AUTH-01. They implement the app interfaces
++// (and the concrete service classes' interfaces via `implements`) so no
++// Firebase SDK is touched.
++import 'dart:async';
++import 'dart:typed_data';
++
++import 'package:firebase_messaging/firebase_messaging.dart';
++import 'package:longvita/firebase/analytics_service.dart';
++import 'package:longvita/firebase/crashlytics_service.dart';
++import 'package:longvita/firebase/notification_service.dart';
++import 'package:longvita/firebase/remote_config_service.dart';
++import 'package:longvita/firebase/storage_service.dart';
++import 'package:longvita/models/auth_state.dart';
++import 'package:longvita/models/meal_plan_model.dart';
++import 'package:longvita/models/user_model.dart';
++import 'package:longvita/services/i_auth_service.dart';
++import 'package:longvita/services/i_report_service.dart';
++import 'package:longvita/viewmodels/session_scoped.dart';
++
++UserModel testUser(String uid, {String role = 'user'}) => UserModel(
++      uid: uid,
++      email: '$uid@example.test',
++      displayName: 'User $uid',
++      role: role,
++      createdAt: DateTime(2026, 11, 2),
++    );
++
++/// Scriptable [IAuthService]. The auth stream behaves like Firebase: it
++/// emits the current uid on listen and on every change.
++class FakeAuthService implements IAuthService {
++  final _uidController = StreamController<String?>.broadcast();
++  String? _uid;
++  UserModel? _cached;
++
++  /// Next result of [signInWithGoogle]; a Completer lets tests hold the
++  /// picker open.
++  Completer<AuthSignInResult>? pendingSignIn;
++  AuthSignInResult nextSignIn = const AuthSignInCancelled();
++
++  /// Per-call profile outcomes; a [AuthFailure] entry is thrown.
++  final List<Object> profileResults = [];
++
++  int signInCalls = 0;
++  int loadProfileCalls = 0;
++  int signOutCalls = 0;
++  bool failSignOut = false;
++
++  FakeAuthService({String? initialUid}) : _uid = initialUid;
++
++  @override
++  Stream<String?> get authUidChanges async* {
++    yield _uid;
++    yield* _uidController.stream;
++  }
++
++  @override
++  String? get currentUid => _uid;
++
++  @override
++  UserModel? get currentUser => _cached?.uid == _uid ? _cached : null;
++
++  /// Simulates Firebase reporting a different user (restore / revoke).
++  void emitUid(String? uid) {
++    _uid = uid;
++    _uidController.add(uid);
++  }
++
++  @override
++  Future<AuthSignInResult> signInWithGoogle() async {
++    signInCalls++;
++    final result =
++        pendingSignIn != null ? await pendingSignIn!.future : nextSignIn;
++    if (result is AuthSignInSucceeded) emitUid(result.uid);
++    return result;
++  }
++
++  @override
++  Future<UserModel> loadProfile(String uid) async {
++    loadProfileCalls++;
++    await Future<void>.delayed(Duration.zero);
++    final outcome =
++        profileResults.isEmpty ? testUser(uid) : profileResults.removeAt(0);
++    if (outcome is AuthFailure) throw outcome;
++    return _cached = outcome as UserModel;
++  }
++
++  @override
++  Future<void> signOut() async {
++    signOutCalls++;
++    if (failSignOut) throw Exception('sign-out failed');
++    _cached = null;
++    emitUid(null);
++  }
++}
++
++class FakeAnalytics implements AnalyticsService {
++  final List<String?> userIds = [];
++  final List<String> events = [];
++
++  @override
++  Future<void> setUserId(String? uid) async => userIds.add(uid);
++
++  @override
++  Future<void> logLogin({String method = 'google'}) async =>
++      events.add('login:$method');
++
++  @override
++  Future<void> logEvent(String name, [Map<String, Object>? parameters]) async =>
++      events.add(name);
++
++  @override
++  dynamic noSuchMethod(Invocation invocation) => Future<void>.value();
++}
++
++class FakeCrashlytics implements CrashlyticsService {
++  final List<String> userIds = [];
++  final List<Object?> errors = [];
++  final Map<String, Object> keys = {};
++
++  @override
++  Future<void> setUserId(String uid) async => userIds.add(uid);
++
++  @override
++  Future<void> setCustomKey(String key, Object value) async =>
++      keys[key] = value;
++
++  @override
++  Future<void> recordError(dynamic exception, StackTrace? stack,
++          {dynamic reason, bool fatal = false}) async =>
++      errors.add(exception);
++
++  @override
++  dynamic noSuchMethod(Invocation invocation) => null;
++}
++
++class FakeNotificationService implements NotificationService {
++  final List<RemoteMessage> history = [];
++  int initializeCalls = 0;
++
++  @override
++  List<RemoteMessage> get messages => List.unmodifiable(history);
++
++  @override
++  Future<void> initialize() async => initializeCalls++;
++
++  @override
++  void clearHistory() => history.clear();
++
++  @override
++  Future<String?> getToken() async => null;
++}
++
++class FakeStorageService implements StorageService {
++  @override
++  Future<String?> uploadReportPdf({
++    required String uid,
++    required String fileName,
++    required Uint8List bytes,
++    void Function(double progress)? onProgress,
++  }) async {
++    onProgress?.call(1);
++    return 'https://storage.test/reports/$uid/$fileName';
++  }
++}
++
++class FakeReportService implements IReportService {
++  @override
++  Future<Uint8List> generateMealPlanPdf(MealPlanModel plan) async =>
++      Uint8List.fromList([1, 2, 3]);
++}
++
++/// Records session callbacks in order.
++class RecordingSession implements SessionScoped {
++  final List<String> calls = [];
++
++  @override
++  void onSessionStarted(UserModel user) => calls.add('start:${user.uid}');
++
++  @override
++  void clearSession() => calls.add('clear');
++}
++
++class FakeRemoteConfig implements RemoteConfigService {
++  @override
++  int get maxRecommendations => 5;
++
++  @override
++  bool get enableLongevityScore => true;
++
++  @override
++  String get bannerAnnouncement => '';
++
++  @override
++  dynamic noSuchMethod(Invocation invocation) => null;
++}
+diff --git a/test/auth/auth_screens_test.dart b/test/auth/auth_screens_test.dart
+new file mode 100644
+index 0000000..ccb9f7c
+--- /dev/null
++++ b/test/auth/auth_screens_test.dart
+@@ -0,0 +1,333 @@
++import 'dart:async';
++
++import 'package:flutter/material.dart';
++import 'package:flutter_test/flutter_test.dart';
++import 'package:longvita/firebase/analytics_service.dart';
++import 'package:longvita/firebase/crashlytics_service.dart';
++import 'package:longvita/firebase/firebase_bootstrap.dart';
++import 'package:longvita/firebase/notification_service.dart';
++import 'package:longvita/firebase/remote_config_service.dart';
++import 'package:longvita/firebase/storage_service.dart';
++import 'package:longvita/models/auth_state.dart';
++import 'package:longvita/screens/auth_gate.dart';
++import 'package:longvita/screens/startup_gate.dart';
++import 'package:longvita/services/i_auth_service.dart';
++import 'package:longvita/services/i_data_service.dart';
++import 'package:longvita/theme/app_theme.dart';
++import 'package:longvita/viewmodels/auth_viewmodel.dart';
++import 'package:longvita/viewmodels/ingredient_viewmodel.dart';
++import 'package:longvita/viewmodels/meal_plan_viewmodel.dart';
++import 'package:longvita/viewmodels/profile_viewmodel.dart';
++import 'package:longvita/widgets/longvita_widgets.dart';
++import 'package:provider/provider.dart';
++
++import '../qa/qa_support.dart';
++import 'auth_fakes.dart';
++import 'session_isolation_test.dart' show FakeDataService;
++
++/// Full provider tree as in main.dart, with fakes.
++class Harness {
++  final auth = FakeAuthService();
++  final analytics = FakeAnalytics();
++  final crashlytics = FakeCrashlytics();
++  late final dataService = FakeDataService();
++  late final mealPlan = MealPlanViewModel(
++    dataService: dataService,
++    analytics: analytics,
++    crashlytics: crashlytics,
++    remoteConfig: FakeRemoteConfig(),
++  );
++  late final ingredients =
++      IngredientViewModel(analytics: analytics, crashlytics: crashlytics);
++  late final profile = ProfileViewModel(
++    authService: auth,
++    storageService: FakeStorageService(),
++    notificationService: FakeNotificationService(),
++    reportService: FakeReportService(),
++    remoteConfigService: FakeRemoteConfig(),
++    crashlyticsService: crashlytics,
++    analyticsService: analytics,
++  );
++  late final vm = AuthViewModel(
++    authService: auth,
++    analytics: analytics,
++    crashlytics: crashlytics,
++    sessionScoped: [mealPlan, ingredients, profile],
++  );
++
++  Widget wrap(Widget child) => MultiProvider(
++        providers: [
++          Provider<IAuthService>.value(value: auth),
++          Provider<IDataService>.value(value: dataService),
++          Provider<AnalyticsService>.value(value: analytics),
++          Provider<CrashlyticsService>.value(value: crashlytics),
++          Provider<RemoteConfigService>.value(value: FakeRemoteConfig()),
++          Provider<StorageService>.value(value: FakeStorageService()),
++          Provider<NotificationService>.value(value: FakeNotificationService()),
++          ChangeNotifierProvider<AuthViewModel>.value(value: vm),
++          ChangeNotifierProvider<MealPlanViewModel>.value(value: mealPlan),
++          ChangeNotifierProvider<IngredientViewModel>.value(value: ingredients),
++          ChangeNotifierProvider<ProfileViewModel>.value(value: profile),
++        ],
++        child: child,
++      );
++}
++
++/// Lets the fake services' futures complete inside the widget test's fake
++/// clock without waiting on the infinite spinner animation.
++Future<void> settle(WidgetTester tester) async {
++  for (var i = 0; i < 5; i++) {
++    await tester.pump(const Duration(milliseconds: 20));
++  }
++}
++
++void main() {
++  final theme = AppTheme.lightTheme;
++
++  setUpAll(loadQaFonts);
++
++  Future<Harness> pumpGate(WidgetTester tester,
++      {Size size = const Size(360, 800), GlobalKey? key, double textScale = 1}) async {
++    final h = Harness();
++    await pumpQa(tester, h.wrap(const AuthGate()),
++        size: size,
++        theme: theme,
++        boundaryKey: key,
++        textScale: textScale,
++        realShadows: key != null);
++    await settle(tester);
++    return h;
++  }
++
++  testWidgets('signed out shows Sign-in with the Google action', (tester) async {
++    await pumpGate(tester);
++    expect(find.text('Thực đơn trường thọ cho cả tuần'), findsOneWidget);
++    expect(find.text('Đăng nhập bằng Google'), findsOneWidget);
++  });
++
++  testWidgets('picker open: loading button, repeated taps ignored',
++      (tester) async {
++    final h = await pumpGate(tester);
++    h.auth.pendingSignIn = Completer<AuthSignInResult>();
++
++    await tester.tap(find.byKey(const Key('sign-in-google')));
++    await tester.pump();
++    expect(find.text('Đang mở tài khoản Google…'), findsOneWidget);
++    await tester.tap(find.byKey(const Key('sign-in-google')));
++    await tester.pump();
++    expect(h.auth.signInCalls, 1);
++
++    h.auth.pendingSignIn!.complete(const AuthSignInCancelled());
++    await settle(tester);
++  });
++
++  testWidgets('cancel shows an informational notice that can be dismissed',
++      (tester) async {
++    final h = await pumpGate(tester);
++    h.auth.nextSignIn = const AuthSignInCancelled();
++
++    await tester.tap(find.byKey(const Key('sign-in-google')));
++    await settle(tester);
++
++    expect(find.textContaining('Bạn đã đóng cửa sổ chọn tài khoản'),
++        findsOneWidget);
++    expect(find.text('Đăng nhập bằng Google'), findsOneWidget);
++    await tester.tap(find.byIcon(AppIcons.close));
++    await tester.pump();
++    expect(find.textContaining('Bạn đã đóng cửa sổ'), findsNothing);
++  });
++
++  testWidgets('credential failure shows an error and a retry label',
++      (tester) async {
++    final h = await pumpGate(tester);
++    h.auth.nextSignIn = const AuthSignInFailed(
++        AuthFailure(AuthFailureKind.network, code: 'network_error'));
++
++    await tester.tap(find.byKey(const Key('sign-in-google')));
++    await settle(tester);
++
++    expect(find.textContaining('Không có kết nối mạng'), findsOneWidget);
++    expect(find.text('Thử lại với Google'), findsOneWidget);
++
++    h.auth.nextSignIn = const AuthSignInSucceeded('uid-a');
++    await tester.tap(find.byKey(const Key('sign-in-google')));
++    await settle(tester);
++    expect(find.text('Thử lại với Google'), findsNothing);
++    expect(h.vm.state, isA<AuthSignedIn>());
++  });
++
++  testWidgets('profile failure opens recovery, not Sign-in; retry recovers',
++      (tester) async {
++    final h = await pumpGate(tester);
++    h.auth.nextSignIn = const AuthSignInSucceeded('uid-a');
++    h.auth.profileResults.add(const AuthFailure(AuthFailureKind.profileRead));
++
++    await tester.tap(find.byKey(const Key('sign-in-google')));
++    await settle(tester);
++
++    expect(find.text('Chưa tải được hồ sơ'), findsOneWidget);
++    expect(find.text('Đăng nhập bằng Google'), findsNothing);
++
++    // Each action is its own accessibility node (TalkBack/ARTEMIS can target
++    // it); found on Android when the whole panel merged into one node.
++    final handle = tester.ensureSemantics();
++    for (final label in ['Thử lại', 'Đăng xuất']) {
++      expect(
++        tester.getSemantics(find.text(label)),
++        matchesSemantics(
++          label: label,
++          isButton: true,
++          hasEnabledState: true,
++          isEnabled: true,
++          hasTapAction: true,
++        ),
++        reason: label,
++      );
++    }
++    handle.dispose();
++
++    await tester.tap(find.text('Thử lại'));
++    await settle(tester);
++    expect(h.vm.state, isA<AuthSignedIn>());
++    expect(find.text('Chưa tải được hồ sơ'), findsNothing);
++  });
++
++  testWidgets('recovery sign-out returns to Sign-in', (tester) async {
++    final h = await pumpGate(tester);
++    h.auth.nextSignIn = const AuthSignInSucceeded('uid-a');
++    h.auth.profileResults.add(const AuthFailure(AuthFailureKind.profileWrite));
++    await tester.tap(find.byKey(const Key('sign-in-google')));
++    await settle(tester);
++    expect(find.text('Chưa tạo được hồ sơ'), findsOneWidget);
++
++    await tester.tap(find.text('Đăng xuất'));
++    await settle(tester);
++    expect(find.text('Đăng nhập bằng Google'), findsOneWidget);
++  });
++
++  testWidgets('logout removes pushed protected routes (Back cannot return)',
++      (tester) async {
++    final h = await pumpGate(tester);
++    h.auth.nextSignIn = const AuthSignInSucceeded('uid-a');
++    await tester.tap(find.byKey(const Key('sign-in-google')));
++    await settle(tester);
++    expect(h.vm.state, isA<AuthSignedIn>());
++
++    final navigator = tester.state<NavigatorState>(find.byType(Navigator).first);
++    navigator.push(MaterialPageRoute<void>(
++      builder: (_) => const Scaffold(body: Text('Protected detail')),
++    ));
++    await tester.pump();
++    await tester.pump(const Duration(milliseconds: 500));
++    expect(find.text('Protected detail'), findsOneWidget);
++
++    await h.vm.signOut();
++    await settle(tester);
++    await tester.pump();
++    await tester.pump(const Duration(milliseconds: 500));
++
++    expect(find.text('Protected detail'), findsNothing);
++    expect(find.text('Đăng nhập bằng Google'), findsOneWidget);
++    expect(navigator.canPop(), isFalse);
++  });
++
++  testWidgets('start-up failure shows error + retry, then the app',
++      (tester) async {
++    var attempts = 0;
++    await tester.pumpWidget(StartupGate(
++      initialize: () async {
++        attempts++;
++        return attempts == 1
++            ? BootstrapFailed('not-configured', Exception('no google-services'))
++            : const BootstrapReady();
++      },
++      buildReadyApp: () async =>
++          const MaterialApp(home: Scaffold(body: Text('App ready'))),
++    ));
++    await tester.pump();
++    await tester.pump();
++    expect(find.text('Không thể khởi động ứng dụng'), findsOneWidget);
++    expect(find.textContaining('chưa có cấu hình Firebase'), findsOneWidget);
++    expect(find.text('App ready'), findsNothing);
++
++    await tester.tap(find.text('Thử lại'));
++    await tester.pump();
++    await tester.pump();
++    expect(find.text('App ready'), findsOneWidget);
++    expect(attempts, 2);
++  });
++
++  group('screenshots (actual)', () {
++    for (final size in const [Size(360, 800), Size(412, 915)]) {
++      final w = size.width.toInt();
++
++      testWidgets('sign-in idle $w', (tester) async {
++        final key = GlobalKey();
++        await pumpGate(tester, size: size, key: key);
++        expect(tester.takeException(), isNull);
++        await captureQa(tester, key, 'auth-sign-in-$w',
++            metadata: {'state': 'AuthSignedOut', 'task': 'CHARLIE-AUTH-01'});
++      });
++
++      testWidgets('sign-in cancelled $w', (tester) async {
++        final key = GlobalKey();
++        final h = await pumpGate(tester, size: size, key: key);
++        h.auth.nextSignIn = const AuthSignInCancelled();
++        await tester.tap(find.byKey(const Key('sign-in-google')));
++        await settle(tester);
++        expect(tester.takeException(), isNull);
++        await captureQa(tester, key, 'auth-sign-in-cancelled-$w',
++            metadata: {'state': 'AuthSignedOut(cancelled)'});
++      });
++
++      testWidgets('sign-in failure $w', (tester) async {
++        final key = GlobalKey();
++        final h = await pumpGate(tester, size: size, key: key);
++        h.auth.nextSignIn = const AuthSignInFailed(
++            AuthFailure(AuthFailureKind.configuration));
++        await tester.tap(find.byKey(const Key('sign-in-google')));
++        await settle(tester);
++        expect(tester.takeException(), isNull);
++        await captureQa(tester, key, 'auth-sign-in-error-$w',
++            metadata: {'state': 'AuthSignedOut(configuration)'});
++      });
++
++      testWidgets('sign-in loading $w', (tester) async {
++        final key = GlobalKey();
++        final h = await pumpGate(tester, size: size, key: key);
++        h.auth.pendingSignIn = Completer<AuthSignInResult>();
++        await tester.tap(find.byKey(const Key('sign-in-google')));
++        await tester.pump();
++        await captureQa(tester, key, 'auth-sign-in-loading-$w',
++            metadata: {'state': 'AuthSigningIn'});
++        h.auth.pendingSignIn!.complete(const AuthSignInCancelled());
++        await settle(tester);
++      });
++
++      testWidgets('profile recovery $w', (tester) async {
++        final key = GlobalKey();
++        final h = await pumpGate(tester, size: size, key: key);
++        h.auth.nextSignIn = const AuthSignInSucceeded('uid-a');
++        h.auth.profileResults
++            .add(const AuthFailure(AuthFailureKind.network, code: 'unavailable'));
++        await tester.tap(find.byKey(const Key('sign-in-google')));
++        await settle(tester);
++        expect(tester.takeException(), isNull);
++        await captureQa(tester, key, 'auth-profile-recovery-$w',
++            metadata: {'state': 'AuthProfileError(network)'});
++      });
++    }
++
++    testWidgets('sign-in textScale 2.0 at 360 has no overflow', (tester) async {
++      final key = GlobalKey();
++      final h = await pumpGate(tester, key: key, textScale: 2.0);
++      h.auth.nextSignIn = const AuthSignInFailed(
++          AuthFailure(AuthFailureKind.credential));
++      await tester.tap(find.byKey(const Key('sign-in-google')));
++      await settle(tester);
++      expect(tester.takeException(), isNull);
++      await captureQa(tester, key, 'auth-sign-in-error-360-text2_0',
++          pixelRatio: 1.0, metadata: {'textScale': 2.0});
++    });
++  });
++}
+diff --git a/test/auth/auth_viewmodel_test.dart b/test/auth/auth_viewmodel_test.dart
+new file mode 100644
+index 0000000..bf72486
+--- /dev/null
++++ b/test/auth/auth_viewmodel_test.dart
+@@ -0,0 +1,206 @@
++import 'dart:async';
++
++import 'package:flutter_test/flutter_test.dart';
++import 'package:longvita/models/auth_state.dart';
++import 'package:longvita/viewmodels/auth_viewmodel.dart';
++
++import 'auth_fakes.dart';
++
++void main() {
++  late FakeAuthService auth;
++  late FakeAnalytics analytics;
++  late FakeCrashlytics crashlytics;
++  late RecordingSession session;
++
++  AuthViewModel build() => AuthViewModel(
++        authService: auth,
++        analytics: analytics,
++        crashlytics: crashlytics,
++        sessionScoped: [session],
++      );
++
++  Future<void> settle() => Future<void>.delayed(const Duration(milliseconds: 5));
++
++  setUp(() {
++    auth = FakeAuthService();
++    analytics = FakeAnalytics();
++    crashlytics = FakeCrashlytics();
++    session = RecordingSession();
++  });
++
++  test('starts in Initializing, then SignedOut without a notice', () async {
++    final vm = build();
++    expect(vm.state, isA<AuthInitializing>());
++    await settle();
++    expect(vm.state, isA<AuthSignedOut>());
++    expect((vm.state as AuthSignedOut).notice, isNull);
++    expect(vm.isAuthenticated, isFalse);
++  });
++
++  test('success: credential then profile, session started, ids set', () async {
++    final vm = build();
++    await settle();
++    auth.nextSignIn = const AuthSignInSucceeded('uid-a');
++
++    await vm.signInWithGoogle();
++    await settle();
++
++    expect(vm.state, isA<AuthSignedIn>());
++    expect(vm.currentUser?.uid, 'uid-a');
++    expect(auth.loadProfileCalls, 1, reason: 'stream + result share one load');
++    expect(session.calls, ['start:uid-a']);
++    expect(analytics.userIds, ['uid-a']);
++    expect(analytics.events, contains('login:google'));
++    expect(crashlytics.userIds, ['uid-a']);
++  });
++
++  test('cancel: SignedOut with cancelled notice, no profile load', () async {
++    final vm = build();
++    await settle();
++    auth.nextSignIn = const AuthSignInCancelled();
++
++    await vm.signInWithGoogle();
++
++    final state = vm.state as AuthSignedOut;
++    expect(state.notice?.kind, AuthFailureKind.cancelled);
++    expect(auth.loadProfileCalls, 0);
++    expect(crashlytics.errors, isEmpty, reason: 'cancel is not an error');
++    vm.clearNotice();
++    expect((vm.state as AuthSignedOut).notice, isNull);
++  });
++
++  test('credential failure: SignedOut with its kind, recorded non-fatal',
++      () async {
++    final vm = build();
++    await settle();
++    auth.nextSignIn = const AuthSignInFailed(
++        AuthFailure(AuthFailureKind.credential, code: 'user-disabled'));
++
++    await vm.signInWithGoogle();
++
++    final state = vm.state as AuthSignedOut;
++    expect(state.notice?.kind, AuthFailureKind.credential);
++    expect(crashlytics.errors.single, isA<AuthFailure>());
++  });
++
++  test('profile failure after sign-in is ProfileError, not cancel; retry works',
++      () async {
++    final vm = build();
++    await settle();
++    auth.nextSignIn = const AuthSignInSucceeded('uid-a');
++    auth.profileResults
++        .add(const AuthFailure(AuthFailureKind.profileRead, code: 'permission-denied'));
++
++    await vm.signInWithGoogle();
++    await settle();
++
++    expect(vm.state, isA<AuthProfileError>());
++    final error = vm.state as AuthProfileError;
++    expect(error.uid, 'uid-a');
++    expect(error.failure.kind, AuthFailureKind.profileRead);
++    expect(vm.isAuthenticated, isFalse, reason: 'protected content stays closed');
++    expect(session.calls, isEmpty);
++
++    await vm.retryProfile();
++    expect(vm.state, isA<AuthSignedIn>());
++    expect(session.calls, ['start:uid-a']);
++  });
++
++  test('profile failure can sign out instead of retrying', () async {
++    final vm = build();
++    await settle();
++    auth.nextSignIn = const AuthSignInSucceeded('uid-a');
++    auth.profileResults.add(const AuthFailure(AuthFailureKind.profileWrite));
++    await vm.signInWithGoogle();
++    await settle();
++    expect(vm.state, isA<AuthProfileError>());
++
++    await vm.signOut();
++    expect(vm.state, isA<AuthSignedOut>());
++    expect(auth.signOutCalls, 1);
++  });
++
++  test('repeated taps while the picker is open start one sign-in', () async {
++    final vm = build();
++    await settle();
++    auth.pendingSignIn = Completer<AuthSignInResult>();
++
++    final first = vm.signInWithGoogle();
++    final second = vm.signInWithGoogle();
++    expect(vm.state, isA<AuthSigningIn>());
++    expect(vm.isBusy, isTrue);
++
++    auth.pendingSignIn!.complete(const AuthSignInCancelled());
++    await Future.wait([first, second]);
++    expect(auth.signInCalls, 1);
++  });
++
++  test('restored session loads the profile without a new sign-in', () async {
++    auth = FakeAuthService(initialUid: 'uid-a');
++    final vm = build();
++    await settle();
++    expect(vm.state, isA<AuthSignedIn>());
++    expect(auth.signInCalls, 0);
++  });
++
++  test('logout clears session data and identifiers, keeps cloud data',
++      () async {
++    final vm = build();
++    await settle();
++    auth.nextSignIn = const AuthSignInSucceeded('uid-a');
++    await vm.signInWithGoogle();
++    await settle();
++
++    await vm.signOut();
++    await settle();
++
++    expect(vm.state, isA<AuthSignedOut>());
++    expect(vm.currentUser, isNull);
++    expect(session.calls, ['start:uid-a', 'clear'],
++        reason: 'cleared exactly once even though the stream also emits null');
++    expect(analytics.userIds.last, isNull);
++    expect(crashlytics.userIds.last, '');
++    expect(analytics.events, contains('logout'));
++  });
++
++  test('sign-out SDK failure still clears local session', () async {
++    final vm = build();
++    await settle();
++    auth.nextSignIn = const AuthSignInSucceeded('uid-a');
++    await vm.signInWithGoogle();
++    await settle();
++    auth.failSignOut = true;
++
++    await vm.signOut();
++
++    expect(vm.state, isA<AuthSignedOut>());
++    expect(session.calls.last, 'clear');
++    expect(crashlytics.errors, isNotEmpty);
++  });
++
++  test('user B replacing user A clears A before starting B', () async {
++    final vm = build();
++    await settle();
++    auth.nextSignIn = const AuthSignInSucceeded('uid-a');
++    await vm.signInWithGoogle();
++    await settle();
++
++    auth.emitUid('uid-b');
++    await settle();
++
++    expect(vm.currentUser?.uid, 'uid-b');
++    expect(session.calls, ['start:uid-a', 'clear', 'start:uid-b']);
++  });
++
++  test('token revoked (stream emits null) ends the session', () async {
++    auth = FakeAuthService(initialUid: 'uid-a');
++    final vm = build();
++    await settle();
++
++    auth.emitUid(null);
++    await settle();
++
++    expect(vm.state, isA<AuthSignedOut>());
++    expect(session.calls, ['start:uid-a', 'clear']);
++  });
++}
+diff --git a/test/auth/firebase_bootstrap_test.dart b/test/auth/firebase_bootstrap_test.dart
+new file mode 100644
+index 0000000..c2ceb1c
+--- /dev/null
++++ b/test/auth/firebase_bootstrap_test.dart
+@@ -0,0 +1,30 @@
++import 'package:firebase_core/firebase_core.dart';
++import 'package:flutter/services.dart';
++import 'package:flutter_test/flutter_test.dart';
++import 'package:longvita/firebase/firebase_bootstrap.dart';
++
++void main() {
++  TestWidgetsFlutterBinding.ensureInitialized();
++
++  Future<BootstrapResult> run(Object error) => FirebaseBootstrap(
++        initializeApp: () async => throw error,
++      ).initialize();
++
++  test('Android missing google-services (as seen in logcat) is not-configured',
++      () async {
++    final result = await run(PlatformException(
++      code: 'java.lang.Exception: Failed to load FirebaseOptions from '
++          'resource. Check that you have defined values.xml correctly.',
++      message: 'Exception',
++    ));
++    expect(result, isA<BootstrapFailed>());
++    expect((result as BootstrapFailed).isConfigurationMissing, isTrue);
++  });
++
++  test('other Firebase failures keep their code and allow retry', () async {
++    final result = await run(
++        FirebaseException(plugin: 'core', code: 'unavailable', message: 'x'));
++    expect((result as BootstrapFailed).code, 'unavailable');
++    expect(result.isConfigurationMissing, isFalse);
++  });
++}
+diff --git a/test/auth/session_isolation_test.dart b/test/auth/session_isolation_test.dart
+new file mode 100644
+index 0000000..4e1c2c3
+--- /dev/null
++++ b/test/auth/session_isolation_test.dart
+@@ -0,0 +1,137 @@
++// User A signs out, user B signs in: B must not see A's local data.
++// Uses the real ViewModels wired like main.dart, with fake services.
++import 'package:flutter_test/flutter_test.dart';
++import 'package:longvita/models/announcement_model.dart';
++import 'package:longvita/models/auth_state.dart';
++import 'package:longvita/models/ingredient_model.dart';
++import 'package:longvita/models/meal_plan_model.dart';
++import 'package:longvita/models/recipe_model.dart';
++import 'package:longvita/models/view_state.dart';
++import 'package:longvita/services/i_data_service.dart';
++import 'package:longvita/viewmodels/auth_viewmodel.dart';
++import 'package:longvita/viewmodels/ingredient_viewmodel.dart';
++import 'package:longvita/viewmodels/meal_plan_viewmodel.dart';
++import 'package:longvita/viewmodels/profile_viewmodel.dart';
++
++import 'auth_fakes.dart';
++
++MealPlanModel planFor(String uid) => MealPlanModel(
++      id: 'plan-$uid',
++      uid: uid,
++      title: 'Plan of $uid',
++      targetCalories: 1800,
++      targetProteinGrams: 50,
++      createdAt: DateTime(2026, 11, 2),
++      days: const [
++        DailyMeal(dayIndex: 0, dayName: 'Thứ Hai', meals: [
++          RecipeModel(
++            id: 'r1',
++            name: 'Lentil soup',
++            description: 'fixture',
++            category: 'dau',
++            proteinGrams: 18,
++            calories: 320,
++            ingredients: [
++              IngredientModel(id: 'i1', name: 'Lentils', amount: 120, unit: 'g'),
++            ],
++            instructions: ['fixture'],
++          ),
++        ]),
++      ],
++    );
++
++class FakeDataService implements IDataService {
++  @override
++  Future<List<RecipeModel>> getRecipes({String? category}) async =>
++      planFor('x').days.first.meals;
++
++  @override
++  MealPlanModel generateLongevityMealPlan({
++    required String uid,
++    required double weightKg,
++    required int age,
++    required int mealsPerDay,
++    required List<RecipeModel> availableRecipes,
++  }) =>
++      planFor(uid);
++
++  @override
++  Future<List<MealPlanModel>> getUserMealPlans(String uid) async =>
++      [planFor(uid)];
++
++  @override
++  Stream<List<AnnouncementModel>> streamAnnouncements() => const Stream.empty();
++
++  @override
++  dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
++}
++
++void main() {
++  test('B does not see A\'s plan, ingredients, export URL or inbox', () async {
++    final auth = FakeAuthService();
++    final analytics = FakeAnalytics();
++    final crashlytics = FakeCrashlytics();
++    final notifications = FakeNotificationService();
++
++    final mealPlan = MealPlanViewModel(
++      dataService: FakeDataService(),
++      analytics: analytics,
++      crashlytics: crashlytics,
++      remoteConfig: FakeRemoteConfig(),
++    );
++    final ingredients =
++        IngredientViewModel(analytics: analytics, crashlytics: crashlytics);
++    final profile = ProfileViewModel(
++      authService: auth,
++      storageService: FakeStorageService(),
++      notificationService: notifications,
++      reportService: FakeReportService(),
++      remoteConfigService: FakeRemoteConfig(),
++      crashlyticsService: crashlytics,
++      analyticsService: analytics,
++    );
++    final vm = AuthViewModel(
++      authService: auth,
++      analytics: analytics,
++      crashlytics: crashlytics,
++      sessionScoped: [mealPlan, ingredients, profile],
++    );
++    Future<void> settle() => Future<void>.delayed(const Duration(milliseconds: 5));
++    await settle();
++
++    // User A works in the app.
++    auth.nextSignIn = const AuthSignInSucceeded('uid-a');
++    await vm.signInWithGoogle();
++    await settle();
++    expect(notifications.initializeCalls, 1,
++        reason: 'FCM permission is requested after sign-in, not at start');
++
++    await mealPlan.generatePlan(uid: 'uid-a', weightKg: 60, age: 30);
++    ingredients.aggregateFromMealPlan(mealPlan.activePlan!);
++    await mealPlan.fetchSavedPlans('uid-a');
++    await profile.exportAndUploadPdf(mealPlan.activePlan!);
++    expect(mealPlan.activePlan?.uid, 'uid-a');
++    expect(ingredients.ingredients, isNotEmpty);
++    expect(profile.lastUploadedUrl, contains('uid-a'));
++
++    // A signs out, B signs in.
++    await vm.signOut();
++    await settle();
++    expect(mealPlan.activePlan, isNull);
++    expect(mealPlan.currentPlanState, isA<ViewStateIdle>());
++    expect(mealPlan.savedPlansState, isA<ViewStateIdle>());
++    expect(ingredients.ingredients, isEmpty);
++    expect(ingredients.canUndo, isFalse);
++    expect(profile.lastUploadedUrl, isNull);
++    expect(profile.exportState, isA<ViewStateIdle>());
++    expect(notifications.messages, isEmpty);
++
++    auth.nextSignIn = const AuthSignInSucceeded('uid-b');
++    await vm.signInWithGoogle();
++    await settle();
++    expect(vm.currentUser?.uid, 'uid-b');
++    expect(profile.user?.uid, 'uid-b');
++    expect(mealPlan.activePlan, isNull);
++    expect(auth.signOutCalls, 1, reason: 'sign-out never deletes cloud data');
++  });
++}
+diff --git a/ui01-snapshot/test/qa/qa_support.dart b/test/qa/qa_support.dart
+index 5bd4536..e5b373f 100644
+--- a/ui01-snapshot/test/qa/qa_support.dart
++++ b/test/qa/qa_support.dart
+@@ -41,8 +41,11 @@ final String qaRunId = Platform.environment['QA_RUN_ID'] ??
+         .replaceAll(RegExp(r'[:.]'), '-')
+         .substring(0, 19);
+ 
++/// Evidence folder per task packet; set `QA_TASK` (default CHARLIE-UI-01).
++final String qaTask = Platform.environment['QA_TASK'] ?? 'CHARLIE-UI-01';
++
+ Directory qaRunDir() =>
+-    Directory('evidence/ui/CHARLIE-UI-01/$qaRunId')..createSync(recursive: true);
++    Directory('evidence/ui/$qaTask/$qaRunId')..createSync(recursive: true);
+ 
+ /// QA fixture image (Figma "Meal photo / Stitch source", node 56:38).
+ final MemoryImage qaMealPhoto = MemoryImage(
