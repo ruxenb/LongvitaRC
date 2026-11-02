@@ -47,3 +47,32 @@ flutter:
   assets:
     - assets/images/
     - assets/icons/
+    - assets/fonts/Quicksand-OFL.txt
+    - assets/fonts/Newsreader-OFL.txt
+    - assets/fonts/Fraunces-OFL.txt
+
+  # Longvita design-system fonts (Figma Foundations 53:45), bundled from
+  # google/fonts under SIL OFL 1.1 (licences in assets/fonts/*-OFL.txt).
+  # Variable fonts are declared once per used weight so the engine never
+  # synthesises bold; AppTypography sets the matching `wght` axis.
+  fonts:
+    - family: Quicksand
+      fonts:
+        - asset: assets/fonts/Quicksand-Variable.ttf
+          weight: 400
+        - asset: assets/fonts/Quicksand-Variable.ttf
+          weight: 500
+        - asset: assets/fonts/Quicksand-Variable.ttf
+          weight: 600
+        - asset: assets/fonts/Quicksand-Variable.ttf
+          weight: 700
+    - family: Newsreader
+      fonts:
+        - asset: assets/fonts/Newsreader-Variable.ttf
+          weight: 600
+        - asset: assets/fonts/Newsreader-Variable.ttf
+          weight: 700
+    - family: Fraunces
+      fonts:
+        - asset: assets/fonts/Fraunces-Variable.ttf
+          weight: 700
