@@ -33,6 +33,10 @@ class ProfileViewModel extends BaseViewModel implements SessionScoped {
   ViewState<String> _exportState = const ViewStateIdle();
   final SessionEpoch _epoch = SessionEpoch();
 
+  /// Identifies the running export or retry. Results and progress apply only
+  /// while their token is still this one; ending the session clears it.
+  Object? _activeOperation;
+
   ProfileViewModel({
     required this.authService,
     required this.storageService,
@@ -52,6 +56,14 @@ class ProfileViewModel extends BaseViewModel implements SessionScoped {
   /// The PDF saved on this device in this session, if any.
   ReportExport? get lastExport => _lastExport;
   ViewState<String> get exportState => _exportState;
+
+  /// True while an export or a retry runs. Only one runs at a time, so the
+  /// saved file, URL, progress and state always describe the same export.
+  bool get isExporting => _activeOperation != null;
+
+  /// True when the saved PDF has not reached Storage and nothing is running.
+  bool get canRetryUpload =>
+      !isExporting && _lastExport != null && _lastUploadedUrl == null;
   List<RemoteMessage> get notifications => notificationService.messages;
 
   /// Notification permission is requested after sign-in, not at app start,
@@ -66,6 +78,7 @@ class ProfileViewModel extends BaseViewModel implements SessionScoped {
   @override
   void clearSession() {
     _epoch.advance();
+    _activeOperation = null;
     _uploadProgress = 0.0;
     _lastUploadedUrl = null;
     _lastExport = null;
@@ -79,7 +92,9 @@ class ProfileViewModel extends BaseViewModel implements SessionScoped {
   bool get enableScore => remoteConfigService.enableLongevityScore;
   String get bannerText => remoteConfigService.bannerAnnouncement;
 
+  /// Does nothing while another export or retry runs: check [isExporting].
   Future<void> exportAndUploadPdf(MealPlanModel plan) async {
+    if (isExporting) return;
     final currentUser = authService.currentUser;
     if (currentUser == null) {
       _exportState = const ViewStateError('Vui lòng đăng nhập để xuất báo cáo');
@@ -87,7 +102,7 @@ class ProfileViewModel extends BaseViewModel implements SessionScoped {
       return;
     }
 
-    final epoch = _epoch.current;
+    final operation = _activeOperation = Object();
     _exportState = const ViewStateLoading('Đang khởi tạo tài liệu PDF...');
     _uploadProgress = 0.0;
     notifyListeners();
@@ -96,7 +111,7 @@ class ProfileViewModel extends BaseViewModel implements SessionScoped {
       // 1. Generate PDF on local device
       final Uint8List pdfBytes =
           await reportService.generateMealPlanPdf(plan);
-      if (_epoch.isStale(epoch)) return;
+      if (!_isActive(operation)) return;
 
       // 2. Keep it on the device first, so a failed upload loses nothing.
       final exportId = _newExportId(plan);
@@ -105,7 +120,7 @@ class ProfileViewModel extends BaseViewModel implements SessionScoped {
         exportId: exportId,
         bytes: pdfBytes,
       );
-      if (_epoch.isStale(epoch)) return;
+      if (!_isActive(operation)) return;
       final export = ReportExport(
         exportId: exportId,
         planId: plan.id,
@@ -115,25 +130,25 @@ class ProfileViewModel extends BaseViewModel implements SessionScoped {
       _lastUploadedUrl = null;
 
       // 3. Upload to Cloud Storage under reports/{uid}/...
-      await _upload(currentUser.uid, export, pdfBytes, epoch);
+      await _upload(currentUser.uid, export, pdfBytes, operation);
     } catch (e, s) {
       // A failure of the previous session must not be reported under the
       // user id of the current one.
-      if (_epoch.isStale(epoch)) return;
-      _exportState = ViewStateError('Lỗi trong quá trình xuất PDF', e);
-      notifyListeners();
+      if (!_isActive(operation)) return;
+      _finish(ViewStateError('Lỗi trong quá trình xuất PDF', e));
       await crashlyticsService.recordError(e, s,
           reason: 'Failed to export and upload PDF');
     }
   }
 
-  /// Uploads the saved PDF again under the same export id.
+  /// Uploads the saved PDF again under the same export id. Does nothing unless
+  /// [canRetryUpload] is true.
   Future<void> retryUpload() async {
     final export = _lastExport;
     final currentUser = authService.currentUser;
-    if (export == null || currentUser == null) return;
+    if (!canRetryUpload || export == null || currentUser == null) return;
 
-    final epoch = _epoch.current;
+    final operation = _activeOperation = Object();
     _exportState = const ViewStateLoading('Đang tải lại PDF lên Cloud Storage...');
     _uploadProgress = 0.0;
     notifyListeners();
@@ -141,19 +156,17 @@ class ProfileViewModel extends BaseViewModel implements SessionScoped {
     try {
       final bytes = await reportStore.read(
           uid: currentUser.uid, exportId: export.exportId);
-      if (_epoch.isStale(epoch)) return;
+      if (!_isActive(operation)) return;
       if (bytes == null) {
         _lastExport = null;
-        _exportState =
-            const ViewStateError('Không còn file PDF trên máy. Vui lòng xuất lại.');
-        notifyListeners();
+        _finish(const ViewStateError(
+            'Không còn file PDF trên máy. Vui lòng xuất lại.'));
         return;
       }
-      await _upload(currentUser.uid, export, bytes, epoch);
+      await _upload(currentUser.uid, export, bytes, operation);
     } catch (e, s) {
-      if (_epoch.isStale(epoch)) return;
-      _exportState = ViewStateError(_uploadFailedMessage, e);
-      notifyListeners();
+      if (!_isActive(operation)) return;
+      _finish(ViewStateError(_uploadFailedMessage, e));
       await crashlyticsService.recordError(e, s,
           reason: 'Failed to retry the PDF upload');
     }
@@ -168,11 +181,20 @@ class ProfileViewModel extends BaseViewModel implements SessionScoped {
   static const _uploadFailedMessage =
       'PDF đã lưu trên máy nhưng chưa tải lên được. Vui lòng thử lại.';
 
+  bool _isActive(Object operation) => identical(_activeOperation, operation);
+
+  /// Publishes the final state of the running operation.
+  void _finish(ViewState<String> state) {
+    _exportState = state;
+    _activeOperation = null;
+    notifyListeners();
+  }
+
   Future<void> _upload(
     String uid,
     ReportExport export,
     Uint8List bytes,
-    int epoch,
+    Object operation,
   ) async {
     _exportState = const ViewStateLoading('Đang tải PDF lên Cloud Storage...');
     notifyListeners();
@@ -183,30 +205,27 @@ class ProfileViewModel extends BaseViewModel implements SessionScoped {
         fileName: export.fileName,
         bytes: bytes,
         onProgress: (progress) {
-          if (_epoch.isStale(epoch)) return;
+          if (!_isActive(operation)) return;
           _uploadProgress = progress;
           notifyListeners();
         },
       );
-      if (_epoch.isStale(epoch)) return;
+      if (!_isActive(operation)) return;
 
       if (downloadUrl != null) {
         _lastUploadedUrl = downloadUrl;
-        _exportState = ViewStateSuccess(downloadUrl);
-        notifyListeners();
+        _finish(ViewStateSuccess(downloadUrl));
         await analyticsService.logExportReport(
           fileSizeKb: (bytes.length / 1024).ceil(),
           // ReportService does not include a shopping list section yet.
           hasShoppingList: 0,
         );
       } else {
-        _exportState = const ViewStateError(_uploadFailedMessage);
-        notifyListeners();
+        _finish(const ViewStateError(_uploadFailedMessage));
       }
     } catch (e, s) {
-      if (_epoch.isStale(epoch)) return;
-      _exportState = ViewStateError(_uploadFailedMessage, e);
-      notifyListeners();
+      if (!_isActive(operation)) return;
+      _finish(ViewStateError(_uploadFailedMessage, e));
       await crashlyticsService.recordError(e, s,
           reason: 'Failed to upload the PDF');
     }
