@@ -4,6 +4,8 @@ Cập nhật 02/11/2026 theo xác nhận người dùng: **Lab 3 chính là Assi
 
 ## PM review mới nhất — 02/11/2026
 
+**Tiến độ trước PR:** [Charlie progress](dev-reports/CHARLIE-PROGRESS-20261102.md), [29 task cá nhân](../tasks/task-charlie.md) và [master](../tasks/danh-sach-task-full.md) đã đồng bộ **6 chờ nghiệm thu / 9 đang thực hiện / 2 skeleton / 12 chưa bắt đầu**. [Title/body PR](CHARLIE_PR_MAIN_DESCRIPTION.md) chuẩn bị để người dùng tự tạo PR `feature/charlie-auth-01` -> `main`; chưa đánh PR/Stage 7 hoàn tất hoặc merge thay leader.
+
 Xem [xác nhận đóng PM-FCM-01, mục 7](PM_REREVIEW_914508c.md#7-xác-nhận-bản-sửa-pm-fcm-01--2d547c7--head-f1f397e), [review cũ](PM_REVIEW_CHARLIE_20261102.md) và [progress Dev](dev-reports/CHARLIE-PROGRESS-20261102.md). Fix `2d547c7` đã push cùng báo cáo tại `f1f397e`; PM chạy lại analyzer/133 tests và reproduction gốc đều pass: **PM-FCM-01 Closed — verified**. Hai findings session trước giữ Closed. Nhánh Charlie đã tích hợp main `614e731`, chưa merge ngược vào main. S4-10/S4-12 vẫn partial: chưa nghiệm thu export/push thật. Các audit/trạng thái trước đọc theo lịch sử.
 
 ## Phối hợp Codex PM / Claude Code Dev

@@ -1,8 +1,8 @@
 # Tiến độ Charlie — đối chiếu CHARLIE_TASK_GUIDE, 02/11/2026
 
-Đối chiếu từng task với [CHARLIE_TASK_GUIDE.md](../CHARLIE_TASK_GUIDE.md), cập nhật sau PM re-review `914508c` (`docs/coordination/PM_REREVIEW_914508c.md`) tại `2d547c7`, nhánh `feature/charlie-auth-01`. Đã merge `origin/main` vào nhánh; **chưa có PR, chưa vào `main`.** Chi tiết: [CHARLIE-PM-FIX](CHARLIE-PM-FIX-20261102.md), [CHARLIE-PM-FCM-01](CHARLIE-PM-FCM-01.md).
+Đối chiếu [CHARLIE_TASK_GUIDE](../CHARLIE_TASK_GUIDE.md), cập nhật bởi Codex PM theo xác nhận đóng lỗi tại **`c5059d8`**; code được kiểm tại `f1f397e` gồm fix `2d547c7`. Nhánh `feature/charlie-auth-01` đã tích hợp main `614e731`; **chưa có PR vào main khi kiểm tra GitHub trong lượt cập nhật này**. Người dùng sẽ mở PR để Thái An/Thắng/team preview và quyết định merge. Dùng [title/body PR đã chuẩn bị](../CHARLIE_PR_MAIN_DESCRIPTION.md).
 
-Đây là đánh dấu tiến độ của Dev để PM và Charlie review, **không phải Done hay Accepted**. Guide và `docs/tasks/task-charlie.md` không bị sửa.
+Đây là tiến độ implementation/evidence và kết quả review có giới hạn, **không phải tuyên bố cả 29 task đã Done/Accepted**. Đã đồng bộ trạng thái 29 task Charlie trong file cá nhân và master, giữ nguyên IDs/owners/dependencies; trạng thái thành viên khác do owner/leader cập nhật. Closed của finding không thay nghiệm thu toàn task.
 
 **Ký hiệu** theo guide mục 3.4: ✅ verified · 🟡 implemented một phần · 🧱 mới có skeleton · ⬜ chưa có.
 
@@ -11,12 +11,14 @@
 | Trạng thái | Số task | Tasks |
 |---|---:|---|
 | ✅ Verified, chờ nghiệm thu | 6 | S0-3-CM, S2-3, S2-4, S3-3, S3-4, S3-9 |
-| 🟡 Implemented một phần | 8 | S0-4, S3-1, S3-2, S3-5, S4-10, S4-12, S4-14, S5-4 |
+| 🟡 Đang thực hiện / chuẩn bị PR | 9 | S0-4, S3-1, S3-2, S3-5, S4-10, S4-12, S4-14, S5-4, S7-1-CM |
 | 🧱 Skeleton | 2 | S3-7, S4-11 |
-| ⬜ Chưa có | 13 | S4-13, S4-15, S6-4, S6-7, S6-14, S7-1-CM, S7-2-CM, S7-3-CM, S8-3, S8-7, S8-12, S8-17-CM, S9-5-CM |
+| ⬜ Chưa bắt đầu | 12 | S4-13, S4-15, S6-4, S6-7, S6-14, S7-2-CM, S7-3-CM, S8-3, S8-7, S8-12, S8-17-CM, S9-5-CM |
 | **Tổng** | **29** | |
 
-**Kiểm tra tại `2d547c7`, đã gồm `origin/main`:** `flutter analyze` không có lỗi · `flutter test` 133/133 pass · build APK debug thành công. Hai kết quả trước đó, không chạy lại vì không liên quan bản sửa: test rules 41/41 pass (rules không đổi), chạy thật mở lại, đăng xuất, đăng nhập lại đạt (tại `40e47a1`).
+**PM kiểm độc lập tại `f1f397e`, code gồm fix `2d547c7`:** analyzer sạch, **133/133 tests pass**, reproduction gốc PM-FCM-01 pass giữ nguyên expected, APK debug build thành công. [PM xác nhận và logs](../PM_REREVIEW_914508c.md#7-xác-nhận-bản-sửa-pm-fcm-01--2d547c7--head-f1f397e) đã push trong `c5059d8`. **PM-S3-5-01, PM-S3-5-02 và PM-FCM-01 đều Closed — verified trong phạm vi kiểm.** Rules 41/41 là kết quả lần trước, không chạy lại vì `firebase/` không đổi; Auth thật do Dev ghi tại `40e47a1`. Lượt cập nhật tiến độ này chỉ sửa docs, không giả kết quả run mới.
+
+Không chuyển 6 task có evidence thành phần trăm hoàn thành toàn bài: UI/contract/native và các dependency còn phải nghiệm thu. S7-1-CM mới **chuẩn bị PR tích hợp sớm**, chưa có output AI review trên PR và chưa đạt đầy đủ Stage 7.
 
 ## Theo đợt triển khai (guide mục 9)
 
@@ -26,8 +28,8 @@
 | C1 Nền UI | ✅ | Codex/Charlie nghiệm thu, Hoàng review cách dùng |
 | C2 Auth end to end | 🟡 | A3 của Hoàng cho S3-5, SHA của ba thành viên, S3-7 |
 | C3 PDF/Storage | 🟡 | PDF có font tiếng Việt và lưu local bằng fixture; chờ S4-3 của Hoàng và DEC-01 |
-| C4 FCM/Profile | 🟡 | Có service và contract đề xuất; chờ route, payload, history; Profile chưa bắt đầu |
-| C5 Kiểm thử/review | ⬜ | Chờ harness S6-2 của Thái An và PR |
+| C4 FCM/Profile | 🟡 | PM-FCM-01 Closed; có service/contract đề xuất; chờ route/history/token/recipient policy/push thật; Profile chưa bắt đầu |
+| C5 Kiểm thử/review | 🟡 Chuẩn bị PR | PR tích hợp chuẩn bị cho leader preview; ARTEMIS thật và AI review Stage 7 chưa thực hiện |
 | C6 Bàn giao cuối | ⬜ | Chưa bắt đầu |
 
 ## Đánh dấu 29 task
@@ -47,7 +49,7 @@
 | ✅ | **S3-9** Bằng chứng Auth | `evidence/auth/S3-9-20261102/`. Ảnh độ phân giải thấp, có email thật |
 | 🟡 | **S4-10** PDF | Font tiếng Việt Regular/Bold và `LocalReportStore` đã có, kiểm bằng **fixture**. **Thiếu:** plan đang xem (S4-3), nối vào luồng export, mở/chia sẻ, chạy trên Android |
 | 🧱 | **S4-11** Upload | Có `uploadReportPdf`; thiếu lỗi typed, cancel, retry ID. Chờ S4-10, S3-7, DEC-01 |
-| 🟡 | **S4-12** FCM | Đủ 4 callback, parser, dedup, inbox theo user, test bằng gateway giả. PM-FCM-01 đã sửa (`2d547c7`), chờ PM xác nhận. **Thiếu:** route, payload, history được chốt; **chưa có push thật** |
+| 🟡 | **S4-12** FCM | Đủ 4 callback/parser/dedup/inbox theo user bằng gateway giả. **PM-FCM-01 Closed — verified** (`2d547c7`, PM `c5059d8`), raw/typed payload và target duplicate thống nhất. **Thiếu:** route/history/token/recipient policy chốt, Profile và push thật |
 | ⬜ | **S4-13** Profile + Demo | Chưa có màn Profile. Export và inbox vẫn ở `home_screen.dart`; cần thống nhất với Hoàng |
 | 🟡 | **S4-14** Semantics | Mới có Sign-in. Profile, export, notification chưa có. Chưa bật TalkBack thật |
 | ⬜ | **S4-15** Bằng chứng Storage/FCM | Chờ S4-11, S4-12 |
@@ -55,7 +57,7 @@
 | ⬜ | **S6-4** test_auth.py | `e2e_test/` mới có `conftest.py` với Dummy client. Chờ S6-2 của Thái An |
 | ⬜ | **S6-7** test_export/profile | Chờ S6-2, S4-11, S4-12 |
 | ⬜ | **S6-14** Sửa lỗi theo ARTEMIS | Chờ S6-9 |
-| ⬜ | **S7-1-CM** PR + AI review | Đã push nhánh, chưa có PR |
+| 🟡 | **S7-1-CM** PR + AI review | Nhánh và title/body PR đã chuẩn bị; người dùng sẽ mở PR vào main. **Chưa có PR/AI output khi cập nhật**; không đánh Done chỉ vì push hoặc PM review local |
 | ⬜ | **S7-2-CM** Findings | Chờ S7-1-CM |
 | ⬜ | **S7-3-CM** Fix finding | Chờ S7-2-CM |
 | ⬜ | **S8-3** Report | Phần Auth đã có evidence để viết; Storage, FCM chưa |
@@ -80,10 +82,10 @@ Các task hỗ trợ khác trong 18 task chưa bắt đầu.
 
 | # | Vấn đề | Tác động | Ai xử lý |
 |---|---|---|---|
-| 1 | **`origin/main` vẫn không biên dịch được** cho đến khi nhánh này vào `main` hoặc Thái An tự sửa. Đã sửa trên nhánh này | Ai pull `main` sẽ gặp lỗi. **`generate_meal_plan` chưa được gửi** vì thiếu `eatingWindowHours` | Thái An, Hoàng |
+| 1 | Main `614e731` chưa nhận các caller fixes Analytics trên nhánh Charlie; bản tích hợp đã qua checks | Leader review/merge fixes; **`generate_meal_plan` vẫn chưa gửi từ Home** vì chưa có `eatingWindowHours` thật | Thái An, Hoàng |
 | 2 | **Đã xử lý:** gói docs (`e829c3c`) đã merge, PM đã chấp nhận cách gộp `docs/code-review.md` | Không còn chặn merge | — |
 | 3 | **DEC-01 chưa chốt:** Storage cần Blaze, Final lại loại Storage | Chặn S3-7, S4-11, một phần S4-13, S4-15 | Thái An (Leader) |
-| 4 | **Chưa mời thành viên, thiếu 3 SHA** | Ba bạn chưa đăng nhập Google được | Charlie, cả nhóm |
+| 4 | **Chưa mời đủ thành viên, thiếu 3 SHA** | Chưa xác minh Google Sign-in trên ba máy còn lại; quyền Firebase Console và SHA/Auth là hai đầu việc riêng | Charlie, cả nhóm |
 | 5 | **Món ăn hard-code** khi Firestore chưa có `recipes` (A9) | Trái quy định bản nộp; có 1 plan test chứa món giả trên project | Hoàng |
 | 6 | **Nhánh đã push nhưng chưa vào `main`** | Muốn dùng widgets, config Firebase và rules, các bạn phải lấy từ `feature/charlie-auth-01` | Charlie, Thái An |
 
@@ -91,7 +93,7 @@ Các task hỗ trợ khác trong 18 task chưa bắt đầu.
 
 ## Việc tiếp theo đề xuất
 
-1. **Review và đồng bộ:** Codex xác nhận PM-FCM-01; Hoàng, Thái An duyệt guard và lời gọi generate.
+1. **PR vào main:** người dùng tạo PR từ `feature/charlie-auth-01`, dùng bản mô tả đã chuẩn bị. Ba finding PM đã đóng; Thắng review A1/A2, Hoàng review A3/A5, Hoàng/Thái An review generate Analytics, Hoàng/Thắng review AUD-11 B1–B5 trước quyết định merge.
 2. **Mở khóa cho nhóm:** mời 3 bạn, nhận SHA, tải lại `google-services.json`; nhờ Leader chốt DEC-01.
 3. **FCM:** khi có câu trả lời cho [3 câu hỏi contract](FCM-CONTRACT-PROPOSAL.md), nối router, history, rồi thử push thật ba trạng thái.
 4. **PDF:** khi có S4-3, dùng plan đang xem; nối `LocalReportStore` vào export; chạy trên Android.
@@ -112,8 +114,10 @@ Các task hỗ trợ khác trong 18 task chưa bắt đầu.
 | `7a9fa8c` | FCM: S4-12 |
 | `40e47a1` | PDF: S4-10 |
 | `2d547c7` | Sửa FCM: PM-FCM-01 |
+| `f1f397e` | Dev báo cáo fix FCM và cập nhật progress |
+| `c5059d8` | Codex xác nhận PM-FCM-01 Closed; push PM re-review và evidence |
 
-Riêng `cd82637` không biên dịch được một mình; `9ecc806` sửa ngay sau đó. Bộ docs điều phối đã vào `e829c3c`; Codex có thể có thay đổi mới chưa commit, không thuộc các commit của Dev. Không commit: XML và logcat thô của lần chạy thật (giữ trên máy Charlie, loại bằng `.git/info/exclude`).
+Riêng `cd82637` không biên dịch được một mình; `9ecc806` sửa ngay sau đó. Bộ docs điều phối đã vào `e829c3c`, PM re-review/evidence đã vào `c5059d8`. Ảnh QA ở các thư mục `evidence/ui/PM-*` còn untracked được giữ trên máy, không cần đưa vào PR để chứng minh đóng finding. XML/logcat thô vẫn chỉ giữ local theo quyết định trước. Không có blocker docs Codex dirty cũ sau khi các commit này đã push.
 
 Repo công khai và nhánh đã push nguyên trạng theo quyết định của Charlie, gồm `google-services.json` và ảnh có email, UID của Charlie. Nên giới hạn API key Android theo package và SHA trên Google Cloud.
 
