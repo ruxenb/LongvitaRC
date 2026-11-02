@@ -26,6 +26,6 @@
 
 ### Hướng Dẫn Ký Duyệt Hoàn Thành Checklist
 Trước khi bấm nộp bài trên hệ thống LMS/Flm:
-- **Thắng** (Lead) triệu tập cuộc họp nghiệm thu 15 phút.
+- **Thái An** (Team Leader) chủ trì cuộc họp nghiệm thu 15 phút cùng các thành viên.
 - Từng thành viên báo cáo và trình chiếu bằng chứng tương ứng với mục mình phụ trách.
 - Đánh dấu `[x]` vào từng mục và ghi chú link commit / đường dẫn file bằng chứng.

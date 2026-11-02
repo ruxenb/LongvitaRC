@@ -15,10 +15,10 @@
 
 | Thành viên | Tài khoản / MSSV | Vai trò chính trong Lab 3 | Tổng task | Đã xong | Tiến độ | File task cá nhân |
 |:---|:---|:---|:---:|:---:|:---:|:---|
-| **Thái An** | Thái An | **Instrument, Test & AI Review**: Analytics, Crashlytics, Remote Config, ARTEMIS | 29 | 0 | 0% | [`task-thai-an.md`](task-thai-an.md) |
+| **Thái An** | Thái An | **Team Leader & QA Lead**: Điều phối chung, Analytics, Crashlytics, Remote Config, ARTEMIS | 29 | 7 | 24% | [`task-thai-an.md`](task-thai-an.md) |
 | **Charlie** | CharlieMinh | **Design System in Code + Firebase**: Auth, Storage, FCM, Common Widgets, Profile | 29 | 0 | 0% | [`task-charlie.md`](task-charlie.md) |
 | **Hoàng** | Hoàng DV (YAHsaveme) | **Dữ liệu & UI Flows**: DataService, 3 Flows (S01–S10), States, A11y, Sync Figma | 26 | 0 | 0% | [`task-hoang.md`](task-hoang.md) |
-| **Thắng** | Thắng VLQ | **Kiến trúc & Tích hợp**: MVVM Skeleton, Router, Docs, Report, Slides, Video | 28 | 0 | 0% | [`task-thang.md`](task-thang.md) |
+| **Thắng** | Thắng VLQ | **Technical Architect & Co-Lead**: MVVM Skeleton, Router, Docs, Report, Slides, Video | 28 | 0 | 0% | [`task-thang.md`](task-thang.md) |
 | **TỔNG CỘNG** | | | **112** | **0** | **0%** | |
 
 ---

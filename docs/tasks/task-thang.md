@@ -1,7 +1,7 @@
 # Kế Hoạch & Bảng Theo Dõi Task — Thắng
 
 > **Thành viên:** Thắng (Thắng VLQ)  
-> **Vai trò:** **Kiến Trúc Hệ Thống, Quản Trị Dự Án & Tổng Hợp Sản Phẩm** (MVVM Skeleton, DI & Router, Hồ Sơ Tài Liệu docs/, Feature Freeze, Tổng Hợp Report, Slides, Video, Rà Soát Nộp Bài)  
+> **Vai trò:** **Technical Architect & Co-Lead** (MVVM Skeleton, DI & Router, Hồ Sơ Tài Liệu docs/, Feature Freeze, Tổng Hợp Report, Slides, Video, Hỗ Trợ Leader Nộp Bài)  
 > **Tổng task:** 28 tasks | **Đã hoàn thành:** 0/28 (0%)
 
 ---

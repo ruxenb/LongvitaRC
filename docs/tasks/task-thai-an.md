@@ -1,8 +1,8 @@
 # Kế Hoạch & Bảng Theo Dõi Task — Thái An
 
 > **Thành viên:** Thái An  
-> **Vai trò:** **Instrument, Test & AI Review** (Analytics, Crashlytics, Remote Config, Google ARTEMIS, Code Review, Slides & Video mảng Kiểm thử & Cloud)  
-> **Tổng task:** 29 tasks | **Đã hoàn thành:** 0/29 (0%)
+> **Vai trò:** **Team Leader & QA Lead** (Điều phối chung toàn nhóm, Nghiệm thu chất lượng, Analytics, Crashlytics, Remote Config, Google ARTEMIS, AI Code Review)  
+> **Tổng task:** 29 tasks | **Đã hoàn thành:** 7/29 (24%)
 
 ---
 
@@ -30,15 +30,15 @@
 | **S0-1** | 0. Chuẩn bị | Xác nhận với GV: làm nhóm 4; duyệt chủ đề & API; số commit/ngày tối thiểu; rubric | — | — | Tin nhắn/email xác nhận (lưu `evidence/`) | Mục 11 | Cao | 1 | | Chưa bắt đầu | Cần làm đầu tiên |
 | **S0-3-TA** | 0. Chuẩn bị | Cài trên máy: Flutter stable, FlutterFire CLI, Android device/emulator, ADB, Python 3.12+, uv | — | — | `flutter doctor` không lỗi | — | Cao | 1 | | Chưa bắt đầu | Môi trường ARTEMIS |
 | **S0-5** | 0. Chuẩn bị | Tạo tài khoản Google test riêng (không dùng cá nhân); lấy multimodal model API key (Gemini/Claude) lưu env | — | — | Tài khoản test + key (KHÔNG commit) | Test quality 0.5 | Cao | 1 | | Chưa bắt đầu | Tuyệt đối không commit key |
-| **S1-3** | 1. Plan | Nháp `docs/analytics-plan.md`: $\ge 7$ events, parameters có kiểu, câu hỏi SP, map Lab 2 flow, không PII | Thắng | S1-1 | `docs/analytics-plan.md` (nháp) | Analytics 0.5 | Cao | 1 | | Chưa bắt đầu | Mẫu Appendix A |
-| **S1-4** | 1. Plan | Nháp `docs/test-plan.md`: critical flow $\to$ screen; $\ge 10$ cases; $\ge 1$ error path; $\ge 1$ native interaction; plan exploratory | Thắng | S1-1 | `docs/test-plan.md` (nháp) | Test plan 0.5 | Trung bình | 1 | | Chưa bắt đầu | Mẫu Appendix B |
-| **S3-8** | 3. Integrate | `firebase/remote-config-defaults.json` + chọn $\ge 2$ tham số làm đổi hiển thị (vd: max_recommendations, flag) | — | S1-3 | `firebase/remote-config-defaults.json` | RC 0.25 | Trung bình | 2 | | Chưa bắt đầu | Phối hợp Hoàng |
-| **S5-1** | 5. Instrument | Chốt `analytics-plan.md` theo flow thực tế (**PHẢI xong trước khi viết mã tracking**) | Thắng, Hoàng | S1-3, S4-4 | `docs/analytics-plan.md` (chốt) | Analytics 0.5 | Cao | 2 | | Chưa bắt đầu | Điều kiện tiên quyết code |
-| **S5-2** | 5. Instrument | Triển khai `AnalyticsService` (interface + Firebase impl); set user ID sau sign-in; không tham số PII | — | S5-1, S3-3 | Code trong `lib/services/` | Analytics 0.5 | Cao | 2 | | Chưa bắt đầu | Không gọi SDK ở widget |
+| **S1-3** | 1. Plan | Nháp `docs/analytics-plan.md`: $\ge 7$ events, parameters có kiểu, câu hỏi SP, map Lab 2 flow, không PII | Thắng | S1-1 | `docs/analytics-plan.md` (nháp) | Analytics 0.5 | Cao | 1 | | Đã hoàn thành | Mẫu Appendix A |
+| **S1-4** | 1. Plan | Nháp `docs/test-plan.md`: critical flow $\to$ screen; $\ge 10$ cases; $\ge 1$ error path; $\ge 1$ native interaction; plan exploratory | Thắng | S1-1 | `docs/test-plan.md` (nháp) | Test plan 0.5 | Trung bình | 1 | | Đã hoàn thành | Mẫu Appendix B (11 cases) |
+| **S3-8** | 3. Integrate | `firebase/remote-config-defaults.json` + chọn $\ge 2$ tham số làm đổi hiển thị (vd: max_recommendations, flag) | — | S1-3 | `firebase/remote-config-defaults.json` | RC 0.25 | Trung bình | 2 | | Đã hoàn thành | 4 params in-app defaults |
+| **S5-1** | 5. Instrument | Chốt `analytics-plan.md` theo flow thực tế (**PHẢI xong trước khi viết mã tracking**) | Thắng, Hoàng | S1-3, S4-4 | `docs/analytics-plan.md` (chốt) | Analytics 0.5 | Cao | 2 | | Đã hoàn thành | Đã phê duyệt chính thức |
+| **S5-2** | 5. Instrument | Triển khai `AnalyticsService` (interface + Firebase impl); set user ID sau sign-in; không tham số PII | — | S5-1, S3-3 | Code trong `lib/services/` | Analytics 0.5 | Cao | 2 | | Đã hoàn thành | lib/firebase/analytics_service.dart |
 | **S5-5** | 5. Instrument | Chụp ảnh DebugView cho từng sự kiện ($\ge 7$) và lưu vào `evidence/analytics/` | Hoàng, Charlie | S5-3, S5-4 | `evidence/analytics/` | Analytics 0.5 | Cao | 3 | | Chưa bắt đầu | Bằng chứng chấm điểm |
-| **S5-6** | 5. Instrument | `CrashService`/Crashlytics: set user ID + $\ge 1$ custom key; non-fatal từ lỗi thật; nút test crash | Hoàng | S4-1, S3-3 | Crashlytics hoạt động | Crashlytics 0.25 | Cao | 3 | | Chưa bắt đầu | Gắn key module |
+| **S5-6** | 5. Instrument | `CrashService`/Crashlytics: set user ID + $\ge 1$ custom key; non-fatal từ lỗi thật; nút test crash | Hoàng | S4-1, S3-3 | Crashlytics hoạt động | Crashlytics 0.25 | Cao | 3 | | Đã hoàn thành | lib/firebase/crashlytics_service.dart |
 | **S5-7** | 5. Instrument | Chụp dashboard Crashlytics: cả non-fatal và crash, có user ID và custom key | — | S5-6 | `evidence/crashlytics/` | Crashlytics 0.25 | Trung bình | 3 | | Chưa bắt đầu | Project ID phải khớp |
-| **S5-8** | 5. Instrument | `RemoteConfigService`: in-app defaults, fetch/activate, $\ge 2$ tham số đổi UI; fetch lỗi dùng default | Hoàng | S3-8, S4-2 | Code `RemoteConfigService` | RC 0.25 | Cao | 3 | | Chưa bắt đầu | Không rebuild app |
+| **S5-8** | 5. Instrument | `RemoteConfigService`: in-app defaults, fetch/activate, $\ge 2$ tham số đổi UI; fetch lỗi dùng default | Hoàng | S3-8, S4-2 | Code `RemoteConfigService` | RC 0.25 | Cao | 3 | | Đã hoàn thành | lib/firebase/remote_config_service.dart |
 | **S5-9** | 5. Instrument | Hiển thị giá trị Remote Config trên Profile demo area; chụp trước/sau khi đổi giá trị trên console | Charlie | S5-8, S4-13 | `evidence/remote-config/` | RC 0.25 | Trung bình | 3 | | Chưa bắt đầu | Bằng chứng trước/sau |
 | **S6-2** | 6. Test | Cài ARTEMIS, ghim commit trong README; viết `e2e_test/conftest.py` (client, serial, profile Flash), `pyproject.toml` | — | S0-3-TA, S0-5 | `e2e_test/` chạy được | Test quality 0.5 | Cao | 3 | | Chưa bắt đầu | Pin commit ARTEMIS |
 | **S6-3** | 6. Test | Chốt `docs/test-plan.md`: $\ge 10$ test cases (ID, precondition, instruction, expected, flow, loại) | Hoàng, Charlie | S6-1 | `docs/test-plan.md` (chốt) | Test plan 0.5 | Cao | 3 | | Chưa bắt đầu | Sau Feature Freeze |

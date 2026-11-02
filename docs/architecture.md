@@ -3,7 +3,7 @@
 > **Trạng thái đối chiếu 02/11/2026:** Tài liệu này mô tả kiến trúc mục tiêu và skeleton tại `ae35f07`, chưa xác nhận cloud/runtime đầy đủ. Phần bootstrap/Auth/session sau đó xem [CHARLIE-AUTH-01](coordination/dev-reports/CHARLIE-AUTH-01.md). Lab 3 chính là Assignment; web/shared-core được tích hợp trong cùng sản phẩm. Xem [đối chiếu hiện trạng và contracts](coordination/LONGVITA_LAB3_IMPLEMENTATION_PLAN.md), nhất là bootstrap/config, UI gọi service, sample fallback và Storage DEC-01.
 
 > **Mô hình kiến trúc:** MVVM (Model - View - ViewModel) với Provider Dependency Injection  
-> **Người phụ trách:** Thắng VLQ (Kiến trúc & Tích hợp)  
+> **Người phụ trách:** Thắng VLQ (Kiến trúc & Tích hợp) | **Phê duyệt:** Thái An (Team Leader)  
 > **Nguyên tắc bất biến:** Phụ thuộc một chiều hướng xuống (`Dependencies point downwards only`); một tầng tuyệt đối không import ngược tầng phía trên nó.  
 > **Chiến lược chuyển tiếp (Forward-Compatibility):** Thiết kế sẵn sàng đóng gói thành `packages/core/` để chia sẻ cho cả Mobile và Web Admin khi tích hợp yêu cầu toàn hệ thống của Assignment; chi phí thay đổi chưa được đo và không cam kết tỷ lệ phần trăm.
 
