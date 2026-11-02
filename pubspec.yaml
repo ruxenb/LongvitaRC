@@ -50,6 +50,10 @@ flutter:
     - assets/fonts/Quicksand-OFL.txt
     - assets/fonts/Newsreader-OFL.txt
     - assets/fonts/Fraunces-OFL.txt
+    # Static fonts embedded in exported PDFs (Apache 2.0), not used by the UI.
+    - assets/fonts/Roboto-Regular.ttf
+    - assets/fonts/Roboto-Bold.ttf
+    - assets/fonts/Roboto-LICENSE.txt
 
   # Longvita design-system fonts (Figma Foundations 53:45), bundled from
   # google/fonts under SIL OFL 1.1 (licences in assets/fonts/*-OFL.txt).
