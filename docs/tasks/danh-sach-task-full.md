@@ -2,7 +2,7 @@
 
 > **Dự án:** Longvita — Cloud-Enabled Mobile App  
 > **Nguyên tắc phân công:** Mỗi việc xuất hiện đúng một lần, một người chịu trách nhiệm chính (`Phụ trách`).  
-> **Cập nhật Charlie 02/11/2026:** 29 task Charlie được đồng bộ: **6 chờ nghiệm thu, 9 đang thực hiện/PR, 2 skeleton, 12 chưa bắt đầu**. [Evidence/status chi tiết](charlie-progress.md). Không đổi IDs/owners/dependencies hoặc tự đánh Done thay leader; trạng thái các thành viên khác giữ theo nguồn owner, tổng tiến độ toàn nhóm do leader tổng hợp.
+> **Cập nhật Charlie 02/11/2026:** 29 task Charlie được đồng bộ: **6 chờ nghiệm thu, 10 đang thực hiện/PR, 2 skeleton, 11 chưa bắt đầu**. [Evidence/status chi tiết](charlie-progress.md). Không đổi IDs/owners/dependencies hoặc tự đánh Done thay leader; trạng thái các thành viên khác giữ theo nguồn owner, tổng tiến độ toàn nhóm do leader tổng hợp.
 
 ---
 
