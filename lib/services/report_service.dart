@@ -1,4 +1,5 @@
 import 'dart:typed_data';
+import 'package:flutter/foundation.dart' show visibleForTesting;
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
@@ -32,7 +33,11 @@ class ReportService implements IReportService {
       };
 
   @override
-  Future<Uint8List> generateMealPlanPdf(MealPlanModel plan) async {
+  Future<Uint8List> generateMealPlanPdf(MealPlanModel plan) async =>
+      (await buildDocument(plan)).save();
+
+  @visibleForTesting
+  Future<pw.Document> buildDocument(MealPlanModel plan) async {
     final pdf = pw.Document();
     final theme = await _loadTheme();
 
@@ -41,6 +46,31 @@ class ReportService implements IReportService {
         theme: theme,
         pageFormat: PdfPageFormat.a4,
         margin: const pw.EdgeInsets.all(32),
+        // A note as the last body item would get a page of its own whenever
+        // the days fill the page before it.
+        footer: (pw.Context context) => pw.Container(
+          margin: const pw.EdgeInsets.only(top: 8),
+          padding: const pw.EdgeInsets.only(top: 4),
+          decoration: const pw.BoxDecoration(
+            border: pw.Border(top: pw.BorderSide(color: PdfColors.grey400)),
+          ),
+          child: pw.Row(
+            crossAxisAlignment: pw.CrossAxisAlignment.start,
+            children: [
+              pw.Expanded(
+                child: pw.Text(
+                  'Ghi chú: Áp dụng nguyên tắc dinh dưỡng trường thọ theo TS. Valter Longo (La dieta della longevità).',
+                  style: const pw.TextStyle(fontSize: 9, color: PdfColors.grey600),
+                ),
+              ),
+              pw.SizedBox(width: 12),
+              pw.Text(
+                'Trang ${context.pageNumber}/${context.pagesCount}',
+                style: const pw.TextStyle(fontSize: 9, color: PdfColors.grey600),
+              ),
+            ],
+          ),
+        ),
         build: (pw.Context context) {
           return [
             pw.Header(
@@ -121,17 +151,11 @@ class ReportService implements IReportService {
                 ),
               );
             }),
-            pw.SizedBox(height: 20),
-            pw.Divider(),
-            pw.Text(
-              'Ghi chú: Áp dụng nguyên tắc dinh dưỡng trường thọ theo TS. Valter Longo (La dieta della longevità).',
-              style: const pw.TextStyle(fontSize: 9, color: PdfColors.grey600),
-            ),
           ];
         },
       ),
     );
 
-    return pdf.save();
+    return pdf;
   }
 }

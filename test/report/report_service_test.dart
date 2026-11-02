@@ -82,6 +82,30 @@ void main() {
       }
     });
 
+    Future<int> pageCount(MealPlanModel plan) async {
+      final doc =
+          await ReportService(loadAsset: loadFromDisk).buildDocument(plan);
+      await doc.save();
+      return doc.document.pdfPageList.pages.length;
+    }
+
+    test('days that fill a page leave no page holding only the note', () async {
+      final plan = fixturePlan();
+      final shorter = plan.copyWith(days: [
+        for (final day in plan.days)
+          DailyMeal(
+              dayIndex: day.dayIndex,
+              dayName: day.dayName,
+              meals: day.meals.take(2).toList()),
+      ]);
+
+      expect(await pageCount(shorter), 1);
+    });
+
+    test('a longer week continues on the next page', () async {
+      expect(await pageCount(fixturePlan()), 2);
+    });
+
     test('a missing font is an error, not a PDF with blank text', () async {
       final service = ReportService(
           loadAsset: (asset) async => throw Exception('missing $asset'));
@@ -149,6 +173,33 @@ void main() {
       await store.save(uid: 'uid-a', exportId: 'e1', bytes: bytes);
 
       expect(await store.find(uid: 'uid-b', exportId: 'e1'), isNull);
+    });
+
+    test('delete removes one file, and a missing file is fine', () async {
+      await store.save(uid: 'uid-a', exportId: 'e1', bytes: bytes);
+      await store.save(uid: 'uid-a', exportId: 'e2', bytes: bytes);
+
+      await store.delete(uid: 'uid-a', exportId: 'e1');
+      await store.delete(uid: 'uid-a', exportId: 'gone');
+
+      expect(await store.find(uid: 'uid-a', exportId: 'e1'), isNull);
+      expect(await store.find(uid: 'uid-a', exportId: 'e2'), isNotNull);
+    });
+
+    test('deleteAll removes only the files of that user', () async {
+      await store.save(uid: 'uid-a', exportId: 'e1', bytes: bytes);
+      await store.save(uid: 'uid-b', exportId: 'e1', bytes: bytes);
+
+      await store.deleteAll(uid: 'uid-a');
+      await store.deleteAll(uid: 'uid-c');
+
+      expect(await store.find(uid: 'uid-a', exportId: 'e1'), isNull);
+      expect(await store.find(uid: 'uid-b', exportId: 'e1'), isNotNull);
+    });
+
+    test('deleteAll rejects an id that could leave the folder', () async {
+      await expectLater(
+          store.deleteAll(uid: '../uid-a'), throwsArgumentError);
     });
 
     test('rejects ids that could leave the folder', () async {
