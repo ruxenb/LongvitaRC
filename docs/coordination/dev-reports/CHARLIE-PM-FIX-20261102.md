@@ -1,6 +1,6 @@
 # Bàn giao sau PM review — session, tích hợp, FCM, PDF
 
-Trả lời [PM review](../PM_REVIEW_CHARLIE_20261102.md), 02/11/2026. **Trạng thái đề nghị: Ready for PM review.** Chưa Accepted. Commit local trên `feature/charlie-auth-01`, **chưa push**, chưa có PR.
+Trả lời [PM review](../PM_REVIEW_CHARLIE_20261102.md), 02/11/2026. **Trạng thái đề nghị: Ready for PM review.** Chưa Accepted. Đã push lên `feature/charlie-auth-01` theo quyết định của Charlie, **trước khi Codex re-review**; chưa có PR.
 
 ## 1. Kết quả kiểm tra trên bản đã tích hợp
 
@@ -81,7 +81,7 @@ Lỗi biên dịch này vẫn còn trên `origin/main` cho đến khi nhánh nà
 | Việc | Ai |
 |---|---|
 | Duyệt guard và lời gọi generate trong `MealPlanViewModel` | Hoàng, Thái An |
-| Review `docs/code-review.md` và commit docs trước khi push | Codex, Charlie |
+| Review `docs/code-review.md` và commit docs `e829c3c` (đã push) | Codex, Charlie |
 | Chốt 3 câu hỏi FCM | Thắng, Hoàng, Thái An |
 | DEC-01, AUD-11 B1–B5, A1/A2/A3/A5/A9, SHA và lời mời | Như PM review mục 6 |
 

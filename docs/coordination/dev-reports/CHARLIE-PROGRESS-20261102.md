@@ -1,6 +1,6 @@
 # Tiến độ Charlie — đối chiếu CHARLIE_TASK_GUIDE, 02/11/2026
 
-Đối chiếu từng task với [CHARLIE_TASK_GUIDE.md](../CHARLIE_TASK_GUIDE.md), cập nhật sau [PM review](../PM_REVIEW_CHARLIE_20261102.md) tại `40e47a1`, nhánh `feature/charlie-auth-01`. Đã merge `origin/main` trên máy. **Các commit từ `9d76623` trở đi chưa push, chưa có PR.** Chi tiết: [CHARLIE-PM-FIX](CHARLIE-PM-FIX-20261102.md).
+Đối chiếu từng task với [CHARLIE_TASK_GUIDE.md](../CHARLIE_TASK_GUIDE.md), cập nhật sau [PM review](../PM_REVIEW_CHARLIE_20261102.md) tại `40e47a1`, nhánh `feature/charlie-auth-01`. Đã merge `origin/main` vào nhánh và push; **chưa có PR, chưa vào `main`.** Chi tiết: [CHARLIE-PM-FIX](CHARLIE-PM-FIX-20261102.md).
 
 Đây là đánh dấu tiến độ của Dev để PM và Charlie review, **không phải Done hay Accepted**. Guide và `docs/tasks/task-charlie.md` không bị sửa.
 
@@ -81,7 +81,7 @@ Các task hỗ trợ khác trong 18 task chưa bắt đầu.
 | # | Vấn đề | Tác động | Ai xử lý |
 |---|---|---|---|
 | 1 | **`origin/main` vẫn không biên dịch được** cho đến khi nhánh này vào `main` hoặc Thái An tự sửa. Đã sửa trên nhánh này | Ai pull `main` sẽ gặp lỗi. **`generate_meal_plan` chưa được gửi** vì thiếu `eatingWindowHours` | Thái An, Hoàng |
-| 2 | **Gói docs đã commit và merge trên máy**, gồm `docs/code-review.md` gộp tay | Cần review trước khi push | Codex, Charlie |
+| 2 | **Gói docs đã commit, merge và push**, gồm `docs/code-review.md` gộp tay | Push trước khi được review, nên cần review bù | Codex, Charlie |
 | 3 | **DEC-01 chưa chốt:** Storage cần Blaze, Final lại loại Storage | Chặn S3-7, S4-11, một phần S4-13, S4-15 | Thái An (Leader) |
 | 4 | **Chưa mời thành viên, thiếu 3 SHA** | Ba bạn chưa đăng nhập Google được | Charlie, cả nhóm |
 | 5 | **Món ăn hard-code** khi Firestore chưa có `recipes` (A9) | Trái quy định bản nộp; có 1 plan test chứa món giả trên project | Hoàng |
@@ -91,7 +91,7 @@ Các task hỗ trợ khác trong 18 task chưa bắt đầu.
 
 ## Việc tiếp theo đề xuất
 
-1. **Review và đồng bộ:** Codex re-review S3-5 và gói docs, rồi push; báo Hoàng, Thái An về guard và lời gọi generate.
+1. **Review và đồng bộ:** Codex re-review S3-5 và gói docs đã push; báo Hoàng, Thái An về guard và lời gọi generate.
 2. **Mở khóa cho nhóm:** mời 3 bạn, nhận SHA, tải lại `google-services.json`; nhờ Leader chốt DEC-01.
 3. **FCM:** khi có câu trả lời cho [3 câu hỏi contract](FCM-CONTRACT-PROPOSAL.md), nối router, history, rồi thử push thật ba trạng thái.
 4. **PDF:** khi có S4-3, dùng plan đang xem; nối `LocalReportStore` vào export; chạy trên Android.
