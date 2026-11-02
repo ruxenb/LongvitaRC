@@ -60,9 +60,10 @@ class MealPlanViewModel extends BaseViewModel {
       }
 
       await analytics.logGenerateMealPlan(
-        targetAge: age,
-        weightKg: weightKg,
-        fishCount: 2,
+        targetAgeGroup: age >= 65 ? 'over_65' : 'under_65',
+        mealsPerDay: mealsPerDay,
+        eatingWindowHours: 12,
+        fishMealsCount: 2,
       );
 
       _currentPlanState = ViewStateSuccess(_activePlan!);

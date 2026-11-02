@@ -80,7 +80,13 @@ class ProfileViewModel extends BaseViewModel {
 
       if (downloadUrl != null) {
         _lastUploadedUrl = downloadUrl;
-        await analyticsService.logExportReport(format: 'pdf');
+        final hasShoppingList = plan.days
+            .expand((day) => day.meals)
+            .any((recipe) => recipe.ingredients.isNotEmpty);
+        await analyticsService.logExportReport(
+          fileSizeKb: (pdfBytes.lengthInBytes / 1024).ceil(),
+          hasShoppingList: hasShoppingList ? 1 : 0,
+        );
         _exportState = ViewStateSuccess(downloadUrl);
       } else {
         _exportState = const ViewStateError('Tải lên thất bại. Vui lòng thử lại.');

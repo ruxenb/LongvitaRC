@@ -3,7 +3,7 @@
 > **Dự án:** Longvita — Cloud-Enabled Mobile App (Dinh dưỡng trường thọ)  
 > **Công nghệ:** Flutter + Firebase + Google ARTEMIS + AI Code Review  
 > **Hình thức làm bài:** Nhóm 4 người (*Handout ghi “Individual”, cần giảng viên xác nhận tại task S0-1*)  
-> **Tổng số task:** 112 tasks | **Tiến độ:** 0/112 (0%)
+> **Tổng số task:** 112 tasks | **Tiến độ đã đồng bộ:** 12/112 (11%)
 
 ---
 
@@ -14,8 +14,8 @@
 | **Thái An** | Thái An | **Team Leader & QA Lead**: Điều phối chung, Analytics, Crashlytics, Remote Config, ARTEMIS | 29 | 7 | 24% | [`task-thai-an.md`](task-thai-an.md) |
 | **Charlie** | CharlieMinh | **Design System in Code + Firebase**: Auth, Storage, FCM, Common Widgets, Profile | 29 | 0 | 0% | [`task-charlie.md`](task-charlie.md) |
 | **Hoàng** | Hoàng DV (YAHsaveme) | **Dữ liệu & UI Flows**: DataService, 3 Flows (S01–S10), States, A11y, Sync Figma | 26 | 0 | 0% | [`task-hoang.md`](task-hoang.md) |
-| **Thắng** | Thắng VLQ | **Technical Architect & Co-Lead**: MVVM Skeleton, Router, Docs, Report, Slides, Video | 28 | 0 | 0% | [`task-thang.md`](task-thang.md) |
-| **TỔNG CỘNG** | | | **112** | **0** | **0%** | |
+| **Thắng** | Thắng VLQ | **Technical Architect & Co-Lead**: MVVM Skeleton, Router, Docs, Report, Slides, Video | 28 | 5 | 18% | [`task-thang.md`](task-thang.md) |
+| **TỔNG CỘNG** | | | **112** | **12** | **11%** | |
 
 ---
 
@@ -38,17 +38,17 @@ flowchart LR
 
 | Giai đoạn | Tổng task | Chưa bắt đầu | Đang làm | Bị chặn | Đã xong | Tỷ lệ |
 |:---|:---:|:---:|:---:|:---:|:---:|:---:|
-| 0. Chuẩn bị | 9 | 9 | 0 | 0 | 0 | 0% |
-| 1. Plan | 5 | 5 | 0 | 0 | 0 | 0% |
-| 2. Architect | 5 | 5 | 0 | 0 | 0 | 0% |
-| 3. Integrate | 9 | 9 | 0 | 0 | 0 | 0% |
+| 0. Chuẩn bị | 9 | 7 | 0 | 1 | 1 | 11% |
+| 1. Plan | 5 | 3 | 0 | 0 | 2 | 40% |
+| 2. Architect | 5 | 2 | 0 | 0 | 3 | 60% |
+| 3. Integrate | 9 | 7 | 1 | 0 | 1 | 11% |
 | 4. Features | 17 | 17 | 0 | 0 | 0 | 0% |
-| 5. Instrument | 10 | 10 | 0 | 0 | 0 | 0% |
+| 5. Instrument | 10 | 5 | 0 | 0 | 5 | 50% |
 | 6. Test (Google ARTEMIS) | 14 | 14 | 0 | 0 | 0 | 0% |
 | 7. AI Code Review | 14 | 14 | 0 | 0 | 0 | 0% |
-| 8. Báo cáo, Slide, Video | 20 | 20 | 0 | 0 | 0 | 0% |
+| 8. Báo cáo, Slide, Video | 20 | 19 | 1 | 0 | 0 | 0% |
 | 9. Kiểm tra & Nộp bài | 9 | 9 | 0 | 0 | 0 | 0% |
-| **TỔNG** | **112** | **112** | **0** | **0** | **0** | **0%** |
+| **TỔNG** | **112** | **97** | **2** | **1** | **12** | **11%** |
 
 ---
 
