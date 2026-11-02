@@ -4,13 +4,17 @@ import 'package:flutter/foundation.dart';
 class NotificationService {
   final FirebaseMessaging _fcm;
   final List<RemoteMessage> _messages = [];
+  bool _initialized = false;
 
   NotificationService({FirebaseMessaging? fcm})
       : _fcm = fcm ?? FirebaseMessaging.instance;
 
   List<RemoteMessage> get messages => List.unmodifiable(_messages);
 
+  /// Requests permission and attaches listeners once per app process.
   Future<void> initialize() async {
+    if (_initialized) return;
+    _initialized = true;
     try {
       final settings = await _fcm.requestPermission(
         alert: true,
@@ -32,6 +36,9 @@ class NotificationService {
       }
     } catch (_) {}
   }
+
+  /// Drops the in-app history of the previous user on sign-out.
+  void clearHistory() => _messages.clear();
 
   Future<String?> getToken() async {
     try {

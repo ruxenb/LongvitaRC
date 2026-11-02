@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
 
 // Services & Interfaces
@@ -11,6 +10,7 @@ import 'services/i_report_service.dart';
 import 'services/report_service.dart';
 
 // Firebase Helpers
+import 'firebase/firebase_bootstrap.dart';
 import 'firebase/analytics_service.dart';
 import 'firebase/crashlytics_service.dart';
 import 'firebase/remote_config_service.dart';
@@ -25,18 +25,24 @@ import 'viewmodels/profile_viewmodel.dart';
 
 // Theme & Screens
 import 'theme/app_theme.dart';
+import 'theme/app_typography.dart';
 import 'screens/auth_gate.dart';
+import 'screens/startup_gate.dart';
 
-void main() async {
+void main() {
   WidgetsFlutterBinding.ensureInitialized();
+  AppTypography.registerFontLicenses();
 
-  // Initialize Firebase (safely catching if unconfigured in local test environments)
-  try {
-    await Firebase.initializeApp();
-  } catch (e) {
-    debugPrint('Firebase.initializeApp warning (skipping if in mock/test): $e');
-  }
+  final bootstrap = FirebaseBootstrap();
+  runApp(StartupGate(
+    initialize: bootstrap.initialize,
+    buildReadyApp: buildAppScope,
+  ));
+}
 
+/// Creates services and ViewModels. Only called after Firebase started
+/// successfully, because the services wrap SDK singletons.
+Future<Widget> buildAppScope() async {
   // Create Firebase singletons
   final analytics = AnalyticsService();
   final crashlytics = CrashlyticsService();
@@ -44,70 +50,65 @@ void main() async {
   final storage = StorageService();
   final notification = NotificationService();
 
-  // Try background init for Remote Config & FCM
-  try {
-    await remoteConfig.initialize();
-    await notification.initialize();
-  } catch (e) {
-    debugPrint('Services background initialization note: $e');
-  }
+  // Remote Config falls back to in-app defaults internally. FCM permission
+  // is requested after sign-in (ProfileViewModel.onSessionStarted).
+  await remoteConfig.initialize();
 
   // Create Service instances
   final IAuthService authService = AuthService();
   final IDataService dataService = DataService();
   final IReportService reportService = ReportService();
 
-  runApp(
-    MultiProvider(
-      providers: [
-        // Service Dependencies (Injected via Interface)
-        Provider<IAuthService>.value(value: authService),
-        Provider<IDataService>.value(value: dataService),
-        Provider<IReportService>.value(value: reportService),
+  // ViewModels holding per-user data are created up front so AuthViewModel
+  // can clear them when a session ends.
+  final mealPlanViewModel = MealPlanViewModel(
+    dataService: dataService,
+    analytics: analytics,
+    crashlytics: crashlytics,
+    remoteConfig: remoteConfig,
+  );
+  final ingredientViewModel = IngredientViewModel(
+    analytics: analytics,
+    crashlytics: crashlytics,
+  );
+  final profileViewModel = ProfileViewModel(
+    authService: authService,
+    storageService: storage,
+    notificationService: notification,
+    reportService: reportService,
+    remoteConfigService: remoteConfig,
+    crashlyticsService: crashlytics,
+    analyticsService: analytics,
+  );
+  final authViewModel = AuthViewModel(
+    authService: authService,
+    analytics: analytics,
+    crashlytics: crashlytics,
+    sessionScoped: [mealPlanViewModel, ingredientViewModel, profileViewModel],
+  );
 
-        // Firebase Service Singletons
-        Provider<AnalyticsService>.value(value: analytics),
-        Provider<CrashlyticsService>.value(value: crashlytics),
-        Provider<RemoteConfigService>.value(value: remoteConfig),
-        Provider<StorageService>.value(value: storage),
-        Provider<NotificationService>.value(value: notification),
+  return MultiProvider(
+    providers: [
+      // Service Dependencies (Injected via Interface)
+      Provider<IAuthService>.value(value: authService),
+      Provider<IDataService>.value(value: dataService),
+      Provider<IReportService>.value(value: reportService),
 
-        // MVVM ViewModels
-        ChangeNotifierProvider<AuthViewModel>(
-          create: (_) => AuthViewModel(
-            authService: authService,
-            analytics: analytics,
-            crashlytics: crashlytics,
-          ),
-        ),
-        ChangeNotifierProvider<MealPlanViewModel>(
-          create: (_) => MealPlanViewModel(
-            dataService: dataService,
-            analytics: analytics,
-            crashlytics: crashlytics,
-            remoteConfig: remoteConfig,
-          ),
-        ),
-        ChangeNotifierProvider<IngredientViewModel>(
-          create: (_) => IngredientViewModel(
-            analytics: analytics,
-            crashlytics: crashlytics,
-          ),
-        ),
-        ChangeNotifierProvider<ProfileViewModel>(
-          create: (_) => ProfileViewModel(
-            authService: authService,
-            storageService: storage,
-            notificationService: notification,
-            reportService: reportService,
-            remoteConfigService: remoteConfig,
-            crashlyticsService: crashlytics,
-            analyticsService: analytics,
-          ),
-        ),
-      ],
-      child: const LongvitaApp(),
-    ),
+      // Firebase Service Singletons
+      Provider<AnalyticsService>.value(value: analytics),
+      Provider<CrashlyticsService>.value(value: crashlytics),
+      Provider<RemoteConfigService>.value(value: remoteConfig),
+      Provider<StorageService>.value(value: storage),
+      Provider<NotificationService>.value(value: notification),
+
+      // MVVM ViewModels
+      ChangeNotifierProvider<AuthViewModel>.value(value: authViewModel),
+      ChangeNotifierProvider<MealPlanViewModel>.value(value: mealPlanViewModel),
+      ChangeNotifierProvider<IngredientViewModel>.value(
+          value: ingredientViewModel),
+      ChangeNotifierProvider<ProfileViewModel>.value(value: profileViewModel),
+    ],
+    child: const LongvitaApp(),
   );
 }
 

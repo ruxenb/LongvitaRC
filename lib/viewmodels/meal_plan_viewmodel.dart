@@ -5,9 +5,11 @@ import '../services/i_data_service.dart';
 import '../firebase/analytics_service.dart';
 import '../firebase/crashlytics_service.dart';
 import '../firebase/remote_config_service.dart';
+import '../models/user_model.dart';
 import 'base_viewmodel.dart';
+import 'session_scoped.dart';
 
-class MealPlanViewModel extends BaseViewModel {
+class MealPlanViewModel extends BaseViewModel implements SessionScoped {
   final IDataService dataService;
   final AnalyticsService analytics;
   final CrashlyticsService crashlytics;
@@ -27,6 +29,18 @@ class MealPlanViewModel extends BaseViewModel {
   ViewState<MealPlanModel> get currentPlanState => _currentPlanState;
   ViewState<List<MealPlanModel>> get savedPlansState => _savedPlansState;
   MealPlanModel? get activePlan => _activePlan;
+
+  @override
+  void onSessionStarted(UserModel user) {}
+
+  /// Drops the previous user's plans when the session ends (CHARLIE-AUTH-01).
+  @override
+  void clearSession() {
+    _currentPlanState = const ViewStateIdle();
+    _savedPlansState = const ViewStateIdle();
+    _activePlan = null;
+    notifyListeners();
+  }
 
   Future<void> generatePlan({
     required String uid,

@@ -11,8 +11,9 @@ import '../firebase/remote_config_service.dart';
 import '../firebase/crashlytics_service.dart';
 import '../firebase/analytics_service.dart';
 import 'base_viewmodel.dart';
+import 'session_scoped.dart';
 
-class ProfileViewModel extends BaseViewModel {
+class ProfileViewModel extends BaseViewModel implements SessionScoped {
   final IAuthService authService;
   final StorageService storageService;
   final NotificationService notificationService;
@@ -40,6 +41,23 @@ class ProfileViewModel extends BaseViewModel {
   String? get lastUploadedUrl => _lastUploadedUrl;
   ViewState<String> get exportState => _exportState;
   List<RemoteMessage> get notifications => notificationService.messages;
+
+  /// Notification permission is requested after sign-in, not at app start,
+  /// so the first screen a new user (and ARTEMIS TC-01) sees is Sign-in
+  /// rather than the Android 13 permission dialog.
+  @override
+  void onSessionStarted(UserModel user) {
+    notificationService.initialize();
+  }
+
+  @override
+  void clearSession() {
+    _uploadProgress = 0.0;
+    _lastUploadedUrl = null;
+    _exportState = const ViewStateIdle();
+    notificationService.clearHistory();
+    notifyListeners();
+  }
 
   // Remote config properties for UI display
   int get maxRecommendations => remoteConfigService.maxRecommendations;
