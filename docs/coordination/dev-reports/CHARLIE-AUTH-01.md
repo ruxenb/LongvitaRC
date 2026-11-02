@@ -1,13 +1,13 @@
 # CHARLIE-AUTH-01 — Toolchain, Firebase bootstrap, Auth và session
 
-**Trạng thái đề nghị: Ready for PM review** cho phần code, test local, build Android và luồng đăng nhập thật với SHA của máy Charlie (mục 2.1). Còn thiếu SHA và lời mời cho ba thành viên, cùng các mục ở mục 6. Bản sửa AUD-11 đã qua test emulator và **đã publish** theo duyệt của Charlie, nhưng Hoàng/Thắng chưa review (mục 2.2). Chưa Accepted. Đã commit local, chưa push.
+**Trạng thái đề nghị: Ready for PM review** cho phần code, test local, build Android và luồng đăng nhập thật với SHA của máy Charlie (mục 2.1). Còn thiếu SHA và lời mời cho ba thành viên, cùng các mục ở mục 6. Bản sửa AUD-11 đã qua test emulator và **đã publish** theo duyệt của Charlie, nhưng Hoàng/Thắng chưa review (mục 2.2). Chưa Accepted. Đã push nhánh, chưa có PR.
 
 | Mục | Giá trị |
 |---|---|
 | Task chính | S0-3-CM, S0-4 (một phần), S3-1 (phần code), S3-3, S3-4, S3-5 |
 | Hỗ trợ | S2-1 (contract Auth), S3-6 (AuthGate). S3-9 đã có bằng chứng; S3-2 mới có SHA của máy Charlie; S3-7 chưa thực hiện |
 | Ngày | 02/11/2026 |
-| Nhánh | `feature/charlie-auth-01`, tạo từ `feature/charlie-ui-01` (= `ae35f07` cộng UI-01). Đã commit local, chưa push, chưa merge `origin/main` |
+| Nhánh | `feature/charlie-auth-01`, tạo từ `feature/charlie-ui-01` (= `ae35f07` cộng UI-01). Đã push, chưa có PR, chưa merge `origin/main` |
 | Tách khỏi UI-01 | Trước khi sửa đã chụp snapshot toàn bộ `lib/ test/ android/ pubspec.* firebase/ e2e_test/` của UI-01. Diff riêng của gói này: `evidence/auth/auth01-vs-ui01.diff` |
 | Thay đổi của người khác đã giữ nguyên | Docs của Codex (`README.md`, `docs/*`, `docs/coordination/*`, `AGENTS.md`, `CLAUDE.md`) và toàn bộ UI-01 (chỉ thêm `container: true` ở mục 4.3) |
 

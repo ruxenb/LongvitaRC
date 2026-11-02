@@ -1,6 +1,6 @@
 # Tiến độ Charlie — đối chiếu CHARLIE_TASK_GUIDE, 02/11/2026
 
-Đối chiếu từng task với [CHARLIE_TASK_GUIDE.md](../CHARLIE_TASK_GUIDE.md) và source tại `4e4bffd`, nhánh `feature/charlie-auth-01`. Đã commit local, **chưa push**.
+Đối chiếu từng task với [CHARLIE_TASK_GUIDE.md](../CHARLIE_TASK_GUIDE.md) và source tại `4e4bffd`, nhánh `feature/charlie-auth-01`. Đã push lên GitHub, **chưa có PR, chưa merge `origin/main`**.
 
 Đây là đánh dấu tiến độ của Dev để PM và Charlie review, **không phải Done hay Accepted**. Guide và `docs/tasks/task-charlie.md` không bị sửa.
 
@@ -55,7 +55,7 @@
 | ⬜ | **S6-4** test_auth.py | `e2e_test/` mới có `conftest.py` với Dummy client. Chờ S6-2 của Thái An |
 | ⬜ | **S6-7** test_export/profile | Chờ S6-2, S4-11, S4-12 |
 | ⬜ | **S6-14** Sửa lỗi theo ARTEMIS | Chờ S6-9 |
-| ⬜ | **S7-1-CM** PR + AI review | Chưa push, chưa có PR |
+| ⬜ | **S7-1-CM** PR + AI review | Đã push nhánh, chưa có PR |
 | ⬜ | **S7-2-CM** Findings | Chờ S7-1-CM |
 | ⬜ | **S7-3-CM** Fix finding | Chờ S7-2-CM |
 | ⬜ | **S8-3** Report | Phần Auth đã có evidence để viết; Storage, FCM chưa |
@@ -85,13 +85,13 @@ Các task hỗ trợ khác trong 18 task chưa bắt đầu.
 | 3 | **DEC-01 chưa chốt:** Storage cần Blaze, Final lại loại Storage | Chặn S3-7, S4-11, một phần S4-13, S4-15 | Thái An (Leader) |
 | 4 | **Chưa mời thành viên, thiếu 3 SHA** | Ba bạn chưa đăng nhập Google được | Charlie, cả nhóm |
 | 5 | **Món ăn hard-code** khi Firestore chưa có `recipes` (A9) | Trái quy định bản nộp; có 1 plan test chứa món giả trên project | Hoàng |
-| 6 | **Nhánh chưa push** | Hoàng chưa dùng được widgets, nhóm chưa có config Firebase và rules | Charlie |
+| 6 | **Nhánh đã push nhưng chưa vào `main`** | Muốn dùng widgets, config Firebase và rules, các bạn phải lấy từ `feature/charlie-auth-01` | Charlie, Thái An |
 
 `origin/main` ghi Thái An là Team Leader và đã có code S5-x, nên nhóm không còn ở mốc ban đầu như guide ghi nhận (`ae35f07`).
 
 ## Việc tiếp theo đề xuất
 
-1. **Đồng bộ:** push nhánh, báo Thái An về vướng mắc 1, xử lý docs của Codex rồi merge `origin/main`, sửa `logExportReport` và `logLogout` theo API mới.
+1. **Đồng bộ:** báo nhóm về nhánh đã push, báo Thái An về vướng mắc 1, xử lý docs của Codex rồi merge `origin/main`, sửa `logExportReport` và `logLogout` theo API mới.
 2. **Mở khóa cho nhóm:** mời 3 bạn, nhận SHA, tải lại `google-services.json`, ghi project ID vào README; nhờ Leader chốt DEC-01.
 3. **Gói code kế tiếp: S4-12 FCM.** Không phụ thuộc DEC-01 hay S4-3. Cần Thắng chốt route/payload và cả nhóm chốt nơi lưu history trước.
 4. **Song song:** S4-10 PDF với font tiếng Việt, dùng fixture cho đến khi có S4-3.
@@ -108,6 +108,6 @@ Các task hỗ trợ khác trong 18 task chưa bắt đầu.
 
 Mỗi commit đều qua `flutter analyze`. Không commit: docs của Codex (giữ nguyên trên working tree), XML và logcat thô của lần chạy thật (giữ trên máy Charlie, loại bằng `.git/info/exclude`).
 
-Commit có `google-services.json` và ảnh có email, UID của Charlie. Cân nhắc trước khi push nếu repo công khai.
+Repo công khai và nhánh đã push nguyên trạng theo quyết định của Charlie, gồm `google-services.json` và ảnh có email, UID của Charlie. Nên giới hạn API key Android theo package và SHA trên Google Cloud.
 
 Chi tiết: [CHARLIE-UI-01](CHARLIE-UI-01.md), [CHARLIE-AUTH-01](CHARLIE-AUTH-01.md).

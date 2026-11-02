@@ -7,7 +7,7 @@
 | Task IDs | S2-3 (tokens → ThemeData), S2-4 (common widgets) — owner Charlie |
 | Dev | Claude Code, 02/11/2026 |
 | Baseline | `ae35f07e36cab9ad4843396a1c22d72c247853ea` (= `origin/main` lúc bắt đầu) |
-| Nhánh | Làm trên `feature/charlie-ui-01` (tạo từ `main`). Commit local cùng AUTH-01 trên `feature/charlie-auth-01`, chưa push |
+| Nhánh | Làm trên `feature/charlie-ui-01` (tạo từ `main`). Đã commit và push cùng AUTH-01 trên `feature/charlie-auth-01` |
 | Thay đổi có sẵn đã giữ nguyên | Bản sửa docs của Codex (`README.md`, `docs/architecture.md`, `docs/code-review.md`, `docs/tasks/README.md`, `docs/test-plan.md`), `AGENTS.md`, `CLAUDE.md`, `docs/coordination/*`. Không đụng tới các file này |
 
 ## 1. Nguồn đã đọc
