@@ -2,37 +2,38 @@
 
 > **Tài liệu:** Sổ ghi nhận kết quả đánh giá mã nguồn bằng công cụ Trí tuệ Nhân tạo (AI-Assisted Code Review).  
 > **Người chủ trì tổng hợp:** Thắng VLQ (Lead) | **Thành viên tham gia:** Cả 4 thành viên (Thắng, Hoàng, Charlie, Thái An).  
-> **Nguyên tắc cốt lõi:** *AI tìm kiếm và phát hiện; Con người đánh giá, quyết định và chịu trách nhiệm.*
+> **Nguyên tắc cốt lõi:** *AI tìm kiếm và phát hiện; Con người đánh giá, quyết định và chịu trách nhiệm.*  
+> **Quy định quy trình (Handout Mục 4 & 10):** Code review chỉ được thực hiện trên **Pull Request (PR)** tại GitHub sau khi các nhánh tính năng hoàn thành (Stage 7). Tuyệt đối không ghi nhận commit trước khi có mã nguồn thực tế.
 
 ---
 
-## 1. Bảng Ghi Nhận Findings & Quyết Định (Chuẩn Appendix C)
+## 1. Bảng Ghi Nhận Findings & Quyết Định Chính Thức (Stage 7 — Pull Requests)
 
-| ID | Công cụ AI | Vị trí (File:Line) | Loại lỗi (Kind) | Tóm tắt phát hiện của AI (Finding Summary) | Quyết định | Lý do kỹ thuật & Định lượng (Reason) | Commit khắc phục (Fix Commit) |
-|:---:|:---|:---|:---:|:---|:---:|:---|:---:|
-| **CR-01** | CodeRabbit | `lib/screens/weekly_plan_screen.dart:45` | **Architecture** *(MVVM Rule)* | Widget đang gọi trực tiếp `FirebaseFirestore.instance.collection('meal_plans')` để lưu dữ liệu thay vì gọi qua ViewModel. | **Accepted** | Vi phạm quy tắc Mục 5 Handout (*No widget calls SDK directly*). Làm mất khả năng unit test và không thể thay thế bằng Fake Service. | `commit-a1b2c3d` *(fix: CR-01)* |
-| **CR-02** | SonarCloud | `lib/services/report_service.dart:32` | **Maintainability** | Hàm `generateMealPlanPdf` dài hơn 110 dòng, ôm đồm cả việc layout PDF, tính toán calo và format bảng nguyên liệu. | **Modified** | Chấp nhận tách nhỏ việc tính toán calo sang helper; giữ nguyên cấu trúc layout PDF trong service để tránh phân mảnh file. | `commit-d4e5f6a` *(refactor: CR-02)* |
-| **CR-03** | GitHub Copilot | `lib/viewmodels/meal_plan_viewmodel.dart:28` | **Performance** | Đề xuất cache toàn bộ dữ liệu món ăn trong bộ nhớ RAM vĩnh viễn (5 phút) để tránh fetch lại. | **Rejected** | Thực đơn cần tính toán động dựa trên cân nặng và khung giờ ăn của người dùng; cache tĩnh sẽ khiến người dùng không thấy thay đổi khi sửa sở thích. | — *(Từ chối hợp lý)* |
-| **CR-04** | CodeRabbit | `lib/services/storage_service.dart:18` | **Security** | Đường dẫn lưu trữ dùng `reports/$fileName` chung, không phân theo User ID, có nguy cơ ghi đè giữa các người dùng. | **Accepted** | Vi phạm yêu cầu bảo mật Mục 6 Handout (*Upload under per-user path reports/{uid}/...*). Bắt buộc phân tách theo UID. | `commit-b7c8d9e` *(fix: CR-04)* |
-| **CR-05** | SonarCloud | `lib/widgets/app_button.dart:52` | **Accessibility** | Nút bấm icon chỉ có kích thước $40 \times 40$ dp, không có nhãn `Semantics`, gây khó khăn cho Screen Reader. | **Accepted** | Vi phạm tiêu chuẩn Handout Mục 6 & 7: touch target phải $\ge 48$ dp và phải có Semantics label để ARTEMIS tương tác. | `commit-e2f3a4b` *(fix: CR-05)* |
-| **CR-06** | Kodus AI | `lib/viewmodels/ingredient_viewmodel.dart:42` | **Bug** | Hàm `updateQuantity` cho phép nhập số 0 hoặc số âm, gây lỗi tính toán lượng mua sắm thực tế. | **Accepted** | Vi phạm quy tắc validation ở Flow 2 (Task S4-5); cần chặn số $\le 0$ ngay tại ViewModel. | `commit-f5a6b7c` *(fix: CR-06)* |
+*Bảng này sẽ được các thành viên điền trực tiếp khi mở PR cho từng module tính năng tại Tuần 4 (Stage 7). Dưới đây là bảng khung sẵn sàng ghi nhận:*
+
+| ID | Công cụ AI | Vị trí (File:Line) | Loại lỗi (Kind) | Tóm tắt phát hiện của AI (Finding Summary) | Quyết định (Accepted / Modified / Rejected) | Lý do kỹ thuật & Định lượng (Reason) | Commit khắc phục (Fix Commit) | Người phụ trách |
+|:---:|:---|:---|:---:|:---|:---:|:---|:---:|:---:|
+| *[CR-01]* | *CodeRabbit* | *(Chờ mở PR)* | Architecture | *(Sẽ cập nhật khi bot AI review PR)* | *(Pending)* | *(Tham chiếu Handout Mục 5)* | *(Mã commit thật)* | Thái An |
+| *[CR-02]* | *SonarCloud* | *(Chờ mở PR)* | Maintainability | *(Sẽ cập nhật khi bot AI review PR)* | *(Pending)* | *(Tham chiếu tiêu chuẩn Clean Code)* | *(Mã commit thật)* | Charlie |
+| *[CR-03]* | *Copilot* | *(Chờ mở PR)* | Performance | *(Sẽ cập nhật khi bot AI review PR)* | *(Pending)* | *(Định lượng Rebuild/Latency)* | *(Mã commit thật)* | Hoàng |
+| *[CR-04]* | *CodeRabbit* | *(Chờ mở PR)* | Security | *(Sẽ cập nhật khi bot AI review PR)* | *(Pending)* | *(Tham chiếu Storage Rules)* | *(Mã commit thật)* | Thắng |
+| *[CR-05]* | *SonarCloud* | *(Chờ mở PR)* | Accessibility | *(Sẽ cập nhật khi bot AI review PR)* | *(Pending)* | *(Touch target $\ge 48$dp / Semantics)* | *(Mã commit thật)* | Thái An |
 
 ---
 
-## 2. Thống Kê & Phân Tích Kết Quả Code Review
+## 2. Kịch Bản & Mẫu Tham Khảo Chuẩn Appendix C (Reference Guide)
 
-- **Tổng số phát hiện ghi nhận:** 6 findings ($\ge 5$ theo yêu cầu Handout).
-- **Phân loại lỗi:** Bao phủ 5 nhóm khác nhau:
-  1. *Architecture (MVVM Rule Broken)*: 1 finding (CR-01)
-  2. *Security*: 1 finding (CR-04)
-  3. *Maintainability*: 1 finding (CR-02)
-  4. *Performance*: 1 finding (CR-03)
-  5. *Accessibility / Test Gap / Bug*: 2 findings (CR-05, CR-06)
-- **Tỷ lệ quyết định:**
-  - Chấp nhận hoàn toàn (Accepted): 4 findings
-  - Chấp nhận có điều chỉnh (Modified): 1 finding
-  - Từ chối với lý do kỹ thuật (Rejected): 1 finding
-- **Số lượng commit khắc phục:** 5 commit liên kết độc lập, mỗi commit ghi rõ mã Finding ID theo định dạng `fix(<module>): <Finding ID> <mô tả>`.
+> [!NOTE]
+> Phần dưới đây là **bản mẫu kịch bản tham khảo** được nhóm chuẩn bị từ trước để hướng dẫn các thành viên cách đánh giá lỗi, đưa ra lý do kỹ thuật (không được nói "do AI bảo thế") và cách đặt tên commit fix theo đúng chuẩn Handout.
+
+| Mã Mẫu | Công cụ AI | Vị trí minh họa | Loại lỗi | Tóm tắt phát hiện của AI | Quyết định mẫu | Lý do kỹ thuật mẫu | Quy chuẩn Commit sửa |
+|:---:|:---|:---|:---:|:---|:---:|:---|:---|
+| **EX-01** | CodeRabbit | `screens/weekly_plan_screen.dart:45` | **Architecture** *(MVVM Rule)* | Widget đang gọi trực tiếp `FirebaseFirestore.instance` để lưu dữ liệu thay vì gọi qua ViewModel. | **Accepted** | Vi phạm quy tắc Mục 5 Handout (*No widget calls SDK directly*). Làm mất khả năng unit test và không thể thay thế bằng Fake Service. | `fix(arch): resolve EX-01 move SDK call to ViewModel` |
+| **EX-02** | SonarCloud | `services/report_service.dart:32` | **Maintainability** | Hàm `generateMealPlanPdf` dài hơn 110 dòng, ôm đồm cả việc layout PDF, tính calo và format bảng. | **Modified** | Chấp nhận tách nhỏ việc tính toán calo sang helper; giữ nguyên cấu trúc layout PDF trong service để tránh phân mảnh file. | `refactor(report): resolve EX-02 split calorie helper` |
+| **EX-03** | Copilot | `viewmodels/meal_plan_viewmodel.dart:28` | **Performance** | Đề xuất cache toàn bộ dữ liệu món ăn trong RAM 5 phút để tránh fetch lại. | **Rejected** | Thực đơn cần tính toán động theo cân nặng và khung giờ ăn; cache tĩnh sẽ khiến người dùng không thấy thay đổi khi sửa sở thích. | *(Từ chối có lý do kỹ thuật, không sửa)* |
+| **EX-04** | CodeRabbit | `services/storage_service.dart:18` | **Security** | Đường dẫn lưu trữ dùng `reports/$fileName` chung, không phân theo User ID. | **Accepted** | Vi phạm yêu cầu bảo mật Mục 6 Handout (*Upload under per-user path reports/{uid}/...*). Bắt buộc phân tách theo UID. | `fix(storage): resolve EX-04 enforce per-user path` |
+| **EX-05** | SonarCloud | `widgets/app_button.dart:52` | **Accessibility** | Nút bấm icon chỉ có kích thước $40 \times 40$ dp, không có nhãn `Semantics`. | **Accepted** | Vi phạm tiêu chuẩn Handout Mục 6 & 7: touch target phải $\ge 48$ dp và phải có Semantics label để ARTEMIS tương tác. | `fix(ui): resolve EX-05 add Semantics and min 48dp` |
+| **EX-06** | Kodus AI | `viewmodels/ingredient_viewmodel.dart:42` | **Bug** | Hàm `updateQuantity` cho phép nhập số 0 hoặc số âm, gây lỗi tính toán lượng mua sắm thực tế. | **Accepted** | Vi phạm quy tắc validation ở Flow 2 (Task S4-5); cần chặn số $\le 0$ ngay tại ViewModel. | `fix(viewmodel): resolve EX-06 validate positive quantity` |
 
 ---
 
@@ -40,7 +41,7 @@
 
 | Tên Công Cụ AI | Phiên bản / Môi trường | Mục đích sử dụng cụ thể trong dự án Lab 3 | Thành viên sử dụng |
 |:---|:---|:---|:---:|
-| **Google Gemini (Antigravity Assistant)** | Gemini 2.5 Pro / Flash | Hỗ trợ thiết kế cấu trúc barebone, lập kế hoạch phân rã 112 tasks từ file Excel, soạn thảo tài liệu mẫu và phân tích đường găng. | Cả nhóm |
+| **Google Gemini (Antigravity Assistant)** | Gemini Pro / Flash | Hỗ trợ thiết kế cấu trúc barebone, lập kế hoạch phân rã 112 tasks từ file Excel, soạn thảo tài liệu mẫu và phân tích đường găng. | Cả nhóm |
 | **GitHub Copilot** | Copilot Chat & Completion | Gợi ý cú pháp Dart, hỗ trợ viết các hàm sinh file PDF (`pdf` package) và các test assertions trong ARTEMIS. | Charlie, Hoàng |
 | **CodeRabbit AI** | GitHub PR App | Tự động review mã nguồn trên từng Pull Request của nhánh tính năng trước khi merge vào nhánh chính. | Cả nhóm |
 | **SonarCloud** | Cloud Scanner | Quét phân tích tĩnh (Static Analysis), phát hiện Code Smells, trùng lặp mã và các vấn đề về maintainability. | Thắng |
