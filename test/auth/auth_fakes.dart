@@ -11,6 +11,7 @@ import 'package:longvita/firebase/crashlytics_service.dart';
 import 'package:longvita/firebase/notification_service.dart';
 import 'package:longvita/firebase/remote_config_service.dart';
 import 'package:longvita/firebase/storage_service.dart';
+import 'package:longvita/models/app_notification.dart';
 import 'package:longvita/models/auth_state.dart';
 import 'package:longvita/models/meal_plan_model.dart';
 import 'package:longvita/models/user_model.dart';
@@ -163,6 +164,12 @@ class FakeNotificationService implements NotificationService {
 
   @override
   List<RemoteMessage> get messages => List.unmodifiable(history);
+
+  @override
+  List<AppNotification> get inbox => const [];
+
+  @override
+  NotificationPermission get permission => NotificationPermission.granted;
 
   @override
   Future<void> initialize() async => initializeCalls++;

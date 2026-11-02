@@ -10,6 +10,7 @@ import '../viewmodels/meal_plan_viewmodel.dart';
 import '../viewmodels/profile_viewmodel.dart';
 import '../widgets/app_button.dart';
 import '../widgets/app_card.dart';
+import 'profile_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -55,6 +56,14 @@ class HomeScreen extends StatelessWidget {
         backgroundColor: AppColors.surface,
         elevation: 0,
         actions: [
+          // Plain push until the router owner (S3-6) adds the /profile route.
+          IconButton(
+            icon: const Icon(Icons.account_circle_rounded),
+            tooltip: 'Hồ sơ',
+            onPressed: () => Navigator.of(context).push(
+              MaterialPageRoute<void>(builder: (_) => const ProfileScreen()),
+            ),
+          ),
           IconButton(
             icon: const Icon(Icons.logout_rounded),
             tooltip: 'Đăng xuất',
