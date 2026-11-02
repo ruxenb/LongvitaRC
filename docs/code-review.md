@@ -1,7 +1,7 @@
 # AI-Assisted Code Review Record — Longvita (Lab 3)
 
 > **Tài liệu:** Sổ ghi nhận kết quả đánh giá mã nguồn bằng công cụ Trí tuệ Nhân tạo (AI-Assisted Code Review).  
-> **Người chủ trì tổng hợp:** Thắng VLQ (Lead) | **Thành viên tham gia:** Cả 4 thành viên (Thắng, Hoàng, Charlie, Thái An).  
+> **Chủ trì nghiệm thu:** Thái An (Team Leader) & Thắng VLQ (Technical Architect) | **Thành viên tham gia:** Cả 4 thành viên (Thái An, Thắng, Hoàng, Charlie).  
 > **Nguyên tắc cốt lõi:** *AI tìm kiếm và phát hiện; Con người đánh giá, quyết định và chịu trách nhiệm.*  
 > **Quy định quy trình (Handout Mục 4 & 10):** Code review chỉ được thực hiện trên **Pull Request (PR)** tại GitHub sau khi các nhánh tính năng hoàn thành (Stage 7). Tuyệt đối không ghi nhận commit trước khi có mã nguồn thực tế.
 

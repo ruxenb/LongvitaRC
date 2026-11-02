@@ -1,7 +1,7 @@
 # Kế Hoạch & Bảng Theo Dõi Task — Thái An
 
 > **Thành viên:** Thái An  
-> **Vai trò:** **Instrument, Test & AI Review** (Analytics, Crashlytics, Remote Config, Google ARTEMIS, Code Review, Slides & Video mảng Kiểm thử & Cloud)  
+> **Vai trò:** **Team Leader & QA Lead** (Điều phối chung toàn nhóm, Nghiệm thu chất lượng, Analytics, Crashlytics, Remote Config, Google ARTEMIS, AI Code Review)  
 > **Tổng task:** 29 tasks | **Đã hoàn thành:** 7/29 (24%)
 
 ---

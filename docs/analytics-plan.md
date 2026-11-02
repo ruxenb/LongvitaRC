@@ -1,9 +1,9 @@
 # Analytics Event Plan — Longvita (Lab 3)
 
 > **Tài liệu:** Kế hoạch đo lường sự kiện hành vi người dùng trên Firebase Analytics (Chuẩn Appendix A).  
-> **Người phụ trách:** Thái An (Instrument & Testing)  
+> **Người phụ trách:** Thái An (Team Leader & Instrumentation)  
 > **Trạng thái:** **ĐÃ PHÊ DUYỆT (Final Approved)** — *Được chốt và ký duyệt TRƯỚC KHI viết mã tracking theo quy định Handout Mục 6 & 8*.  
-> **Các bên phê duyệt:** Lê Nhật Thắng (Lead/Architecture), Nguyễn Huy Hoàng (Features Dev), Thái An (Instrumentation).  
+> **Các bên phê duyệt:** Thái An (Team Leader), Lê Nhật Thắng (Architect), Nguyễn Huy Hoàng (Features Dev).  
 > **Cam kết bảo mật:** Tuyệt đối không chứa thông tin định danh cá nhân (No PII: không email, không họ tên, không số điện thoại).
 
 ---

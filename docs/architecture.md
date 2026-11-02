@@ -1,7 +1,7 @@
 # Architecture Document — Longvita (Lab 3 & Final Assignment Bridge)
 
 > **Mô hình kiến trúc:** MVVM (Model - View - ViewModel) với Provider Dependency Injection  
-> **Người phụ trách:** Thắng VLQ (Kiến trúc & Tích hợp)  
+> **Người phụ trách:** Thắng VLQ (Kiến trúc & Tích hợp) | **Phê duyệt:** Thái An (Team Leader)  
 > **Nguyên tắc bất biến:** Phụ thuộc một chiều hướng xuống (`Dependencies point downwards only`); một tầng tuyệt đối không import ngược tầng phía trên nó.  
 > **Chiến lược chuyển tiếp (Forward-Compatibility):** Thiết kế sẵn sàng đóng gói thành `packages/core/` để chia sẻ cho cả Mobile và Web Admin khi lên Final Assignment với chi phí thay đổi $\le 10\%$.
 

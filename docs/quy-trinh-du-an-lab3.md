@@ -1,9 +1,8 @@
 # Quy Trình Toàn Bộ Dự Án & Người Phụ Trách — PRM393 Lab 3
 
-> **Dự án:** Longvita — Cloud-Enabled Mobile App (Flutter + Firebase + Google ARTEMIS + AI Code Review)
-> **Nhóm:** Thái An, Charlie, Hoàng, Thắng
+> **Dự án:** Longvita — Cloud-Enabled Mobile App (Flutter + Firebase + Google ARTEMIS + AI Code Review)  
+> **Nhóm:** Thái An (Team Leader & QA Lead), Thắng (Technical Architect), Charlie (Firebase & Design System), Hoàng (Core Features)  
 > **Nguồn:** `README.md`, `milestones-and-dependencies.md`, `submission-checklist.md`, 4 file `task-*.md`
-> **Lưu ý:** Chưa đọc được `danh-sach-task-full.md`, nên task **S0-2** (có trong số liệu giai đoạn 0 của README) chưa xác định được nội dung và người phụ trách.
 
 ---
 

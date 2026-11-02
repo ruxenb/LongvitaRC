@@ -1,7 +1,7 @@
 # Design Traceability Matrix — Longvita (Lab 3)
 
 > **Tài liệu:** Truy vết thiết kế từ Lab 2 (Figma & `screen-spec.md`) sang Flutter App.  
-> **Người phụ trách:** Thắng VLQ (Lead) & Hoàng DV  
+> **Người phụ trách:** Thắng VLQ (Architect) & Hoàng DV | **Phê duyệt:** Thái An (Team Leader)  
 > **Giai đoạn:** Stage 1 — Plan (Bắt buộc hoàn thành trước khi triển khai tính năng theo Mục 4 Handout).
 
 ---
