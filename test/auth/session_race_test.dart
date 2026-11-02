@@ -286,6 +286,21 @@ void main() {
           contains('generate_meal_plan:over_65:3:12:0'));
     });
 
+    test('the event plan counts age 65 as over_65', () async {
+      final plans = plansWith(HeldData());
+      await session.signIn('uid-a');
+
+      await plans.generatePlan(
+          uid: 'uid-a', weightKg: 60, age: 65, eatingWindowHours: 12);
+      await plans.generatePlan(
+          uid: 'uid-a', weightKg: 60, age: 64, eatingWindowHours: 12);
+
+      expect(session.analytics.events,
+          contains('generate_meal_plan:over_65:3:12:0'));
+      expect(session.analytics.events,
+          contains('generate_meal_plan:under_65:3:12:0'));
+    });
+
     test('sign-out logs the logout event', () async {
       profileWith();
       await session.signIn('uid-a');
