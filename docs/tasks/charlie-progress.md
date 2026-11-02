@@ -23,7 +23,7 @@ Chi tiết IDs/owner/dependency tại [task Charlie](task-charlie.md) và [maste
 - **Firestore AUD-11:** schema/role/status/owner constraints và 41 emulator tests. Theo ghi nhận của Charlie, rules đã publish lên project trước PR; Hoàng/Thắng còn cần review các policy bên dưới.
 - **Analytics:** callers theo API mới của Thái An. Export params lấy từ PDF bytes thực. Chưa có eating window thật thì không gửi generate event; Hoàng nối dữ liệu S02, không điền số giả.
 - **FCM preparation:** gateway và 4 callback, parser, inbox/dedup theo phiên. Payload gốc đi cùng entry đã chấp nhận; first accepted message thắng trong một phiên, tap duplicate dùng target đã chấp nhận. Chưa phải live FCM hoàn chỉnh.
-- **PDF (S4-10), nhánh `feature/charlie-pdf-01`, chưa vào PR #1:** TTF tiếng Việt regular/bold, lưu trên máy trước khi upload, export ID giữ nguyên khi thử lại, mở và chia sẻ qua `IReportViewer`. Hai nút trên Home là tạm thời, sẽ chuyển sang Profile ở S4-13. Chưa chứng minh đúng plan đang xem vì chờ S4-3.
+- **PDF (S4-10), nhánh `feature/charlie-pdf-01`, chưa vào PR #1:** TTF tiếng Việt regular/bold, lưu trên máy trước khi upload, export ID giữ nguyên khi thử lại, mở và chia sẻ qua `IReportViewer`. Mỗi lúc chỉ chạy một export hoặc retry, nên file, URL, tiến độ và trạng thái luôn thuộc cùng một lần xuất. Các nút mở, chia sẻ, thử lại trên Home là tạm thời, sẽ chuyển sang Profile ở S4-13. Chưa chứng minh đúng plan đang xem vì chờ S4-3.
 
 Các commits chức năng: `6dfddf9` (UI), `56b1896` (Auth), `4e4bffd` (Firebase/rules), `9d76623` (session guards), `9ecc806` (Analytics callers), `7a9fa8c` (FCM), `40e47a1` (PDF), `2d547c7` (FCM recipient/dedup fix).
 
@@ -35,7 +35,7 @@ Code `2d547c7` / HEAD báo cáo `f1f397e` đã được kiểm độc lập: ana
 - [Rules 41/41](../../evidence/rules/AUD-11-20261102/new-rules-run.txt) là kết quả emulator trước; không chạy lại sau FCM fix vì `firebase/` không đổi. Không coi emulator là live rules/role evidence đầy đủ.
 - [Auth thật](../../evidence/auth/S3-9-20261102/README.md): success/cancel/restore/logout với SHA Charlie. Ba máy còn lại, network/profile lỗi native và A/B native chưa được kiểm đầy đủ.
 - FCM tests dùng fake gateway, history chỉ ở RAM; chưa push thật, chưa router/Profile/token binding.
-- [PDF trên Android](../../evidence/pdf/S4-10-export-20261102/): 150/150 tests, chạy thật trên emulator: font nạp được, file lưu trong `app_flutter/reports/<uid>/`, upload lỗi thì file còn và có thông báo, mở màn xem trước, mở cửa sổ chia sẻ. Plan thử dùng món hard-code (A9), không chứng minh đúng plan đang xem. Upload thành công và `retryUpload` chỉ test bằng fake vì project chưa có Storage. Chưa thử trên máy thật.
+- [PDF trên Android](../../evidence/pdf/S4-10-export-20261102/) và [xuất chồng nhau](../../evidence/pdf/PM-PDF-01/): 168/168 tests, chạy thật trên emulator: font nạp được, file lưu trong `app_flutter/reports/<uid>/`, upload lỗi thì file còn và có thông báo, mở màn xem trước, mở cửa sổ chia sẻ, bấm xuất liên tiếp 3 lần chỉ tạo 1 file, thử lại khi upload lỗi không tạo file mới. Plan thử dùng món hard-code (A9), không chứng minh đúng plan đang xem. Upload và thử lại **thành công** chỉ test bằng fake vì project chưa có Storage. Trạng thái khóa nút trong lúc chạy chỉ test ở ViewModel. Chưa thử trên máy thật.
 - ARTEMIS thật, AI review trên PR và deliverables report/slides/video/worklog chưa hoàn tất. Các ví dụ trong `docs/code-review.md` không được tính là findings thật.
 
 ## Các điểm reviewer/team cần chốt
@@ -46,7 +46,7 @@ Code `2d547c7` / HEAD báo cáo `f1f397e` đã được kiểm độc lập: ana
 4. **Thái An/leader (DEC-01):** Guide yêu cầu Storage upload, Final loại Storage; quyết định áp dụng/billing trước S3-7/S4-11. Không chặn Auth hoặc PDF local vì việc này.
 5. **FCM contract còn mở:** route intent của `meal_plan`/`announcement` (Thắng); history local theo UID hay Firestore/schema/rules (Hoàng/Thắng); token theo user hay topic và cách xử lý tin thiếu `recipient_uid` (Thái An/Thắng). Hiện tin không recipient chờ người login kế, chưa được team chốt cho production.
 6. **Charlie/team:** mời đủ thành viên Firebase, nhận SHA-1/SHA-256 và kiểm Google Sign-in trên từng máy; quyền Console và SHA/Auth là các đầu việc riêng. Đồng thời chốt ngôn ngữ UI và font Roboto cho PDF.
-7. **PDF cần chốt:** file PDF đang được giữ trên máy sau khi đăng xuất (chỉ xóa tham chiếu trong app) và chưa có giới hạn số file; sau khi mở lại app chưa xem lại được file cũ. S3-5 ghi "xóa dữ liệu cục bộ", trong khi S4-11 cần giữ file khi lỗi: nhóm cần chọn chính sách.
+7. **PDF cần chốt:** hiện file PDF còn trên máy sau khi đăng xuất (chỉ xóa tham chiếu trong app), chưa giới hạn số file, và sau khi mở lại app chưa xem lại được file cũ. Đề xuất tối thiểu: giữ file để thử lại, mở, chia sẻ trong phiên; khi đăng xuất xóa file của user đó, không đụng dữ liệu cloud. Cách này bám được cả S3-5 và S4-11. Nếu muốn giữ qua đăng xuất hoặc mở lại app, nhóm cần chốt thêm retention, quota, cách khôi phục và thao tác xóa. Hành vi hiện tại chưa được duyệt.
 
 ## Đề xuất contract FCM (S4-12), chưa được duyệt
 

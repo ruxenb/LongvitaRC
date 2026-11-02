@@ -58,3 +58,4 @@ Task S8-17-CM. Ghi theo commit và evidence thật, cập nhật dần. Trạng 
 - **Lỗi tìm được khi chạy thật:** upload thất bại gây `Unhandled Exception` vì stream tiến độ không có xử lý lỗi. Test giả không phát hiện được. Đã sửa trong `StorageService` và chạy lại trên emulator.
 - **Kiểm tra:** 150/150 test. Emulator: file được lưu, upload lỗi vẫn còn file, mở được màn xem trước, mở được cửa sổ chia sẻ.
 - **Còn vướng:** chưa có plan thật từ S4-3; project chưa có Storage nên upload thành công chưa chạy thật; cần chốt chính sách giữ file.
+- **Sửa lỗi sau review (PM-PDF-01):** hai lần xuất chồng nhau làm file trên máy và URL thuộc hai lần xuất khác nhau. Sửa bằng cách chỉ cho một thao tác chạy tại một thời điểm, kết quả cũ không ghi đè được thao tác mới. Thêm nút Thử lại trên Home và test cho lỗi stream của `StorageService`. Trên emulator, bấm xuất 3 lần liên tiếp chỉ tạo 1 file.
