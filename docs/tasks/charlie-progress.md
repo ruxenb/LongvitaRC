@@ -2,9 +2,7 @@
 
 Đây là bàn giao nền tảng mobile của cùng Assignment, không tuyên bố toàn bộ các task đã hoàn tất. Lab 3 = Assignment; Figma Lab 2 là tham chiếu đóng băng, UI được cải thiện trong code.
 
-**Đã merge vào `main` theo yêu cầu của leader, sau khi Charlie tự kiểm tra:** [#1 — design system, Firebase Auth và nền tảng PDF/FCM](https://github.com/ruxenb/LongvitaRC/pull/1), [#2 — lưu, mở, chia sẻ PDF](https://github.com/ruxenb/LongvitaRC/pull/2). `main` tại `6f58786`. Cả hai PR **chưa có review của thành viên khác hay AI**, nên các điểm cần chốt bên dưới vẫn còn mở. S7-1-CM cần chạy AI review trên PR kế tiếp.
-
-**Chưa merge:** nhánh `feature/charlie-profile-01`, gồm màn Profile (S4-13).
+**Đã merge vào `main` theo yêu cầu của leader, sau khi Charlie tự kiểm tra:** [#1 — design system, Firebase Auth và nền tảng PDF/FCM](https://github.com/ruxenb/LongvitaRC/pull/1), [#2 — lưu, mở, chia sẻ PDF](https://github.com/ruxenb/LongvitaRC/pull/2). [#3 — màn Profile và Firebase Demo Area](https://github.com/ruxenb/LongvitaRC/pull/3). Cả ba PR **chưa có review của thành viên khác hay AI**, nên các điểm cần chốt bên dưới vẫn còn mở. CodeRabbit chưa được cài, chờ leader xác nhận; S7-1-CM cần chạy AI review trên PR kế tiếp.
 
 ## Tiến độ 29 task
 
@@ -25,14 +23,14 @@ Chi tiết IDs/owner/dependency tại [task Charlie](task-charlie.md) và [maste
 - **Firestore AUD-11:** schema/role/status/owner constraints và 41 emulator tests. Theo ghi nhận của Charlie, rules đã publish lên project trước PR; Hoàng/Thắng còn cần review các policy bên dưới.
 - **Analytics:** callers theo API mới của Thái An. Export params lấy từ PDF bytes thực. Chưa có eating window thật thì không gửi generate event; Hoàng nối dữ liệu S02, không điền số giả. `login` (`method=google`) và `logout` đã thấy trên [DebugView](../../evidence/analytics/S5-4-debugview-20261102/README.md), mỗi lần thao tác một event; `export_report` chưa kiểm thật vì chờ DEC-01.
 - **FCM preparation:** gateway và 4 callback, parser, inbox/dedup theo phiên. Payload gốc đi cùng entry đã chấp nhận; first accepted message thắng trong một phiên, tap duplicate dùng target đã chấp nhận. Chưa phải live FCM hoàn chỉnh.
-- **Profile (S4-13), nhánh `feature/charlie-profile-01`:** danh tính, đăng xuất, xuất PDF với tiến độ và URL, hộp thư FCM, giá trị và nút cập nhật Remote Config, crash thử có xác nhận. Home chỉ thêm một nút mở Profile; khối xuất PDF tạm trên Home chưa gỡ, chờ thống nhất với Hoàng. Bấm vào thông báo chưa điều hướng. Route `/profile` chờ Thắng.
+- **Profile (S4-13), đã vào `main` qua PR #3:** danh tính, đăng xuất, xuất PDF với tiến độ và URL, hộp thư FCM, giá trị và nút cập nhật Remote Config, crash thử có xác nhận. Home chỉ thêm một nút mở Profile, **Hoàng chưa xem phần sửa này**; khối xuất PDF tạm trên Home chưa gỡ, chờ thống nhất với Hoàng. Bấm vào thông báo chưa điều hướng. Route `/profile` chờ Thắng.
 - **PDF (S4-10), đã vào `main` qua PR #2:** TTF tiếng Việt regular/bold, lưu trên máy trước khi upload, export ID giữ nguyên khi thử lại, mở và chia sẻ qua `IReportViewer`. Mỗi lúc chỉ chạy một export hoặc retry, nên file, URL, tiến độ và trạng thái luôn thuộc cùng một lần xuất. Đăng xuất chỉ vô hiệu hóa kết quả ở ViewModel, **chưa hủy `UploadTask` của SDK**: upload đang chạy vẫn tiếp tục cho đến khi kết thúc; hủy thật thuộc S4-11. Các nút mở, chia sẻ, thử lại trên Home là tạm thời. Chưa chứng minh đúng plan đang xem vì chờ S4-3.
 
 Các commits chức năng: `6dfddf9` (UI), `56b1896` (Auth), `4e4bffd` (Firebase/rules), `9d76623` (session guards), `9ecc806` (Analytics callers), `7a9fa8c` (FCM), `40e47a1` (PDF), `2d547c7` (FCM recipient/dedup fix).
 
 ## Kiểm chứng và giới hạn
 
-**`main` tại `6f58786`, sau khi merge PR #1 và #2:** analyzer sạch, 168/168 tests, rules 41/41 trên emulator. APK debug build được trên nhánh PDF ngay trước khi merge, cùng nội dung code với `main`. **Nhánh Profile:** analyzer sạch, 191/191 tests; chạy trên emulator, xem [bằng chứng](../../evidence/ui/S4-13-profile-20261102/README.md), gồm cả phần chưa kiểm chứng.
+**`main` tại `6f58786`, sau khi merge PR #1 và #2:** analyzer sạch, 168/168 tests, rules 41/41 trên emulator. APK debug build được trên nhánh PDF ngay trước khi merge, cùng nội dung code với `main`. **PR #3:** analyzer sạch, 191/191 tests; chạy trên emulator, xem [bằng chứng](../../evidence/ui/S4-13-profile-20261102/README.md), gồm cả phần chưa kiểm chứng.
 
 Code `2d547c7` / HEAD báo cáo `f1f397e` đã được kiểm độc lập: analyzer sạch, **133/133 unit/widget tests pass**, APK debug build thành công. Ca tái hiện recipient collision giữ nguyên expected đã pass. Hai lỗi response muộn qua đổi phiên và lỗi raw notification cache đã được xác nhận sửa; không tự đổi các fix này thành evidence PR Stage 7 hoàn tất.
 

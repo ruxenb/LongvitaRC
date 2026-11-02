@@ -68,8 +68,9 @@ Task S8-17-CM. Ghi theo commit và evidence thật, cập nhật dần. Trạng 
 - **Kiểm tra:** trên `main` sau merge, analyzer sạch, 168/168 test, rules 41/41.
 - **Còn vướng:** hai PR chưa có review của thành viên khác hay AI. S7-1-CM phải chạy trên PR kế tiếp.
 
-### Profile và Firebase Demo Area (S4-13) — nhánh `feature/charlie-profile-01`
+### Profile và Firebase Demo Area (S4-13) — [PR #3](https://github.com/ruxenb/LongvitaRC/pull/3)
 
+- **Merge:** Charlie quyết định merge thủ công khi không có lỗi, vì CodeRabbit chưa được cài. PR chưa có AI review và Hoàng chưa xem phần sửa Home.
 - **Đã làm:** màn Profile có danh tính, đăng xuất, xuất PDF với tiến độ và URL, hộp thư FCM, Remote Config, crash thử.
 - **Quyết định:** chỉ thêm một nút mở Profile trên Home, chưa gỡ khối xuất tạm vì Home thuộc Hoàng. Gây crash phải qua hộp xác nhận. Khi cập nhật Remote Config trả về false, chỉ báo "không có giá trị mới hoặc chưa tải được", vì service không phân biệt hai trường hợp này.
 - **Lỗi tìm được:** hộp thư không tự cập nhật khi có tin mới vì `NotificationService` không báo cho ViewModel. Thêm `onChanged`.
