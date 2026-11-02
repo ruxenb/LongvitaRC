@@ -165,10 +165,16 @@ class FakeNotificationService implements NotificationService {
   Future<void> initialize() async => initializeCalls++;
 
   @override
+  void bindUser(String uid) {}
+
+  @override
   void clearHistory() => history.clear();
 
   @override
   Future<String?> getToken() async => null;
+
+  @override
+  dynamic noSuchMethod(Invocation invocation) => null;
 }
 
 class FakeStorageService implements StorageService {

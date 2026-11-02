@@ -48,6 +48,7 @@ class ProfileViewModel extends BaseViewModel implements SessionScoped {
   /// rather than the Android 13 permission dialog.
   @override
   void onSessionStarted(UserModel user) {
+    notificationService.bindUser(user.uid);
     notificationService.initialize();
   }
 
