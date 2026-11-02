@@ -2,6 +2,7 @@
 // (and the concrete service classes' interfaces via `implements`) so no
 // Firebase SDK is touched.
 import 'dart:async';
+import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -15,6 +16,8 @@ import 'package:longvita/models/meal_plan_model.dart';
 import 'package:longvita/models/user_model.dart';
 import 'package:longvita/services/i_auth_service.dart';
 import 'package:longvita/services/i_report_service.dart';
+import 'package:longvita/services/local_report_store.dart';
+import 'package:longvita/services/report_viewer.dart';
 import 'package:longvita/viewmodels/session_scoped.dart';
 
 UserModel testUser(String uid, {String role = 'user'}) => UserModel(
@@ -194,6 +197,56 @@ class FakeReportService implements IReportService {
   @override
   Future<Uint8List> generateMealPlanPdf(MealPlanModel plan) async =>
       Uint8List.fromList([1, 2, 3]);
+}
+
+/// In-memory store: no file system or path_provider in unit tests.
+class FakeLocalReportStore implements LocalReportStore {
+  final Map<String, Uint8List> files = {};
+  Object? saveError;
+
+  @override
+  Future<File> save({
+    required String uid,
+    required String exportId,
+    required Uint8List bytes,
+  }) async {
+    if (saveError != null) throw saveError!;
+    files['$uid/$exportId'] = bytes;
+    return File('memory/reports/$uid/$exportId.pdf');
+  }
+
+  @override
+  Future<Uint8List?> read({
+    required String uid,
+    required String exportId,
+  }) async =>
+      files['$uid/$exportId'];
+
+  @override
+  Future<File?> find({required String uid, required String exportId}) async =>
+      files.containsKey('$uid/$exportId')
+          ? File('memory/reports/$uid/$exportId.pdf')
+          : null;
+}
+
+class FakeReportViewer implements IReportViewer {
+  final List<String> previewed = [];
+  final List<String> shared = [];
+  Object? error;
+
+  @override
+  Future<bool> preview(Uint8List bytes, String fileName) async {
+    if (error != null) throw error!;
+    previewed.add(fileName);
+    return true;
+  }
+
+  @override
+  Future<bool> share(Uint8List bytes, String fileName) async {
+    if (error != null) throw error!;
+    shared.add(fileName);
+    return true;
+  }
 }
 
 /// Records session callbacks in order.

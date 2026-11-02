@@ -126,6 +126,8 @@ void main() {
       storageService: storage ?? FakeStorageService(),
       notificationService: FakeNotificationService(),
       reportService: report ?? FakeReportService(),
+      reportStore: FakeLocalReportStore(),
+      reportViewer: FakeReportViewer(),
       remoteConfigService: FakeRemoteConfig(),
       crashlyticsService: session.crashlytics,
       analyticsService: session.analytics,

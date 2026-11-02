@@ -14,6 +14,18 @@ import '../widgets/app_card.dart';
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
+  Future<void> _openExport(
+    BuildContext context,
+    Future<bool> Function() open,
+  ) async {
+    final opened = await open();
+    if (!opened && context.mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Không mở được file PDF đã lưu.')),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final authViewModel = context.watch<AuthViewModel>();
@@ -193,17 +205,36 @@ class HomeScreen extends StatelessWidget {
                       onPressed: () async {
                         await profileViewModel.exportAndUploadPdf(
                             mealPlanViewModel.activePlan!);
-                        if (context.mounted &&
-                            profileViewModel.lastUploadedUrl != null) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text('Đã xuất PDF và tải lên Storage thành công!'),
-                            ),
-                          );
-                        }
+                        if (!context.mounted) return;
+                        final state = profileViewModel.exportState;
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(state is ViewStateError<String>
+                                ? state.message
+                                : 'Đã xuất PDF và tải lên Storage thành công!'),
+                          ),
+                        );
                       },
                       icon: const Icon(Icons.picture_as_pdf_outlined),
                       label: const Text('Xuất báo cáo PDF & Upload Storage'),
+                    ),
+                  ],
+                  // Temporary home for these actions until the export area
+                  // moves to the Profile screen (S4-13).
+                  if (profileViewModel.lastExport != null) ...[
+                    const SizedBox(height: AppSpacing.xs),
+                    OutlinedButton.icon(
+                      onPressed: () => _openExport(
+                          context, profileViewModel.previewLastExport),
+                      icon: const Icon(Icons.visibility_outlined),
+                      label: const Text('Mở PDF đã lưu'),
+                    ),
+                    const SizedBox(height: AppSpacing.xs),
+                    OutlinedButton.icon(
+                      onPressed: () => _openExport(
+                          context, profileViewModel.shareLastExport),
+                      icon: const Icon(Icons.share_outlined),
+                      label: const Text('Chia sẻ PDF đã lưu'),
                     ),
                   ],
                 ],

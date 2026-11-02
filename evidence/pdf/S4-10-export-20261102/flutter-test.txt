@@ -1,0 +1,159 @@
+00:00 +0: loading C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/auth_error_mapper_test.dart
+00:00 +0: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/auth_error_mapper_test.dart: Google Sign-In sign_in_canceled is a cancel
+00:00 +1: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/auth_error_mapper_test.dart: Google Sign-In network_error is network
+00:00 +2: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/auth_error_mapper_test.dart: Google Sign-In ApiException 10 (DEVELOPER_ERROR: SHA/package) is configuration
+00:00 +3: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/auth_error_mapper_test.dart: Google Sign-In other sign_in_failed is a credential failure
+00:00 +4: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/auth_error_mapper_test.dart: Firebase Auth network-request-failed is network
+00:00 +5: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/auth_error_mapper_test.dart: Firebase Auth operation-not-allowed (provider disabled) is configuration
+00:00 +6: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/auth_error_mapper_test.dart: Firebase Auth user-disabled / invalid-credential are credential
+00:00 +7: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/auth_error_mapper_test.dart: Firestore profile permission-denied read is profileRead
+00:00 +8: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/auth_error_mapper_test.dart: Firestore profile permission-denied write is profileWrite
+00:00 +9: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/auth_error_mapper_test.dart: Firestore profile unavailable is network, not a cancelled sign-in
+00:00 +10: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/auth_viewmodel_test.dart: starts in Initializing, then SignedOut without a notice
+00:00 +11: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/auth_viewmodel_test.dart: success: credential then profile, session started, ids set
+00:00 +12: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/auth_viewmodel_test.dart: cancel: SignedOut with cancelled notice, no profile load
+00:00 +13: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/auth_viewmodel_test.dart: credential failure: SignedOut with its kind, recorded non-fatal
+00:00 +14: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/auth_viewmodel_test.dart: profile failure after sign-in is ProfileError, not cancel; retry works
+00:00 +15: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/auth_screens_test.dart: (setUpAll)
+00:00 +16: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/auth_screens_test.dart: (setUpAll)
+00:00 +17: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/auth_screens_test.dart: (setUpAll)
+00:00 +18: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/auth_screens_test.dart: (setUpAll)
+00:00 +19: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/auth_screens_test.dart: (setUpAll)
+00:00 +20: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/auth_screens_test.dart: (setUpAll)
+00:00 +21: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/auth_screens_test.dart: (setUpAll)
+00:00 +21: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/auth_viewmodel_test.dart: token revoked (stream emits null) ends the session
+00:00 +22: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/auth_screens_test.dart: signed out shows Sign-in with the Google action
+00:01 +23: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/auth_screens_test.dart: signed out shows Sign-in with the Google action
+00:01 +24: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/auth_screens_test.dart: signed out shows Sign-in with the Google action
+00:01 +25: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/auth_screens_test.dart: signed out shows Sign-in with the Google action
+00:01 +26: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/auth_screens_test.dart: signed out shows Sign-in with the Google action
+00:01 +27: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/auth_screens_test.dart: signed out shows Sign-in with the Google action
+00:01 +28: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/auth_screens_test.dart: signed out shows Sign-in with the Google action
+00:01 +29: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/auth_screens_test.dart: signed out shows Sign-in with the Google action
+00:01 +30: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/auth_screens_test.dart: signed out shows Sign-in with the Google action
+00:01 +31: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/auth_screens_test.dart: signed out shows Sign-in with the Google action
+00:01 +32: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/auth_screens_test.dart: signed out shows Sign-in with the Google action
+00:01 +33: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/auth_screens_test.dart: signed out shows Sign-in with the Google action
+00:01 +34: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/auth_screens_test.dart: signed out shows Sign-in with the Google action
+00:01 +35: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/auth_screens_test.dart: signed out shows Sign-in with the Google action
+00:01 +36: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/auth_screens_test.dart: signed out shows Sign-in with the Google action
+00:01 +37: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/auth_screens_test.dart: signed out shows Sign-in with the Google action
+00:01 +38: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/auth_screens_test.dart: signed out shows Sign-in with the Google action
+00:01 +39: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/auth_screens_test.dart: signed out shows Sign-in with the Google action
+00:01 +40: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/auth_screens_test.dart: signed out shows Sign-in with the Google action
+00:01 +41: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/auth_screens_test.dart: signed out shows Sign-in with the Google action
+00:01 +42: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/auth_screens_test.dart: signed out shows Sign-in with the Google action
+00:01 +43: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/auth_screens_test.dart: signed out shows Sign-in with the Google action
+00:02 +44: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/auth_screens_test.dart: signed out shows Sign-in with the Google action
+00:02 +45: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/auth_screens_test.dart: signed out shows Sign-in with the Google action
+00:02 +46: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/auth_screens_test.dart: signed out shows Sign-in with the Google action
+00:02 +47: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/auth_screens_test.dart: signed out shows Sign-in with the Google action
+00:02 +48: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/session_race_test.dart: Analytics contract generate_meal_plan is skipped without an eating window
+00:02 +49: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/fcm/notification_service_test.dart: NotificationService initializes once, including the background handler
+00:02 +50: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/auth_screens_test.dart: picker open: loading button, repeated taps ignored
+00:02 +51: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/auth_screens_test.dart: picker open: loading button, repeated taps ignored
+00:02 +52: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/auth_screens_test.dart: picker open: loading button, repeated taps ignored
+00:02 +53: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/auth_screens_test.dart: picker open: loading button, repeated taps ignored
+00:02 +54: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/auth_screens_test.dart: picker open: loading button, repeated taps ignored
+00:02 +54: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/fcm/notification_service_test.dart: NotificationService a failed start is reported, not thrown
+FCM init failed: Exception: no play services
+00:02 +55: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/auth_screens_test.dart: picker open: loading button, repeated taps ignored
+00:02 +56: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/auth_screens_test.dart: picker open: loading button, repeated taps ignored
+00:02 +57: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/auth_screens_test.dart: picker open: loading button, repeated taps ignored
+00:02 +58: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/auth_screens_test.dart: picker open: loading button, repeated taps ignored
+00:02 +59: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/auth_screens_test.dart: picker open: loading button, repeated taps ignored
+00:02 +60: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/auth_screens_test.dart: picker open: loading button, repeated taps ignored
+00:02 +61: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/auth_screens_test.dart: picker open: loading button, repeated taps ignored
+00:02 +62: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/auth_screens_test.dart: picker open: loading button, repeated taps ignored
+00:02 +63: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/auth_screens_test.dart: picker open: loading button, repeated taps ignored
+00:02 +64: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/auth_screens_test.dart: picker open: loading button, repeated taps ignored
+00:02 +65: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/auth_screens_test.dart: picker open: loading button, repeated taps ignored
+00:02 +66: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/auth_screens_test.dart: picker open: loading button, repeated taps ignored
+00:02 +67: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/auth_screens_test.dart: picker open: loading button, repeated taps ignored
+00:02 +68: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/auth_screens_test.dart: picker open: loading button, repeated taps ignored
+00:02 +69: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/auth_screens_test.dart: picker open: loading button, repeated taps ignored
+00:02 +70: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/auth_screens_test.dart: picker open: loading button, repeated taps ignored
+00:02 +71: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/auth_screens_test.dart: picker open: loading button, repeated taps ignored
+00:02 +72: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/auth_screens_test.dart: picker open: loading button, repeated taps ignored
+00:02 +73: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/auth_screens_test.dart: picker open: loading button, repeated taps ignored
+00:02 +74: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/auth_screens_test.dart: picker open: loading button, repeated taps ignored
+00:02 +75: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/auth_screens_test.dart: picker open: loading button, repeated taps ignored
+00:02 +76: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/session_race_test.dart: MealPlanViewModel after switching to uid-a late saved plans error is ignored
+00:02 +77: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/auth_screens_test.dart: cancel shows an informational notice that can be dismissed
+00:02 +78: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/auth_screens_test.dart: cancel shows an informational notice that can be dismissed
+00:02 +79: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/auth_screens_test.dart: cancel shows an informational notice that can be dismissed
+00:02 +80: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/auth_screens_test.dart: cancel shows an informational notice that can be dismissed
+00:02 +81: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/session_race_test.dart: MealPlanViewModel fetch started in the new session still applies
+00:02 +82: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/auth_screens_test.dart: credential failure shows an error and a retry label
+00:02 +83: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/auth_screens_test.dart: profile failure opens recovery, not Sign-in; retry recovers
+00:02 +84: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/auth_screens_test.dart: recovery sign-out returns to Sign-in
+00:02 +85: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/qa/design_system_qa_test.dart: (setUpAll)
+00:02 +85: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/auth_screens_test.dart: logout removes pushed protected routes (Back cannot return)
+00:03 +86: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/qa/design_system_qa_test.dart: screenshots (actual) buttons
+00:03 +86: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/auth_screens_test.dart: start-up failure shows error + retry, then the app
+Firebase start-up failed: not-configured Exception: no google-services
+00:03 +87: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/qa/design_system_qa_test.dart: screenshots (actual) buttons
+00:03 +88: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/qa/design_system_qa_test.dart: screenshots (actual) buttons
+00:03 +89: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/qa/design_system_qa_test.dart: screenshots (actual) buttons
+00:03 +90: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/qa/design_system_qa_test.dart: screenshots (actual) buttons
+00:03 +91: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/qa/design_system_qa_test.dart: screenshots (actual) buttons
+00:03 +92: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/qa/design_system_qa_test.dart: screenshots (actual) buttons
+00:03 +93: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/qa/design_system_qa_test.dart: screenshots (actual) buttons
+00:03 +94: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/qa/design_system_qa_test.dart: screenshots (actual) buttons
+00:03 +95: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/qa/design_system_qa_test.dart: screenshots (actual) buttons
+00:03 +96: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/qa/design_system_qa_test.dart: screenshots (actual) buttons
+00:03 +97: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/qa/design_system_qa_test.dart: screenshots (actual) buttons
+00:03 +98: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/qa/design_system_qa_test.dart: screenshots (actual) buttons
+00:03 +99: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/qa/design_system_qa_test.dart: screenshots (actual) buttons
+00:03 +100: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/qa/design_system_qa_test.dart: screenshots (actual) buttons
+00:03 +101: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/qa/design_system_qa_test.dart: screenshots (actual) buttons
+00:03 +102: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/qa/design_system_qa_test.dart: screenshots (actual) buttons
+00:03 +103: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/qa/design_system_qa_test.dart: screenshots (actual) buttons
+00:03 +104: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/qa/design_system_qa_test.dart: screenshots (actual) buttons
+00:03 +105: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/qa/design_system_qa_test.dart: screenshots (actual) buttons
+00:03 +106: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/qa/design_system_qa_test.dart: screenshots (actual) buttons
+00:03 +107: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/qa/design_system_qa_test.dart: screenshots (actual) buttons
+00:03 +108: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/qa/design_system_qa_test.dart: screenshots (actual) buttons
+00:03 +109: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/qa/design_system_qa_test.dart: screenshots (actual) buttons
+00:03 +110: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/qa/design_system_qa_test.dart: screenshots (actual) buttons
+00:03 +111: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/qa/design_system_qa_test.dart: screenshots (actual) buttons
+00:03 +112: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/widget_test.dart: AppButton renders properly with Design System theme
+00:03 +113: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/widget_test.dart: AppButton renders properly with Design System theme
+00:03 +114: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/widget_test.dart: AppButton renders properly with Design System theme
+00:03 +115: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/widget_test.dart: AppButton renders properly with Design System theme
+00:03 +116: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/widget_test.dart: AppButton renders properly with Design System theme
+00:03 +117: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/widget_test.dart: AppButton renders properly with Design System theme
+00:03 +118: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/widget_test.dart: AppButton renders properly with Design System theme
+00:04 +119: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/widget_test.dart: AppButton renders properly with Design System theme
+00:04 +120: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/widget_test.dart: AppButton renders properly with Design System theme
+00:04 +121: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/widget_test.dart: AppButton renders properly with Design System theme
+00:04 +122: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/widget_test.dart: AppButton renders properly with Design System theme
+00:04 +123: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/widget_test.dart: AppButton renders properly with Design System theme
+00:04 +124: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/qa/design_system_qa_test.dart: screenshots (actual) text-fields
+00:04 +125: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/qa/design_system_qa_test.dart: screenshots (actual) text-fields
+00:04 +126: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/auth_screens_test.dart: screenshots (actual) profile recovery 412
+00:04 +127: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/qa/design_system_qa_test.dart: screenshots (actual) cards
+00:04 +128: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/auth_screens_test.dart: screenshots (actual) sign-in textScale 2.0 at 360 has no overflow
+00:04 +129: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/qa/design_system_qa_test.dart: screenshots (actual) navigation
+00:04 +130: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/qa/design_system_qa_test.dart: screenshots (actual) app-bar
+00:04 +131: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/qa/design_system_qa_test.dart: screenshots (actual) dialogs
+00:05 +132: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/qa/design_system_qa_test.dart: screenshots (actual) states
+00:05 +133: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/qa/design_system_qa_test.dart: screenshots (actual) supporting
+00:05 +134: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/qa/design_system_qa_test.dart: screenshots (actual) qa-responsive-360
+00:05 +135: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/qa/design_system_qa_test.dart: screenshots (actual) qa-responsive-360-text1_3
+00:06 +136: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/qa/design_system_qa_test.dart: screenshots (actual) qa-responsive-360-text2_0
+00:06 +137: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/qa/design_system_qa_test.dart: screenshots (actual) qa-responsive-412
+00:06 +138: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/qa/design_system_qa_test.dart: screenshots (actual) qa-responsive-412-text1_3
+00:06 +139: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/qa/design_system_qa_test.dart: screenshots (actual) qa-responsive-412-text2_0
+00:06 +140: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/qa/design_system_qa_test.dart: spec checks button heights: 52 min, 56 with icon; radius 12
+00:06 +141: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/qa/design_system_qa_test.dart: spec checks button states: disabled, loading, pressed colours
+00:06 +142: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/qa/design_system_qa_test.dart: spec checks semantics: button label once, enabled flags
+00:06 +143: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/qa/design_system_qa_test.dart: spec checks touch targets >= 48
+00:06 +144: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/qa/design_system_qa_test.dart: spec checks navigation: height 80, selected semantics, callback
+00:06 +145: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/qa/design_system_qa_test.dart: spec checks text field: 58 input, error replaces helper, focus border
+00:06 +146: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/qa/design_system_qa_test.dart: spec checks checkbox semantics and toggle
+00:06 +147: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/qa/design_system_qa_test.dart: spec checks EditError dialog keeps primary disabled; cancel closes
+00:06 +148: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/qa/design_system_qa_test.dart: spec checks snackbar Undo calls back and hides
+00:06 +149: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/qa/design_system_qa_test.dart: spec checks typography tokens match Figma styles
+00:06 +150: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/qa/design_system_qa_test.dart: (tearDownAll)
+00:07 +150: All tests passed!
