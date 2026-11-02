@@ -6,7 +6,9 @@ import 'dart:typed_data';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:longvita/firebase/notification_history_store.dart';
 import 'package:longvita/firebase/notification_service.dart';
+import 'package:longvita/models/app_notification.dart';
 import 'package:longvita/models/auth_state.dart';
 import 'package:longvita/models/upload_failure.dart';
 import 'package:longvita/screens/auth_gate.dart';
@@ -55,6 +57,29 @@ class ScriptedRemoteConfig extends FakeRemoteConfig {
   Future<bool> forceFetchAndActivate() async => nextRefresh;
 }
 
+/// No file system in widget tests, where real file futures never complete.
+class MemoryHistory implements NotificationHistoryStore {
+  final Map<String, List<AppNotification>> saved = {};
+  final List<AppNotification> pending = [];
+
+  @override
+  Future<List<AppNotification>> load(String uid) async => saved[uid] ?? const [];
+
+  @override
+  Future<void> save(String uid, List<AppNotification> items) async =>
+      saved[uid] = items;
+
+  @override
+  Future<void> addPending(AppNotification item) async => pending.insert(0, item);
+
+  @override
+  Future<List<AppNotification>> takePending() async {
+    final items = List.of(pending);
+    pending.clear();
+    return items;
+  }
+}
+
 class CountingCrashlytics extends FakeCrashlytics {
   int crashes = 0;
 
@@ -70,7 +95,9 @@ class Harness {
   final viewer = FakeReportViewer();
   final remoteConfig = ScriptedRemoteConfig();
   final gateway = FakeGateway();
-  late final notifications = NotificationService(gateway: gateway);
+  final history = MemoryHistory();
+  late final notifications =
+      NotificationService(gateway: gateway, history: history);
   late final mealPlan = MealPlanViewModel(
     dataService: FakeDataService(),
     analytics: analytics,
@@ -331,6 +358,30 @@ void main() {
     testWidgets('denied permission is explained', (tester) async {
       await pumpProfile(tester, arrange: (h) => h.gateway.grant = false);
       expect(find.textContaining('Thông báo đang tắt'), findsOneWidget);
+    });
+
+    testWidgets('saved history shows when Profile opens', (tester) async {
+      await pumpProfile(tester, arrange: (h) {
+        h.history.saved['uid-a'] = const [
+          AppNotification(messageId: 'old', title: 'Tin đã lưu'),
+        ];
+      });
+
+      expect(find.text('Tin đã lưu'), findsOneWidget);
+    });
+
+    testWidgets('a background message shows when the app resumes',
+        (tester) async {
+      final h = await pumpProfile(tester);
+      h.history.pending
+          .add(const AppNotification(messageId: 'bg', title: 'Tin nền'));
+      expect(find.text('Tin nền'), findsNothing);
+
+      tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.inactive);
+      tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.resumed);
+      await settle(tester);
+
+      expect(find.text('Tin nền'), findsOneWidget);
     });
 
     testWidgets('sign-out empties the inbox', (tester) async {

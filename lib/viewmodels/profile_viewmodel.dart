@@ -88,9 +88,12 @@ class ProfileViewModel extends BaseViewModel implements SessionScoped {
   @override
   void onSessionStarted(UserModel user) {
     _sessionUid = user.uid;
-    notificationService.bindUser(user.uid);
+    unawaited(notificationService.bindUser(user.uid));
     notificationService.initialize();
   }
+
+  /// Picks up messages that arrived while the app was in the background.
+  Future<void> refreshInbox() => notificationService.drainPending();
 
   /// Stops the running upload and removes this user's PDFs from the device, so
   /// the next person using it finds neither. Cloud copies stay.

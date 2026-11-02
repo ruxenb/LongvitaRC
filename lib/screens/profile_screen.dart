@@ -14,8 +14,29 @@ import '../widgets/longvita_widgets.dart';
 /// (S1-5), so the layout is composed from the Longvita design system. All
 /// logic lives in [ProfileViewModel] and [AuthViewModel]; `AuthGate` removes
 /// this route when the session ends.
-class ProfileScreen extends StatelessWidget {
+class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
+
+  @override
+  State<ProfileScreen> createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends State<ProfileScreen> {
+  late final AppLifecycleListener _lifecycle;
+
+  @override
+  void initState() {
+    super.initState();
+    final profile = context.read<ProfileViewModel>();
+    profile.refreshInbox();
+    _lifecycle = AppLifecycleListener(onResume: profile.refreshInbox);
+  }
+
+  @override
+  void dispose() {
+    _lifecycle.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -345,8 +366,8 @@ class _InboxCard extends StatelessWidget {
         children: [
           const _CardHeader(
             title: 'Thông báo',
-            description: 'Tin nhận trong phiên này. Chưa lưu sau khi đóng '
-                'ứng dụng.',
+            description: 'Tin nhắn đã nhận, lưu trên máy này theo từng tài '
+                'khoản.',
           ),
           if (permissionNotice != null) ...[
             const SizedBox(height: AppSpacing.s16),

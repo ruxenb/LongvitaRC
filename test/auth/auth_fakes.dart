@@ -175,7 +175,10 @@ class FakeNotificationService implements NotificationService {
   Future<void> initialize() async => initializeCalls++;
 
   @override
-  void bindUser(String uid) {}
+  Future<void> bindUser(String uid) async {}
+
+  @override
+  Future<void> drainPending() async {}
 
   @override
   void clearHistory() => history.clear();
