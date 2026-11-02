@@ -5,7 +5,6 @@ import 'package:path_provider/path_provider.dart';
 
 /// Keeps exported PDFs on the device under `reports/{uid}/{exportId}.pdf`, so
 /// a file survives a failed upload and a retry can reuse the same export id.
-/// Open/share and the export id format wait for the export policy (S4-10/S4-11).
 class LocalReportStore {
   final Future<Directory> Function() _baseDirectory;
 
@@ -30,6 +29,12 @@ class LocalReportStore {
   Future<File?> find({required String uid, required String exportId}) async {
     final file = await _fileFor(uid, exportId);
     return await file.exists() ? file : null;
+  }
+
+  /// Returns the saved bytes, or null when the file does not exist.
+  Future<Uint8List?> read({required String uid, required String exportId}) async {
+    final file = await find(uid: uid, exportId: exportId);
+    return file?.readAsBytes();
   }
 
   Future<File> _fileFor(String uid, String exportId) async {

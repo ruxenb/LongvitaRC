@@ -1,0 +1,43 @@
+00:00 +0: loading C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/report/storage_service_test.dart
+00:00 +0: a failed upload returns null, with no unhandled stream error
+00:00 +0 -1: a failed upload returns null, with no unhandled stream error [E]
+  [firebase_storage/object-not-found] null
+  dart:async                                    _BroadcastStreamController.addError
+  test\report\storage_service_test.dart 37:12   FakeUploadTask.fail
+  test\report\storage_service_test.dart 120:10  main.<fn>
+  ===== asynchronous gap ===========================
+  dart:async                                    _CustomZone.registerUnaryCallback
+  test\report\storage_service_test.dart 118:5   main.<fn>
+  
+00:00 +0 -1: stops listening to progress after a failure
+00:00 +0 -2: stops listening to progress after a failure [E]
+  Exception: network
+  dart:async                                    _BroadcastStreamController.addError
+  test\report\storage_service_test.dart 37:12   FakeUploadTask.fail
+  test\report\storage_service_test.dart 131:10  main.<fn>
+  ===== asynchronous gap ===========================
+  dart:async                                    _CustomZone.registerUnaryCallback
+  test\report\storage_service_test.dart 128:5   main.<fn>
+  
+  Expected: false
+    Actual: <true>
+  
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test\report\storage_service_test.dart 134:5         main.<fn>
+  
+00:00 +0 -2: reports progress and returns the URL, then stops listening
+00:00 +0 -3: reports progress and returns the URL, then stops listening [E]
+  Expected: false
+    Actual: <true>
+  
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test\report\storage_service_test.dart 148:5         main.<fn>
+  
+00:00 +0 -3: Some tests failed.
+
+Failing tests:
+  C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/report/storage_service_test.dart: a failed upload returns null, with no unhandled stream error
+  C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/report/storage_service_test.dart: reports progress and returns the URL, then stops listening
+  C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/report/storage_service_test.dart: stops listening to progress after a failure

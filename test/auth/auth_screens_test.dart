@@ -44,6 +44,8 @@ class Harness {
     storageService: FakeStorageService(),
     notificationService: FakeNotificationService(),
     reportService: FakeReportService(),
+    reportStore: FakeLocalReportStore(),
+    reportViewer: FakeReportViewer(),
     remoteConfigService: FakeRemoteConfig(),
     crashlyticsService: crashlytics,
     analyticsService: analytics,

@@ -8,6 +8,8 @@ import 'services/i_data_service.dart';
 import 'services/data_service.dart';
 import 'services/i_report_service.dart';
 import 'services/report_service.dart';
+import 'services/local_report_store.dart';
+import 'services/report_viewer.dart';
 
 // Firebase Helpers
 import 'firebase/firebase_bootstrap.dart';
@@ -76,6 +78,8 @@ Future<Widget> buildAppScope() async {
     storageService: storage,
     notificationService: notification,
     reportService: reportService,
+    reportStore: LocalReportStore(),
+    reportViewer: PrintingReportViewer(),
     remoteConfigService: remoteConfig,
     crashlyticsService: crashlytics,
     analyticsService: analytics,
