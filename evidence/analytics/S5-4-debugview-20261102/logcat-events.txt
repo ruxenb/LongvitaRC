@@ -1,0 +1,2 @@
+11-02 19:57:55.918  1411  3508 V FA-SVC  : Logging event: origin=app,name=logout,params=Bundle[{ga_event_origin(_o)=app, ga_screen_class(_sc)=MainActivity, ga_screen_id(_si)=<id>}]
+11-02 19:58:07.822  1411  3508 V FA-SVC  : Logging event: origin=app,name=login,params=Bundle[{method=google, ga_event_origin(_o)=app, ga_screen_class(_sc)=MainActivity, ga_screen_id(_si)=<id>}]

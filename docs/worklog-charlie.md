@@ -76,6 +76,12 @@ Task S8-17-CM. Ghi theo commit và evidence thật, cập nhật dần. Trạng 
 - **Kiểm tra:** 191/191 test. Emulator: mở và quay lại Profile, upload lỗi có thông báo, thử lại không tạo file mới, xem trước, chia sẻ, hủy crash, đăng xuất về Sign-in.
 - **Còn vướng:** chưa có upload thành công, push thật, crash thật, TalkBack.
 
+### Kiểm Analytics trên DebugView (S5-4) — `evidence/analytics/S5-4-debugview-20261102/`
+
+- **Đã làm:** bật chế độ debug trên emulator, đăng nhập và đăng xuất bằng tài khoản thật, xem trên Console.
+- **Kết quả:** `login` có `method=google`, `logout` có; mỗi lần thao tác một event, không gửi trùng.
+- **Còn vướng:** `export_report` chờ upload thật (DEC-01), `generate_meal_plan` chờ màn S02.
+
 ### Nháp báo cáo Auth (S8-3) — `docs/report-drafts/s8-3-firebase-auth.md`
 
 - **Đã làm:** phần Auth, gồm luồng, xử lý lỗi, kiểm thử, bằng chứng, giới hạn. Mỗi ca lỗi ghi rõ đã kiểm trên emulator hay chỉ bằng fake.
