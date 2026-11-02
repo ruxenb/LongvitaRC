@@ -92,6 +92,15 @@ Task S8-17-CM. Ghi theo commit và evidence thật, cập nhật dần. Trạng 
 - **Kiểm tra:** 223/223 test, rules 55/55. Rules mở toang làm đúng 9 ca fail. Emulator: upload thành công và file trùng byte, hủy, mất mạng, thử lại không tạo file mới, bị từ chối, đăng xuất giữa chừng.
 - **Còn vướng:** chưa deploy, chưa có file trên project thật (DEC-01). Tiến độ tăng dần chưa thấy trên thiết bị vì file quá nhỏ.
 
+### Push thật, Crashlytics và ARTEMIS (S4-12, S4-15, S3-1, S6-4, S6-7) — nhánh `feature/charlie-storage-01`
+
+- **Phối hợp:** Thắng, Hoàng, Thái An đồng ý cho sửa Home, thêm route, plugin Crashlytics, `conftest.py` và dùng contract FCM tạm.
+- **Đã làm:** lịch sử thông báo theo UID, bấm tin mở Profile, Home chỉ còn lối sang Profile, hộp xác nhận đăng xuất, plugin Crashlytics, viết lại harness ARTEMIS và 3 file test.
+- **Quyết định:** tin nhận ở isolate nền chưa biết ai đăng nhập nên chờ ở file riêng. Gửi từ Console bằng chiến dịch tới app, không nhập token vào Console.
+- **Lỗi tìm được:** `conftest.py` cũ nhập SDK không tồn tại nên luôn rơi vào client giả báo SUCCESS. Một test lịch sử có lúc fail vì chờ cố định 50ms; sửa bằng cách chờ đúng lúc ghi xong. TC-11 yêu cầu hộp xác nhận đăng xuất mà app chưa có.
+- **Kiểm tra:** 251/251 test. Thật: push 3 trạng thái, bấm tin mở Profile, lịch sử còn sau khi mở lại, crash thử lên Console.
+- **Còn vướng:** ARTEMIS chưa chạy vì chưa có key. Chưa nối `FlutterError.onError`. Chưa có thông báo trên màn khác khi tin đến lúc app đang mở.
+
 ### Nháp báo cáo Auth (S8-3) — `docs/report-drafts/s8-3-firebase-auth.md`
 
 - **Đã làm:** phần Auth, gồm luồng, xử lý lỗi, kiểm thử, bằng chứng, giới hạn. Mỗi ca lỗi ghi rõ đã kiểm trên emulator hay chỉ bằng fake.
