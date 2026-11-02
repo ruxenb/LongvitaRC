@@ -34,7 +34,7 @@
 | Flow ID | Tên Flow | Chuỗi màn hình | Luồng thay thế / Error & Recovery Paths | Người phụ trách |
 |:---:|:---|:---|:---|:---:|
 | **Flow 1** | Lập và lưu thực đơn 7 ngày | `S01` $\to$ `S02` $\to$ `S03` $\to$ `S04` $\to$ `S10` | - `S03 Generation Error`: hiển thị nút `Retry` hoặc quay về `S02` chỉnh lại sở thích.<br/>- `S04 Save Error`: lưu ngoại tuyến / thông báo thử lại không làm mất thực đơn đang xem. | Hoàng |
-| **Flow 2** | Tổng hợp nguyên liệu và đi chợ | `S04` $\to$ `S07` $\to$ `S08` | - `S07 Edit Quantity`: overlay dialog có validation chặn số $\le 0$.<br/>- `S07 Delete Ingredient`: `SnackBar` hoàn tác (Undo).<br/>- `S07 Empty State`: thông báo chưa có nguyên liệu kèm nút tạo lại.<br/>- `S08 Checklist`: khôi phục trạng thái check/uncheck khi mở lại. | Hoàng |
+| **Flow 2** | Tổng hợp nguyên liệu và đi chợ | `S04` $\to$ `S07` $\to$ `S08` | - `S07 Edit Quantity`: overlay dialog có validation chặn số $\le 0$.<br/>- `S07 Delete Ingredient`: `SnackBar` hoàn tác (Undo).<br/>- `S07 Empty State`: thông báo chưa có nguyên liệu và cho phép quay về `S04` theo nguồn Lab 2.<br/>- `S08 Checklist`: khôi phục trạng thái check/uncheck khi mở lại. | Hoàng |
 | **Flow 3** | Tra cứu sách và thay đổi món ăn | `S04` $\to$ `S05` $\to$ `S06` / `S09` $\to$ `S04` | - `S06 No Alternative`: cho phép chuyển sang `S02` để nới lỏng bộ lọc.<br/>- `S06 Update Error`: giữ nguyên món ăn cũ, không làm lỗi giao diện tuần.<br/>- `S09 Book Knowledge`: xem trích dẫn nguồn sách của TS. Valter Longo. | Hoàng |
 | **Auth Flow** | Xác thực & Phân quyền | `/sign-in` $\leftrightarrow$ `/home` | - Người dùng hủy Google account picker: hiển thị `SnackBar` thông báo, không crash.<br/>- Mất mạng: hiển thị thông báo lỗi mạng kèm nút đăng nhập lại. | Charlie |
 

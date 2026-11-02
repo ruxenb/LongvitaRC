@@ -12,6 +12,13 @@
 > **Hình thức làm bài:** Nhóm 4 người (*Handout ghi “Individual”, cần giảng viên xác nhận tại task S0-1*)  
 > **Figma Design Lab 2:** [Longvita — UI/UX Design (Page 01–06)](https://www.figma.com/design/73GTcipwH825N7l501or8D/Longvita---UI-UX-Design?node-id=0-1)
 
+### Nguồn đầu vào kế thừa từ Lab 2
+
+- **Repository Lab 2:** [ruxenb/longvita](https://github.com/ruxenb/longvita) — nguồn chuẩn của `ux/persona.md`, `ux/user-flow.md`, `design/DESIGN.md`, `design/design-decisions.md`, `design/screen-spec.md` và `handoff/flutter-handoff.md`.
+- **Checkout dùng để đối chiếu:** `T:\PRM393\git\longvita` (nhánh bàn giao Lab 2: `Task_4`).
+- **Figma export dùng để kiểm tra offline:** `T:\PRM393\Longvita - UI_UX Design.fig`, SHA-256 `AFAE9522E873EA909F1FBF74AD1AFD329B8CC6A15715B51709D0D3932EEAB140`, cập nhật ngày 01/11/2026.
+- **Phạm vi truy vết:** 10 màn `S01–S10`, ba user flow, design foundations, components và prototype Page 03–06. Ma trận chuyển sang Flutter nằm tại [`docs/design-traceability.md`](docs/design-traceability.md).
+
 ---
 
 ## 1. Phân Công Thành Viên & Vai Trò Trong Dự Án
@@ -82,7 +89,9 @@ PRM393_Lab03_<StudentID>/
 │   ├── architecture.md                # Tài liệu kiến trúc MVVM, Mermaid layer diagram, sequence
 │   ├── analytics-plan.md              # Kế hoạch đo lường sự kiện Firebase Analytics (Appendix A)
 │   ├── test-plan.md                   # Kế hoạch kiểm thử tự động ARTEMIS (Appendix B)
-│   └── code-review.md                 # Sổ ghi nhận kết quả AI Code Review (Appendix C)
+│   ├── code-review.md                 # Sổ ghi nhận kết quả AI Code Review (Appendix C)
+│   ├── service-contracts.md            # Baseline service interfaces/wrappers và ViewModel
+│   └── worklog-thang.md                # Tiến độ, bằng chứng, lỗi và blocker của Thắng
 ├── evidence/                          # Toàn bộ bằng chứng nghiệm thu (Mục 11)
 │   ├── auth/                          # Ảnh chụp màn hình đăng nhập, tab Users trên Firebase console
 │   ├── storage/                       # Ảnh chụp console file list under reports/{uid}/...
