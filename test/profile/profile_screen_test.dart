@@ -9,6 +9,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:longvita/firebase/notification_service.dart';
 import 'package:longvita/models/auth_state.dart';
 import 'package:longvita/screens/auth_gate.dart';
+import 'package:longvita/screens/home_screen.dart';
 import 'package:longvita/screens/profile_screen.dart';
 import 'package:longvita/services/i_data_service.dart';
 import 'package:longvita/theme/app_theme.dart';
@@ -182,6 +183,21 @@ void main() {
     expect(h.auth.signOutCalls, 1);
     expect(find.byType(ProfileScreen), findsNothing);
     expect(find.text('Đăng nhập bằng Google'), findsOneWidget);
+  });
+
+  testWidgets('Home opens Profile, and Back returns to Home', (tester) async {
+    final h = await pumpProfile(tester);
+    await tester.pumpWidget(h.app(home: const HomeScreen()));
+    await settle(tester);
+
+    await tester.tap(find.byTooltip('Hồ sơ'));
+    await tester.pumpAndSettle();
+    expect(find.byType(ProfileScreen), findsOneWidget);
+
+    await tester.tap(find.bySemanticsLabel('Quay lại'));
+    await tester.pumpAndSettle();
+    expect(find.byType(ProfileScreen), findsNothing);
+    expect(find.byType(HomeScreen), findsOneWidget);
   });
 
   group('export', () {
