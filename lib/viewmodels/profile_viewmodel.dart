@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import '../models/app_notification.dart';
 import '../models/meal_plan_model.dart';
 import '../models/report_export.dart';
 import '../models/user_model.dart';
@@ -36,6 +37,7 @@ class ProfileViewModel extends BaseViewModel implements SessionScoped {
   /// Identifies the running export or retry. Results and progress apply only
   /// while their token is still this one; ending the session clears it.
   Object? _activeOperation;
+  bool _refreshingConfig = false;
 
   ProfileViewModel({
     required this.authService,
@@ -47,7 +49,9 @@ class ProfileViewModel extends BaseViewModel implements SessionScoped {
     required this.remoteConfigService,
     required this.crashlyticsService,
     required this.analyticsService,
-  });
+  }) {
+    notificationService.onChanged = notifyListeners;
+  }
 
   UserModel? get user => authService.currentUser;
   double get uploadProgress => _uploadProgress;
@@ -65,6 +69,9 @@ class ProfileViewModel extends BaseViewModel implements SessionScoped {
   bool get canRetryUpload =>
       !isExporting && _lastExport != null && _lastUploadedUrl == null;
   List<RemoteMessage> get notifications => notificationService.messages;
+  List<AppNotification> get inbox => notificationService.inbox;
+  NotificationPermission get notificationPermission =>
+      notificationService.permission;
 
   /// Notification permission is requested after sign-in, not at app start,
   /// so the first screen a new user (and ARTEMIS TC-01) sees is Sign-in
@@ -91,6 +98,22 @@ class ProfileViewModel extends BaseViewModel implements SessionScoped {
   int get maxRecommendations => remoteConfigService.maxRecommendations;
   bool get enableScore => remoteConfigService.enableLongevityScore;
   String get bannerText => remoteConfigService.bannerAnnouncement;
+  bool get isRefreshingConfig => _refreshingConfig;
+
+  /// Returns true when new values were applied. False means no change or a
+  /// failed fetch, which the service does not tell apart; the current values
+  /// stay in use either way.
+  Future<bool> refreshRemoteConfig() async {
+    if (_refreshingConfig) return false;
+    _refreshingConfig = true;
+    notifyListeners();
+    try {
+      return await remoteConfigService.forceFetchAndActivate();
+    } finally {
+      _refreshingConfig = false;
+      notifyListeners();
+    }
+  }
 
   /// Does nothing while another export or retry runs: check [isExporting].
   Future<void> exportAndUploadPdf(MealPlanModel plan) async {
@@ -261,5 +284,11 @@ class ProfileViewModel extends BaseViewModel implements SessionScoped {
 
   void testCrashlytics() {
     crashlyticsService.triggerTestCrash();
+  }
+
+  @override
+  void dispose() {
+    notificationService.onChanged = null;
+    super.dispose();
   }
 }

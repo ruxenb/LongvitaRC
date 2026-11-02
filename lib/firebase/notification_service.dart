@@ -70,6 +70,9 @@ class NotificationService {
   bool _initialized = false;
   NotificationPermission _permission = NotificationPermission.unknown;
 
+  /// Called when [inbox] gains an entry or [permission] is resolved.
+  void Function()? onChanged;
+
   NotificationService({FcmGateway? gateway})
       : _gateway = gateway ?? FirebaseFcmGateway();
 
@@ -102,6 +105,7 @@ class NotificationService {
       _permission = NotificationPermission.failed;
       if (kDebugMode) debugPrint('FCM init failed: $e');
     }
+    onChanged?.call();
   }
 
   /// Starts the inbox of the signed-in user.
@@ -131,6 +135,6 @@ class NotificationService {
       source: message,
     );
     if (notification == null) return;
-    _inbox.receive(notification, tapped: tapped);
+    if (_inbox.receive(notification, tapped: tapped)) onChanged?.call();
   }
 }
