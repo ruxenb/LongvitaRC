@@ -25,6 +25,7 @@ class ProfileViewModel extends BaseViewModel implements SessionScoped {
   double _uploadProgress = 0.0;
   String? _lastUploadedUrl;
   ViewState<String> _exportState = const ViewStateIdle();
+  final SessionEpoch _epoch = SessionEpoch();
 
   ProfileViewModel({
     required this.authService,
@@ -52,6 +53,7 @@ class ProfileViewModel extends BaseViewModel implements SessionScoped {
 
   @override
   void clearSession() {
+    _epoch.advance();
     _uploadProgress = 0.0;
     _lastUploadedUrl = null;
     _exportState = const ViewStateIdle();
@@ -72,6 +74,7 @@ class ProfileViewModel extends BaseViewModel implements SessionScoped {
       return;
     }
 
+    final epoch = _epoch.current;
     _exportState = const ViewStateLoading('Đang khởi tạo tài liệu PDF...');
     _uploadProgress = 0.0;
     notifyListeners();
@@ -80,6 +83,7 @@ class ProfileViewModel extends BaseViewModel implements SessionScoped {
       // 1. Generate PDF on local device
       final Uint8List pdfBytes =
           await reportService.generateMealPlanPdf(plan);
+      if (_epoch.isStale(epoch)) return;
 
       _exportState = const ViewStateLoading('Đang tải PDF lên Cloud Storage...');
       notifyListeners();
@@ -91,24 +95,31 @@ class ProfileViewModel extends BaseViewModel implements SessionScoped {
         fileName: fileName,
         bytes: pdfBytes,
         onProgress: (progress) {
+          if (_epoch.isStale(epoch)) return;
           _uploadProgress = progress;
           notifyListeners();
         },
       );
+      if (_epoch.isStale(epoch)) return;
 
       if (downloadUrl != null) {
         _lastUploadedUrl = downloadUrl;
-        await analyticsService.logExportReport(format: 'pdf');
         _exportState = ViewStateSuccess(downloadUrl);
+        notifyListeners();
+        await analyticsService.logExportReport(format: 'pdf');
       } else {
         _exportState = const ViewStateError('Tải lên thất bại. Vui lòng thử lại.');
+        notifyListeners();
       }
     } catch (e, s) {
+      // A failure of the previous session must not be reported under the
+      // user id of the current one.
+      if (_epoch.isStale(epoch)) return;
+      _exportState = ViewStateError('Lỗi trong quá trình xuất PDF', e);
+      notifyListeners();
       await crashlyticsService.recordError(e, s,
           reason: 'Failed to export and upload PDF');
-      _exportState = ViewStateError('Lỗi trong quá trình xuất PDF', e);
     }
-    notifyListeners();
   }
 
   void testCrashlytics() {

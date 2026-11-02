@@ -18,6 +18,7 @@ class MealPlanViewModel extends BaseViewModel implements SessionScoped {
   ViewState<MealPlanModel> _currentPlanState = const ViewStateIdle();
   ViewState<List<MealPlanModel>> _savedPlansState = const ViewStateIdle();
   MealPlanModel? _activePlan;
+  final SessionEpoch _epoch = SessionEpoch();
 
   MealPlanViewModel({
     required this.dataService,
@@ -36,6 +37,7 @@ class MealPlanViewModel extends BaseViewModel implements SessionScoped {
   /// Drops the previous user's plans when the session ends (CHARLIE-AUTH-01).
   @override
   void clearSession() {
+    _epoch.advance();
     _currentPlanState = const ViewStateIdle();
     _savedPlansState = const ViewStateIdle();
     _activePlan = null;
@@ -48,11 +50,13 @@ class MealPlanViewModel extends BaseViewModel implements SessionScoped {
     required int age,
     int mealsPerDay = 3,
   }) async {
+    final epoch = _epoch.current;
     _currentPlanState = const ViewStateLoading('Đang tính toán dinh dưỡng trường thọ...');
     notifyListeners();
 
     try {
       final recipes = await dataService.getRecipes();
+      if (_epoch.isStale(epoch)) return;
       if (recipes.isEmpty) {
         // Fallback sample recipes if Firestore is empty initially
         final sampleRecipes = _getInitialLongevityRecipes();
@@ -78,31 +82,40 @@ class MealPlanViewModel extends BaseViewModel implements SessionScoped {
         weightKg: weightKg,
         fishCount: 2,
       );
+      if (_epoch.isStale(epoch)) return;
 
       _currentPlanState = ViewStateSuccess(_activePlan!);
     } catch (e, s) {
-      await crashlytics.recordError(e, s, reason: 'Failed to generate meal plan');
+      if (_epoch.isStale(epoch)) return;
       _currentPlanState = ViewStateError('Không thể tạo thực đơn lúc này. Vui lòng thử lại.', e);
+      notifyListeners();
+      await crashlytics.recordError(e, s, reason: 'Failed to generate meal plan');
+      return;
     }
     notifyListeners();
   }
 
+  /// Returns false when the session changed before the save finished: the
+  /// record stays in the cloud, but it is no longer this session's plan.
   Future<bool> saveActivePlan() async {
-    if (_activePlan == null) return false;
+    final plan = _activePlan;
+    if (plan == null) return false;
+    final epoch = _epoch.current;
 
     try {
-      final savedId = await dataService.saveMealPlan(_activePlan!);
-      _activePlan = _activePlan!.copyWith(id: savedId);
+      final savedId = await dataService.saveMealPlan(plan);
+      if (_epoch.isStale(epoch)) return false;
+      _activePlan = plan.copyWith(id: savedId);
+      _currentPlanState = ViewStateSuccess(_activePlan!);
+      notifyListeners();
 
       await analytics.logSaveMealPlan(
         planId: savedId,
-        status: _activePlan!.status,
+        status: plan.status,
       );
-
-      _currentPlanState = ViewStateSuccess(_activePlan!);
-      notifyListeners();
       return true;
     } catch (e, s) {
+      if (_epoch.isStale(epoch)) return false;
       await crashlytics.recordError(e, s, reason: 'Failed to save meal plan');
       return false;
     }
@@ -110,8 +123,10 @@ class MealPlanViewModel extends BaseViewModel implements SessionScoped {
 
   /// Cross-Role Flow: Gửi thực đơn cho chuyên gia duyệt (draft -> submitted)
   Future<bool> submitForReview(String planId) async {
+    final epoch = _epoch.current;
     try {
       await dataService.updateMealPlanStatus(planId, 'submitted');
+      if (_epoch.isStale(epoch)) return false;
       if (_activePlan != null && _activePlan!.id == planId) {
         _activePlan = _activePlan!.copyWith(status: 'submitted');
         _currentPlanState = ViewStateSuccess(_activePlan!);
@@ -119,25 +134,31 @@ class MealPlanViewModel extends BaseViewModel implements SessionScoped {
       notifyListeners();
       return true;
     } catch (e, s) {
+      if (_epoch.isStale(epoch)) return false;
       await crashlytics.recordError(e, s, reason: 'Failed to submit plan for review');
       return false;
     }
   }
 
   Future<void> fetchSavedPlans(String uid) async {
+    final epoch = _epoch.current;
     _savedPlansState = const ViewStateLoading('Đang tải danh sách thực đơn đã lưu...');
     notifyListeners();
 
     try {
       final plans = await dataService.getUserMealPlans(uid);
+      if (_epoch.isStale(epoch)) return;
       if (plans.isEmpty) {
         _savedPlansState = const ViewStateEmpty(message: 'Bạn chưa lưu thực đơn nào');
       } else {
         _savedPlansState = ViewStateSuccess(plans);
       }
     } catch (e, s) {
-      await crashlytics.recordError(e, s, reason: 'Failed to fetch saved plans');
+      if (_epoch.isStale(epoch)) return;
       _savedPlansState = ViewStateError('Không thể tải thực đơn đã lưu', e);
+      notifyListeners();
+      await crashlytics.recordError(e, s, reason: 'Failed to fetch saved plans');
+      return;
     }
     notifyListeners();
   }

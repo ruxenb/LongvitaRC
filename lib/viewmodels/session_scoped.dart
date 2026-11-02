@@ -13,3 +13,19 @@ abstract interface class SessionScoped {
   /// Called when the session of the previous user ends.
   void clearSession();
 }
+
+/// Tells async work started in an earlier session apart from the current one.
+///
+/// [SessionScoped.clearSession] cannot cancel a running Future, so its result
+/// would arrive in the next session. Capture [current] before the first await,
+/// call [advance] in `clearSession`, and check [isStale] after every await.
+/// This also covers the same uid signing back in, which a uid check would miss.
+class SessionEpoch {
+  int _value = 0;
+
+  int get current => _value;
+
+  void advance() => _value++;
+
+  bool isStale(int captured) => captured != _value;
+}

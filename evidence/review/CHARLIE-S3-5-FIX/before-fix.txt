@@ -1,0 +1,156 @@
+00:00 +0: loading C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/session_race_test.dart
+00:00 +0: ProfileViewModel after switching to uid-b PM-S3-5-01: late upload is ignored
+00:00 +0 -1: ProfileViewModel after switching to uid-b PM-S3-5-01: late upload is ignored [E]
+  Expected: null
+    Actual: 'https://storage.test/reports/uid-a/late.pdf'
+  
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test\auth\session_race_test.dart 171:11             main.<fn>.<fn>.<fn>
+  
+00:00 +0 -1: ProfileViewModel after switching to uid-b late progress is ignored
+00:00 +0 -2: ProfileViewModel after switching to uid-b late progress is ignored [E]
+  Expected: <0>
+    Actual: <0.8>
+  
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test\auth\session_race_test.dart 187:11             main.<fn>.<fn>.<fn>
+  
+00:00 +0 -2: ProfileViewModel after switching to uid-b late upload error is ignored
+00:00 +0 -3: ProfileViewModel after switching to uid-b late upload error is ignored [E]
+  Expected: <Instance of 'ViewStateIdle'>
+    Actual: <Instance of 'ViewStateError<String>'>
+     Which: is not an instance of 'ViewStateIdle'
+  
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test\auth\session_race_test.dart 207:11             main.<fn>.<fn>.<fn>
+  
+00:00 +0 -3: ProfileViewModel after switching to uid-b logout during PDF generation never starts the upload
+00:30 +0 -4: ProfileViewModel after switching to uid-b logout during PDF generation never starts the upload [E]
+  TimeoutException after 0:00:30.000000: Test timed out after 30 seconds. See https://pub.dev/packages/test#timeouts
+  dart:isolate  _RawReceivePort._handleMessage
+  
+00:30 +0 -4: ProfileViewModel after switching to uid-a PM-S3-5-01: late upload is ignored
+00:30 +0 -5: ProfileViewModel after switching to uid-a PM-S3-5-01: late upload is ignored [E]
+  Expected: null
+    Actual: 'https://storage.test/reports/uid-a/late.pdf'
+  
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test\auth\session_race_test.dart 171:11             main.<fn>.<fn>.<fn>
+  
+00:30 +0 -5: ProfileViewModel after switching to uid-a late progress is ignored
+00:30 +0 -6: ProfileViewModel after switching to uid-a late progress is ignored [E]
+  Expected: <0>
+    Actual: <0.8>
+  
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test\auth\session_race_test.dart 187:11             main.<fn>.<fn>.<fn>
+  
+00:30 +0 -6: ProfileViewModel after switching to uid-a late upload error is ignored
+00:30 +0 -7: ProfileViewModel after switching to uid-a late upload error is ignored [E]
+  Expected: <Instance of 'ViewStateIdle'>
+    Actual: <Instance of 'ViewStateError<String>'>
+     Which: is not an instance of 'ViewStateIdle'
+  
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test\auth\session_race_test.dart 207:11             main.<fn>.<fn>.<fn>
+  
+00:30 +0 -7: ProfileViewModel after switching to uid-a logout during PDF generation never starts the upload
+01:00 +0 -8: ProfileViewModel after switching to uid-a logout during PDF generation never starts the upload [E]
+  TimeoutException after 0:00:30.000000: Test timed out after 30 seconds. See https://pub.dev/packages/test#timeouts
+  dart:isolate  _RawReceivePort._handleMessage
+  
+01:00 +0 -8: ProfileViewModel a new export in the new session still works
+01:00 +1 -8: ProfileViewModel progress and completion apply within the same session
+01:00 +2 -8: MealPlanViewModel after switching to uid-b PM-S3-5-02: late saved plans are ignored
+01:00 +2 -9: MealPlanViewModel after switching to uid-b PM-S3-5-02: late saved plans are ignored [E]
+  Expected: <Instance of 'ViewStateIdle'>
+    Actual: <Instance of 'ViewStateSuccess<List<MealPlanModel>>'>
+     Which: is not an instance of 'ViewStateIdle'
+  
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test\auth\session_race_test.dart 274:11             main.<fn>.<fn>.<fn>
+  
+01:00 +2 -9: MealPlanViewModel after switching to uid-b late saved plans error is ignored
+01:00 +2 -10: MealPlanViewModel after switching to uid-b late saved plans error is ignored [E]
+  Expected: <Instance of 'ViewStateIdle'>
+    Actual: <Instance of 'ViewStateError<List<MealPlanModel>>'>
+     Which: is not an instance of 'ViewStateIdle'
+  
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test\auth\session_race_test.dart 289:11             main.<fn>.<fn>.<fn>
+  
+01:00 +2 -10: MealPlanViewModel after switching to uid-b late generate is ignored
+01:00 +2 -11: MealPlanViewModel after switching to uid-b late generate is ignored [E]
+  Expected: null
+    Actual: <Instance of 'MealPlanModel'>
+  
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test\auth\session_race_test.dart 306:11             main.<fn>.<fn>.<fn>
+  
+01:00 +2 -11: MealPlanViewModel after switching to uid-b late save is ignored
+01:00 +3 -11: MealPlanViewModel after switching to uid-b late submit is ignored
+01:00 +3 -12: MealPlanViewModel after switching to uid-b late submit is ignored [E]
+  Expected: false
+    Actual: <true>
+  
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test\auth\session_race_test.dart 339:11             main.<fn>.<fn>.<fn>
+  
+01:00 +3 -12: MealPlanViewModel after switching to uid-a PM-S3-5-02: late saved plans are ignored
+01:00 +3 -13: MealPlanViewModel after switching to uid-a PM-S3-5-02: late saved plans are ignored [E]
+  Expected: <Instance of 'ViewStateIdle'>
+    Actual: <Instance of 'ViewStateSuccess<List<MealPlanModel>>'>
+     Which: is not an instance of 'ViewStateIdle'
+  
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test\auth\session_race_test.dart 274:11             main.<fn>.<fn>.<fn>
+  
+01:00 +3 -13: MealPlanViewModel after switching to uid-a late saved plans error is ignored
+01:00 +3 -14: MealPlanViewModel after switching to uid-a late saved plans error is ignored [E]
+  Expected: <Instance of 'ViewStateIdle'>
+    Actual: <Instance of 'ViewStateError<List<MealPlanModel>>'>
+     Which: is not an instance of 'ViewStateIdle'
+  
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test\auth\session_race_test.dart 289:11             main.<fn>.<fn>.<fn>
+  
+01:00 +3 -14: MealPlanViewModel after switching to uid-a late generate is ignored
+01:00 +3 -15: MealPlanViewModel after switching to uid-a late generate is ignored [E]
+  Expected: null
+    Actual: <Instance of 'MealPlanModel'>
+  
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test\auth\session_race_test.dart 306:11             main.<fn>.<fn>.<fn>
+  
+01:00 +3 -15: MealPlanViewModel after switching to uid-a late save is ignored
+01:00 +4 -15: MealPlanViewModel after switching to uid-a late submit is ignored
+01:00 +4 -16: MealPlanViewModel after switching to uid-a late submit is ignored [E]
+  Expected: false
+    Actual: <true>
+  
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test\auth\session_race_test.dart 339:11             main.<fn>.<fn>.<fn>
+  
+01:00 +4 -16: MealPlanViewModel fetch started in the new session still applies
+01:00 +5 -16: Some tests failed.
+
+Failing tests:
+  C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/session_race_test.dart: MealPlanViewModel after switching to uid-a PM-S3-5-02: late saved plans are ignored
+  C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/session_race_test.dart: MealPlanViewModel after switching to uid-a late generate is ignored
+  C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/session_race_test.dart: MealPlanViewModel after switching to uid-a late saved plans error is ignored
+  C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/session_race_test.dart: MealPlanViewModel after switching to uid-a late submit is ignored
+  ... and 12 more
