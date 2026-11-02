@@ -4,7 +4,7 @@ Cập nhật 02/11/2026 theo xác nhận người dùng: **Lab 3 chính là Assi
 
 ## PM review mới nhất — 02/11/2026
 
-Xem [review nhánh Charlie tại d17383c](PM_REVIEW_CHARLIE_20261102.md) và [báo cáo tiến độ Dev](dev-reports/CHARLIE-PROGRESS-20261102.md). Nhánh `feature/charlie-auth-01` đã push; PM chạy lại analyzer/69 tests/41 rules tests đều pass, nhưng hai ca callback hoàn thành muộn sau A logout/B login đều fail. **S3-5: Changes requested**, chưa Accepted. Auth cloud có bằng chứng Dev mới; các câu “chưa config/chưa chạy Android” của audit cũ bên dưới phải đọc theo mốc lịch sử, không dùng làm trạng thái hiện tại. Main `614e731` có API Analytics mới chưa tích hợp vào nhánh Charlie; docs còn chưa commit và chưa merge.
+Xem [xác nhận đóng PM-FCM-01, mục 7](PM_REREVIEW_914508c.md#7-xác-nhận-bản-sửa-pm-fcm-01--2d547c7--head-f1f397e), [review cũ](PM_REVIEW_CHARLIE_20261102.md) và [progress Dev](dev-reports/CHARLIE-PROGRESS-20261102.md). Fix `2d547c7` đã push cùng báo cáo tại `f1f397e`; PM chạy lại analyzer/133 tests và reproduction gốc đều pass: **PM-FCM-01 Closed — verified**. Hai findings session trước giữ Closed. Nhánh Charlie đã tích hợp main `614e731`, chưa merge ngược vào main. S4-10/S4-12 vẫn partial: chưa nghiệm thu export/push thật. Các audit/trạng thái trước đọc theo lịch sử.
 
 ## Phối hợp Codex PM / Claude Code Dev
 

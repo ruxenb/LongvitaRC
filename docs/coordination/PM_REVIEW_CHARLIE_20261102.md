@@ -1,5 +1,7 @@
 # PM review Charlie — UI/Auth, integration và bước kế tiếp
 
+> **Re-review mới nhất:** PM-S3-5-01/02 đã **Closed — local regression verified** tại `914508c`; PM-FCM-01 cũng **Closed — verified** sau fix `2d547c7`, PM kiểm HEAD `f1f397e` với 133 tests/reproduction gốc pass. Xem [mục 7 của re-review](PM_REREVIEW_914508c.md#7-xác-nhận-bản-sửa-pm-fcm-01--2d547c7--head-f1f397e). Nội dung dưới giữ làm lịch sử tại `d17383c`, không dùng trạng thái chưa merge/Changes requested cũ làm snapshot hiện tại.
+
 Ngày **02/11/2026**. Người review: **Codex**. Căn cứ: [báo cáo tiến độ Dev](dev-reports/CHARLIE-PROGRESS-20261102.md), [Auth report](dev-reports/CHARLIE-AUTH-01.md), source và các kiểm chứng local bên dưới. Đây là review tập trung Auth/session và dependency tích hợp, không phải nghiệm thu visual toàn UI hay toàn Assignment.
 
 **Kết luận: Changes requested cho S3-5/session isolation.** Hai ca tác vụ hoàn thành sau đổi tài khoản tái hiện lỗi; các checks hiện có vẫn pass. Chưa chuyển các gói sang Accepted. Giữ các kết quả Dev đã đạt với giới hạn tương ứng, không yêu cầu làm lại UI/Auth từ đầu.

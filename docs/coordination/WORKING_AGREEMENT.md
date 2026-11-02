@@ -71,6 +71,6 @@ Blockers và bước tiếp theo:
 
 ## 6. Gói đầu tiên đề xuất
 
-**CHARLIE-UI-01: S2-3 + S2-4, theme và common widgets.** Packet ở [CLAUDE_FIRST_TASK.md](CLAUDE_FIRST_TASK.md), [báo cáo Dev](dev-reports/CHARLIE-UI-01.md). UI commit `6dfddf9` và các commit Auth/Firebase sau đó đã push trên `feature/charlie-auth-01` tại `d17383c`. [PM review 02/11](PM_REVIEW_CHARLIE_20261102.md) xác nhận analyzer/69 tests/41 rules tests pass, phát hiện hai ca callback muộn qua đổi phiên: **S3-5 Changes requested**, chưa Accepted. Auth có ảnh Android/cloud Dev bàn giao; chưa nghiệm thu visual toàn UI hay toàn bộ Firebase.
+**CHARLIE-UI-01: S2-3 + S2-4, theme và common widgets.** Packet ở [CLAUDE_FIRST_TASK.md](CLAUDE_FIRST_TASK.md), [báo cáo Dev](dev-reports/CHARLIE-UI-01.md). Nhánh `feature/charlie-auth-01` đã push fix `2d547c7` và báo cáo `f1f397e`, đã tích hợp main. [PM xác nhận 02/11, mục 7](PM_REREVIEW_914508c.md#7-xác-nhận-bản-sửa-pm-fcm-01--2d547c7--head-f1f397e) ghi analyzer/133 tests/reproduction gốc pass, PM-FCM-01 Closed; hai findings session trước giữ Closed. Auth có ảnh Android/cloud Dev bàn giao; chưa nghiệm thu visual toàn UI, toàn task S3-5 hoặc toàn bộ Firebase chỉ từ các checks này.
 
 Nguồn UI theo [FIGMA_IMPLEMENTATION_CONTRACT.md](FIGMA_IMPLEMENTATION_CONTRACT.md). Đây là bước nền để Hoàng lắp screens, không tự nhận code mười màn chính thay Hoàng.
