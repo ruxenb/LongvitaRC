@@ -11,7 +11,7 @@
 | **Router** | `NotificationService.takePendingTarget()` trả target một lần. Router gọi khi đã sẵn sàng, gồm cả sau khi qua auth/profile recovery | Có API, **chưa nối router** | Thắng: route intent, thời điểm ready, fallback |
 | **History** | Chưa chọn local theo UID hay Firestore. Nếu Firestore thì cần schema, rules, test trước khi ghi | Chỉ trong RAM, **mất khi mở lại app** | Hoàng, Thắng |
 | **Read state, retention** | Chưa có | Chưa | Hoàng, Thắng |
-| **Chống trùng** | Theo `message_id`, trong từng phiên user | Có test | Khi chọn history cần làm bền qua lần mở lại |
+| **Chống trùng** | Theo `message_id`, trong từng phiên user; tin được chấp nhận đầu tiên thắng, tin trùng không đổi nội dung hay đích | Có test | Khi chọn history cần làm bền qua lần mở lại |
 | **Session** | Đăng xuất xóa inbox và tin đang chờ. Tin có `recipient_uid` khác user hiện tại bị bỏ. Tin đến khi chưa đăng nhập chờ tới lần đăng nhập kế | Có test | Thái An/Thắng: tin **không có** `recipient_uid` sẽ đến người đăng nhập kế tiếp, cần chốt có chấp nhận không |
 | **Token** | Chưa lưu token theo UID, chưa xử lý refresh, chưa xóa khi đăng xuất. Chưa có cách gửi tới từng user nếu không có | Chưa | Thái An, Thắng |
 | **Background/terminated** | Handler riêng, không điều hướng, không lưu gì vì chưa chốt history | Đã đăng ký, **chưa chạy thật** | Theo History |
