@@ -171,6 +171,10 @@ class NotificationService {
   /// call this and where each target type leads.
   NotificationTarget? takePendingTarget() => _inbox.takePendingTarget();
 
+  /// True once after a message was tapped. Under the temporary contract every
+  /// tap opens the notification center, whatever its target.
+  bool takeOpenRequest() => _inbox.takeOpenRequest();
+
   Future<String?> getToken() async {
     try {
       return await _gateway.getToken();
@@ -182,11 +186,11 @@ class NotificationService {
   void _receive(RemoteMessage message, {bool tapped = false}) {
     final notification = _parseMessage(message);
     if (notification == null) return;
-    if (_inbox.receive(notification, tapped: tapped)) {
-      onChanged?.call();
-      final uid = _inbox.boundUid;
-      if (uid != null) unawaited(_save(uid));
-    }
+    final added = _inbox.receive(notification, tapped: tapped);
+    final uid = _inbox.boundUid;
+    if (added && uid != null) unawaited(_save(uid));
+    // A tap on a message already in the inbox adds nothing but must still open.
+    if (added || tapped) onChanged?.call();
   }
 
   Future<void> _save(String uid) {

@@ -132,6 +132,7 @@ class Harness {
         ],
         child: MaterialApp(
           theme: AppTheme.lightTheme,
+          routes: {ProfileScreen.routeName: (_) => const ProfileScreen()},
           home: MediaQuery.withClampedTextScaling(
             minScaleFactor: textScale,
             maxScaleFactor: textScale,
@@ -231,6 +232,92 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.byType(ProfileScreen), findsNothing);
     expect(find.byType(HomeScreen), findsOneWidget);
+  });
+
+  testWidgets('Home has one way to export: it leads to Profile', (tester) async {
+    final h = await pumpProfile(tester);
+    await tester.pumpWidget(h.app(home: const HomeScreen()));
+    await settle(tester);
+
+    expect(find.text('Mở PDF đã lưu'), findsNothing);
+    expect(find.text('Chia sẻ PDF đã lưu'), findsNothing);
+    expect(find.text('Thử tải lên lại'), findsNothing);
+
+    final link = find.text('Xuất báo cáo PDF ở Hồ sơ');
+    await tester.ensureVisible(link);
+    await tester.pump();
+    await tester.tap(link);
+    await tester.pumpAndSettle();
+
+    expect(find.byType(ProfileScreen), findsOneWidget);
+    expect(h.storage.uploads, 0);
+  });
+
+  group('tapping a notification', () {
+    Future<Harness> pumpGate(WidgetTester tester) async {
+      final h = await pumpProfile(tester);
+      await tester.pumpWidget(h.app(home: const AuthGate()));
+      await settle(tester);
+      return h;
+    }
+
+    testWidgets('opens Profile from Home', (tester) async {
+      final h = await pumpGate(tester);
+      expect(find.byType(ProfileScreen), findsNothing);
+
+      h.gateway.opened.add(push('m1', title: 'Tin mới'));
+      await settle(tester);
+      await tester.pumpAndSettle();
+
+      expect(find.byType(ProfileScreen), findsOneWidget);
+      expect(find.text('Tin mới'), findsOneWidget);
+    });
+
+    testWidgets('a message only received does not navigate', (tester) async {
+      final h = await pumpGate(tester);
+
+      h.gateway.foreground.add(push('m1', title: 'Tin mới'));
+      await settle(tester);
+      await tester.pumpAndSettle();
+
+      expect(find.byType(ProfileScreen), findsNothing);
+    });
+
+    testWidgets('a message already in the inbox still opens, once',
+        (tester) async {
+      final h = await pumpGate(tester);
+      h.gateway.foreground.add(push('m1', title: 'Tin mới'));
+      await settle(tester);
+
+      h.gateway.opened.add(push('m1', title: 'Tin mới'));
+      await settle(tester);
+      await tester.pumpAndSettle();
+      expect(find.byType(ProfileScreen), findsOneWidget);
+
+      await tester.tap(find.bySemanticsLabel('Quay lại'));
+      await tester.pumpAndSettle();
+      h.gateway.opened.add(push('m1', title: 'Tin mới'));
+      await settle(tester);
+      await tester.pumpAndSettle();
+
+      expect(find.byType(ProfileScreen), findsNothing, reason: 'routed once');
+    });
+
+    testWidgets('does not stack a second Profile', (tester) async {
+      final h = await pumpGate(tester);
+      h.gateway.opened.add(push('m1', title: 'Tin 1'));
+      await settle(tester);
+      await tester.pumpAndSettle();
+
+      h.gateway.opened.add(push('m2', title: 'Tin 2'));
+      await settle(tester);
+      await tester.pumpAndSettle();
+      await tester.tap(find.bySemanticsLabel('Quay lại'));
+      await tester.pumpAndSettle();
+
+      expect(find.byType(ProfileScreen), findsNothing);
+      expect(find.byType(HomeScreen), findsOneWidget);
+    });
   });
 
   group('export', () {

@@ -181,6 +181,9 @@ class FakeNotificationService implements NotificationService {
   Future<void> drainPending() async {}
 
   @override
+  bool takeOpenRequest() => false;
+
+  @override
   void clearHistory() => history.clear();
 
   @override

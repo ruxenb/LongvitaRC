@@ -18,6 +18,7 @@ class NotificationInbox {
   final Map<String, AppNotification> _accepted = {};
   final Set<String> _routed = {};
   NotificationTarget? _pendingTarget;
+  bool _openRequested = false;
 
   List<AppNotification> get items => List.unmodifiable(_items);
 
@@ -68,8 +69,9 @@ class NotificationInbox {
     }
 
     final target = (accepted ?? notification).target;
-    if (tapped && target != null && _routed.add(notification.messageId)) {
-      _pendingTarget = target;
+    if (tapped && _routed.add(notification.messageId)) {
+      _openRequested = true;
+      if (target != null) _pendingTarget = target;
     }
     return accepted == null;
   }
@@ -81,11 +83,19 @@ class NotificationInbox {
     return target;
   }
 
+  /// True once after a message was tapped, with or without a target.
+  bool takeOpenRequest() {
+    final requested = _openRequested;
+    _openRequested = false;
+    return requested;
+  }
+
   void _resetSession() {
     _items.clear();
     _accepted.clear();
     _routed.clear();
     _pendingTarget = null;
+    _openRequested = false;
   }
 }
 

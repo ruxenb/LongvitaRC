@@ -15,6 +15,8 @@ import '../widgets/longvita_widgets.dart';
 /// logic lives in [ProfileViewModel] and [AuthViewModel]; `AuthGate` removes
 /// this route when the session ends.
 class ProfileScreen extends StatefulWidget {
+  static const routeName = '/profile';
+
   const ProfileScreen({super.key});
 
   @override

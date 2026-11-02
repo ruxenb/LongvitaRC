@@ -92,6 +92,9 @@ class ProfileViewModel extends BaseViewModel implements SessionScoped {
     notificationService.initialize();
   }
 
+  /// True once after a notification was tapped.
+  bool takeNotificationOpenRequest() => notificationService.takeOpenRequest();
+
   /// Picks up messages that arrived while the app was in the background.
   Future<void> refreshInbox() => notificationService.drainPending();
 
