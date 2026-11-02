@@ -167,6 +167,10 @@ class NotificationService {
   /// user, and a next user only ever loads their own.
   void clearHistory() => _inbox.clear();
 
+  /// Completes when every save requested so far has finished.
+  @visibleForTesting
+  Future<void> get savesDone => _lastSave;
+
   /// The target of a tapped message, once. The router owner decides when to
   /// call this and where each target type leads.
   NotificationTarget? takePendingTarget() => _inbox.takePendingTarget();

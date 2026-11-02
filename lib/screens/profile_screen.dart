@@ -87,6 +87,24 @@ class _IdentityCard extends StatelessWidget {
 
   const _IdentityCard({required this.user});
 
+  Future<void> _confirmSignOut(BuildContext context) async {
+    final auth = context.read<AuthViewModel>();
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (dialogContext) => AppDialog.confirmation(
+        icon: AppIcons.infoOutline,
+        title: 'Đăng xuất?',
+        message: 'PDF đã lưu trên máy này sẽ bị xóa. '
+            'Bản đã tải lên và thực đơn đã lưu vẫn còn.',
+        primaryLabel: 'Đồng ý',
+        onPrimary: () => Navigator.of(dialogContext).pop(true),
+        secondaryLabel: 'Hủy',
+        onSecondary: () => Navigator.of(dialogContext).pop(false),
+      ),
+    );
+    if (confirmed == true) await auth.signOut();
+  }
+
   @override
   Widget build(BuildContext context) {
     final photoUrl = user.photoUrl;
@@ -140,7 +158,7 @@ class _IdentityCard extends StatelessWidget {
             key: const Key('profile-sign-out'),
             text: 'Đăng xuất',
             variant: AppButtonVariant.secondary,
-            onPressed: context.read<AuthViewModel>().signOut,
+            onPressed: () => _confirmSignOut(context),
           ),
         ],
       ),

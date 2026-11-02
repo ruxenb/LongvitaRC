@@ -122,8 +122,11 @@ void main() {
     NotificationService newService() =>
         NotificationService(gateway: gateway, history: store);
 
-    /// Lets the queued history writes finish.
-    Future<void> settle() => Future<void>.delayed(const Duration(milliseconds: 50));
+    /// Lets a pushed message reach the service, then waits for its save.
+    Future<void> settle(NotificationService service) async {
+      await Future<void>.delayed(Duration.zero);
+      await service.savesDone;
+    }
 
     setUp(() => gateway = FakeGateway());
 
@@ -132,7 +135,7 @@ void main() {
       await first.bindUser('uid-a');
       await first.initialize();
       gateway.foreground.add(push('m1'));
-      await settle();
+      await settle(first);
 
       gateway = FakeGateway();
       final restarted = newService();
@@ -146,7 +149,7 @@ void main() {
       await service.bindUser('uid-a');
       await service.initialize();
       gateway.foreground.add(push('m1'));
-      await settle();
+      await settle(service);
 
       service.clearHistory();
       expect(service.inbox, isEmpty);
@@ -160,7 +163,7 @@ void main() {
       await service.bindUser('uid-a');
       await service.initialize();
       gateway.foreground.add(push('m1'));
-      await settle();
+      await settle(service);
 
       service.clearHistory();
       await service.bindUser('uid-b');
@@ -175,7 +178,7 @@ void main() {
       await service.initialize();
 
       gateway.foreground.add(push('m1'));
-      await settle();
+      await settle(service);
 
       expect(ids(service.inbox), ['m1']);
     });
@@ -187,7 +190,7 @@ void main() {
       await service.initialize();
 
       gateway.foreground.add(push('new'));
-      await settle();
+      await settle(service);
 
       expect(ids(service.inbox), ['new', 'old']);
     });
@@ -220,7 +223,7 @@ void main() {
 
       await store.addPending(note('p1'));
       await service.drainPending();
-      await settle();
+      await settle(service);
 
       expect(ids(service.inbox), ['p1']);
       expect(changes, 1);
@@ -247,7 +250,7 @@ void main() {
         'target_type': 'meal_plan',
         'target_id': 'plan-1',
       }));
-      await settle();
+      await settle(service);
 
       expect(ids(service.inbox), ['m1']);
       expect(service.takePendingTarget(), target);
@@ -262,7 +265,7 @@ void main() {
       await service.bindUser('uid-a');
       await service.initialize();
       gateway.foreground.add(push('m1'));
-      await settle();
+      await settle(service);
 
       expect(ids(service.inbox), ['m1']);
     });

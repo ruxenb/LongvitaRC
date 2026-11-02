@@ -213,10 +213,26 @@ void main() {
 
     await tapKey(tester, 'profile-sign-out');
     await tester.pumpAndSettle();
+    expect(h.auth.signOutCalls, 0, reason: 'asks first');
+    await tester.tap(find.text('Đồng ý'));
+    await tester.pumpAndSettle();
 
     expect(h.auth.signOutCalls, 1);
     expect(find.byType(ProfileScreen), findsNothing);
     expect(find.text('Đăng nhập bằng Google'), findsOneWidget);
+  });
+
+  testWidgets('cancelling the sign-out keeps the session', (tester) async {
+    final h = await pumpProfile(tester);
+
+    await tapKey(tester, 'profile-sign-out');
+    await tester.pumpAndSettle();
+    expect(find.textContaining('PDF đã lưu trên máy này sẽ bị xóa'), findsOneWidget);
+    await tester.tap(find.text('Hủy'));
+    await tester.pumpAndSettle();
+
+    expect(h.auth.signOutCalls, 0);
+    expect(find.text('User uid-a'), findsOneWidget);
   });
 
   testWidgets('Home opens Profile, and Back returns to Home', (tester) async {
