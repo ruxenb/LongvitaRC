@@ -188,8 +188,13 @@ class FakeNotificationService implements NotificationService {
 }
 
 class FakeStorageService implements StorageService {
+  int cancelCalls = 0;
+
   @override
-  Future<String?> uploadReportPdf({
+  Future<void> cancelActiveUpload() async => cancelCalls++;
+
+  @override
+  Future<String> uploadReportPdf({
     required String uid,
     required String fileName,
     required Uint8List bytes,
@@ -234,6 +239,14 @@ class FakeLocalReportStore implements LocalReportStore {
       files.containsKey('$uid/$exportId')
           ? File('memory/reports/$uid/$exportId.pdf')
           : null;
+
+  @override
+  Future<void> delete({required String uid, required String exportId}) async =>
+      files.remove('$uid/$exportId');
+
+  @override
+  Future<void> deleteAll({required String uid}) async =>
+      files.removeWhere((key, _) => key.startsWith('$uid/'));
 }
 
 class FakeReportViewer implements IReportViewer {

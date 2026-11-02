@@ -6,6 +6,7 @@ import 'dart:typed_data';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:longvita/models/auth_state.dart';
 import 'package:longvita/models/meal_plan_model.dart';
+import 'package:longvita/models/upload_failure.dart';
 import 'package:longvita/models/view_state.dart';
 import 'package:longvita/viewmodels/auth_viewmodel.dart';
 import 'package:longvita/viewmodels/profile_viewmodel.dart';
@@ -16,19 +17,22 @@ import '../auth/session_isolation_test.dart' show planFor;
 class HeldUpload {
   final String fileName;
   final void Function(double)? onProgress;
-  final Completer<String?> result = Completer();
+  final Completer<String> result = Completer();
 
   HeldUpload(this.fileName, this.onProgress);
 
   void succeed() =>
       result.complete('https://storage.test/$fileName');
+
+  void fail([UploadFailureKind kind = UploadFailureKind.unknown]) =>
+      result.completeError(UploadFailure(kind));
 }
 
 class HeldStorage extends FakeStorageService {
   final List<HeldUpload> uploads = [];
 
   @override
-  Future<String?> uploadReportPdf({
+  Future<String> uploadReportPdf({
     required String uid,
     required String fileName,
     required Uint8List bytes,
@@ -137,7 +141,7 @@ void main() {
       await signIn('uid-a');
       final first = startExport('first');
       await settle();
-      storage.uploads.single.result.complete(null);
+      storage.uploads.single.fail();
       await first;
 
       final retry = profile.retryUpload();
@@ -173,7 +177,7 @@ void main() {
 
     for (final (name, finish) in <(String, void Function(HeldUpload))>[
       ('success', (u) => u.succeed()),
-      ('null result', (u) => u.result.complete(null)),
+      ('typed failure', (u) => u.fail()),
       ('error', (u) => u.result.completeError(Exception('network'))),
     ]) {
       test('the busy state ends after $name', () async {
@@ -206,7 +210,7 @@ void main() {
       final first = startExport('first');
       await settle();
       final oldUpload = storage.uploads.single;
-      oldUpload.result.complete(null);
+      oldUpload.fail();
       await first;
 
       final second = startExport('second');
@@ -229,7 +233,7 @@ void main() {
       await settle();
       final upload = storage.uploads.single;
       upload.onProgress!(0.4);
-      upload.result.complete(null);
+      upload.fail();
       await first;
 
       upload.onProgress!(0.9);
@@ -290,6 +294,90 @@ void main() {
     });
   });
 
+  group('cancel', () {
+    test('stops the upload, keeps the file and allows a retry', () async {
+      await signIn('uid-a');
+      final first = startExport('first');
+      await settle();
+      expect(profile.canCancelUpload, isTrue);
+
+      profile.cancelUpload();
+
+      expect(storage.cancelCalls, 1);
+      expect(profile.canCancelUpload, isFalse, reason: 'reported at once');
+      expect(profile.isExporting, isFalse);
+      expect(profile.exportState, isA<ViewStateEmpty<String>>());
+      expect(profile.canRetryUpload, isTrue);
+      expect(store.files, hasLength(1));
+
+      storage.uploads.single.fail(UploadFailureKind.cancelled);
+      await first;
+      expect(profile.exportState, isA<ViewStateEmpty<String>>());
+      expect(crashlytics.errors, isEmpty);
+    });
+
+    test('a task that still finishes after cancel changes nothing', () async {
+      await signIn('uid-a');
+      final first = startExport('first');
+      await settle();
+
+      profile.cancelUpload();
+      storage.uploads.single.succeed();
+      await first;
+
+      expect(profile.lastUploadedUrl, isNull);
+      expect(profile.canRetryUpload, isTrue);
+      expect(analytics.events.where((e) => e.startsWith('export_report')), isEmpty);
+    });
+
+    test('a retry can start right after cancel', () async {
+      await signIn('uid-a');
+      final first = startExport('first');
+      await settle();
+      profile.cancelUpload();
+
+      final retry = profile.retryUpload();
+      await settle();
+      storage.uploads.first.fail(UploadFailureKind.cancelled);
+      await first;
+
+      expect(profile.isExporting, isTrue, reason: 'the old task must not end the retry');
+      storage.uploads.last.succeed();
+      await retry;
+      expectConsistent();
+      expect(profile.lastUploadedUrl, isNotNull);
+    });
+
+    test('does nothing when no upload runs', () async {
+      await signIn('uid-a');
+
+      profile.cancelUpload();
+
+      expect(storage.cancelCalls, 0);
+    });
+
+    test('sign-out stops the running upload', () async {
+      await signIn('uid-a');
+      final first = startExport('first');
+      await settle();
+
+      await session.signOut();
+
+      expect(storage.cancelCalls, 1);
+      storage.uploads.single.fail(UploadFailureKind.cancelled);
+      await first;
+      expect(profile.exportState, isA<ViewStateIdle<String>>());
+    });
+
+    test('sign-out with nothing running cancels nothing', () async {
+      await signIn('uid-a');
+
+      await session.signOut();
+
+      expect(storage.cancelCalls, 0);
+    });
+  });
+
   group('canRetryUpload', () {
     test('is true only after a failed upload, and while nothing runs', () async {
       await signIn('uid-a');
@@ -300,7 +388,7 @@ void main() {
       await settle();
       expect(profile.canRetryUpload, isFalse, reason: 'still uploading');
 
-      storage.uploads.single.result.complete(null);
+      storage.uploads.single.fail();
       await first;
       expect(profile.canRetryUpload, isTrue);
 

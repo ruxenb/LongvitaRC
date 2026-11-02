@@ -7,6 +7,7 @@ import 'dart:typed_data';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:longvita/firebase/storage_service.dart';
+import 'package:longvita/models/upload_failure.dart';
 
 class FakeSnapshot implements TaskSnapshot {
   @override
@@ -39,6 +40,16 @@ class FakeUploadTask implements UploadTask {
   }
 
   void succeed(TaskSnapshot snapshot) => _done.complete(snapshot);
+
+  int cancelCalls = 0;
+
+  /// Like the SDK, a cancelled task fails with the code `canceled`.
+  @override
+  Future<bool> cancel() async {
+    cancelCalls++;
+    fail(FirebaseException(plugin: 'firebase_storage', code: 'canceled'));
+    return true;
+  }
 
   @override
   Future<R> then<R>(FutureOr<R> Function(TaskSnapshot) onValue,
@@ -91,6 +102,9 @@ class FakeStorage implements FirebaseStorage {
   Reference ref([String? path]) => reference;
 
   @override
+  void setMaxUploadRetryTime(Duration time) {}
+
+  @override
   dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
 }
 
@@ -99,7 +113,7 @@ void main() {
   late FakeReference reference;
   late StorageService service;
 
-  Future<String?> upload({void Function(double)? onProgress}) =>
+  Future<String> upload({void Function(double)? onProgress}) =>
       service.uploadReportPdf(
         uid: 'uid-a',
         fileName: 'e1.pdf',
@@ -113,14 +127,77 @@ void main() {
     service = StorageService(storage: FakeStorage(reference));
   });
 
-  test('a failed upload returns null, with no unhandled stream error', () async {
-    final result = upload();
-    await Future<void>.delayed(Duration.zero);
+  group('a failed upload', () {
+    for (final (code, kind) in const [
+      ('canceled', UploadFailureKind.cancelled),
+      ('unauthorized', UploadFailureKind.denied),
+      ('unauthenticated', UploadFailureKind.denied),
+      ('retry-limit-exceeded', UploadFailureKind.network),
+      ('quota-exceeded', UploadFailureKind.quota),
+      ('object-not-found', UploadFailureKind.notConfigured),
+      ('bucket-not-found', UploadFailureKind.notConfigured),
+      ('project-not-found', UploadFailureKind.notConfigured),
+      ('something-new', UploadFailureKind.unknown),
+    ]) {
+      test('$code becomes ${kind.name}, with no unhandled stream error',
+          () async {
+        final result = upload();
+        await Future<void>.delayed(Duration.zero);
 
-    task.fail(FirebaseException(plugin: 'firebase_storage', code: 'object-not-found'));
+        task.fail(FirebaseException(plugin: 'firebase_storage', code: code));
 
-    expect(await result, isNull);
-    await Future<void>.delayed(Duration.zero);
+        await expectLater(
+            result,
+            throwsA(isA<UploadFailure>()
+                .having((f) => f.kind, 'kind', kind)
+                .having((f) => f.code, 'code', code)));
+        await Future<void>.delayed(Duration.zero);
+      });
+    }
+
+    test('an error from outside Firebase becomes unknown', () async {
+      final result = upload();
+      await Future<void>.delayed(Duration.zero);
+
+      task.fail(Exception('boom'));
+
+      await expectLater(
+          result,
+          throwsA(isA<UploadFailure>()
+              .having((f) => f.kind, 'kind', UploadFailureKind.unknown)));
+    });
+  });
+
+  group('cancelActiveUpload', () {
+    test('cancels the running task', () async {
+      final result = upload();
+      await Future<void>.delayed(Duration.zero);
+
+      await service.cancelActiveUpload();
+
+      expect(task.cancelCalls, 1);
+      await expectLater(
+          result,
+          throwsA(isA<UploadFailure>()
+              .having((f) => f.kind, 'kind', UploadFailureKind.cancelled)));
+    });
+
+    test('does nothing after the upload ended', () async {
+      final result = upload();
+      await Future<void>.delayed(Duration.zero);
+      task.succeed(FakeSnapshot(4, 4, url: 'https://storage.test/e1.pdf'));
+      await result;
+
+      await service.cancelActiveUpload();
+
+      expect(task.cancelCalls, 0);
+    });
+
+    test('does nothing with no upload', () async {
+      await service.cancelActiveUpload();
+
+      expect(task.cancelCalls, 0);
+    });
   });
 
   test('stops listening to progress after a failure', () async {
@@ -129,7 +206,7 @@ void main() {
     expect(task.events.hasListener, isTrue);
 
     task.fail(Exception('network'));
-    await result;
+    await expectLater(result, throwsA(isA<UploadFailure>()));
 
     expect(task.events.hasListener, isFalse);
   });

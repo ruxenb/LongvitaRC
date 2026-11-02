@@ -1,8 +1,10 @@
+import 'dart:async';
 import 'dart:typed_data';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import '../models/app_notification.dart';
 import '../models/meal_plan_model.dart';
 import '../models/report_export.dart';
+import '../models/upload_failure.dart';
 import '../models/user_model.dart';
 import '../models/view_state.dart';
 import '../services/i_auth_service.dart';
@@ -37,7 +39,11 @@ class ProfileViewModel extends BaseViewModel implements SessionScoped {
   /// Identifies the running export or retry. Results and progress apply only
   /// while their token is still this one; ending the session clears it.
   Object? _activeOperation;
+  bool _uploading = false;
   bool _refreshingConfig = false;
+
+  /// Owner of the PDFs on this device for the current session.
+  String? _sessionUid;
 
   ProfileViewModel({
     required this.authService,
@@ -68,6 +74,9 @@ class ProfileViewModel extends BaseViewModel implements SessionScoped {
   /// True when the saved PDF has not reached Storage and nothing is running.
   bool get canRetryUpload =>
       !isExporting && _lastExport != null && _lastUploadedUrl == null;
+
+  /// True while the PDF is on its way to Storage.
+  bool get canCancelUpload => _uploading;
   List<RemoteMessage> get notifications => notificationService.messages;
   List<AppNotification> get inbox => notificationService.inbox;
   NotificationPermission get notificationPermission =>
@@ -78,20 +87,37 @@ class ProfileViewModel extends BaseViewModel implements SessionScoped {
   /// rather than the Android 13 permission dialog.
   @override
   void onSessionStarted(UserModel user) {
+    _sessionUid = user.uid;
     notificationService.bindUser(user.uid);
     notificationService.initialize();
   }
 
+  /// Stops the running upload and removes this user's PDFs from the device, so
+  /// the next person using it finds neither. Cloud copies stay.
   @override
   void clearSession() {
     _epoch.advance();
     _activeOperation = null;
+    if (_uploading) unawaited(storageService.cancelActiveUpload());
+    _uploading = false;
     _uploadProgress = 0.0;
     _lastUploadedUrl = null;
     _lastExport = null;
     _exportState = const ViewStateIdle();
+    final uid = _sessionUid;
+    _sessionUid = null;
+    if (uid != null) unawaited(_deleteLocalReports(uid));
     notificationService.clearHistory();
     notifyListeners();
+  }
+
+  Future<void> _deleteLocalReports(String uid) async {
+    try {
+      await reportStore.deleteAll(uid: uid);
+    } catch (e, s) {
+      await crashlyticsService.recordError(e, s,
+          reason: 'Failed to remove local reports at sign-out');
+    }
   }
 
   // Remote config properties for UI display
@@ -143,7 +169,11 @@ class ProfileViewModel extends BaseViewModel implements SessionScoped {
         exportId: exportId,
         bytes: pdfBytes,
       );
-      if (!_isActive(operation)) return;
+      if (!_isActive(operation)) {
+        // The session ended during the save, after its files were removed.
+        await reportStore.delete(uid: currentUser.uid, exportId: exportId);
+        return;
+      }
       final export = ReportExport(
         exportId: exportId,
         planId: plan.id,
@@ -195,6 +225,17 @@ class ProfileViewModel extends BaseViewModel implements SessionScoped {
     }
   }
 
+  /// Stops the running upload. The PDF stays on the device and can be retried.
+  ///
+  /// Reports the cancel at once: offline, the SDK only stops at its next retry,
+  /// which can take many seconds. A later outcome of that task is ignored, and
+  /// a retry uploads to the same path.
+  void cancelUpload() {
+    if (!_uploading) return;
+    unawaited(storageService.cancelActiveUpload());
+    _finish(const ViewStateEmpty(message: _uploadCancelledMessage));
+  }
+
   /// Opens the saved PDF. Returns false when it could not be opened.
   Future<bool> previewLastExport() => _openLastExport(reportViewer.preview);
 
@@ -203,6 +244,26 @@ class ProfileViewModel extends BaseViewModel implements SessionScoped {
 
   static const _uploadFailedMessage =
       'PDF đã lưu trên máy nhưng chưa tải lên được. Vui lòng thử lại.';
+  static const _uploadCancelledMessage =
+      'Đã hủy tải lên. PDF vẫn còn trên máy.';
+
+  static String _uploadFailureMessage(UploadFailureKind kind) => switch (kind) {
+        UploadFailureKind.network =>
+          'PDF đã lưu trên máy nhưng mất kết nối khi tải lên. '
+              'Kiểm tra mạng rồi thử lại.',
+        UploadFailureKind.denied =>
+          'PDF đã lưu trên máy nhưng tài khoản chưa có quyền tải lên. '
+              'Đăng nhập lại rồi thử lại.',
+        UploadFailureKind.notConfigured =>
+          'PDF đã lưu trên máy nhưng dịch vụ lưu trữ chưa sẵn sàng. '
+              'Vui lòng thử lại sau.',
+        UploadFailureKind.quota =>
+          'PDF đã lưu trên máy nhưng dung lượng lưu trữ đã hết. '
+              'Vui lòng thử lại sau.',
+        UploadFailureKind.cancelled ||
+        UploadFailureKind.unknown =>
+          _uploadFailedMessage,
+      };
 
   bool _isActive(Object operation) => identical(_activeOperation, operation);
 
@@ -210,6 +271,7 @@ class ProfileViewModel extends BaseViewModel implements SessionScoped {
   void _finish(ViewState<String> state) {
     _exportState = state;
     _activeOperation = null;
+    _uploading = false;
     notifyListeners();
   }
 
@@ -220,6 +282,7 @@ class ProfileViewModel extends BaseViewModel implements SessionScoped {
     Object operation,
   ) async {
     _exportState = const ViewStateLoading('Đang tải PDF lên Cloud Storage...');
+    _uploading = true;
     notifyListeners();
 
     try {
@@ -235,16 +298,24 @@ class ProfileViewModel extends BaseViewModel implements SessionScoped {
       );
       if (!_isActive(operation)) return;
 
-      if (downloadUrl != null) {
-        _lastUploadedUrl = downloadUrl;
-        _finish(ViewStateSuccess(downloadUrl));
-        await analyticsService.logExportReport(
-          fileSizeKb: (bytes.length / 1024).ceil(),
-          // ReportService does not include a shopping list section yet.
-          hasShoppingList: 0,
-        );
-      } else {
-        _finish(const ViewStateError(_uploadFailedMessage));
+      _lastUploadedUrl = downloadUrl;
+      _finish(ViewStateSuccess(downloadUrl));
+      await analyticsService.logExportReport(
+        fileSizeKb: (bytes.length / 1024).ceil(),
+        // ReportService does not include a shopping list section yet.
+        hasShoppingList: 0,
+      );
+    } on UploadFailure catch (failure, s) {
+      if (!_isActive(operation)) return;
+      if (failure.kind == UploadFailureKind.cancelled) {
+        _finish(const ViewStateEmpty(message: _uploadCancelledMessage));
+        return;
+      }
+      _finish(ViewStateError(_uploadFailureMessage(failure.kind), failure));
+      // A lost connection is expected on a phone and is not an app defect.
+      if (failure.kind != UploadFailureKind.network) {
+        await crashlyticsService.recordError(failure, s,
+            reason: 'Failed to upload the PDF (${failure.kind.name})');
       }
     } catch (e, s) {
       if (!_isActive(operation)) return;

@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:longvita/firebase/notification_service.dart';
 import 'package:longvita/models/auth_state.dart';
+import 'package:longvita/models/upload_failure.dart';
 import 'package:longvita/screens/auth_gate.dart';
 import 'package:longvita/screens/home_screen.dart';
 import 'package:longvita/screens/profile_screen.dart';
@@ -25,12 +26,12 @@ import '../fcm/notification_service_test.dart' show FakeGateway;
 class ScriptedStorage extends FakeStorageService {
   /// Next upload result; null fails the upload, as a missing bucket does.
   String? nextUrl = 'https://storage.test/report.pdf';
-  Completer<String?>? held;
+  Completer<String>? held;
   void Function(double)? lastOnProgress;
   int uploads = 0;
 
   @override
-  Future<String?> uploadReportPdf({
+  Future<String> uploadReportPdf({
     required String uid,
     required String fileName,
     required Uint8List bytes,
@@ -38,7 +39,12 @@ class ScriptedStorage extends FakeStorageService {
   }) {
     uploads++;
     lastOnProgress = onProgress;
-    return held?.future ?? Future.value(nextUrl);
+    final url = nextUrl;
+    return held?.future ??
+        (url != null
+            ? Future.value(url)
+            : Future.error(
+                const UploadFailure(UploadFailureKind.unknown)));
   }
 }
 
@@ -161,7 +167,7 @@ void main() {
     await pumpProfile(tester);
 
     expect(find.text('User uid-a'), findsOneWidget);
-    expect(find.text('uid-a@example.test'), findsOneWidget);
+    expect(find.textContaining('example.test'), findsOneWidget);
     expect(find.text('Vai trò: user'), findsOneWidget);
   });
 
@@ -260,6 +266,26 @@ void main() {
       expect(h.storage.uploads, 2);
       expect(find.text('https://storage.test/report.pdf'), findsOneWidget);
       expect(find.byKey(const Key('profile-retry')), findsNothing);
+    });
+
+    testWidgets('cancel stops the upload and allows a retry', (tester) async {
+      final h = await pumpProfile(tester);
+      h.storage.held = Completer();
+
+      await tapKey(tester, 'profile-export');
+      expect(find.byKey(const Key('profile-retry')), findsNothing);
+
+      await tapKey(tester, 'profile-cancel-upload');
+      expect(h.storage.cancelCalls, 1);
+      expect(find.text('Đã hủy tải lên. PDF vẫn còn trên máy.'), findsOneWidget,
+          reason: 'shown at once, before the SDK task ends');
+      h.storage.held!
+          .completeError(const UploadFailure(UploadFailureKind.cancelled));
+      await settle(tester);
+
+      expect(find.text('Đã hủy tải lên. PDF vẫn còn trên máy.'), findsOneWidget);
+      expect(find.byKey(const Key('profile-cancel-upload')), findsNothing);
+      expect(find.byKey(const Key('profile-retry')), findsOneWidget);
     });
 
     testWidgets('a PDF that cannot be opened is reported', (tester) async {

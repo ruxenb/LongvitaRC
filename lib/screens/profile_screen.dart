@@ -95,8 +95,10 @@ class _IdentityCard extends StatelessWidget {
                   children: [
                     Text(user.displayName, style: AppTypography.title),
                     const SizedBox(height: AppSpacing.s4),
+                    // A long address breaks before the @ rather than inside a word.
                     Text(
-                      user.email,
+                      user.email.replaceFirst('@', '​@'),
+                      semanticsLabel: user.email,
                       style: AppTypography.supporting
                           .copyWith(color: AppColors.textSecondary),
                     ),
@@ -234,6 +236,19 @@ class _ExportCard extends StatelessWidget {
               message: state.message ?? 'Đang xuất PDF…',
               progress: profile.uploadProgress,
             ),
+          ],
+          if (profile.canCancelUpload) ...[
+            const SizedBox(height: AppSpacing.s8),
+            AppButton(
+              key: const Key('profile-cancel-upload'),
+              text: 'Hủy tải lên',
+              variant: AppButtonVariant.secondary,
+              onPressed: profile.cancelUpload,
+            ),
+          ],
+          if (state is ViewStateEmpty<String>) ...[
+            const SizedBox(height: AppSpacing.s16),
+            _Notice(message: state.message),
           ],
           if (state is ViewStateError<String>) ...[
             const SizedBox(height: AppSpacing.s16),
