@@ -3,6 +3,8 @@ import '../models/app_notification.dart';
 /// Per-user inbox rules, free of Firebase so they can be unit tested.
 ///
 /// - One message reaching several callbacks gives one entry and one route.
+/// - The first accepted message wins: a later one with the same id changes
+///   neither the entry nor where a tap leads.
 /// - A message for another recipient never enters the inbox.
 /// - Messages arriving with no user signed in wait for the next sign-in, and
 ///   are dropped on sign-out.
@@ -13,7 +15,7 @@ class NotificationInbox {
   String? _uid;
   final List<AppNotification> _items = [];
   final List<_Held> _held = [];
-  final Set<String> _seen = {};
+  final Map<String, AppNotification> _accepted = {};
   final Set<String> _routed = {};
   NotificationTarget? _pendingTarget;
 
@@ -49,14 +51,17 @@ class NotificationInbox {
     final recipient = notification.recipientUid;
     if (recipient != null && recipient != uid) return false;
 
-    final isNew = _seen.add(notification.messageId);
-    if (isNew) _items.insert(0, notification);
+    final accepted = _accepted[notification.messageId];
+    if (accepted == null) {
+      _accepted[notification.messageId] = notification;
+      _items.insert(0, notification);
+    }
 
-    final target = notification.target;
+    final target = (accepted ?? notification).target;
     if (tapped && target != null && _routed.add(notification.messageId)) {
       _pendingTarget = target;
     }
-    return isNew;
+    return accepted == null;
   }
 
   /// Hands the tapped target to whoever routes it, once.
@@ -68,7 +73,7 @@ class NotificationInbox {
 
   void _resetSession() {
     _items.clear();
-    _seen.clear();
+    _accepted.clear();
     _routed.clear();
     _pendingTarget = null;
   }

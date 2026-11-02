@@ -37,6 +37,10 @@ class AppNotification {
   /// When set, only this user may see the message.
   final String? recipientUid;
 
+  /// The message this was parsed from. It travels with the entry, so what is
+  /// accepted, held, deduplicated or dropped is the same for both forms.
+  final Object? source;
+
   const AppNotification({
     required this.messageId,
     this.title,
@@ -44,6 +48,7 @@ class AppNotification {
     this.target,
     this.targetIssue = NotificationTargetIssue.none,
     this.recipientUid,
+    this.source,
   });
 
   /// Returns null when no message id exists, since it could not be deduplicated.
@@ -52,6 +57,7 @@ class AppNotification {
     String? fcmMessageId,
     String? title,
     String? body,
+    Object? source,
   }) {
     final messageId = _text(data['message_id']) ?? _text(fcmMessageId);
     if (messageId == null) return null;
@@ -64,6 +70,7 @@ class AppNotification {
       target: target,
       targetIssue: issue,
       recipientUid: _text(data['recipient_uid']),
+      source: source,
     );
   }
 

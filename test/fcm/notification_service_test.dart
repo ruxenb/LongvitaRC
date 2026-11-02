@@ -259,5 +259,195 @@ void main() {
       expect(service.inbox, isEmpty);
       expect(service.messages, isEmpty);
     });
+
+    group('PM-FCM-01: raw and typed state follow one decision', () {
+      RemoteMessage shared({
+        required String fcmId,
+        required String recipient,
+        required String title,
+        String targetId = 'plan-1',
+      }) =>
+          RemoteMessage(
+            messageId: fcmId,
+            notification: RemoteNotification(title: title),
+            data: payload(
+                id: 'shared-id', recipient: recipient, targetId: targetId),
+          );
+
+      /// `inbox` and `messages` must describe the same accepted messages.
+      void expectAgree(NotificationService service, String recipient, String title) {
+        expect(service.inbox.single.recipientUid, recipient);
+        expect(service.inbox.single.title, title);
+        final raw = service.messages.single;
+        expect(raw.data['recipient_uid'], recipient);
+        expect(raw.notification?.title, title);
+      }
+
+      test('a late message for A does not overwrite B', () async {
+        service.bindUser('uid-b');
+        await service.initialize();
+
+        gateway.foreground
+            .add(shared(fcmId: 'fcm-b', recipient: 'uid-b', title: 'Tin của B'));
+        gateway.foreground
+            .add(shared(fcmId: 'fcm-a', recipient: 'uid-a', title: 'Tin của A'));
+        await settle();
+
+        expectAgree(service, 'uid-b', 'Tin của B');
+      });
+
+      test('a rejected message first does not block the accepted one', () async {
+        service.bindUser('uid-b');
+        await service.initialize();
+
+        gateway.foreground
+            .add(shared(fcmId: 'fcm-a', recipient: 'uid-a', title: 'Tin của A'));
+        await settle();
+        expect(service.messages, isEmpty);
+
+        gateway.foreground
+            .add(shared(fcmId: 'fcm-b', recipient: 'uid-b', title: 'Tin của B'));
+        await settle();
+
+        expectAgree(service, 'uid-b', 'Tin của B');
+      });
+
+      test('a duplicate with other content keeps the first accepted', () async {
+        service.bindUser('uid-b');
+        await service.initialize();
+
+        gateway.foreground
+            .add(shared(fcmId: 'first', recipient: 'uid-b', title: 'Bản đầu'));
+        gateway.foreground
+            .add(shared(fcmId: 'second', recipient: 'uid-b', title: 'Bản sau'));
+        await settle();
+
+        expectAgree(service, 'uid-b', 'Bản đầu');
+      });
+
+      test('a tapped duplicate routes to the accepted target', () async {
+        service.bindUser('uid-b');
+        await service.initialize();
+
+        gateway.foreground.add(shared(
+            fcmId: 'first', recipient: 'uid-b', title: 'Bản đầu', targetId: 'plan-b'));
+        gateway.opened.add(shared(
+            fcmId: 'second', recipient: 'uid-b', title: 'Bản sau', targetId: 'other'));
+        await settle();
+
+        expect(service.takePendingTarget(),
+            const NotificationTarget('meal_plan', 'plan-b'));
+      });
+
+      test('a tapped message for A gives B no route', () async {
+        service.bindUser('uid-b');
+        await service.initialize();
+
+        gateway.opened
+            .add(shared(fcmId: 'fcm-a', recipient: 'uid-a', title: 'Tin của A'));
+        await settle();
+
+        expect(service.inbox, isEmpty);
+        expect(service.messages, isEmpty);
+        expect(service.takePendingTarget(), isNull);
+      });
+
+      test('held messages keep their payload until sign-in', () async {
+        await service.initialize();
+
+        gateway.foreground
+            .add(shared(fcmId: 'fcm-a', recipient: 'uid-a', title: 'Tin của A'));
+        gateway.foreground
+            .add(shared(fcmId: 'fcm-b', recipient: 'uid-b', title: 'Tin của B'));
+        await settle();
+        expect(service.messages, isEmpty);
+
+        service.bindUser('uid-b');
+
+        expectAgree(service, 'uid-b', 'Tin của B');
+      });
+
+      test('a held message for A arriving last does not overwrite B', () async {
+        await service.initialize();
+
+        gateway.foreground
+            .add(shared(fcmId: 'fcm-b', recipient: 'uid-b', title: 'Tin của B'));
+        gateway.foreground
+            .add(shared(fcmId: 'fcm-a', recipient: 'uid-a', title: 'Tin của A'));
+        await settle();
+
+        service.bindUser('uid-b');
+
+        expectAgree(service, 'uid-b', 'Tin của B');
+      });
+
+      test('a held tap keeps its payload and routes after sign-in', () async {
+        gateway.initial = message(id: 'cold');
+        await service.initialize();
+
+        service.bindUser('uid-a');
+
+        expect(service.messages.single.messageId, 'cold');
+        expect(service.takePendingTarget(), planTarget);
+      });
+
+      test('foreground then tap keeps one payload and still routes', () async {
+        service.bindUser('uid-a');
+        await service.initialize();
+
+        gateway.foreground.add(message());
+        gateway.opened.add(message());
+        await settle();
+
+        expect(service.messages, hasLength(1));
+        expect(service.takePendingTarget(), planTarget);
+      });
+
+      test('A -> logout -> B: no payload of A remains', () async {
+        service.bindUser('uid-a');
+        await service.initialize();
+        gateway.foreground
+            .add(shared(fcmId: 'fcm-a', recipient: 'uid-a', title: 'Tin của A'));
+        await settle();
+
+        service.clearHistory();
+        service.bindUser('uid-b');
+        gateway.foreground
+            .add(shared(fcmId: 'fcm-a2', recipient: 'uid-a', title: 'Tin của A'));
+        await settle();
+
+        expect(service.inbox, isEmpty);
+        expect(service.messages, isEmpty);
+      });
+
+      test('binding B directly over A drops the payload of A', () async {
+        service.bindUser('uid-a');
+        await service.initialize();
+        gateway.foreground
+            .add(shared(fcmId: 'fcm-a', recipient: 'uid-a', title: 'Tin của A'));
+        await settle();
+
+        service.bindUser('uid-b');
+
+        expect(service.inbox, isEmpty);
+        expect(service.messages, isEmpty);
+      });
+
+      test('the same id can be delivered to B after A signed out', () async {
+        service.bindUser('uid-a');
+        await service.initialize();
+        gateway.foreground
+            .add(shared(fcmId: 'fcm-a', recipient: 'uid-a', title: 'Tin của A'));
+        await settle();
+
+        service.clearHistory();
+        service.bindUser('uid-b');
+        gateway.foreground
+            .add(shared(fcmId: 'fcm-b', recipient: 'uid-b', title: 'Tin của B'));
+        await settle();
+
+        expectAgree(service, 'uid-b', 'Tin của B');
+      });
+    });
   });
 }

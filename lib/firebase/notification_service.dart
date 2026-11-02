@@ -67,7 +67,6 @@ class FirebaseFcmGateway implements FcmGateway {
 class NotificationService {
   final FcmGateway _gateway;
   final NotificationInbox _inbox = NotificationInbox();
-  final Map<String, RemoteMessage> _raw = {};
   bool _initialized = false;
   NotificationPermission _permission = NotificationPermission.unknown;
 
@@ -78,9 +77,8 @@ class NotificationService {
 
   List<AppNotification> get inbox => _inbox.items;
 
-  List<RemoteMessage> get messages => [
-        for (final item in _inbox.items) ?_raw[item.messageId],
-      ];
+  List<RemoteMessage> get messages =>
+      _inbox.items.map((item) => item.source).whereType<RemoteMessage>().toList();
 
   /// Requests permission and attaches listeners once per app process.
   ///
@@ -110,10 +108,7 @@ class NotificationService {
   void bindUser(String uid) => _inbox.bind(uid);
 
   /// Drops the in-app history of the previous user on sign-out.
-  void clearHistory() {
-    _inbox.clear();
-    _raw.clear();
-  }
+  void clearHistory() => _inbox.clear();
 
   /// The target of a tapped message, once. The router owner decides when to
   /// call this and where each target type leads.
@@ -133,9 +128,9 @@ class NotificationService {
       fcmMessageId: message.messageId,
       title: message.notification?.title,
       body: message.notification?.body,
+      source: message,
     );
     if (notification == null) return;
-    _raw[notification.messageId] = message;
     _inbox.receive(notification, tapped: tapped);
   }
 }

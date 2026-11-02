@@ -1,0 +1,89 @@
+00:00 +0: loading C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/fcm/notification_service_test.dart
+00:00 +0: AppNotification.parse reads a valid target
+00:00 +1: AppNotification.parse falls back to the FCM id, and rejects a message with no id
+00:00 +2: AppNotification.parse never trusts a route string from the payload
+00:00 +3: AppNotification.parse keeps a bad target in the inbox with the reason
+00:00 +4: NotificationInbox one message through several callbacks: one entry, one route
+00:00 +5: NotificationInbox a message for another recipient is dropped
+00:00 +6: NotificationInbox A -> logout -> B: nothing of A remains
+00:00 +7: NotificationInbox a late callback for A while signed out does not reach B
+00:00 +8: NotificationInbox sign-out drops messages waiting for a sign-in
+00:00 +9: NotificationInbox a tap before sign-in waits for the session (cold start)
+00:00 +10: NotificationInbox a tapped message with a bad target gives no route
+00:00 +11: NotificationInbox rebinding the same user keeps the inbox
+00:00 +12: NotificationService initializes once, including the background handler
+00:00 +13: NotificationService foreground, opened and initial all reach one inbox
+00:00 +14: NotificationService foreground then tap of one message is deduplicated
+00:00 +15: NotificationService a denied permission still receives a tap, with no crash
+00:00 +16: NotificationService a failed start is reported, not thrown
+FCM init failed: Exception: no play services
+00:00 +17: NotificationService sign-out clears the inbox and the raw messages
+00:00 +18: NotificationService PM-FCM-01: raw and typed state follow one decision a late message for A does not overwrite B
+00:00 +18 -1: NotificationService PM-FCM-01: raw and typed state follow one decision a late message for A does not overwrite B [E]
+  Expected: 'uid-b'
+    Actual: 'uid-a'
+     Which: is different.
+            Expected: uid-b
+              Actual: uid-a
+                          ^
+             Differ at offset 4
+  
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test\fcm\notification_service_test.dart 282:9       main.<fn>.<fn>.expectAgree
+  test\fcm\notification_service_test.dart 296:9       main.<fn>.<fn>.<fn>
+  
+00:00 +18 -1: NotificationService PM-FCM-01: raw and typed state follow one decision a rejected message first does not block the accepted one
+00:00 +19 -1: NotificationService PM-FCM-01: raw and typed state follow one decision a duplicate with other content keeps the first accepted
+00:00 +19 -2: NotificationService PM-FCM-01: raw and typed state follow one decision a duplicate with other content keeps the first accepted [E]
+  Expected: 'Bản đầu'
+    Actual: 'Bản sau'
+     Which: is different.
+            Expected: Bản đầu
+              Actual: Bản sau
+                          ^
+             Differ at offset 4
+  
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test\fcm\notification_service_test.dart 283:9       main.<fn>.<fn>.expectAgree
+  test\fcm\notification_service_test.dart 325:9       main.<fn>.<fn>.<fn>
+  
+00:00 +19 -2: NotificationService PM-FCM-01: raw and typed state follow one decision a tapped duplicate routes to the accepted target
+00:00 +19 -3: NotificationService PM-FCM-01: raw and typed state follow one decision a tapped duplicate routes to the accepted target [E]
+  Expected: <Instance of 'NotificationTarget'>
+    Actual: <Instance of 'NotificationTarget'>
+  
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test\fcm\notification_service_test.dart 338:9       main.<fn>.<fn>.<fn>
+  
+00:00 +19 -3: NotificationService PM-FCM-01: raw and typed state follow one decision a tapped message for A gives B no route
+00:00 +20 -3: NotificationService PM-FCM-01: raw and typed state follow one decision held messages keep their payload until sign-in
+00:00 +21 -3: NotificationService PM-FCM-01: raw and typed state follow one decision a held message for A arriving last does not overwrite B
+00:00 +21 -4: NotificationService PM-FCM-01: raw and typed state follow one decision a held message for A arriving last does not overwrite B [E]
+  Expected: 'uid-b'
+    Actual: 'uid-a'
+     Which: is different.
+            Expected: uid-b
+              Actual: uid-a
+                          ^
+             Differ at offset 4
+  
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test\fcm\notification_service_test.dart 282:9       main.<fn>.<fn>.expectAgree
+  test\fcm\notification_service_test.dart 381:9       main.<fn>.<fn>.<fn>
+  
+00:00 +21 -4: NotificationService PM-FCM-01: raw and typed state follow one decision a held tap keeps its payload and routes after sign-in
+00:00 +22 -4: NotificationService PM-FCM-01: raw and typed state follow one decision foreground then tap keeps one payload and still routes
+00:00 +23 -4: NotificationService PM-FCM-01: raw and typed state follow one decision A -> logout -> B: no payload of A remains
+00:00 +24 -4: NotificationService PM-FCM-01: raw and typed state follow one decision binding B directly over A drops the payload of A
+00:00 +25 -4: NotificationService PM-FCM-01: raw and typed state follow one decision the same id can be delivered to B after A signed out
+00:00 +26 -4: Some tests failed.
+
+Failing tests:
+  C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/fcm/notification_service_test.dart: NotificationService PM-FCM-01: raw and typed state follow one decision a duplicate with other content keeps the first accepted
+  C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/fcm/notification_service_test.dart: NotificationService PM-FCM-01: raw and typed state follow one decision a held message for A arriving last does not overwrite B
+  C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/fcm/notification_service_test.dart: NotificationService PM-FCM-01: raw and typed state follow one decision a late message for A does not overwrite B
+  C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/fcm/notification_service_test.dart: NotificationService PM-FCM-01: raw and typed state follow one decision a tapped duplicate routes to the accepted target
