@@ -2,6 +2,8 @@
 
 Nhánh **`feature/charlie-auth-01`** đã tích hợp main `614e731`; PR vào `main` phục vụ leader/team preview và quyết định merge. Đây là bàn giao nền tảng mobile của cùng Assignment, không tuyên bố toàn bộ các task đã hoàn tất. Lab 3 = Assignment; Figma Lab 2 là tham chiếu đóng băng, UI được cải thiện trong code.
 
+**PR đang mở:** [#1 — design system, Firebase Auth và nền tảng PDF/FCM](https://github.com/ruxenb/LongvitaRC/pull/1). S7-1-CM đang thực hiện; chưa có AI PR review output và chưa merge vào main.
+
 ## Tiến độ 29 task
 
 | Trạng thái | Số lượng | IDs |
