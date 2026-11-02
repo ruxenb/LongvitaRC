@@ -59,3 +59,24 @@ Task S8-17-CM. Ghi theo commit và evidence thật, cập nhật dần. Trạng 
 - **Kiểm tra:** 150/150 test. Emulator: file được lưu, upload lỗi vẫn còn file, mở được màn xem trước, mở được cửa sổ chia sẻ.
 - **Còn vướng:** chưa có plan thật từ S4-3; project chưa có Storage nên upload thành công chưa chạy thật; cần chốt chính sách giữ file.
 - **Sửa lỗi sau review (PM-PDF-01):** hai lần xuất chồng nhau làm file trên máy và URL thuộc hai lần xuất khác nhau. Sửa bằng cách chỉ cho một thao tác chạy tại một thời điểm, kết quả cũ không ghi đè được thao tác mới. Thêm nút Thử lại trên Home và test cho lỗi stream của `StorageService`. Trên emulator, bấm xuất 3 lần liên tiếp chỉ tạo 1 file.
+
+### Merge vào `main` — [PR #1](https://github.com/ruxenb/LongvitaRC/pull/1), [PR #2](https://github.com/ruxenb/LongvitaRC/pull/2)
+
+- **Đã làm:** leader yêu cầu tự kiểm tra rồi merge. Merge PR #1 (`a6f489e`), đổi base PR #2 sang `main` rồi merge (`6f58786`).
+- **Vấn đề:** Thắng vừa đẩy `d9d0a90`, gây xung đột ở 4 file: hai file ViewModel và hai file task.
+- **Quyết định:** dùng merge commit để không phải dựng lại nhánh PDF. Giữ các dòng task của Thắng và của Charlie. Không nhận `eating_window_hours: 12` cố định vì đó là số giả. Sửa `age > 65` thành `age >= 65` theo Thắng, vì analytics plan ghi từ 65 tuổi.
+- **Kiểm tra:** trên `main` sau merge, analyzer sạch, 168/168 test, rules 41/41.
+- **Còn vướng:** hai PR chưa có review của thành viên khác hay AI. S7-1-CM phải chạy trên PR kế tiếp.
+
+### Profile và Firebase Demo Area (S4-13) — nhánh `feature/charlie-profile-01`
+
+- **Đã làm:** màn Profile có danh tính, đăng xuất, xuất PDF với tiến độ và URL, hộp thư FCM, Remote Config, crash thử.
+- **Quyết định:** chỉ thêm một nút mở Profile trên Home, chưa gỡ khối xuất tạm vì Home thuộc Hoàng. Gây crash phải qua hộp xác nhận. Khi cập nhật Remote Config trả về false, chỉ báo "không có giá trị mới hoặc chưa tải được", vì service không phân biệt hai trường hợp này.
+- **Lỗi tìm được:** hộp thư không tự cập nhật khi có tin mới vì `NotificationService` không báo cho ViewModel. Thêm `onChanged`.
+- **Kiểm tra:** 190/190 test. Emulator: mở và quay lại Profile, upload lỗi có thông báo, thử lại không tạo file mới, xem trước, chia sẻ, hủy crash, đăng xuất về Sign-in.
+- **Còn vướng:** chưa có upload thành công, push thật, crash thật, TalkBack.
+
+### Nháp báo cáo Auth (S8-3) — `docs/report-drafts/s8-3-firebase-auth.md`
+
+- **Đã làm:** phần Auth, gồm luồng, xử lý lỗi, kiểm thử, bằng chứng, giới hạn. Mỗi ca lỗi ghi rõ đã kiểm trên emulator hay chỉ bằng fake.
+- **Còn vướng:** phần Storage và FCM chờ bằng chứng thật (S4-15).
