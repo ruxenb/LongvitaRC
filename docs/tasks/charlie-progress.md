@@ -6,6 +6,54 @@
 
 **Chưa merge:** nhánh `feature/charlie-storage-01`, gồm S3-7, S4-11, xóa PDF khi đăng xuất, sửa chân trang PDF, lịch sử FCM, route `/profile`, gỡ khối xuất khỏi Home, plugin Crashlytics và script ARTEMIS. Thắng, Hoàng và Thái An đã đồng ý các phần chạm vào việc của họ (theo Charlie, 02/11).
 
+## Mức hoàn thành công việc
+
+```text
+Toàn dự án   [███████████░░░░░░░░░░░░░░░░░░░░░░░░░░░░░]  27%
+Charlie      [███████████████████████░░░░░░░░░░░░░░░░░]  58%
+```
+
+Code và tích hợp Firebase (18 task, giai đoạn 0–5): **81%**. Test, AI review, báo cáo, nộp bài (11 task, giai đoạn 6–9): **20%**.
+
+Mỗi task chấm theo phần tiêu chí nghiệm thu đã đạt và có bằng chứng. Đây là ước lượng của Charlie, chưa được leader duyệt. Số của Thái An, Thắng, Hoàng lấy từ bảng task (đã xong 100%, đang làm 50%), nên có thể thấp hơn thực tế. Task đã nghiệm thu chính thức: 0/29.
+
+<details>
+<summary>Chi tiết 29 task</summary>
+
+| Task | % | Lý do |
+|---|---:|---|
+| S0-3-CM | 95% | Công cụ chạy đủ; còn FlutterFire CLI chưa có trong PATH |
+| S0-4 | 70% | Project, README, 2/3 thành viên; còn Hoàng và DEC-01 |
+| S2-3 | 100% | Đủ theo tiêu chí, chờ nghiệm thu |
+| S2-4 | 100% | Đủ theo tiêu chí, chờ nghiệm thu |
+| S3-1 | 90% | Build, init, Crashlytics đều chạy; còn chốt ghim phiên bản |
+| S3-2 | 25% | 1/4 máy |
+| S3-3 | 90% | Chạy thật; lỗi mạng và lỗi hồ sơ mới test bằng fake |
+| S3-4 | 95% | Đủ trạng thái; còn chốt layout và ngôn ngữ |
+| S3-5 | 85% | Chạy thật; còn A/B bằng hai tài khoản và Hoàng duyệt A3 |
+| S3-7 | 70% | Rules và 14 test trên emulator; còn deploy lên project thật |
+| S3-9 | 100% | Đủ theo tiêu chí, chờ nghiệm thu |
+| S4-10 | 80% | PDF, lưu, mở, chia sẻ xong; còn thực đơn thật từ S4-3 |
+| S4-11 | 85% | Đủ các ca trên emulator; còn upload lên project thật |
+| S4-12 | 85% | Push thật 3 trạng thái, lịch sử, bấm mở màn; còn token theo user, route theo đích |
+| S4-13 | 90% | Đủ khu vực; còn upload thật và đổi Remote Config từ Console |
+| S4-14 | 75% | Nhãn đủ, kiểm bằng widget test; còn TalkBack thật |
+| S4-15 | 50% | FCM đủ; Storage trên Console chờ DEC-01 |
+| S5-4 | 80% | login, logout đã thấy trên DebugView; còn export_report thật |
+| S6-4 | 40% | Script đã viết; chưa chạy, cần key và 3 lần chạy |
+| S6-7 | 35% | Script đã viết; chưa chạy, cần key và Storage |
+| S6-14 | 0% | Chờ lần chạy ARTEMIS chính thức |
+| S7-1-CM | 40% | Đã có PR; còn chạy AI review và lưu output |
+| S7-2-CM | 0% | Chờ output AI review |
+| S7-3-CM | 0% | Chờ finding được chấp nhận |
+| S8-3 | 35% | Xong phần Auth; bằng chứng FCM đã có, chưa viết FCM và Storage |
+| S8-7 | 0% | Chưa soạn |
+| S8-12 | 0% | Chưa quay; bằng chứng Auth và push đã sẵn |
+| S8-17-CM | 70% | Đã ghi theo từng đợt; cập nhật đến khi chốt |
+| S9-5-CM | 0% | Làm cuối dự án |
+
+</details>
+
 ## Tiến độ 29 task
 
 | Trạng thái | Số lượng | IDs |
