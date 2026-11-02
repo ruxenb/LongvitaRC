@@ -1,0 +1,92 @@
+import 'dart:async';
+import 'dart:typed_data';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:longvita/models/auth_state.dart';
+import 'package:longvita/models/meal_plan_model.dart';
+import 'package:longvita/models/view_state.dart';
+import 'package:longvita/viewmodels/auth_viewmodel.dart';
+import 'package:longvita/viewmodels/profile_viewmodel.dart';
+import 'package:longvita/viewmodels/meal_plan_viewmodel.dart';
+import 'auth/auth_fakes.dart';
+import 'auth/session_isolation_test.dart' show FakeDataService, planFor;
+
+class DelayedStorage extends FakeStorageService {
+  final started = Completer<void>();
+  final response = Completer<String?>();
+  @override
+  Future<String?> uploadReportPdf({required String uid, required String fileName,
+    required Uint8List bytes, void Function(double)? onProgress}) {
+    started.complete();
+    return response.future;
+  }
+}
+
+class DelayedData extends FakeDataService {
+  final started = Completer<void>();
+  final response = Completer<List<MealPlanModel>>();
+  @override
+  Future<List<MealPlanModel>> getUserMealPlans(String uid) {
+    started.complete();
+    return response.future;
+  }
+}
+
+void main() {
+  test('PM-S3-5-01: late upload from A must not repopulate B profile', () async {
+    final auth = FakeAuthService();
+    final analytics = FakeAnalytics();
+    final crash = FakeCrashlytics();
+    final storage = DelayedStorage();
+    final profile = ProfileViewModel(authService: auth, storageService: storage,
+      notificationService: FakeNotificationService(), reportService: FakeReportService(),
+      remoteConfigService: FakeRemoteConfig(), crashlyticsService: crash,
+      analyticsService: analytics);
+    final session = AuthViewModel(authService: auth, analytics: analytics,
+      crashlytics: crash, sessionScoped: [profile]);
+    addTearDown(session.dispose);
+    addTearDown(profile.dispose);
+    await Future<void>.delayed(const Duration(milliseconds: 5));
+    auth.nextSignIn = const AuthSignInSucceeded('uid-a');
+    await session.signInWithGoogle();
+    final upload = profile.exportAndUploadPdf(planFor('uid-a'));
+    await storage.started.future;
+    await session.signOut();
+    auth.nextSignIn = const AuthSignInSucceeded('uid-b');
+    await session.signInWithGoogle();
+    expect(profile.lastUploadedUrl, isNull);
+    storage.response.complete('https://storage.test/reports/uid-a/late.pdf');
+    await upload;
+    expect(profile.user?.uid, 'uid-b');
+    expect(profile.lastUploadedUrl, isNull,
+      reason: 'A late completion must be ignored after a session change');
+    expect(profile.exportState, isA<ViewStateIdle>());
+  });
+
+  test('PM-S3-5-02: late fetch from A must not repopulate B saved plans', () async {
+    final auth = FakeAuthService();
+    final analytics = FakeAnalytics();
+    final crash = FakeCrashlytics();
+    final data = DelayedData();
+    final plans = MealPlanViewModel(dataService: data, analytics: analytics,
+      crashlytics: crash, remoteConfig: FakeRemoteConfig());
+    final session = AuthViewModel(authService: auth, analytics: analytics,
+      crashlytics: crash, sessionScoped: [plans]);
+    addTearDown(session.dispose);
+    addTearDown(plans.dispose);
+    await Future<void>.delayed(const Duration(milliseconds: 5));
+    auth.nextSignIn = const AuthSignInSucceeded('uid-a');
+    await session.signInWithGoogle();
+    final fetch = plans.fetchSavedPlans('uid-a');
+    await data.started.future;
+    await session.signOut();
+    auth.nextSignIn = const AuthSignInSucceeded('uid-b');
+    await session.signInWithGoogle();
+    expect(plans.savedPlansState, isA<ViewStateIdle>());
+    data.response.complete([planFor('uid-a')]);
+    await fetch;
+    expect(session.currentUser?.uid, 'uid-b');
+    expect(plans.savedPlansState, isA<ViewStateIdle>(),
+      reason: 'A stale response must not enter B saved plans state');
+  });
+}
+

@@ -1,0 +1,27 @@
+00:00 +0: loading C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/pm_review_session_race_test.dart
+00:00 +0: PM-S3-5-01: late upload from A must not repopulate B profile
+00:00 +0 -1: PM-S3-5-01: late upload from A must not repopulate B profile [E]
+  Expected: null
+    Actual: 'https://storage.test/reports/uid-a/late.pdf'
+  A late completion must be ignored after a session change
+  
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test\pm_review_session_race_test.dart 60:5          main.<fn>
+  
+00:00 +0 -1: PM-S3-5-02: late fetch from A must not repopulate B saved plans
+00:00 +0 -2: PM-S3-5-02: late fetch from A must not repopulate B saved plans [E]
+  Expected: <Instance of 'ViewStateIdle'>
+    Actual: <Instance of 'ViewStateSuccess<List<MealPlanModel>>'>
+     Which: is not an instance of 'ViewStateIdle'
+  A stale response must not enter B saved plans state
+  
+  package:matcher                                     expect
+  package:flutter_test/src/widget_tester.dart 473:18  expect
+  test\pm_review_session_race_test.dart 88:5          main.<fn>
+  
+00:00 +0 -2: Some tests failed.
+
+Failing tests:
+  C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/pm_review_session_race_test.dart: PM-S3-5-01: late upload from A must not repopulate B profile
+  C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/pm_review_session_race_test.dart: PM-S3-5-02: late fetch from A must not repopulate B saved plans

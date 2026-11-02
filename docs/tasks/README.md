@@ -1,5 +1,9 @@
 # Kế Hoạch Task & Điều Phối Dự Án — PRM393 Lab 3
 
+> **Cập nhật điều phối 02/11/2026:** Lab 3 = Assignment. Giữ nguyên 112 IDs và bốn owner; không lấy bảng 0% bên dưới làm bằng chứng code chưa tồn tại hoặc đã hoàn tất. [Bộ đối chiếu Guide v5/repo](../coordination/README.md) bổ sung technical gates, scope SYS, pending decisions và quy tắc evidence. Owner chỉ cập nhật Done/Verified khi có commit/run/Console tương ứng.
+
+> **Chốt UI của user/team 02/11/2026:** Giữ Figma làm tham chiếu đóng băng, cải thiện UI trong code và lưu traceability/evidence ở repo; không sửa/đồng bộ Figma. Câu “Sync Figma”/“cập nhật Figma” trong phân công gốc là nội dung nguồn, áp dụng theo [quyết định hiện hành](../coordination/FIGMA_IMPLEMENTATION_CONTRACT.md); giữ IDs/owners, không coi là giảng viên đã đổi rubric.
+
 > **Dự án:** Longvita — Cloud-Enabled Mobile App (Dinh dưỡng trường thọ)  
 > **Công nghệ:** Flutter + Firebase + Google ARTEMIS + AI Code Review  
 > **Hình thức làm bài:** Nhóm 4 người (*Handout ghi “Individual”, cần giảng viên xác nhận tại task S0-1*)  
