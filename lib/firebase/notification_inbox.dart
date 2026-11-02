@@ -9,8 +9,8 @@ import '../models/app_notification.dart';
 /// - Messages arriving with no user signed in wait for the next sign-in, and
 ///   are dropped on sign-out.
 ///
-/// History is memory only until the storage policy is agreed, so it does not
-/// survive an app restart.
+/// This class holds the inbox in memory; `NotificationService` saves and
+/// restores it per user.
 class NotificationInbox {
   String? _uid;
   final List<AppNotification> _items = [];
@@ -18,6 +18,7 @@ class NotificationInbox {
   final Map<String, AppNotification> _accepted = {};
   final Set<String> _routed = {};
   NotificationTarget? _pendingTarget;
+  bool _openRequested = false;
 
   List<AppNotification> get items => List.unmodifiable(_items);
 
@@ -31,6 +32,16 @@ class NotificationInbox {
     _held.clear();
     for (final item in held) {
       receive(item.notification, tapped: item.tapped);
+    }
+  }
+
+  /// Adds saved history of the bound user behind what is already in the inbox.
+  /// Later messages with the same id count as duplicates.
+  void restore(List<AppNotification> saved) {
+    for (final item in saved) {
+      if (_accepted.containsKey(item.messageId)) continue;
+      _accepted[item.messageId] = item;
+      _items.add(item);
     }
   }
 
@@ -58,8 +69,9 @@ class NotificationInbox {
     }
 
     final target = (accepted ?? notification).target;
-    if (tapped && target != null && _routed.add(notification.messageId)) {
-      _pendingTarget = target;
+    if (tapped && _routed.add(notification.messageId)) {
+      _openRequested = true;
+      if (target != null) _pendingTarget = target;
     }
     return accepted == null;
   }
@@ -71,11 +83,19 @@ class NotificationInbox {
     return target;
   }
 
+  /// True once after a message was tapped, with or without a target.
+  bool takeOpenRequest() {
+    final requested = _openRequested;
+    _openRequested = false;
+    return requested;
+  }
+
   void _resetSession() {
     _items.clear();
     _accepted.clear();
     _routed.clear();
     _pendingTarget = null;
+    _openRequested = false;
   }
 }
 

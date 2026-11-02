@@ -74,6 +74,33 @@ class AppNotification {
     );
   }
 
+  /// The form kept on the device. [source] stays out: it only lives in memory.
+  Map<String, dynamic> toJson() => {
+        'message_id': messageId,
+        'title': title,
+        'body': body,
+        'target_type': target?.type,
+        'target_id': target?.id,
+        'target_issue': targetIssue.name,
+        'recipient_uid': recipientUid,
+      };
+
+  factory AppNotification.fromJson(Map<String, dynamic> json) {
+    final type = json['target_type'] as String?;
+    final id = json['target_id'] as String?;
+    return AppNotification(
+      messageId: json['message_id'] as String,
+      title: json['title'] as String?,
+      body: json['body'] as String?,
+      target: type != null && id != null ? NotificationTarget(type, id) : null,
+      targetIssue: NotificationTargetIssue.values.firstWhere(
+        (issue) => issue.name == json['target_issue'],
+        orElse: () => NotificationTargetIssue.none,
+      ),
+      recipientUid: json['recipient_uid'] as String?,
+    );
+  }
+
   static (NotificationTarget?, NotificationTargetIssue) _parseTarget(
       Map<String, dynamic> data) {
     final type = _text(data['target_type']);

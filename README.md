@@ -47,7 +47,7 @@ Tuân thủ yêu cầu bắt buộc của Handout Mục 3 & 9 về việc ghim p
 | **Dart SDK** | `3.13.2` | Đi kèm với Flutter 3.47.2 |
 | **Android SDK Platform** | API 34 (Android 14) / Min SDK 21 | Cấu hình trong `android/app/build.gradle.kts` |
 | **Python** | `3.12+` | Dành cho Google ARTEMIS Test Suite |
-| **Google ARTEMIS** | Chưa pin full commit SHA (Apache 2.0) | Chốt full SHA của `google/artemis`; HEAD không phải pin |
+| **Google ARTEMIS** | `351ca8422f7b5b54e80a9c1ce03a222e02415b6b` (Apache 2.0) | Pin tại `e2e_test/pyproject.toml`; chưa có raw run |
 | **Firebase Packages** | Core `3.15.2`, Auth `5.7.0`, Storage `12.4.10`, Messaging `15.2.10`, Analytics `11.6.0`, Crashlytics `4.3.10`, RemoteConfig `5.5.0`, Firestore `5.6.12` | Quản lý trong `pubspec.yaml` |
 | **State Management** | `provider: ^6.1.2` | MVVM Architecture Dependency Injection |
 
@@ -142,9 +142,10 @@ flutter run
    ```
 2. Thiết lập biến môi trường API Key (không commit file chứa key):
    ```bash
-   export GEMINI_API_KEY="your-api-key"
+   export ARTEMIS_BASE_URL="http://127.0.0.1:8000"  # Daemon ARTEMIS, chạy từ checkout của google/artemis tại commit đã pin, với GEMINI_API_KEY
    export ANDROID_SERIAL="emulator-5554"  # Hoặc serial của thiết bị adb
    export ARTEMIS_PROFILE="flash"         # "flash" cho regression; "pro" cho exploratory
+   export FCM_TEST_TITLE="tiêu đề tin"    # Tin gửi từ Console trước khi chạy TC-10
    ```
 3. Chạy toàn bộ test suite bằng pytest:
    ```bash

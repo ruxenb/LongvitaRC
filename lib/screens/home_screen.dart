@@ -15,33 +15,6 @@ import 'profile_screen.dart';
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
-  /// Shows the outcome of a finished export or retry. A call ignored because
-  /// another one is running leaves the state loading, and shows nothing.
-  void _showExportResult(BuildContext context, ProfileViewModel profile) {
-    final state = profile.exportState;
-    final String? message = switch (state) {
-      ViewStateError<String>() => state.message,
-      ViewStateSuccess<String>() => 'Đã xuất PDF và tải lên Storage thành công!',
-      _ => null,
-    };
-    if (message != null) {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text(message)));
-    }
-  }
-
-  Future<void> _openExport(
-    BuildContext context,
-    Future<bool> Function() open,
-  ) async {
-    final opened = await open();
-    if (!opened && context.mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Không mở được file PDF đã lưu.')),
-      );
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     final authViewModel = context.watch<AuthViewModel>();
@@ -56,13 +29,11 @@ class HomeScreen extends StatelessWidget {
         backgroundColor: AppColors.surface,
         elevation: 0,
         actions: [
-          // Plain push until the router owner (S3-6) adds the /profile route.
           IconButton(
             icon: const Icon(Icons.account_circle_rounded),
             tooltip: 'Hồ sơ',
-            onPressed: () => Navigator.of(context).push(
-              MaterialPageRoute<void>(builder: (_) => const ProfileScreen()),
-            ),
+            onPressed: () =>
+                Navigator.of(context).pushNamed(ProfileScreen.routeName),
           ),
           IconButton(
             icon: const Icon(Icons.logout_rounded),
@@ -226,50 +197,10 @@ class HomeScreen extends StatelessWidget {
                     ),
                     const SizedBox(height: AppSpacing.xs),
                     OutlinedButton.icon(
-                      onPressed: profileViewModel.isExporting
-                          ? null
-                          : () async {
-                              await profileViewModel.exportAndUploadPdf(
-                                  mealPlanViewModel.activePlan!);
-                              if (context.mounted) {
-                                _showExportResult(context, profileViewModel);
-                              }
-                            },
+                      onPressed: () => Navigator.of(context)
+                          .pushNamed(ProfileScreen.routeName),
                       icon: const Icon(Icons.picture_as_pdf_outlined),
-                      label: Text(profileViewModel.isExporting
-                          ? 'Đang xuất PDF...'
-                          : 'Xuất báo cáo PDF & Upload Storage'),
-                    ),
-                  ],
-                  // Temporary home for these actions until the export area
-                  // moves to the Profile screen (S4-13).
-                  if (profileViewModel.canRetryUpload) ...[
-                    const SizedBox(height: AppSpacing.xs),
-                    OutlinedButton.icon(
-                      onPressed: () async {
-                        await profileViewModel.retryUpload();
-                        if (context.mounted) {
-                          _showExportResult(context, profileViewModel);
-                        }
-                      },
-                      icon: const Icon(Icons.refresh_rounded),
-                      label: const Text('Thử tải lên lại'),
-                    ),
-                  ],
-                  if (profileViewModel.lastExport != null) ...[
-                    const SizedBox(height: AppSpacing.xs),
-                    OutlinedButton.icon(
-                      onPressed: () => _openExport(
-                          context, profileViewModel.previewLastExport),
-                      icon: const Icon(Icons.visibility_outlined),
-                      label: const Text('Mở PDF đã lưu'),
-                    ),
-                    const SizedBox(height: AppSpacing.xs),
-                    OutlinedButton.icon(
-                      onPressed: () => _openExport(
-                          context, profileViewModel.shareLastExport),
-                      icon: const Icon(Icons.share_outlined),
-                      label: const Text('Chia sẻ PDF đã lưu'),
+                      label: const Text('Xuất báo cáo PDF ở Hồ sơ'),
                     ),
                   ],
                 ],

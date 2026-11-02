@@ -7,7 +7,7 @@
 > **Dự án:** Longvita — Cloud-Enabled Mobile App (Dinh dưỡng trường thọ)  
 > **Công nghệ:** Flutter + Firebase + Google ARTEMIS + AI Code Review  
 > **Hình thức làm bài:** Nhóm 4 người (*Handout ghi “Individual”, cần giảng viên xác nhận tại task S0-1*)  
-> **Tổng số task:** 112 tasks | **Tiến độ đã đồng bộ:** 12/112 (11%). **Charlie (02/11): 6 chờ nghiệm thu / 12 đang thực hiện / 2 skeleton / 9 chưa bắt đầu**; [progress](charlie-progress.md). Leader tổng hợp phần còn lại; không dùng số 0% từ bảng baseline làm tiến độ hiện tại của Charlie.
+> **Tổng số task:** 112 tasks | **Tiến độ đã đồng bộ:** 12/112 (11%). **Charlie (02/11): 6 chờ nghiệm thu / 17 đang thực hiện / 0 skeleton / 6 chưa bắt đầu**; [progress](charlie-progress.md). Leader tổng hợp phần còn lại; không dùng số 0% từ bảng baseline làm tiến độ hiện tại của Charlie.
 
 ---
 
@@ -16,7 +16,7 @@
 | Thành viên | Tài khoản / MSSV | Vai trò chính trong Lab 3 | Tổng task | Đã xong | Tiến độ | File task cá nhân |
 |:---|:---|:---|:---:|:---:|:---:|:---|
 | **Thái An** | Thái An | **Team Leader & QA Lead**: Điều phối chung, Analytics, Crashlytics, Remote Config, ARTEMIS | 29 | 7 | 24% | [`task-thai-an.md`](task-thai-an.md) |
-| **Charlie** | CharlieMinh | **Design System in Code + Firebase**: Auth, Storage, FCM, Common Widgets, Profile | 29 | Chờ nghiệm thu | 6 review / 12 đang làm / 2 skeleton / 9 chưa bắt đầu | [`task-charlie.md`](task-charlie.md) |
+| **Charlie** | CharlieMinh | **Design System in Code + Firebase**: Auth, Storage, FCM, Common Widgets, Profile | 29 | Chờ nghiệm thu | 6 review / 17 đang làm / 0 skeleton / 6 chưa bắt đầu | [`task-charlie.md`](task-charlie.md) |
 | **Hoàng** | Hoàng DV (YAHsaveme) | **Dữ liệu & UI Flows**: DataService, 3 Flows (S01–S10), States, A11y, Sync Figma | 26 | 0 | 0% | [`task-hoang.md`](task-hoang.md) |
 | **Thắng** | Thắng VLQ | **Technical Architect & Co-Lead**: MVVM Skeleton, Router, Docs, Report, Slides, Video | 28 | 5 | 18% | [`task-thang.md`](task-thang.md) |
 | **TỔNG CỘNG** | | | **112** | **12** | **11%** | |

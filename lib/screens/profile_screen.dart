@@ -14,8 +14,31 @@ import '../widgets/longvita_widgets.dart';
 /// (S1-5), so the layout is composed from the Longvita design system. All
 /// logic lives in [ProfileViewModel] and [AuthViewModel]; `AuthGate` removes
 /// this route when the session ends.
-class ProfileScreen extends StatelessWidget {
+class ProfileScreen extends StatefulWidget {
+  static const routeName = '/profile';
+
   const ProfileScreen({super.key});
+
+  @override
+  State<ProfileScreen> createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends State<ProfileScreen> {
+  late final AppLifecycleListener _lifecycle;
+
+  @override
+  void initState() {
+    super.initState();
+    final profile = context.read<ProfileViewModel>();
+    profile.refreshInbox();
+    _lifecycle = AppLifecycleListener(onResume: profile.refreshInbox);
+  }
+
+  @override
+  void dispose() {
+    _lifecycle.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -64,6 +87,24 @@ class _IdentityCard extends StatelessWidget {
 
   const _IdentityCard({required this.user});
 
+  Future<void> _confirmSignOut(BuildContext context) async {
+    final auth = context.read<AuthViewModel>();
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (dialogContext) => AppDialog.confirmation(
+        icon: AppIcons.infoOutline,
+        title: 'Đăng xuất?',
+        message: 'PDF đã lưu trên máy này sẽ bị xóa. '
+            'Bản đã tải lên và thực đơn đã lưu vẫn còn.',
+        primaryLabel: 'Đồng ý',
+        onPrimary: () => Navigator.of(dialogContext).pop(true),
+        secondaryLabel: 'Hủy',
+        onSecondary: () => Navigator.of(dialogContext).pop(false),
+      ),
+    );
+    if (confirmed == true) await auth.signOut();
+  }
+
   @override
   Widget build(BuildContext context) {
     final photoUrl = user.photoUrl;
@@ -95,8 +136,10 @@ class _IdentityCard extends StatelessWidget {
                   children: [
                     Text(user.displayName, style: AppTypography.title),
                     const SizedBox(height: AppSpacing.s4),
+                    // A long address breaks before the @ rather than inside a word.
                     Text(
-                      user.email,
+                      user.email.replaceFirst('@', '​@'),
+                      semanticsLabel: user.email,
                       style: AppTypography.supporting
                           .copyWith(color: AppColors.textSecondary),
                     ),
@@ -115,7 +158,7 @@ class _IdentityCard extends StatelessWidget {
             key: const Key('profile-sign-out'),
             text: 'Đăng xuất',
             variant: AppButtonVariant.secondary,
-            onPressed: context.read<AuthViewModel>().signOut,
+            onPressed: () => _confirmSignOut(context),
           ),
         ],
       ),
@@ -235,6 +278,19 @@ class _ExportCard extends StatelessWidget {
               progress: profile.uploadProgress,
             ),
           ],
+          if (profile.canCancelUpload) ...[
+            const SizedBox(height: AppSpacing.s8),
+            AppButton(
+              key: const Key('profile-cancel-upload'),
+              text: 'Hủy tải lên',
+              variant: AppButtonVariant.secondary,
+              onPressed: profile.cancelUpload,
+            ),
+          ],
+          if (state is ViewStateEmpty<String>) ...[
+            const SizedBox(height: AppSpacing.s16),
+            _Notice(message: state.message),
+          ],
           if (state is ViewStateError<String>) ...[
             const SizedBox(height: AppSpacing.s16),
             _Notice(message: state.message, isError: true),
@@ -330,8 +386,8 @@ class _InboxCard extends StatelessWidget {
         children: [
           const _CardHeader(
             title: 'Thông báo',
-            description: 'Tin nhận trong phiên này. Chưa lưu sau khi đóng '
-                'ứng dụng.',
+            description: 'Tin nhắn đã nhận, lưu trên máy này theo từng tài '
+                'khoản.',
           ),
           if (permissionNotice != null) ...[
             const SizedBox(height: AppSpacing.s16),

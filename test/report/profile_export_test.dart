@@ -7,6 +7,7 @@ import 'dart:typed_data';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:longvita/models/auth_state.dart';
+import 'package:longvita/models/upload_failure.dart';
 import 'package:longvita/models/view_state.dart';
 import 'package:longvita/viewmodels/auth_viewmodel.dart';
 import 'package:longvita/viewmodels/profile_viewmodel.dart';
@@ -16,12 +17,13 @@ import '../auth/session_isolation_test.dart' show planFor;
 
 /// Scripts upload outcomes and records every call.
 class ScriptedStorage extends FakeStorageService {
-  final List<String?> results = [];
+  /// Next outcomes: null fails the upload as an unknown error.
+  final List<Object?> results = [];
   final List<String> fileNames = [];
   final List<Uint8List> uploads = [];
 
   @override
-  Future<String?> uploadReportPdf({
+  Future<String> uploadReportPdf({
     required String uid,
     required String fileName,
     required Uint8List bytes,
@@ -30,7 +32,9 @@ class ScriptedStorage extends FakeStorageService {
     fileNames.add(fileName);
     uploads.add(bytes);
     if (results.isEmpty) return 'https://storage.test/reports/$uid/$fileName';
-    return results.removeAt(0);
+    final result = results.removeAt(0) ?? const UploadFailure(UploadFailureKind.unknown);
+    if (result is UploadFailure) throw result;
+    return result as String;
   }
 }
 
@@ -58,6 +62,12 @@ class HeldSaveStore extends FakeLocalReportStore {
     await release.future;
     return super.save(uid: uid, exportId: exportId, bytes: bytes);
   }
+}
+
+class FailingDeleteStore extends FakeLocalReportStore {
+  @override
+  Future<void> deleteAll({required String uid}) async =>
+      throw const FileSystemException('locked');
 }
 
 void main() {
@@ -288,13 +298,26 @@ void main() {
       expect(viewer.shared, isEmpty);
     });
 
-    test('sign-out keeps the file of A on the device', () async {
+    test('sign-out removes the files of A from the device', () async {
       await signIn('uid-a');
       await profile.exportAndUploadPdf(planFor('uid-a'));
+      store.files['uid-b/other'] = Uint8List.fromList([9]);
 
       await session.signOut();
 
-      expect(store.files, hasLength(1));
+      expect(store.files.keys, ['uid-b/other']);
+    });
+
+    test('a failed removal is recorded and does not break sign-out', () async {
+      final failing = FailingDeleteStore();
+      wire(customStore: failing);
+      await signIn('uid-a');
+
+      await session.signOut();
+      await Future<void>.delayed(Duration.zero);
+
+      expect(session.currentUser, isNull);
+      expect(crashlytics.errors, hasLength(1));
     });
 
     test('logout during save neither sets the export nor uploads', () async {
@@ -312,6 +335,48 @@ void main() {
       expect(profile.lastExport, isNull);
       expect(storage.fileNames, isEmpty);
       expect(profile.exportState, isA<ViewStateIdle<String>>());
+      expect(store.files, isEmpty, reason: 'the late save is removed too');
+    });
+  });
+
+  group('upload failures', () {
+    for (final (kind, text) in const [
+      (UploadFailureKind.network, 'mất kết nối'),
+      (UploadFailureKind.denied, 'chưa có quyền'),
+      (UploadFailureKind.notConfigured, 'chưa sẵn sàng'),
+      (UploadFailureKind.quota, 'dung lượng'),
+      (UploadFailureKind.unknown, 'chưa tải lên được'),
+    ]) {
+      test('${kind.name} says why and keeps the file', () async {
+        await signIn('uid-a');
+        storage.results.add(UploadFailure(kind));
+
+        await profile.exportAndUploadPdf(planFor('uid-a'));
+
+        final state = profile.exportState as ViewStateError<String>;
+        expect(state.message, contains(text));
+        expect(state.message, contains('đã lưu trên máy'));
+        expect(profile.canRetryUpload, isTrue);
+        expect(store.files, hasLength(1));
+      });
+    }
+
+    test('a lost connection is not recorded as an app error', () async {
+      await signIn('uid-a');
+      storage.results.add(const UploadFailure(UploadFailureKind.network));
+
+      await profile.exportAndUploadPdf(planFor('uid-a'));
+
+      expect(crashlytics.errors, isEmpty);
+    });
+
+    test('a denied upload is recorded', () async {
+      await signIn('uid-a');
+      storage.results.add(const UploadFailure(UploadFailureKind.denied));
+
+      await profile.exportAndUploadPdf(planFor('uid-a'));
+
+      expect(crashlytics.errors, hasLength(1));
     });
   });
 }

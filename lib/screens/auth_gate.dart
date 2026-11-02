@@ -3,10 +3,12 @@ import 'package:provider/provider.dart';
 
 import '../models/auth_state.dart';
 import '../viewmodels/auth_viewmodel.dart';
+import '../viewmodels/profile_viewmodel.dart';
 import '../widgets/state_views.dart';
 import '../theme/app_spacing.dart';
 import 'auth_recovery_screen.dart';
 import 'home_screen.dart';
+import 'profile_screen.dart';
 import 'sign_in_screen.dart';
 
 /// Routes by [AuthState] (S3-6, owner Thắng; auth states from S3-3).
@@ -23,6 +25,32 @@ class AuthGate extends StatefulWidget {
 
 class _AuthGateState extends State<AuthGate> {
   bool _wasSignedIn = false;
+  late final ProfileViewModel _profile;
+
+  @override
+  void initState() {
+    super.initState();
+    _profile = context.read<ProfileViewModel>();
+    _profile.addListener(_openTappedNotification);
+  }
+
+  @override
+  void dispose() {
+    _profile.removeListener(_openTappedNotification);
+    super.dispose();
+  }
+
+  /// A tap waits here until someone is signed in. Temporary contract: every
+  /// tap opens the notification center on Profile (owners agreed 02/11/2026).
+  void _openTappedNotification() {
+    if (!mounted || context.read<AuthViewModel>().state is! AuthSignedIn) return;
+    if (!_profile.takeNotificationOpenRequest()) return;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      Navigator.of(context).pushNamedAndRemoveUntil(
+          ProfileScreen.routeName, (route) => route.isFirst);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,6 +61,10 @@ class _AuthGateState extends State<AuthGate> {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (mounted) Navigator.of(context).popUntil((route) => route.isFirst);
       });
+    }
+    if (signedIn && !_wasSignedIn) {
+      WidgetsBinding.instance
+          .addPostFrameCallback((_) => _openTappedNotification());
     }
     _wasSignedIn = signedIn;
 

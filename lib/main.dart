@@ -29,6 +29,7 @@ import 'viewmodels/profile_viewmodel.dart';
 import 'theme/app_theme.dart';
 import 'theme/app_typography.dart';
 import 'screens/auth_gate.dart';
+import 'screens/profile_screen.dart';
 import 'screens/startup_gate.dart';
 
 void main() {
@@ -126,6 +127,7 @@ class LongvitaApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: AppTheme.lightTheme,
       home: const AuthGate(),
+      routes: {ProfileScreen.routeName: (_) => const ProfileScreen()},
     );
   }
 }

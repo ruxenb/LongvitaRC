@@ -37,6 +37,20 @@ class LocalReportStore {
     return file?.readAsBytes();
   }
 
+  /// Removes one saved file, if it exists.
+  Future<void> delete({required String uid, required String exportId}) async {
+    final file = await find(uid: uid, exportId: exportId);
+    await file?.delete();
+  }
+
+  /// Removes every file of [uid] from this device. Cloud copies stay.
+  Future<void> deleteAll({required String uid}) async {
+    _checkSegment(uid);
+    final base = await _baseDirectory();
+    final folder = Directory('${base.path}/reports/$uid');
+    if (await folder.exists()) await folder.delete(recursive: true);
+  }
+
   Future<File> _fileFor(String uid, String exportId) async {
     _checkSegment(uid);
     _checkSegment(exportId);

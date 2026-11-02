@@ -2,16 +2,65 @@
 
 Đây là bàn giao nền tảng mobile của cùng Assignment, không tuyên bố toàn bộ các task đã hoàn tất. Lab 3 = Assignment; Figma Lab 2 là tham chiếu đóng băng, UI được cải thiện trong code.
 
-**Đã merge vào `main` theo yêu cầu của leader, sau khi Charlie tự kiểm tra:** [#1 — design system, Firebase Auth và nền tảng PDF/FCM](https://github.com/ruxenb/LongvitaRC/pull/1), [#2 — lưu, mở, chia sẻ PDF](https://github.com/ruxenb/LongvitaRC/pull/2). [#3 — màn Profile và Firebase Demo Area](https://github.com/ruxenb/LongvitaRC/pull/3). Cả ba PR **chưa có review của thành viên khác hay AI**, nên các điểm cần chốt bên dưới vẫn còn mở. CodeRabbit chưa được cài, chờ leader xác nhận; S7-1-CM cần chạy AI review trên PR kế tiếp.
+**Đã merge vào `main` theo yêu cầu của leader, sau khi Charlie tự kiểm tra:** [#1 — design system, Firebase Auth và nền tảng PDF/FCM](https://github.com/ruxenb/LongvitaRC/pull/1), [#2 — lưu, mở, chia sẻ PDF](https://github.com/ruxenb/LongvitaRC/pull/2). [#3 — màn Profile và Firebase Demo Area](https://github.com/ruxenb/LongvitaRC/pull/3), [#4 — push thật, Storage trên emulator, Crashlytics, harness ARTEMIS](https://github.com/ruxenb/LongvitaRC/pull/4). Cả bốn PR **chưa có review trên GitHub của thành viên khác hay AI**, nên các điểm cần chốt bên dưới vẫn còn mở. CodeRabbit chưa được cài, chờ leader xác nhận; S7-1-CM cần chạy AI review trên PR kế tiếp.
+
+Thắng, Hoàng và Thái An đã đồng ý các phần của PR #4 chạm vào việc của họ (theo Charlie, 02/11).
+
+## Mức hoàn thành công việc
+
+```text
+Toàn dự án   [███████████░░░░░░░░░░░░░░░░░░░░░░░░░░░░░]  27%
+Charlie      [███████████████████████░░░░░░░░░░░░░░░░░]  58%
+```
+
+Code và tích hợp Firebase (18 task, giai đoạn 0–5): **81%**. Test, AI review, báo cáo, nộp bài (11 task, giai đoạn 6–9): **20%**.
+
+Mỗi task chấm theo phần tiêu chí nghiệm thu đã đạt và có bằng chứng. Đây là ước lượng của Charlie, chưa được leader duyệt. Số của Thái An, Thắng, Hoàng lấy từ bảng task (đã xong 100%, đang làm 50%), nên có thể thấp hơn thực tế. Task đã nghiệm thu chính thức: 0/29.
+
+<details>
+<summary>Chi tiết 29 task</summary>
+
+| Task | % | Lý do |
+|---|---:|---|
+| S0-3-CM | 95% | Công cụ chạy đủ; còn FlutterFire CLI chưa có trong PATH |
+| S0-4 | 70% | Project, README, 2/3 thành viên; còn Hoàng và DEC-01 |
+| S2-3 | 100% | Đủ theo tiêu chí, chờ nghiệm thu |
+| S2-4 | 100% | Đủ theo tiêu chí, chờ nghiệm thu |
+| S3-1 | 90% | Build, init, Crashlytics đều chạy; còn chốt ghim phiên bản |
+| S3-2 | 25% | 1/4 máy |
+| S3-3 | 90% | Chạy thật; lỗi mạng và lỗi hồ sơ mới test bằng fake |
+| S3-4 | 95% | Đủ trạng thái; còn chốt layout và ngôn ngữ |
+| S3-5 | 85% | Chạy thật; còn A/B bằng hai tài khoản và Hoàng duyệt A3 |
+| S3-7 | 70% | Rules và 14 test trên emulator; còn deploy lên project thật |
+| S3-9 | 100% | Đủ theo tiêu chí, chờ nghiệm thu |
+| S4-10 | 80% | PDF, lưu, mở, chia sẻ xong; còn thực đơn thật từ S4-3 |
+| S4-11 | 85% | Đủ các ca trên emulator; còn upload lên project thật |
+| S4-12 | 85% | Push thật 3 trạng thái, lịch sử, bấm mở màn; còn token theo user, route theo đích |
+| S4-13 | 90% | Đủ khu vực; còn upload thật và đổi Remote Config từ Console |
+| S4-14 | 75% | Nhãn đủ, kiểm bằng widget test; còn TalkBack thật |
+| S4-15 | 50% | FCM đủ; Storage trên Console chờ DEC-01 |
+| S5-4 | 80% | login, logout đã thấy trên DebugView; còn export_report thật |
+| S6-4 | 40% | Script đã viết; chưa chạy, cần key và 3 lần chạy |
+| S6-7 | 35% | Script đã viết; chưa chạy, cần key và Storage |
+| S6-14 | 0% | Chờ lần chạy ARTEMIS chính thức |
+| S7-1-CM | 40% | Đã có PR; còn chạy AI review và lưu output |
+| S7-2-CM | 0% | Chờ output AI review |
+| S7-3-CM | 0% | Chờ finding được chấp nhận |
+| S8-3 | 35% | Xong phần Auth; bằng chứng FCM đã có, chưa viết FCM và Storage |
+| S8-7 | 0% | Chưa soạn |
+| S8-12 | 0% | Chưa quay; bằng chứng Auth và push đã sẵn |
+| S8-17-CM | 70% | Đã ghi theo từng đợt; cập nhật đến khi chốt |
+| S9-5-CM | 0% | Làm cuối dự án |
+
+</details>
 
 ## Tiến độ 29 task
 
 | Trạng thái | Số lượng | IDs |
 |---|---:|---|
 | Có kiểm chứng/evidence, chờ nghiệm thu | 6 | S0-3-CM, S2-3, S2-4, S3-3, S3-4, S3-9 |
-| Đang thực hiện / PR | 12 | S0-4, S3-1, S3-2, S3-5, S4-10, S4-12, S4-13, S4-14, S5-4, S7-1-CM, S8-3, S8-17-CM |
-| Skeleton | 2 | S3-7, S4-11 |
-| Chưa bắt đầu | 9 | S4-15, S6-4, S6-7, S6-14, S7-2-CM, S7-3-CM, S8-7, S8-12, S9-5-CM |
+| Đang thực hiện / PR | 17 | S0-4, S3-1, S3-2, S3-5, S3-7, S4-10, S4-11, S4-12, S4-13, S4-14, S4-15, S5-4, S6-4, S6-7, S7-1-CM, S8-3, S8-17-CM |
+| Chưa bắt đầu | 6 | S6-14, S7-2-CM, S7-3-CM, S8-7, S8-12, S9-5-CM |
 | **Tổng** | **29** | |
 
 Chi tiết IDs/owner/dependency tại [task Charlie](task-charlie.md) và [master 112 task](danh-sach-task-full.md). Chưa tự đánh Done thay leader; S7-1 đang thực hiện, chưa có AI PR review output để tính đủ Stage 7. Merge vào `main` không đồng nghĩa task đã được nghiệm thu.
@@ -23,14 +72,20 @@ Chi tiết IDs/owner/dependency tại [task Charlie](task-charlie.md) và [maste
 - **Firestore AUD-11:** schema/role/status/owner constraints và 41 emulator tests. Theo ghi nhận của Charlie, rules đã publish lên project trước PR; Hoàng/Thắng còn cần review các policy bên dưới.
 - **Analytics:** callers theo API mới của Thái An. Export params lấy từ PDF bytes thực. Chưa có eating window thật thì không gửi generate event; Hoàng nối dữ liệu S02, không điền số giả. `login` (`method=google`) và `logout` đã thấy trên [DebugView](../../evidence/analytics/S5-4-debugview-20261102/README.md), mỗi lần thao tác một event; `export_report` chưa kiểm thật vì chờ DEC-01.
 - **FCM preparation:** gateway và 4 callback, parser, inbox/dedup theo phiên. Payload gốc đi cùng entry đã chấp nhận; first accepted message thắng trong một phiên, tap duplicate dùng target đã chấp nhận. Chưa phải live FCM hoàn chỉnh.
-- **Profile (S4-13), đã vào `main` qua PR #3:** danh tính, đăng xuất, xuất PDF với tiến độ và URL, hộp thư FCM, giá trị và nút cập nhật Remote Config, crash thử có xác nhận. Home chỉ thêm một nút mở Profile, **Hoàng chưa xem phần sửa này**; khối xuất PDF tạm trên Home chưa gỡ, chờ thống nhất với Hoàng. Bấm vào thông báo chưa điều hướng. Route `/profile` chờ Thắng.
-- **PDF (S4-10), đã vào `main` qua PR #2:** TTF tiếng Việt regular/bold, lưu trên máy trước khi upload, export ID giữ nguyên khi thử lại, mở và chia sẻ qua `IReportViewer`. Mỗi lúc chỉ chạy một export hoặc retry, nên file, URL, tiến độ và trạng thái luôn thuộc cùng một lần xuất. Đăng xuất chỉ vô hiệu hóa kết quả ở ViewModel, **chưa hủy `UploadTask` của SDK**: upload đang chạy vẫn tiếp tục cho đến khi kết thúc; hủy thật thuộc S4-11. Các nút mở, chia sẻ, thử lại trên Home là tạm thời. Chưa chứng minh đúng plan đang xem vì chờ S4-3.
+- **Storage (S3-7, S4-11):** lỗi có kiểu (mất mạng, bị từ chối, chưa cấu hình, hết dung lượng), hủy thật, thử lại cùng ID. Rules owner-only có 14 test. Upload thành công bằng SDK thật **trên Storage Emulator**, [bằng chứng](../../evidence/storage/S4-11-emulator-20261102/README.md). Chưa deploy và chưa có file trên project thật vì DEC-01.
+- **FCM thật (S4-12, S4-15):** tin từ Console về đủ foreground, background, terminated; bấm tin mở Profile; lịch sử lưu trên máy theo UID. [Bằng chứng](../../evidence/fcm/S4-15-push-20261102/README.md). Đây là contract tạm nhóm đã đồng ý.
+- **Crashlytics:** có plugin Gradle, [crash thử đã lên Console](../../evidence/crashlytics/S4-13-test-crash-20261102/README.md). **Thái An cần chốt:** chưa nối `FlutterError.onError` và `PlatformDispatcher.onError` (S5-6), nên lỗi Flutter không bắt được chưa tự lên Crashlytics.
+- **ARTEMIS (S6-4, S6-7):** bỏ `DummyArtemisClient` trả SUCCESS giả, dùng `artemis-client` thật, ghim commit `351ca84`, viết `test_auth.py`, `test_export.py`, `test_profile.py`. **Chưa chạy lần nào:** cần key mô hình (S0-5). Thiếu SDK hoặc daemon thì test fail.
+- **Profile (S4-13), đã vào `main` qua PR #3:** danh tính, đăng xuất, xuất PDF với tiến độ và URL, hộp thư FCM, giá trị và nút cập nhật Remote Config, crash thử có xác nhận. Có route `/profile`, Home bỏ khối xuất tạm và chỉ còn lối sang Profile, đăng xuất từ Profile có hộp xác nhận theo TC-11. Nút đăng xuất trên Home vẫn không hỏi xác nhận, Hoàng xem có đổi không.
+- **PDF (S4-10), đã vào `main` qua PR #2:** TTF tiếng Việt regular/bold, lưu trên máy trước khi upload, export ID giữ nguyên khi thử lại, mở và chia sẻ qua `IReportViewer`. Mỗi lúc chỉ chạy một export hoặc retry, nên file, URL, tiến độ và trạng thái luôn thuộc cùng một lần xuất. Đăng xuất hủy upload đang chạy và xóa PDF của user đó trên máy, không đụng bản đã lên Storage. Các nút mở, chia sẻ, thử lại trên Home là tạm thời. Chưa chứng minh đúng plan đang xem vì chờ S4-3.
 
 Các commits chức năng: `6dfddf9` (UI), `56b1896` (Auth), `4e4bffd` (Firebase/rules), `9d76623` (session guards), `9ecc806` (Analytics callers), `7a9fa8c` (FCM), `40e47a1` (PDF), `2d547c7` (FCM recipient/dedup fix).
 
 ## Kiểm chứng và giới hạn
 
-**`main` tại `6f58786`, sau khi merge PR #1 và #2:** analyzer sạch, 168/168 tests, rules 41/41 trên emulator. APK debug build được trên nhánh PDF ngay trước khi merge, cùng nội dung code với `main`. **PR #3:** analyzer sạch, 191/191 tests; chạy trên emulator, xem [bằng chứng](../../evidence/ui/S4-13-profile-20261102/README.md), gồm cả phần chưa kiểm chứng.
+**`main` tại `6f58786`, sau khi merge PR #1 và #2:** analyzer sạch, 168/168 tests, rules 41/41 trên emulator. APK debug build được trên nhánh PDF ngay trước khi merge, cùng nội dung code với `main`. **PR #4, trước khi merge:** analyzer sạch, APK debug build được, 251/251 tests, rules 55/55 (41 Firestore, 14 Storage). Với rules mở toang, đúng 9 ca từ chối của Storage fail, [log](../../evidence/rules/S3-7-20261102/).
+
+**PR #3:** analyzer sạch, 191/191 tests; chạy trên emulator, xem [bằng chứng](../../evidence/ui/S4-13-profile-20261102/README.md), gồm cả phần chưa kiểm chứng.
 
 Code `2d547c7` / HEAD báo cáo `f1f397e` đã được kiểm độc lập: analyzer sạch, **133/133 unit/widget tests pass**, APK debug build thành công. Ca tái hiện recipient collision giữ nguyên expected đã pass. Hai lỗi response muộn qua đổi phiên và lỗi raw notification cache đã được xác nhận sửa; không tự đổi các fix này thành evidence PR Stage 7 hoàn tất.
 
@@ -50,11 +105,11 @@ Code `2d547c7` / HEAD báo cáo `f1f397e` đã được kiểm độc lập: ana
 4. **Thái An/leader (DEC-01):** Guide yêu cầu Storage upload, Final loại Storage; quyết định áp dụng/billing trước S3-7/S4-11. Không chặn Auth hoặc PDF local vì việc này.
 5. **FCM contract còn mở:** route intent của `meal_plan`/`announcement` (Thắng); history local theo UID hay Firestore/schema/rules (Hoàng/Thắng); token theo user hay topic và cách xử lý tin thiếu `recipient_uid` (Thái An/Thắng). Hiện tin không recipient chờ người login kế, chưa được team chốt cho production.
 6. **Charlie/team:** mời đủ thành viên Firebase, nhận SHA-1/SHA-256 và kiểm Google Sign-in trên từng máy; quyền Console và SHA/Auth là các đầu việc riêng. Đồng thời chốt ngôn ngữ UI và font Roboto cho PDF.
-7. **PDF cần chốt:** hiện file PDF còn trên máy sau khi đăng xuất (chỉ xóa tham chiếu trong app), chưa giới hạn số file, và sau khi mở lại app chưa xem lại được file cũ. Đề xuất tối thiểu: giữ file để thử lại, mở, chia sẻ trong phiên; khi đăng xuất xóa file của user đó, không đụng dữ liệu cloud. Cách này bám được cả S3-5 và S4-11. Nếu muốn giữ qua đăng xuất hoặc mở lại app, nhóm cần chốt thêm retention, quota, cách khôi phục và thao tác xóa. Hành vi hiện tại chưa được duyệt.
+7. **PDF cần chốt:** app làm theo đề xuất tối thiểu: giữ file để thử lại, mở, chia sẻ trong phiên; khi đăng xuất xóa file của user đó, không đụng dữ liệu cloud. Sau khi mở lại app vẫn chưa xem lại được file cũ. Nếu muốn giữ qua đăng xuất, nhóm cần chốt thêm retention, quota, cách khôi phục và thao tác xóa. Hành vi này chưa được nhóm duyệt và dễ đổi.
 
-## Đề xuất contract FCM (S4-12), chưa được duyệt
+## Contract FCM tạm (S4-12)
 
-Phần này cần Thắng, Hoàng, Thái An trả lời trước khi nối router, history và thử push thật. Code đã theo đề xuất dưới đây ở `lib/models/app_notification.dart` và `lib/firebase/notification_inbox.dart`; đổi được khi nhóm chốt.
+Thắng, Hoàng, Thái An đã đồng ý dùng tạm (theo Charlie, 02/11): mọi tin bấm vào đều mở Profile, lịch sử lưu trên máy theo UID và còn sau đăng xuất, thiếu `recipient_uid` thì hiện cho người đang đăng nhập, token chỉ dùng để thử. Các câu hỏi dưới đây vẫn cần chốt cho bản cuối.
 
 **Payload, các trường trong `data`:**
 
@@ -68,8 +123,8 @@ Phần này cần Thắng, Hoàng, Thái An trả lời trước khi nối route
 **Hành vi hiện có:**
 - Target sai hoặc thiếu: tin vẫn vào inbox, không điều hướng.
 - Trùng `message_id` trong một phiên: tin được chấp nhận đầu tiên thắng.
-- Đăng xuất: xóa inbox và tin đang chờ. Tin đến khi chưa đăng nhập chờ tới lần đăng nhập kế.
-- Router lấy đích bằng `NotificationService.takePendingTarget()`, mỗi tin một lần. Handler nền không điều hướng và chưa lưu gì.
+- Đăng xuất: xóa inbox trong bộ nhớ và tin đang chờ, lịch sử của user đó vẫn ở trên máy. Tin đến khi chưa đăng nhập chờ tới lần đăng nhập kế.
+- Bấm tin: `AuthGate` mở Profile, mỗi tin một lần. `takePendingTarget()` vẫn giữ đích để nối route thật sau. Handler nền không điều hướng, chỉ lưu tin chờ.
 
 **Câu hỏi cần trả lời:**
 

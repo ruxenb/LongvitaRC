@@ -6,8 +6,11 @@ import 'dart:typed_data';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:longvita/firebase/notification_history_store.dart';
 import 'package:longvita/firebase/notification_service.dart';
+import 'package:longvita/models/app_notification.dart';
 import 'package:longvita/models/auth_state.dart';
+import 'package:longvita/models/upload_failure.dart';
 import 'package:longvita/screens/auth_gate.dart';
 import 'package:longvita/screens/home_screen.dart';
 import 'package:longvita/screens/profile_screen.dart';
@@ -25,12 +28,12 @@ import '../fcm/notification_service_test.dart' show FakeGateway;
 class ScriptedStorage extends FakeStorageService {
   /// Next upload result; null fails the upload, as a missing bucket does.
   String? nextUrl = 'https://storage.test/report.pdf';
-  Completer<String?>? held;
+  Completer<String>? held;
   void Function(double)? lastOnProgress;
   int uploads = 0;
 
   @override
-  Future<String?> uploadReportPdf({
+  Future<String> uploadReportPdf({
     required String uid,
     required String fileName,
     required Uint8List bytes,
@@ -38,7 +41,12 @@ class ScriptedStorage extends FakeStorageService {
   }) {
     uploads++;
     lastOnProgress = onProgress;
-    return held?.future ?? Future.value(nextUrl);
+    final url = nextUrl;
+    return held?.future ??
+        (url != null
+            ? Future.value(url)
+            : Future.error(
+                const UploadFailure(UploadFailureKind.unknown)));
   }
 }
 
@@ -47,6 +55,29 @@ class ScriptedRemoteConfig extends FakeRemoteConfig {
 
   @override
   Future<bool> forceFetchAndActivate() async => nextRefresh;
+}
+
+/// No file system in widget tests, where real file futures never complete.
+class MemoryHistory implements NotificationHistoryStore {
+  final Map<String, List<AppNotification>> saved = {};
+  final List<AppNotification> pending = [];
+
+  @override
+  Future<List<AppNotification>> load(String uid) async => saved[uid] ?? const [];
+
+  @override
+  Future<void> save(String uid, List<AppNotification> items) async =>
+      saved[uid] = items;
+
+  @override
+  Future<void> addPending(AppNotification item) async => pending.insert(0, item);
+
+  @override
+  Future<List<AppNotification>> takePending() async {
+    final items = List.of(pending);
+    pending.clear();
+    return items;
+  }
 }
 
 class CountingCrashlytics extends FakeCrashlytics {
@@ -64,7 +95,9 @@ class Harness {
   final viewer = FakeReportViewer();
   final remoteConfig = ScriptedRemoteConfig();
   final gateway = FakeGateway();
-  late final notifications = NotificationService(gateway: gateway);
+  final history = MemoryHistory();
+  late final notifications =
+      NotificationService(gateway: gateway, history: history);
   late final mealPlan = MealPlanViewModel(
     dataService: FakeDataService(),
     analytics: analytics,
@@ -99,6 +132,7 @@ class Harness {
         ],
         child: MaterialApp(
           theme: AppTheme.lightTheme,
+          routes: {ProfileScreen.routeName: (_) => const ProfileScreen()},
           home: MediaQuery.withClampedTextScaling(
             minScaleFactor: textScale,
             maxScaleFactor: textScale,
@@ -161,7 +195,7 @@ void main() {
     await pumpProfile(tester);
 
     expect(find.text('User uid-a'), findsOneWidget);
-    expect(find.text('uid-a@example.test'), findsOneWidget);
+    expect(find.textContaining('example.test'), findsOneWidget);
     expect(find.text('Vai trò: user'), findsOneWidget);
   });
 
@@ -179,10 +213,26 @@ void main() {
 
     await tapKey(tester, 'profile-sign-out');
     await tester.pumpAndSettle();
+    expect(h.auth.signOutCalls, 0, reason: 'asks first');
+    await tester.tap(find.text('Đồng ý'));
+    await tester.pumpAndSettle();
 
     expect(h.auth.signOutCalls, 1);
     expect(find.byType(ProfileScreen), findsNothing);
     expect(find.text('Đăng nhập bằng Google'), findsOneWidget);
+  });
+
+  testWidgets('cancelling the sign-out keeps the session', (tester) async {
+    final h = await pumpProfile(tester);
+
+    await tapKey(tester, 'profile-sign-out');
+    await tester.pumpAndSettle();
+    expect(find.textContaining('PDF đã lưu trên máy này sẽ bị xóa'), findsOneWidget);
+    await tester.tap(find.text('Hủy'));
+    await tester.pumpAndSettle();
+
+    expect(h.auth.signOutCalls, 0);
+    expect(find.text('User uid-a'), findsOneWidget);
   });
 
   testWidgets('Home opens Profile, and Back returns to Home', (tester) async {
@@ -198,6 +248,92 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.byType(ProfileScreen), findsNothing);
     expect(find.byType(HomeScreen), findsOneWidget);
+  });
+
+  testWidgets('Home has one way to export: it leads to Profile', (tester) async {
+    final h = await pumpProfile(tester);
+    await tester.pumpWidget(h.app(home: const HomeScreen()));
+    await settle(tester);
+
+    expect(find.text('Mở PDF đã lưu'), findsNothing);
+    expect(find.text('Chia sẻ PDF đã lưu'), findsNothing);
+    expect(find.text('Thử tải lên lại'), findsNothing);
+
+    final link = find.text('Xuất báo cáo PDF ở Hồ sơ');
+    await tester.ensureVisible(link);
+    await tester.pump();
+    await tester.tap(link);
+    await tester.pumpAndSettle();
+
+    expect(find.byType(ProfileScreen), findsOneWidget);
+    expect(h.storage.uploads, 0);
+  });
+
+  group('tapping a notification', () {
+    Future<Harness> pumpGate(WidgetTester tester) async {
+      final h = await pumpProfile(tester);
+      await tester.pumpWidget(h.app(home: const AuthGate()));
+      await settle(tester);
+      return h;
+    }
+
+    testWidgets('opens Profile from Home', (tester) async {
+      final h = await pumpGate(tester);
+      expect(find.byType(ProfileScreen), findsNothing);
+
+      h.gateway.opened.add(push('m1', title: 'Tin mới'));
+      await settle(tester);
+      await tester.pumpAndSettle();
+
+      expect(find.byType(ProfileScreen), findsOneWidget);
+      expect(find.text('Tin mới'), findsOneWidget);
+    });
+
+    testWidgets('a message only received does not navigate', (tester) async {
+      final h = await pumpGate(tester);
+
+      h.gateway.foreground.add(push('m1', title: 'Tin mới'));
+      await settle(tester);
+      await tester.pumpAndSettle();
+
+      expect(find.byType(ProfileScreen), findsNothing);
+    });
+
+    testWidgets('a message already in the inbox still opens, once',
+        (tester) async {
+      final h = await pumpGate(tester);
+      h.gateway.foreground.add(push('m1', title: 'Tin mới'));
+      await settle(tester);
+
+      h.gateway.opened.add(push('m1', title: 'Tin mới'));
+      await settle(tester);
+      await tester.pumpAndSettle();
+      expect(find.byType(ProfileScreen), findsOneWidget);
+
+      await tester.tap(find.bySemanticsLabel('Quay lại'));
+      await tester.pumpAndSettle();
+      h.gateway.opened.add(push('m1', title: 'Tin mới'));
+      await settle(tester);
+      await tester.pumpAndSettle();
+
+      expect(find.byType(ProfileScreen), findsNothing, reason: 'routed once');
+    });
+
+    testWidgets('does not stack a second Profile', (tester) async {
+      final h = await pumpGate(tester);
+      h.gateway.opened.add(push('m1', title: 'Tin 1'));
+      await settle(tester);
+      await tester.pumpAndSettle();
+
+      h.gateway.opened.add(push('m2', title: 'Tin 2'));
+      await settle(tester);
+      await tester.pumpAndSettle();
+      await tester.tap(find.bySemanticsLabel('Quay lại'));
+      await tester.pumpAndSettle();
+
+      expect(find.byType(ProfileScreen), findsNothing);
+      expect(find.byType(HomeScreen), findsOneWidget);
+    });
   });
 
   group('export', () {
@@ -262,6 +398,26 @@ void main() {
       expect(find.byKey(const Key('profile-retry')), findsNothing);
     });
 
+    testWidgets('cancel stops the upload and allows a retry', (tester) async {
+      final h = await pumpProfile(tester);
+      h.storage.held = Completer();
+
+      await tapKey(tester, 'profile-export');
+      expect(find.byKey(const Key('profile-retry')), findsNothing);
+
+      await tapKey(tester, 'profile-cancel-upload');
+      expect(h.storage.cancelCalls, 1);
+      expect(find.text('Đã hủy tải lên. PDF vẫn còn trên máy.'), findsOneWidget,
+          reason: 'shown at once, before the SDK task ends');
+      h.storage.held!
+          .completeError(const UploadFailure(UploadFailureKind.cancelled));
+      await settle(tester);
+
+      expect(find.text('Đã hủy tải lên. PDF vẫn còn trên máy.'), findsOneWidget);
+      expect(find.byKey(const Key('profile-cancel-upload')), findsNothing);
+      expect(find.byKey(const Key('profile-retry')), findsOneWidget);
+    });
+
     testWidgets('a PDF that cannot be opened is reported', (tester) async {
       final h = await pumpProfile(tester);
       h.viewer.error = Exception('no viewer');
@@ -305,6 +461,30 @@ void main() {
     testWidgets('denied permission is explained', (tester) async {
       await pumpProfile(tester, arrange: (h) => h.gateway.grant = false);
       expect(find.textContaining('Thông báo đang tắt'), findsOneWidget);
+    });
+
+    testWidgets('saved history shows when Profile opens', (tester) async {
+      await pumpProfile(tester, arrange: (h) {
+        h.history.saved['uid-a'] = const [
+          AppNotification(messageId: 'old', title: 'Tin đã lưu'),
+        ];
+      });
+
+      expect(find.text('Tin đã lưu'), findsOneWidget);
+    });
+
+    testWidgets('a background message shows when the app resumes',
+        (tester) async {
+      final h = await pumpProfile(tester);
+      h.history.pending
+          .add(const AppNotification(messageId: 'bg', title: 'Tin nền'));
+      expect(find.text('Tin nền'), findsNothing);
+
+      tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.inactive);
+      tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.resumed);
+      await settle(tester);
+
+      expect(find.text('Tin nền'), findsOneWidget);
     });
 
     testWidgets('sign-out empties the inbox', (tester) async {

@@ -83,6 +83,25 @@ Task S8-17-CM. Ghi theo commit và evidence thật, cập nhật dần. Trạng 
 - **Kết quả:** `login` có `method=google`, `logout` có; mỗi lần thao tác một event, không gửi trùng.
 - **Còn vướng:** `export_report` chờ upload thật (DEC-01), `generate_meal_plan` chờ màn S02.
 
+### Storage không chờ Blaze (S3-7, S4-11) — [PR #4](https://github.com/ruxenb/LongvitaRC/pull/4)
+
+- **Vấn đề:** nhóm cần tiến độ gấp, nhưng Storage cần Blaze và DEC-01 chưa chốt.
+- **Quyết định:** làm đủ code và test trên Storage Emulator, ghi rõ đây là bằng chứng emulator. Khi có Blaze chỉ cần deploy rules và chụp Console. Không bật billing.
+- **Đã làm:** lỗi có kiểu, hủy thật, 14 test rules, đăng xuất hủy upload và xóa PDF trên máy, ghi chú PDF chuyển xuống chân trang.
+- **Lỗi tìm được khi chạy thật:** khi mất mạng, SDK chờ tới lần thử lại kế tiếp mới hủy, nên nút Hủy trông như không có tác dụng trong hàng chục giây. Sửa bằng cách báo đã hủy ngay và bỏ qua kết quả về sau. Test giả không phát hiện được.
+- **Kiểm tra:** 223/223 test, rules 55/55. Rules mở toang làm đúng 9 ca fail. Emulator: upload thành công và file trùng byte, hủy, mất mạng, thử lại không tạo file mới, bị từ chối, đăng xuất giữa chừng.
+- **Còn vướng:** chưa deploy, chưa có file trên project thật (DEC-01). Tiến độ tăng dần chưa thấy trên thiết bị vì file quá nhỏ.
+
+### Push thật, Crashlytics và ARTEMIS (S4-12, S4-15, S3-1, S6-4, S6-7) — [PR #4](https://github.com/ruxenb/LongvitaRC/pull/4)
+
+- **Merge:** Charlie quyết định merge khi không có lỗi để nhóm có code mới. PR chưa có AI review, nên S7-1-CM chuyển sang PR kế tiếp.
+- **Phối hợp:** Thắng, Hoàng, Thái An đồng ý cho sửa Home, thêm route, plugin Crashlytics, `conftest.py` và dùng contract FCM tạm.
+- **Đã làm:** lịch sử thông báo theo UID, bấm tin mở Profile, Home chỉ còn lối sang Profile, hộp xác nhận đăng xuất, plugin Crashlytics, viết lại harness ARTEMIS và 3 file test.
+- **Quyết định:** tin nhận ở isolate nền chưa biết ai đăng nhập nên chờ ở file riêng. Gửi từ Console bằng chiến dịch tới app, không nhập token vào Console.
+- **Lỗi tìm được:** `conftest.py` cũ nhập SDK không tồn tại nên luôn rơi vào client giả báo SUCCESS. Một test lịch sử có lúc fail vì chờ cố định 50ms; sửa bằng cách chờ đúng lúc ghi xong. TC-11 yêu cầu hộp xác nhận đăng xuất mà app chưa có.
+- **Kiểm tra:** 251/251 test. Thật: push 3 trạng thái, bấm tin mở Profile, lịch sử còn sau khi mở lại, crash thử lên Console.
+- **Còn vướng:** ARTEMIS chưa chạy vì chưa có key. Chưa nối `FlutterError.onError`. Chưa có thông báo trên màn khác khi tin đến lúc app đang mở.
+
 ### Nháp báo cáo Auth (S8-3) — `docs/report-drafts/s8-3-firebase-auth.md`
 
 - **Đã làm:** phần Auth, gồm luồng, xử lý lỗi, kiểm thử, bằng chứng, giới hạn. Mỗi ca lỗi ghi rõ đã kiểm trên emulator hay chỉ bằng fake.

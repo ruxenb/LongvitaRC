@@ -8,6 +8,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:longvita/models/auth_state.dart';
 import 'package:longvita/models/meal_plan_model.dart';
 import 'package:longvita/models/recipe_model.dart';
+import 'package:longvita/models/upload_failure.dart';
 import 'package:longvita/models/view_state.dart';
 import 'package:longvita/viewmodels/auth_viewmodel.dart';
 import 'package:longvita/viewmodels/meal_plan_viewmodel.dart';
@@ -20,12 +21,12 @@ const lateUrl = 'https://storage.test/reports/uid-a/late.pdf';
 
 class HeldStorage extends FakeStorageService {
   final started = Completer<void>();
-  final response = Completer<String?>();
+  final response = Completer<String>();
   void Function(double progress)? progress;
   int uploads = 0;
 
   @override
-  Future<String?> uploadReportPdf({
+  Future<String> uploadReportPdf({
     required String uid,
     required String fileName,
     required Uint8List bytes,
@@ -188,10 +189,11 @@ void main() {
           storage.progress!(0.8);
           expect(profile.uploadProgress, 0);
 
-          storage.response.complete(null);
+          storage.response
+              .completeError(const UploadFailure(UploadFailureKind.unknown));
           await upload;
           expect(profile.exportState, isA<ViewStateIdle>(),
-              reason: 'a late null result is not an error of this session');
+              reason: 'a late failure is not an error of this session');
         });
 
         test('late upload error is ignored', () async {
