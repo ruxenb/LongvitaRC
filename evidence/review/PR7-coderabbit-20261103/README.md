@@ -14,8 +14,8 @@ Ví dụ ba findings Accepted có commit sửa riêng: CR-03 → [2fd3e2e](https
 | `inline-comments.json` | 11 comment gốc, gồm ID/link/path/line/body và tác giả bot |
 | `reviews.json` | Review submission của bot trên PR #7 |
 | `summary-comments.json` | Conversation comments tại thời điểm lưu |
-| `findings.md` | Bản đọc của 11 findings, có link tới comment gốc |
-| `source-sha256.json` | SHA-256 của bốn file nguồn trên, giữ nguyên nội dung |
+| `findings.md` | Bản đọc của 11 findings, có link tới comment gốc; chỉ chuẩn hóa trailing whitespace Markdown |
+| `source-sha256.json` | SHA-256 ba JSON gốc giữ nguyên nội dung và bản Markdown diễn giải |
 | `assertions-before.txt` | Probe trước follow-up: 20 pass / 1 fail, tái hiện final-output fallback của CR-08 |
 | `assertions-after.txt` | Sau follow-up và hai ca thiếu replay: 23/23 kiểm assertions pass |
 | `validation.json` | Kiểm IDs, quyết định, fix SHA, task counts và manifest |

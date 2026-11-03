@@ -9,8 +9,8 @@ Nguyên văn ở `inline-comments.json`, `reviews.json`, `summary-comments.json`
 
 ** Minor** · **Security & Privacy** · ** Detected with Advanced Tier** · **Quick win**
 **Sensitive Data Exposure**
-**Reachability:** External  
-**Exploitability:** Trivial  
+**Reachability:** External
+**Exploitability:** Trivial
 **CWE:** [CWE-359](https://cwe.mitre.org/data/definitions/359.html)
 **Make blurring of email and UID mandatory in the clip script.**
 Line 9 makes masking optional: "nếu nhóm muốn che thông tin cá nhân thì làm mờ khi dựng." The planned Console footage and the existing screenshots contain real identifiers. Scene 1 records the Authentication → Users view, which shows the signed-in account's email and UID. `s8-3-firebase-auth.md` and `s8-7-slides.md` both state that existing images show Charlie's real email and UID. Require blurring those fields before the clip or any image from it is shared.
@@ -49,8 +49,8 @@ The guide cites `main` at `30ca6e3`, but its Remote Config explanation depends o
 
 ** Major** · **Security & Privacy** · ** Detected with Advanced Tier** · **Heavy lift**
 **Sensitive Data Exposure**
-**Reachability:** External  
-**Exploitability:** Trivial  
+**Reachability:** External
+**Exploitability:** Trivial
 **CWE:** [CWE-359](https://cwe.mitre.org/data/definitions/359.html)
 **Redact personal identifiers from the committed ARTEMIS evidence.**
 This handoff links readers to `evidence/artemis/README.md`, which points to `raw/runs.jsonl`. The run data contains Charlie’s real email and Firebase UID. A public repository viewer can read these identifiers. ([github.com](https://github.com/ruxenb/LongvitaRC/blob/cdf90e54d6c91be253e343c848ecfe23f69fd9cf/evidence/artemis/README.md))
