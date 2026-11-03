@@ -15,7 +15,7 @@ Bộ test `e2e_test/` chạy bằng `artemis-client` ghim commit `351ca84` với
 
 ## Kết quả lượt chạy đủ 7 test
 
-Xem `full-pass-batch1.log`, `full-pass-batch2.log` (output của pytest) và `raw/runs.jsonl` (mỗi dòng một lần chạy).
+Xem `full-pass-batch1.txt`, `full-pass-batch2.txt` (output của pytest) và `raw/runs.jsonl` (mỗi dòng một lần chạy).
 
 **7/7 pass** trong một lượt chạy bằng code cuối (đợt 1: 5 test trong 5 phút 50 giây; đợt 2: push gửi tay rồi TC-10, TC-11 trong 2 phút 9 giây). Đây là 7 dòng cuối của `raw/runs.jsonl`.
 
