@@ -18,7 +18,7 @@ This is a technical evidence matrix, NOT the formal Accepted status in the team-
 | S4-8 | Labels and action names in new widgets/screens | TalkBack native traversal |
 | S4-9 | Fake-backed ViewModel unit tests + isolation regression | Final full suite 294/294 passed |
 | S4-16 | 360/412dp x 1x/2x widget tests pass | Contrast and 14sp measurement; native screenshots |
-| S4-17 | docs/hoang-accessibility-audit.md, mapping & deviations | Compare actual Figma screenshots; team accepts deviation |
+| S4-17 | docs/hoang-accessibility-audit.md, mapping & deviations | Page 03/06 metadata audited in docs/hoang-figma-deviation-audit.md; native screenshot comparison and team acceptance still required |
 | S5-3 | Search/details/replace/shopping/generated events in UI/VM | Firebase DebugView verified event parameters, no PII |
 | S6-5 | e2e_test/test_flows.py, test_search.py written | Run with ARTEMIS daemon and signed-in device |
 | S6-6 | e2e_test/test_detail.py written | Run with ARTEMIS and native evidence |

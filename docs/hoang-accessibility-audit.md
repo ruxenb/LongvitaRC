@@ -16,7 +16,7 @@ Date: 2026-11-04 | Tasks: S4-8, S4-16, S4-17
 - Real emulator screenshots, landscape and heavy text scaling.
 - Verification against actual Figma Page 03 and 06.
 
-The team decision recorded in docs/design-traceability.md on 2026-11-02 freezes Lab 2 Figma and asks for code-side improvements and deviation logs. Therefore no Figma file was edited without team approval.
+The team decision recorded in docs/design-traceability.md on 2026-11-02 freezes Lab 2 Figma and asks for code-side improvements and deviation logs. Therefore no Figma file was edited without team approval. A read-only Page 03/06 structural audit is recorded in docs/hoang-figma-deviation-audit.md, with source node IDs and outstanding fidelity gaps.
 
 ## Traceability
 | Screen | Implemented Flutter screen | User-flow and deviation notes |
