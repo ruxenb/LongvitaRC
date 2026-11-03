@@ -1,5 +1,5 @@
 // Longvita / Hoang: generated presentation (no fabricated screenshots).
-// Run: "C:\Program Files\nodejs\node_modules\node.exe" slides/hoang_slides.js
+// Run (with Node.js on PATH): node slides/hoang_slides.js
 // Requires pptxgenjs installed to D:\Tools\LongvitaPptx.
 const path = require('path');
 let pptxgen;
@@ -40,7 +40,7 @@ function hdr(slide,page,title,subtitle){
   txt(slide,subtitle,0.58,1.5,11.9,0.45,{fontSize:14,color:C.muted});
   slide.addShape(pptx.ShapeType.line,{x:0.55,y:7.07,w:12.2,h:0,
     line:{color:C.edge,width:1}});
-  txt(slide,'Hoàng DV • 04/11/2026 • Status: implementation / review pending',
+  txt(slide,'Hoàng DV • 04/11/2026 • Status: 305 tests passed / acceptance pending',
       0.58,7.12,11.8,0.22,{fontSize:9,color:C.muted});
   txt(slide,String(page).padStart(2,'0') + ' / 04',
       12.02,7.11,0.65,0.25,{fontSize:10,bold:true,color:C.green,align:'right'});
@@ -191,11 +191,11 @@ function pill(slide,text,x,y,w,fill=C.light){
   ],7.08,2.72,5.20,1.70,12.2);
   rect(s,0.55,4.94,5.96,1.42,C.white);
   heading(s,'ĐÃ CÓ BẰNG CHỨNG',0.85,5.16,5.25);
-  txt(s,'295/295 Flutter tests • 6/6 A11y widget tests\n360/412dp • scale 1x/2x • flutter analyze sạch',
+  txt(s,'305/305 Flutter tests • 6/6 A11y widget tests\n360/412dp • scale 1x/2x • flutter analyze sạch',
       0.86,5.62,5.20,0.48,{fontSize:13,bold:true});
   rect(s,6.77,4.94,5.99,1.42,C.white);
   heading(s,'CÒN CHỜ XÁC MINH',7.08,5.16,5.2);
-  txt(s,'Android device + ARTEMIS • Firestore live/rules\nFirebase SHA, PR AI review • screenshot & demo video',
+  txt(s,'Android device + ARTEMIS • Firestore live/rules\nFirebase SHA, PR re-review • screenshot & demo video',
       7.08,5.61,5.18,0.55,{fontSize:12.6,color:C.red,bold:true});
 }
 pptx.writeFile({fileName:path.join(__dirname, 'Longvita_Hoang_4_Slides_20261104.pptx')});

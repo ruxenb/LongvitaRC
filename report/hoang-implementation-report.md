@@ -38,7 +38,7 @@ Figma Page 03/06 được nhóm giữ làm baseline đóng băng theo quyết đ
 
 ## 5. Kiểm thử đã có bằng chứng
 - flutter analyze: clean sau giai đoạn triển khai đầu.
-- Toàn bộ Flutter tests: 295/295 pass sau khi thêm 6 widget tests và bugfix cô lập phiên.
+- Toàn bộ Flutter tests: 305/305 pass sau khi thêm 6 widget tests và bugfix cô lập phiên.
 - Unit tests Hoàng: 8/8 pass ban đầu, sau thêm HOANG-F02 thành 9/9 pass.
 - A11y & responsive widget tests bổ sung: 6/6 pass.
 - Mẫu kiểm tra thực tế: mất mạng -> Error/Retry; Firestore trống -> Empty; lưu lỗi -> giữ nguyên plan; thay món lỗi -> giữ món; số lượng âm -> dialog validation; Undo; checkbox bền vững trong fake service; cô lập phiên.
@@ -62,7 +62,7 @@ ARTEMIS scripts được viết tại e2e_test/test_flows.py, test_search.py, te
 3. Review/test/deploy Firestore rules cho shopping list mới, có tách quyền UID.
 4. Chạy ARTEMIS >=3 lượt cho test cases chính, chụp ảnh bằng chứng; kiểm tra Firebase Analytics DebugView.
 5. Xem lại Figma, TalkBack và độ tương phản thực tế.
-6. Mở PR, nhận reviewer CodeRabbit/Copilot/SonarCloud, ghi finding/commit và phê duyệt từ nhóm.
+6. PR #10 đã mở và CodeRabbit đã phản hồi 4 findings. Những sửa lỗi đã được đưa vào commit 81f8d7e, chờ re-review và phê duyệt từ nhóm; các công cụ khác chưa có bằng chứng chạy.
 7. Quay video 3 user flows, cập nhật slide và báo cáo bằng ảnh thực.
 
 ### Nguồn kiểm chứng trong repository

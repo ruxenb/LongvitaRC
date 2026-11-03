@@ -21,7 +21,7 @@ The model MealPlanModel defaults to status=draft. Saved plans contain seven Dail
 - getRecipes(category?): Firestore query; a zero-row response is a real empty state, not a request to generate demo recipes.
 - getRecipeById(id): null if absent; translate Firebase permission/offline/invalid errors using DataFailure.
 - getUserMealPlans(uid), streamUserMealPlans(uid): always filter by uid; currently sort client-side by createdAt for the small lab dataset.
-- saveMealPlan(plan): create draft or update existing plan; Firestore rules enforce owner/status transitions.
+- saveMealPlan(plan): create draft or update existing plan; Firestore rules enforce owner/status transitions. Creates use a deterministic doc ID from UID + creation timestamp to avoid duplicate documents if a queued offline write later synchronizes. Write futures are bounded to 15 seconds, but timing out does not cancel Firestore's queued operation.
 - getShoppingItems(uid,planId): null if document absent; an existing document with empty items returns an empty list. This prevents regenerating a deliberately emptied shopping list.
 - saveShoppingItems(uid,planId,items): per-user, per-plan persistence with serialised ViewModel writes and retryable errors.
 - Analytics: operations from user actions only; do not invent a target meal window or clinical results.
