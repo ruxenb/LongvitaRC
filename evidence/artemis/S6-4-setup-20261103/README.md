@@ -6,7 +6,7 @@
 |---|---|
 | `01-install.txt` | `artemis-client 0.1.0` cài từ `google/artemis@351ca8422f7b5b54e80a9c1ce03a222e02415b6b` (đúng commit ghim trong `e2e_test/pyproject.toml`), cùng pytest và pytest-asyncio. Python 3.12.10, venv ngoài repo |
 | `02-collect.txt` | `pytest --collect-only`: đủ 7 test (TC-01, TC-01b, TC-11, TC-08, TC-08b, TC-09, TC-10) |
-| `03-run-without-daemon.txt` | Chạy cả 7 test khi không có daemon: cả 7 **lỗi ngay ở fixture** với `NetworkError: Could not reach Artemis host at http://127.0.0.1:8000/api/status`. Không test nào pass |
+| `03-run-without-daemon-sanitized.txt` | Bản tóm tắt đã loại username/đường dẫn máy: chạy cả 7 test khi không có daemon, cả 7 **lỗi ngay ở fixture** với `NetworkError` tại `http://127.0.0.1:8000/api/status`. Không test nào pass |
 
 ## Đã kiểm
 

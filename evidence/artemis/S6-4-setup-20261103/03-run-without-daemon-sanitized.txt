@@ -1,0 +1,28 @@
+Command: pytest -q
+Environment: Python 3.12 virtual environment outside the repository
+ARTEMIS endpoint: http://127.0.0.1:8000
+
+Observed result:
+
+- The ARTEMIS daemon was intentionally not running.
+- The shared fixture called GET /api/status before any UI action.
+- The client raised `artemis_client.errors.NetworkError` because the local
+  connection to `http://127.0.0.1:8000/api/status` was refused.
+- No test reported PASS and no app behavior was inferred from this run.
+
+Affected tests:
+
+- test_auth.py::test_tc01_sign_in_with_google
+- test_auth.py::test_tc01b_cancelled_sign_in_stays_on_sign_in
+- test_auth.py::test_tc11_sign_out_cannot_return_with_back
+- test_export.py::test_tc08_export_uploads_and_shows_url
+- test_export.py::test_tc08b_saved_pdf_opens_in_the_native_viewer
+- test_profile.py::test_tc09_remote_config_refresh_reports_a_result
+- test_profile.py::test_tc10_push_opens_profile_from_the_shade
+
+Final summary: 7 fixture errors; 0 passed.
+
+Privacy note: the original raw traceback was removed before merge because it
+contained a local Windows username and machine-specific temporary paths. This
+summary preserves the command, endpoint, failure class, affected tests, and
+outcome without personal or workstation-identifying data.
