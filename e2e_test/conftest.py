@@ -15,6 +15,7 @@ import subprocess
 import time
 import urllib.parse
 import urllib.request
+import urllib.error
 from pathlib import Path
 
 import pytest
@@ -130,13 +131,16 @@ def run_case(artemis, request):
             expected_output=expected_output,
             enable_outputter=True,
         )
-        if result.output is not None:
-            observation, source = Observation([str(result.output)]), "output"
-        else:
-            # At the pinned ARTEMIS commit the Flash profile skips the Outputter,
-            # so the task carries no output. The agent's own per-step summaries
-            # of what it saw on screen are the observation in that case.
-            observation, source = Observation(_step_summaries(result.task_id)), "replay_steps"
+        # A final Outputter summary can mention earlier screens too. Never use
+        # it as one synthetic step: after(action) would then accept stale text
+        # from before that action (PR7-CR-08). Keep it only as raw evidence.
+        observation_error = None
+        try:
+            observation = Observation(_step_summaries(result.task_id))
+        except (urllib.error.URLError, OSError, ValueError, KeyError, TypeError) as error:
+            observation = Observation([])
+            observation_error = str(error)
+        source = "replay_steps"
 
         EVIDENCE_DIR.mkdir(parents=True, exist_ok=True)
         record = {
@@ -149,13 +153,19 @@ def run_case(artemis, request):
             "seconds": round(time.time() - started, 1),
             "output_source": source,
             "output": str(observation),
+            "steps": observation.steps,
+            "agent_output": result.output,
+            "observation_error": observation_error,
             "error": result.error,
         }
         with (EVIDENCE_DIR / "runs.jsonl").open("a", encoding="utf-8") as file:
             file.write(json.dumps(record, ensure_ascii=False, default=str) + "\n")
 
         assert result.succeeded, f"{result.status}: {result.error}"
-        assert observation.strip(), "the agent reported success but observed nothing"
+        assert observation.strip(), (
+            "no action-scoped replay observations: "
+            f"{observation_error or 'empty replay; final output alone cannot pass the test'}"
+        )
         return observation
 
     return run
