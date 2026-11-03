@@ -161,3 +161,7 @@ CodeRabbit check hoàn tất nhưng còn 2 Major/1 Minor. Chấp nhận cả ba:
 ### Follow-up PR #8 — contract của Flash summarizer
 
 CodeRabbit tìm đúng hai lỗi trong parser VIEWER/HEADING ban đầu (CR-04/05). Đối chiếu source summarizer pin cho thấy producer chỉ sinh một đoạn; bỏ parser và dùng native UI packages + printed heading ở replay cuối (0df2563). 33/33 kiểm assertions pass, có dùng replay đã lưu để kiểm format. Chưa chạy lại native; không tính bộ fixture này thành ARTEMIS runs.
+
+### Follow-up PR #8 — root viewer và heading phủ định
+
+Hai Minor CR-06/07 tại f9f2130 được chấp nhận: 1d3d995 kiểm package của root cửa sổ, từ chối hierarchy mơ hồ và heading phủ định tiếng Anh/Việt. 40/40 kiểm assertions độc lập pass; replay dương đã lưu vẫn pass. Chưa chạy native mới. Nguồn và log trong evidence/review/PR8-coderabbit-20261103/.

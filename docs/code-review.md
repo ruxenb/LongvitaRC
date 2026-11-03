@@ -45,7 +45,7 @@
 
 ### 1.2 Charlie — phản hồi CodeRabbit trên PR #8 trước merge
 
-Nguồn: [PR #8](https://github.com/ruxenb/LongvitaRC/pull/8), 3 comments ở head `2833d74` và 2 follow-up ở `323d930`; [raw output và kiểm chứng](../evidence/review/PR8-coderabbit-20261103/README.md). Cả 5 **Accepted** sau đối chiếu. Tách khỏi 11 findings của PR #7.
+Nguồn: [PR #8](https://github.com/ruxenb/LongvitaRC/pull/8), 3 comments ở head `2833d74`, 2 follow-up ở `323d930` và 2 ở `f9f2130`; [raw output và kiểm chứng](../evidence/review/PR8-coderabbit-20261103/README.md). Cả 7 **Accepted** sau đối chiếu. Tách khỏi 11 findings của PR #7.
 
 | ID | Mức | Vị trí tại head review | Loại | Quyết định / lý do | Commit |
 |---|---|---|---|---|---|
@@ -54,10 +54,12 @@ Nguồn: [PR #8](https://github.com/ruxenb/LongvitaRC/pull/8), 3 comments ở he
 | PR8-CR-03 | Major | `e2e_test/test_profile.py:68` | Correctness | Accepted: title trong mô tả tap chưa chứng minh inbox có tin; kiểm title ở quan sát cuối | [bcaa8a5](https://github.com/ruxenb/LongvitaRC/commit/bcaa8a5) |
 | PR8-CR-04 | Minor | `e2e_test/test_export.py:62` tại 323d930 | Correctness | Accepted: parser bỏ qua trường VIEWER sai/duplicate; bỏ parser này trong follow-up | [0df2563](https://github.com/ruxenb/LongvitaRC/commit/0df2563) |
 | PR8-CR-05 | Major | `e2e_test/test_export.py:62–63` tại 323d930 | Correctness | Accepted: summarizer đã pin không xuất hai dòng; thay bằng native UI package và heading trong replay một đoạn | [0df2563](https://github.com/ruxenb/LongvitaRC/commit/0df2563) |
+| PR8-CR-06 | Minor | `e2e_test/conftest.py` tại f9f2130 | Correctness | Accepted: package của node con chưa chứng minh viewer là cửa sổ hiện hành; chỉ lấy package ở root, từ chối hierarchy mơ hồ | [1d3d995](https://github.com/ruxenb/LongvitaRC/commit/1d3d995) |
+| PR8-CR-07 | Minor | `e2e_test/test_export.py` tại f9f2130 | Correctness | Accepted: câu phủ định vẫn chứa heading LONGVITA; thêm guard và regression cho phủ định tiếng Anh/Việt | [1d3d995](https://github.com/ruxenb/LongvitaRC/commit/1d3d995) |
 
 Hai ca tái hiện trước sửa fail đúng rủi ro false-pass; bộ kiểm assertions sau sửa 30/30 pass. Không gọi đây là 30 ARTEMIS runs hoặc báo đã chạy lại native. PM-DOC-01 sửa câu quyền đọc hồ sơ được ghi riêng, không thêm vào số bot findings.
 
-Follow-up `0df2563` thay protocol hai dòng của bản sửa ban đầu bằng cách tương thích producer thực; bộ kiểm hiện tại 33/33 pass, có replay đã lưu. Chưa có native rerun mới. Không dùng commit `bcaa8a5` riêng lẻ như bản viewer assertion cuối cùng.
+Follow-up `0df2563` thay protocol hai dòng của bản sửa ban đầu bằng cách tương thích producer thực; `1d3d995` kiểm root cửa sổ và loại câu phủ định. Bộ kiểm hiện tại 40/40 pass, có replay đã lưu. Chưa có native rerun mới. Không dùng commit `bcaa8a5` riêng lẻ như bản viewer assertion cuối cùng.
 
 ## 2. Kịch Bản & Mẫu Tham Khảo Chuẩn Appendix C (Reference Guide)
 

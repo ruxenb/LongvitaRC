@@ -1,6 +1,6 @@
 # PR #8 — kiểm tra trước merge, 03/11/2026
 
-**Bản hiện tại:** follow-up [0df2563](https://github.com/ruxenb/LongvitaRC/commit/0df2563) thay protocol VIEWER/HEADING bằng bằng chứng native UI package + heading trong replay cuối. Bộ kiểm assertions **33/33 pass**, có test dùng replay thật đã lưu. Các kết quả 30/30 và parser hai dòng bên dưới là lịch sử lượt đầu, không phải protocol hiện hành.
+**Bản hiện tại:** [1d3d995](https://github.com/ruxenb/LongvitaRC/commit/1d3d995) kiểm package ở root cửa sổ và từ chối heading phủ định, tiếp nối [0df2563](https://github.com/ruxenb/LongvitaRC/commit/0df2563) thay protocol VIEWER/HEADING bằng native UI package + heading trong replay cuối. Bộ kiểm assertions **40/40 pass**, có test dùng replay thật đã lưu. Các kết quả 30/30, 33/33 và parser hai dòng bên dưới là lịch sử các lượt trước.
 
 CodeRabbit đã review head `2833d74`: 3 findings (2 Major, 1 Minor). Check SUCCESS chỉ xác nhận review chạy xong; ba findings được đối chiếu và sửa trước khi merge.
 
@@ -32,3 +32,12 @@ Code cuối kiểm package owning nodes trong UIAutomator hierarchy: mặc đị
 `followup-inline-comments.json` lưu hai source comments mới, được bổ sung vào manifest SHA-256.
 
 Đồng thời sửa câu slide Auth theo PM-DOC-01: staff/admin được đọc hồ sơ theo rules. Đây là correction của PM, không tính thành finding CodeRabbit thứ tư.
+
+## Lượt 3 — root cửa sổ và heading phủ định
+
+Hai Minor tại `f9f2130` được Accepted và sửa trong `1d3d995`:
+
+- [PR8-CR-06, 4455233119](https://github.com/ruxenb/LongvitaRC/pull/8#discussion_r4455233119): package ở descendant không chứng minh cửa sổ hiện hành. Chỉ đọc package của root; hierarchy thiếu hoặc có nhiều root bị từ chối.
+- [PR8-CR-07, 4455233159](https://github.com/ruxenb/LongvitaRC/pull/8#discussion_r4455233159): từ chối câu phủ định như “No heading LONGVITA is visible” và “Không có tiêu đề LONGVITA”. Replay dương đã lưu vẫn được chấp nhận.
+
+`round3-inline-comments.json` lưu nguồn của hai comments; `root-window-and-heading.txt` ghi **40/40 kiểm assertions độc lập pass** (chỉ bỏ trailing whitespace của pytest). Không có native rerun, không cộng 40 checks này vào số lượt ARTEMIS. Heading vẫn dựa vào quan sát agent, còn package được kiểm độc lập qua UIAutomator; không tuyên bố đây là phép so nội dung PDF tự động hoàn toàn.
