@@ -169,3 +169,7 @@ Hai Minor CR-06/07 tại f9f2130 được chấp nhận: 1d3d995 kiểm package 
 ### Follow-up PR #8 — CR-08 và finding ngoài diff CR-09
 
 Hai Minor tại 06b8f9f được chấp nhận: d7c7609 thu hẹp phủ định vào heading/visibility, d7ffa05 phân biệt Back/background và giữ tap/tapped. 49/49 assertion checks pass, không phải native rerun. Lưu cả inline comment và toàn review có finding ngoài diff trong evidence/review/PR8-coderabbit-20261103/.
+
+### S4-14 đợt 2 — code 14ec763 và PM review, 03/11/2026
+
+Sửa Semantics của các thẻ Profile, URL, tiến trình, danh tính, heading Sign-in và dialog; đổi ba chuỗi trạng thái sang dấu “…”. Evidence tại `evidence/a11y/S4-14-semantics-20261103/`: đi TalkBack hết Profile, dialog mở/Hủy, mở PDF, các bố cục 360/412dp và chữ ×1/×2; Storage dùng Emulator. PM chạy độc lập analyzer sạch và 277/277 tests pass; đọc diff và ảnh, chưa tự chạy cử chỉ TalkBack. Chưa đóng S4-14: còn Sign-in bản mới, kích hoạt Chia sẻ, test Semantics lúc RC pending. Fake RC hiện trả ngay nên báo cáo “pending đã widget-test” đã được đính chính. Không tăng tổng task nghiệm thu và chưa chuyển S3-5.

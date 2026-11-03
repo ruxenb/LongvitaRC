@@ -2,7 +2,7 @@
 
 Đợt hai của S4-14, tiếp theo [`../S4-14-talkback-20261103/`](../S4-14-talkback-20261103/). Đợt đó đi TalkBack hết Sign-in và nửa đầu Profile; Remote Config và Crashlytics mới chỉ kiểm nhãn bằng `uiautomator dump`.
 
-- **Code:** nhánh `feature/charlie-a11y-02`, tách từ `main` `b2101a3` (sau khi merge PR #8).
+- **Code:** `14ec763`, nhánh `feature/charlie-a11y-02`, tách từ `main` `b2101a3` (sau khi merge PR #8). PM đã đọc diff/evidence và chạy lại analyzer sạch, 277/277 tests pass; PM chưa tự thực hiện cử chỉ TalkBack trong lượt review.
 - **Thiết bị:** AVD `LocalMate_API_35`, Android 15, màn gốc 320×640 px ở mật độ 160 (320×640 dp), TalkBack 15.0 có sẵn trong image.
 - **Bản build:** debug với `--dart-define=STORAGE_EMULATOR_HOST=10.0.2.2`. Xuất PDF tải lên Storage Emulator ở máy, không lên Storage thật.
 - **Tài khoản:** của Charlie, đã đăng nhập sẵn. Ảnh có email và UID của Charlie, theo quyết định ngày 02/11.
@@ -80,7 +80,7 @@ Không có tràn bố cục: logcat không có "overflowed", không có sọc v�
   - lỗi tải lên, "Thử tải lên lại" và "Hủy tải lên";
   - hộp thư trống;
   - thông báo bị tắt quyền;
-  - nút Remote Config đang tải ("Đang cập nhật…"), vì bước này quá nhanh trên emulator.
+- Nút Remote Config đang tải ("Đang cập nhật…") **chưa có test quan sát trạng thái pending**: fake trả kết quả ngay, các test hiện chỉ kiểm kết quả sau refresh. Cần thêm test giữ Future chưa hoàn tất và kiểm label/enabled/tap action. Đây là đính chính sau PM review, không phải bằng chứng runtime có lỗi.
 - "Chia sẻ PDF đã lưu": TalkBack đọc đúng nhãn và vai trò nút, nhưng chưa chạm đúp mở bảng chia sẻ.
 - Chưa thử trên máy thật. Chưa nghe kiểm cách phát âm (xem phần Cách kiểm).
 - Ngoài phạm vi, chưa sửa: `meal_plan_viewmodel.dart` và `ingredient_viewmodel.dart` còn chuỗi "..." sẽ bị đọc "3 Period". Các chuỗi này không thuộc màn của Charlie.
