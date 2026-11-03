@@ -1,6 +1,6 @@
 # AI-Assisted Code Review Record — Longvita (Lab 3)
 
-> **TEMPLATE / VÍ DỤ - chưa phải kết quả PR review đã xác minh (02/11/2026).** Bảng khung CR-xx ở mục 1 chưa có nội dung; các dòng EX-xx, tên tool, file:line và commit mẫu ở mục 2 chỉ minh họa format, không được tính vào >=5 findings hoặc >=3 fix commits. **Số findings PR có raw evidence đã xác minh: 0**. Chỉ điền kết quả khi có PR/tool output/file:line, quyết định và fix links thật. Các lỗi regression đã sửa và kiểm chứng ở [bàn giao Charlie](tasks/charlie-progress.md) không tự thay bộ evidence Stage 7.
+> **Cập nhật 03/11/2026:** PR #6 đã được Codex Bugbot và Security Review kiểm tra. Có **5 findings duy nhất đã xác minh**, đều được xử lý trong commit `55bdf3e`; hồ sơ review nằm tại [`evidence/review/PR-6-THANG-20261103/`](../evidence/review/PR-6-THANG-20261103/). Các dòng EX-xx ở mục 2 vẫn chỉ là ví dụ và không được tính. Stage 7 vẫn chưa hoàn tất vì nhóm còn phải đạt tổng số fix commits và review các PR/thành viên còn lại.
 
 > **Tài liệu:** Sổ ghi nhận kết quả đánh giá mã nguồn bằng công cụ Trí tuệ Nhân tạo (AI-Assisted Code Review).  
 > **Chủ trì nghiệm thu:** Thái An (Team Leader) & Thắng VLQ (Technical Architect) | **Thành viên tham gia:** Cả 4 thành viên (Thái An, Thắng, Hoàng, Charlie).  
@@ -15,6 +15,11 @@
 
 | ID | Công cụ AI | Vị trí (File:Line) | Loại lỗi (Kind) | Tóm tắt phát hiện của AI (Finding Summary) | Quyết định (Accepted / Modified / Rejected) | Lý do kỹ thuật & Định lượng (Reason) | Commit khắc phục (Fix Commit) | Người phụ trách |
 |:---:|:---|:---|:---:|:---|:---:|:---|:---:|:---:|
+| **PR6-01** | Codex Security Review | `evidence/fcm/S4-12-foreground-20261103/07-queue-attempt-snackbar.png:1` | Security / Privacy | Ảnh evidence hiển thị tên đầy đủ và email FPT của Charlie. | **Accepted** | Repo và bản nộp không cần định danh thật để chứng minh snackbar; công khai PII tạo rủi ro riêng tư không cần thiết. Ảnh bị loại, README giữ mô tả và giới hạn bằng chứng. | [`55bdf3e`](https://github.com/ruxenb/LongvitaRC/commit/55bdf3e591808e5bfcf5af52a6a866384b0b83fe) | Thắng |
+| **PR6-02** | Codex Bugbot + Security Review | `evidence/artemis/S6-4-setup-20261103/03-run-without-daemon.txt:53` | Security / Privacy | Traceback 2.188 dòng lặp username và đường dẫn OneDrive/temp của máy Charlie. | **Modified** | Không giữ raw traceback có định danh máy; thay bằng bản tóm tắt đã khử PII nhưng vẫn giữ command, endpoint, exception, 7 test bị ảnh hưởng và kết quả `0 passed`. | [`55bdf3e`](https://github.com/ruxenb/LongvitaRC/commit/55bdf3e591808e5bfcf5af52a6a866384b0b83fe) | Thắng |
+| **PR6-03** | Codex Security Review | `docs/report-drafts/s8-12-clip-script.md:9` | Security / Process | Kịch bản coi việc che email/UID là tùy chọn dù cảnh Auth Users chứa định danh thật. | **Accepted** | Quy tắc được đổi thành bắt buộc cho repo, slide và video; ưu tiên không quay vùng chứa định danh thay vì chỉ sửa hậu kỳ. | [`55bdf3e`](https://github.com/ruxenb/LongvitaRC/commit/55bdf3e591808e5bfcf5af52a6a866384b0b83fe) | Thắng |
+| **PR6-04** | Codex Bugbot | `docs/report-drafts/s8-12-clip-script.md:25` | Correctness | Ghi bốn chiến dịch cho cảnh 2–4 dù chỉ có ba cảnh gửi FCM. | **Accepted** | Sửa thành ba chiến dịch để checklist quay không yêu cầu một chiến dịch thừa. | [`55bdf3e`](https://github.com/ruxenb/LongvitaRC/commit/55bdf3e591808e5bfcf5af52a6a866384b0b83fe) | Thắng |
+| **PR6-05** | Codex Bugbot | `docs/tasks/task-charlie.md:5` | Traceability | Ngày cập nhật 02/11 không khớp nội dung/evidence PR #6 ngày 03/11. | **Accepted** | Sửa ngày thành 03/11 để chronology của tracker khớp Git và evidence. | [`55bdf3e`](https://github.com/ruxenb/LongvitaRC/commit/55bdf3e591808e5bfcf5af52a6a866384b0b83fe) | Thắng |
 | *[CR-01]* | *CodeRabbit* | *(Chờ mở PR)* | Architecture | *(Sẽ cập nhật khi bot AI review PR)* | *(Pending)* | *(Tham chiếu Handout Mục 5)* | *(Mã commit thật)* | Thái An |
 | *[CR-02]* | *SonarCloud* | *(Chờ mở PR)* | Maintainability | *(Sẽ cập nhật khi bot AI review PR)* | *(Pending)* | *(Tham chiếu tiêu chuẩn Clean Code)* | *(Mã commit thật)* | Charlie |
 | *[CR-03]* | *Copilot* | *(Chờ mở PR)* | Performance | *(Sẽ cập nhật khi bot AI review PR)* | *(Pending)* | *(Định lượng Rebuild/Latency)* | *(Mã commit thật)* | Hoàng |
@@ -41,7 +46,7 @@
 
 ## 3. Danh Mục Tool Trong Mẫu - Cần Xác Nhận Trước Disclosure
 
-Các dòng dưới đây được giữ làm mẫu kế hoạch; không xác nhận mọi thành viên đã dùng các tool này. Chỉ chuyển sang disclosure thực tế khi có mục đích/output hoặc worklog. Ngày 02/11, Charlie dùng Codex (đọc repo/PDF, review, Markdown điều phối) và Claude Code (viết code, test, báo cáo Dev); chưa chạy ARTEMIS, CodeRabbit, Copilot, SonarCloud hoặc model API.
+Các dòng dưới đây được giữ làm mẫu kế hoạch; không xác nhận mọi thành viên đã dùng các tool này. Chỉ chuyển sang disclosure thực tế khi có mục đích/output hoặc worklog. Ngày 02/11, Charlie dùng Codex (đọc repo/PDF, review, Markdown điều phối) và Claude Code (viết code, test, báo cáo Dev); chưa chạy ARTEMIS, CodeRabbit, Copilot, SonarCloud hoặc model API. Ngày 03/11, Thắng dùng Codex Bugbot và Codex Security Review để review PR #6; output và quyết định được lưu trong hồ sơ PR6 nêu trên.
 
 | Tên Công Cụ AI | Phiên bản / Môi trường | Mục đích sử dụng cụ thể trong dự án Lab 3 | Thành viên sử dụng |
 |:---|:---|:---|:---:|
