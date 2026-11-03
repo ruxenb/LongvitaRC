@@ -4,7 +4,7 @@
 
 **Snapshot 03/11/2026:** PR #1–#7 đã vào main; base tích hợp gói review là `97cbaa9`. CodeRabbit đã được Thái An cài và review [PR #7](https://github.com/ruxenb/LongvitaRC/pull/7) với 11 góp ý. Gói S7-1/2/3 trên `feature/charlie-review-delivery-01` lưu output, quyết định và các commit sửa; chờ team nghiệm thu, không tự merge PR. [Evidence/verification](../../evidence/review/PR7-coderabbit-20261103/README.md).
 
-**Cập nhật sau snapshot:** [PR #8 — hoàn thiện S7-2/S7-3 và kiểm assertions ARTEMIS](https://github.com/ruxenb/LongvitaRC/pull/8) đã merge vào main tại `b2101a3`. Các trạng thái S7 dưới đây vẫn chờ nghiệm thu chính thức. Gói S4-14 đợt 2 ở nhánh local `feature/charlie-a11y-02`, code `14ec763`; PM đã review và chạy lại analyzer/277 tests, còn các kiểm tra cuối bên dưới. Chưa push/PR gói S4-14 tại thời điểm review này.
+**Cập nhật sau snapshot:** [PR #8 — hoàn thiện S7-2/S7-3 và kiểm assertions ARTEMIS](https://github.com/ruxenb/LongvitaRC/pull/8) đã merge vào main tại `b2101a3`. Các trạng thái S7 dưới đây vẫn chờ nghiệm thu chính thức. Gói S4-14 đợt 2 ở nhánh local `feature/charlie-a11y-02`, code `f83206a`; PM re-review đạt, chạy lại analyzer sạch/279 tests pass và đóng ba mục bổ sung. Chưa push/PR gói S4-14 tại thời điểm re-review; bước tiếp là đưa gói này lên PR, chưa tự merge hoặc chuyển S3-5.
 
 Thắng, Hoàng và Thái An đã đồng ý các phần của PR #4 chạm vào việc của họ (theo Charlie, 02/11).
 
@@ -12,7 +12,7 @@ Thắng, Hoàng và Thái An đã đồng ý các phần của PR #4 chạm vào
 
 ## Mức hoàn thành công việc
 
-**29 task: 9 chờ nghiệm thu / 20 đang thực hiện / 0 chưa bắt đầu; 0/29 Accepted chính thức.** Ba task S7 đã được đóng gói để review, không chỉ mới làm ở local.
+**29 task: 10 chờ nghiệm thu / 19 đang thực hiện / 0 chưa bắt đầu; 0/29 Accepted chính thức.** S4-14 đạt PM review, chờ PR/user-team nghiệm thu; ba task S7 đã được đóng gói và merge, chờ nghiệm thu chính thức.
 
 Các điểm % cũ trong bảng dưới là ước lượng Dev của các phần ngoài S7, giữ để tham khảo; không tính lại thành % toàn dự án khi các owner dùng cách đo khác nhau. S7 dùng trạng thái chờ nghiệm thu. Các bản nháp report/slide/clip/viva được giữ trên GitHub theo lựa chọn Charlie, dù working copies ở máy chính đã được xóa.
 
@@ -36,7 +36,7 @@ Các điểm % cũ trong bảng dưới là ước lượng Dev của các phầ
 | S4-11 | 85% | Đủ các ca trên emulator; còn upload lên project thật |
 | S4-12 | 90% | Push thật 3 trạng thái, lịch sử, bấm mở màn, thanh thông báo khi app đang mở; còn token theo user, route theo đích |
 | S4-13 | 90% | Đủ khu vực; còn upload thật và đổi Remote Config từ Console |
-| S4-14 | Đang thực hiện | Code 14ec763 qua PM review/analyzer/277 tests; evidence đợt 2 đi hết Profile. Còn TalkBack Sign-in mới, kích hoạt Chia sẻ và assertion Semantics cho RC pending. Chưa chốt nghiệm thu. |
+| S4-14 | Chờ nghiệm thu | PM re-review f83206a đạt, analyzer sạch/279 tests pass. RC pending có Semantics test, Sign-in dùng QA host/Auth giả, Share mở bằng TalkBack trên app thật. HeadingLevel được sửa trong scope; chờ PR/user-team nghiệm thu. |
 | S4-15 | 50% | FCM đủ; Storage trên Console chờ DEC-01 |
 | S5-4 | 80% | login, logout đã thấy trên DebugView; còn export_report thật |
 | S6-4 | 80% | TC-01, TC-01b, TC-11 chạy thật bằng ARTEMIS và pass; còn đủ 3 lượt và lượt chính thức |
@@ -57,8 +57,8 @@ Các điểm % cũ trong bảng dưới là ước lượng Dev của các phầ
 
 | Trạng thái | Số lượng | IDs |
 |---|---:|---|
-| Có kiểm chứng/evidence, chờ nghiệm thu | 9 | S0-3-CM, S2-3, S2-4, S3-3, S3-4, S3-9, S7-1-CM, S7-2-CM, S7-3-CM |
-| Đang thực hiện / PR | 20 | S0-4, S3-1, S3-2, S3-5, S3-7, S4-10, S4-11, S4-12, S4-13, S4-14, S4-15, S5-4, S6-4, S6-7, S6-14, S8-3, S8-7, S8-12, S8-17-CM, S9-5-CM |
+| Có kiểm chứng/evidence, chờ nghiệm thu | 10 | S0-3-CM, S2-3, S2-4, S3-3, S3-4, S3-9, S4-14, S7-1-CM, S7-2-CM, S7-3-CM |
+| Đang thực hiện / PR | 19 | S0-4, S3-1, S3-2, S3-5, S3-7, S4-10, S4-11, S4-12, S4-13, S4-15, S5-4, S6-4, S6-7, S6-14, S8-3, S8-7, S8-12, S8-17-CM, S9-5-CM |
 | Chưa bắt đầu | 0 | — |
 | **Tổng** | **29** | |
 
@@ -73,7 +73,7 @@ Chi tiết IDs/owner/dependency tại [task Charlie](task-charlie.md) và [maste
 - **FCM preparation:** gateway và 4 callback, parser, inbox/dedup theo phiên. Payload gốc đi cùng entry đã chấp nhận; first accepted message thắng trong một phiên, tap duplicate dùng target đã chấp nhận. Chưa phải live FCM hoàn chỉnh.
 - **Storage (S3-7, S4-11):** lỗi có kiểu (mất mạng, bị từ chối, chưa cấu hình, hết dung lượng), hủy thật, thử lại cùng ID. Rules owner-only có 14 test. Upload thành công bằng SDK thật **trên Storage Emulator**, [bằng chứng](../../evidence/storage/S4-11-emulator-20261102/README.md). Chưa deploy và chưa có file trên project thật vì DEC-01.
 - **FCM thật (S4-12, S4-15):** tin từ Console về đủ foreground, background, terminated; bấm tin mở Profile; lịch sử lưu trên máy theo UID. [Bằng chứng](../../evidence/fcm/S4-15-push-20261102/README.md). Tin đến khi app đang mở hiện thanh thông báo trên màn đang xem, nút "Xem" mở hộp thư ([bằng chứng 03/11](../../evidence/fcm/S4-12-foreground-20261103/README.md)). Đây là contract tạm nhóm đã đồng ý.
-- **TalkBack (S4-14):** [đợt 1](../../evidence/a11y/S4-14-talkback-20261103/README.md) đi hết Sign-in và phần đầu Profile; [đợt 2 trên code 14ec763](../../evidence/a11y/S4-14-semantics-20261103/README.md) đi hết Profile, gồm Remote Config/Crashlytics, hai dialog và mở PDF. PM chạy lại analyzer sạch, 277/277 tests pass. Còn đi Sign-in bản mới, kích hoạt Chia sẻ và thêm test giữ RC ở trạng thái pending; fake hiện trả ngay nên chưa chứng minh Semantics của nút đang tải. Máy thật/phát âm tiếng Việt vẫn là giới hạn được ghi rõ.
+- **TalkBack (S4-14):** [đợt 1](../../evidence/a11y/S4-14-talkback-20261103/README.md) đi hết Sign-in và phần đầu Profile; [đợt 2, code f83206a](../../evidence/a11y/S4-14-semantics-20261103/README.md) hoàn thiện Profile, dialog, mở/chia sẻ PDF, Sign-in qua QA host với Auth giả, và heading navigation. RC pending được giữ bằng Completer trong widget test và kiểm Semantics/khóa action/khôi phục. PM re-review đạt, chạy lại analyzer sạch, 279/279 tests pass. Sign-in QA không chứng minh Google/Firebase thật; máy thật/phát âm tiếng Việt và các state fake còn là giới hạn đã ghi rõ.
 - **Crashlytics:** có plugin Gradle, [crash thử đã lên Console](../../evidence/crashlytics/S4-13-test-crash-20261102/README.md). **Thái An cần chốt:** chưa nối `FlutterError.onError` và `PlatformDispatcher.onError` (S5-6), nên lỗi Flutter không bắt được chưa tự lên Crashlytics.
 - **ARTEMIS (S6-4, S6-7):** bỏ `DummyArtemisClient` trả SUCCESS giả, dùng `artemis-client` thật, ghim commit `351ca84`, viết `test_auth.py`, `test_export.py`, `test_profile.py`. **Snapshot trước đợt chạy thật:** khi chưa có key S0-5, bộ test chưa chạy được. Ngày 03/11 đã cài client đúng commit ghim; 7 test được nhận, và khi thiếu daemon cả 7 lỗi ở fixture chứ không pass ([log](../../evidence/artemis/S6-4-setup-20261103/README.md)). **Ngày 03/11 đã chạy thật:** 7/7 test pass trong một lượt đủ, với key Gemini miễn phí của Charlie, Storage Emulator và push gửi tay ([kết quả](../../evidence/artemis/README.md)). Lần chạy tìm ra một lỗi app (Remote Config báo sai) và đã sửa.
 - **Profile (S4-13), đã vào `main` qua PR #3:** danh tính, đăng xuất, xuất PDF với tiến độ và URL, hộp thư FCM, giá trị và nút cập nhật Remote Config, crash thử có xác nhận. Có route `/profile`, Home bỏ khối xuất tạm và chỉ còn lối sang Profile, đăng xuất từ Profile có hộp xác nhận theo TC-11. Nút đăng xuất trên Home vẫn không hỏi xác nhận, Hoàng xem có đổi không.

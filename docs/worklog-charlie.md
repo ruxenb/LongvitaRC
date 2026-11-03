@@ -173,3 +173,7 @@ Hai Minor tại 06b8f9f được chấp nhận: d7c7609 thu hẹp phủ định 
 ### S4-14 đợt 2 — code 14ec763 và PM review, 03/11/2026
 
 Sửa Semantics của các thẻ Profile, URL, tiến trình, danh tính, heading Sign-in và dialog; đổi ba chuỗi trạng thái sang dấu “…”. Evidence tại `evidence/a11y/S4-14-semantics-20261103/`: đi TalkBack hết Profile, dialog mở/Hủy, mở PDF, các bố cục 360/412dp và chữ ×1/×2; Storage dùng Emulator. PM chạy độc lập analyzer sạch và 277/277 tests pass; đọc diff và ảnh, chưa tự chạy cử chỉ TalkBack. Chưa đóng S4-14: còn Sign-in bản mới, kích hoạt Chia sẻ, test Semantics lúc RC pending. Fake RC hiện trả ngay nên báo cáo “pending đã widget-test” đã được đính chính. Không tăng tổng task nghiệm thu và chưa chuyển S3-5.
+
+### S4-14 — re-review f83206a đạt, 03/11/2026
+
+Giữ 14ec763 và PM docs 17a8ff9. f83206a hoàn thiện test RC pending bằng Completer và Semantics; Sign-in được đi TalkBack qua QA host dùng màn/VM thật với Auth giả; Share trên app thật mở ChooserActivity rồi Back. Trong lúc kiểm Sign-in phát hiện heading không được Android nhận; thêm headingLevel ở 8 vị trí, có test và ảnh điều hướng heading trên Sign-in/Profile. PM xác nhận lỗi này thuộc S4-14, chạy độc lập analyzer sạch/279 tests pass, xem ảnh 16–20 và diff; PM không tự thao tác TalkBack. Ba mục PM bổ sung đã đạt, S4-14 chuyển Chờ nghiệm thu, tổng Charlie 10 chờ/19 đang làm. Chưa push/PR tại thời điểm này; bước kế là giao gói lên PR để review, chưa tự merge hoặc chuyển S3-5. Các giới hạn QA/Auth giả, states fake, máy thật/TTS được giữ rõ trong README.
