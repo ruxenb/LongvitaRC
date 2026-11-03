@@ -1,6 +1,6 @@
 # S3-5 — Đăng xuất và cách ly phiên, 04/11/2026
 
-> **PM review evidence commit 0e3ef5a:** giữ các kết quả native normal-path dưới đây. Phần kỹ thuật cần sửa hai lỗi mới PM-S3-5-03/04, tái hiện bằng probe có điều khiển (không phải native): profile Auth cũ bị reuse qua phiên mới cùng UID; cleanup cũ xóa PDF mới cùng UID. Bộ 279 tests cũ chưa phủ hai ca này. S3-5 chưa hoàn tất kỹ thuật và còn A3/policy pending; xem mục PM review cuối tài liệu.
+> **PM re-review code 9710d81:** analyzer sạch, 294/294 tests khi PM chạy độc lập. PM-S3-5-04 Closed; reproduction cũ 03 pass, nhưng 03 còn callback sau await Crashlytics và có 05 mới (completions login/logout cũ). Bốn probe độc lập fail, không phải native. S3-5 vẫn Changes requested và chờ A3/policy/SDK-error decision. Các kết quả 0e3ef5a/279 tests bên dưới là lịch sử baseline.
 
 - **Code:** `main` `96c9f57` (sau khi merge PR #9). Đợt này không đổi code: không tái hiện được lỗi nào.
 - **Thiết bị:** AVD `LocalMate_API_35`, Android 15.
@@ -85,6 +85,8 @@ Kết quả native ở phần trên vẫn có giá trị cho các trình tự đ
 
 Các phần trên (ảnh 01–16, kết quả, các con số 279 và 148) là baseline của `0e3ef5a`, giữ nguyên. Phần này là kết quả trên code đã sửa.
 
+Phần bản sửa do Dev bàn giao tương ứng code `9710d81`; xem kết luận PM mới nhất ở cuối tài liệu trước khi coi cả hai findings đã Closed.
+
 ### Sửa
 
 | Finding | Thay đổi | Regression (fail trên code cũ / tổng) |
@@ -131,3 +133,15 @@ Race của 03 và 04 vẫn chỉ kiểm bằng test có điều khiển. Trên m
 3. **Không đổi gì:** chấp nhận rủi ro thấp và ghi giới hạn. Trên Android, `FirebaseAuth.signOut` chỉ xóa phiên trên máy, nên hiếm khi lỗi; nhưng chưa có bằng chứng nó không bao giờ lỗi.
 
 Không dùng `setPersistence(NONE)`: tùy chọn này chỉ có trên web.
+
+## PM re-review 9710d81
+
+PM tự chạy analyzer sạch/294 tests pass; reproduction 03 cũ pass (hai profile loads, chỉ nhận profile mới). PM-S3-5-04 Closed: queue theo UID và regressions bảo vệ file cũ được dọn, file mới còn/mở/chia sẻ được; không chạy lại scheduling probe 04 cũ gây deadlock với cách serialize.
+
+| Mục còn lại | Actual bằng probe điều khiển | Expected |
+|---|---|---|
+| 03, hai error branches | Lỗi profile A đã bắt đầu await Crashlytics khi A còn hợp lệ; stream null/B vào app; logging cũ xong set AuthProfileError(A), SDK vẫn B | Recheck/tách state transition để callback cũ không đổi state B |
+| 05-A | Logout A đã signed-out, logLogout đang giữ; B vào app; thả logging thì lượt logout cũ clear B/set signed-out, SDK vẫn B | Lượt logout cũ không dọn phiên mới |
+| 05-B | SDK stream đã đưa A vào app khi logLogin còn giữ; A logout; thả logging cũ thì VM khởi động lại AuthLoadingProfile(A) dù SDK UID=null và bị kẹt | Giữ đúng signed-out, không load profile từ operation đã hết phiên |
+
+Bốn probe mới fail, là tests bổ sung độc lập với fake logger delays, không thuộc suite 294 và chưa native. Phần fixes profile generation/dedup/cache đã làm đúng cho các ca trước; còn thiếu bảo vệ async completion nói trên. Native after-fix r01–r08 được giữ, A→B sau fix vẫn chỉ có baseline trước sửa. SDK-error notice/retry và bảo vệ ý định logout qua restart còn cần quyết định owner; A3/retention chưa chốt. Chưa hoàn tất phần kỹ thuật hoặc toàn S3-5.

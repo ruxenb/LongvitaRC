@@ -29,7 +29,7 @@ Các điểm % cũ trong bảng dưới là ước lượng Dev của các phầ
 | S3-2 | 55% | SHA của Charlie, An, Thắng đã đăng ký (03/11); còn An, Thắng đăng nhập thử và SHA của Hoàng |
 | S3-3 | 90% | Chạy thật; lỗi mạng và lỗi hồ sơ mới test bằng fake |
 | S3-4 | 95% | Đủ trạng thái; còn chốt layout và ngôn ngữ |
-| S3-5 | Đang thực hiện | Native normal-path A/B/cùng UID đạt; PM review 0e3ef5a tái hiện PM-S3-5-03/04 (stale Auth profile, cleanup PDF cùng UID). Cần sửa và regression; đồng thời chờ A3/policy PDF-history, làm rõ SDK sign-out failure. |
+| S3-5 | Đang thực hiện | PM re-review 9710d81: 294 tests pass, 04 Closed; 03 còn callback sau await logging và 05 mới (completion login/logout cũ), 4 probe fail. Native same-UID sau sửa đạt, A→B còn evidence baseline. Chờ A3/policy PDF-history và quyết định SDK-error. |
 | S3-7 | 70% | Rules và 14 test trên emulator; còn deploy lên project thật |
 | S3-9 | 100% | Đủ theo tiêu chí, chờ nghiệm thu |
 | S4-10 | 80% | PDF, lưu, mở, chia sẻ xong; còn thực đơn thật từ S4-3 |
