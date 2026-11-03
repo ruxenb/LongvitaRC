@@ -19,6 +19,7 @@ import 'package:longvita/theme/app_theme.dart';
 import 'package:longvita/viewmodels/auth_viewmodel.dart';
 import 'package:longvita/viewmodels/meal_plan_viewmodel.dart';
 import 'package:longvita/viewmodels/profile_viewmodel.dart';
+import 'package:longvita/widgets/app_supporting.dart';
 import 'package:provider/provider.dart';
 
 import '../auth/auth_fakes.dart';
@@ -348,6 +349,153 @@ void main() {
       await tester.pump();
 
       expect(find.text('Thông báo mới: Tin mới'), findsNothing);
+    });
+
+    group('PM-FCM-02: a message belongs to the session that received it', () {
+      RemoteMessage forA() => const RemoteMessage(
+            messageId: 'private-a',
+            data: {'recipient_uid': 'uid-a'},
+            notification: RemoteNotification(title: 'Private message for A'),
+          );
+      const shownA = 'Thông báo mới: Private message for A';
+
+      Future<VoidCallback> showForA(WidgetTester tester, Harness h) async {
+        h.gateway.foreground.add(forA());
+        await settle(tester);
+        await tester.pump(const Duration(milliseconds: 300));
+        expect(find.text(shownA), findsOneWidget);
+        return tester
+            .widget<AppSnackBarContent>(find.byType(AppSnackBarContent))
+            .onAction!;
+      }
+
+      Future<void> signOut(WidgetTester tester, Harness h) async {
+        unawaited(h.session.signOut());
+        await settle(tester);
+        await tester.pump(const Duration(milliseconds: 300));
+        expect(find.text('Đăng nhập bằng Google'), findsOneWidget);
+      }
+
+      Future<void> signIn(WidgetTester tester, Harness h, String uid) async {
+        h.auth.nextSignIn = AuthSignInSucceeded(uid);
+        unawaited(h.session.signInWithGoogle());
+        await settle(tester);
+        await tester.pumpAndSettle();
+      }
+
+      testWidgets('sign-out removes the message and its View action',
+          (tester) async {
+        final h = await pumpGate(tester);
+        await showForA(tester, h);
+
+        await signOut(tester, h);
+
+        expect(find.text(shownA), findsNothing);
+        expect(find.text('Xem'), findsNothing);
+      });
+
+      testWidgets('View kept from before sign-out does not open Profile',
+          (tester) async {
+        final h = await pumpGate(tester);
+        final view = await showForA(tester, h);
+        await signOut(tester, h);
+
+        view();
+        await tester.pumpAndSettle();
+
+        expect(find.byType(ProfileScreen), findsNothing);
+        expect(find.text('Đăng nhập bằng Google'), findsOneWidget);
+      });
+
+      testWidgets('A -> B: B sees nothing of A and A\'s View does nothing',
+          (tester) async {
+        final h = await pumpGate(tester);
+        final view = await showForA(tester, h);
+
+        h.auth.emitUid('uid-b');
+        await settle(tester);
+        await tester.pumpAndSettle();
+        expect(h.session.currentUser?.uid, 'uid-b');
+        expect(find.text(shownA), findsNothing);
+
+        view();
+        await tester.pumpAndSettle();
+        expect(find.byType(ProfileScreen), findsNothing);
+      });
+
+      testWidgets('A -> sign-out -> A: the old View does nothing',
+          (tester) async {
+        final h = await pumpGate(tester);
+        final view = await showForA(tester, h);
+        await signOut(tester, h);
+        await signIn(tester, h, 'uid-a');
+        expect(h.session.currentUser?.uid, 'uid-a');
+        expect(find.text(shownA), findsNothing);
+
+        view();
+        await tester.pumpAndSettle();
+        expect(find.byType(ProfileScreen), findsNothing);
+      });
+
+      testWidgets('A -> sign-out -> A: a new message still shows and opens',
+          (tester) async {
+        final h = await pumpGate(tester);
+        await showForA(tester, h);
+        await signOut(tester, h);
+        await signIn(tester, h, 'uid-a');
+
+        h.gateway.foreground.add(push('m2', title: 'Tin sau'));
+        await settle(tester);
+        await tester.pumpAndSettle();
+        expect(find.text('Thông báo mới: Tin sau'), findsOneWidget);
+
+        await tester.tap(find.text('Xem'));
+        await tester.pumpAndSettle();
+        expect(find.byType(ProfileScreen), findsOneWidget);
+      });
+
+      testWidgets('session ending before the frame shows nothing',
+          (tester) async {
+        final h = await pumpGate(tester);
+
+        // The message reaches the gate first; the session ends right after,
+        // before the frame that would show the snackbar.
+        h.gateway.foreground.add(forA());
+        scheduleMicrotask(() => h.auth.emitUid(null));
+        await settle(tester);
+        await tester.pumpAndSettle();
+
+        expect(find.text(shownA), findsNothing);
+        expect(find.byType(ProfileScreen), findsNothing);
+      });
+
+      testWidgets('a tap from the shade after sign-out waits for sign-in',
+          (tester) async {
+        final h = await pumpGate(tester);
+        await signOut(tester, h);
+
+        h.gateway.opened.add(push('m3', title: 'Tin bấm'));
+        await settle(tester);
+        await tester.pumpAndSettle();
+        expect(find.byType(ProfileScreen), findsNothing);
+
+        await signIn(tester, h, 'uid-a');
+        expect(find.byType(ProfileScreen), findsOneWidget);
+      });
+
+      testWidgets('a message for B shows nothing to A', (tester) async {
+        final h = await pumpGate(tester);
+
+        h.gateway.foreground.add(const RemoteMessage(
+          messageId: 'for-b',
+          data: {'recipient_uid': 'uid-b'},
+          notification: RemoteNotification(title: 'Private message for B'),
+        ));
+        await settle(tester);
+        await tester.pumpAndSettle();
+
+        expect(find.textContaining('Private message for B'), findsNothing);
+      });
     });
 
     testWidgets('a message already in the inbox still opens, once',
