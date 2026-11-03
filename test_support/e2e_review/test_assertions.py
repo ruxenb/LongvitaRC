@@ -40,6 +40,24 @@ async def test_cancel_does_not_accept_a_notice_seen_before_back():
         ))
 
 
+async def test_cancel_does_not_accept_background_as_a_back_action():
+    with pytest.raises(AssertionError):
+        await auth_cases.test_tc01b_cancelled_sign_in_stays_on_sign_in(observe(
+            "Tapped outside; background dimmed. đóng cửa sổ chọn tài khoản; Đăng nhập bằng Google.",
+        ))
+
+
+async def test_sign_out_does_not_accept_background_as_a_back_action():
+    with pytest.raises(AssertionError):
+        await auth_cases.test_tc11_sign_out_cannot_return_with_back(observe(
+            "Tap Đồng ý: background dimmed, then Đăng nhập bằng Google appears.",
+        ))
+
+
+def test_action_substrings_remain_available_for_tapped():
+    assert harness.Observation(["Tapped Đồng ý: sign-in appears."]).after("tap", "Đồng ý")
+
+
 @pytest.mark.parametrize("last", [
     "Press Android Back: Android launcher and app icons are visible.",
     "Press Android Back: Đăng nhập bằng Google remains visible.",

@@ -53,15 +53,21 @@ class Observation(str):
         """The final step: the screen the task ended on."""
         return self.steps[-1] if self.steps else ""
 
-    def after(self, *words: str) -> str:
+    def after(self, *words: str, whole_word: bool = False) -> str:
         """The steps from the last one that mentions every word (any case).
 
         Empty when no step mentions them, so a missing action fails the check.
+        Whole-word matching keeps Back distinct from background; tap callers
+        retain substring matching so they also recognize tapped.
         """
         wanted = [w.lower() for w in words]
         for index in range(len(self.steps) - 1, -1, -1):
             step = self.steps[index].lower()
-            if all(w in step for w in wanted):
+            if all(
+                re.search(rf"(?<!\w){re.escape(w)}(?!\w)", step) is not None
+                if whole_word else w in step
+                for w in wanted
+            ):
                 return "\n".join(self.steps[index:])
         return ""
 

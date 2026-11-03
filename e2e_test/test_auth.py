@@ -37,7 +37,7 @@ async def test_tc01b_cancelled_sign_in_stays_on_sign_in(run_case):
         "The notice shown after closing the picker, and the label of the sign-in button.",
     )
 
-    after_back = output.after("back")
+    after_back = output.after("back", whole_word=True)
     assert "đóng cửa sổ chọn tài khoản" in after_back
     assert "Đăng nhập bằng Google" in after_back
 
@@ -54,7 +54,7 @@ async def test_tc11_sign_out_cannot_return_with_back(run_case):
     assert "Đăng nhập bằng Google" in output.after("tap", "Đồng ý")
     # Only the screen after Back counts. "Home screen" alone is ambiguous: it
     # may be Android's launcher or the app's own dashboard.
-    after_back = output.after("back")
+    after_back = output.after("back", whole_word=True)
     assert after_back, "the agent did not report pressing Back"
     assert not APP_HOME.search(after_back), after_back
     assert LAUNCHER.search(after_back) or "Đăng nhập bằng Google" in after_back, after_back
