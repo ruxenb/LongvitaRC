@@ -124,4 +124,6 @@ Task S8-17-CM. Ghi theo commit và evidence thật, cập nhật dần. Trạng 
 - **Quyết định:** viết phần Storage ngay bằng bằng chứng Storage Emulator thay vì chờ DEC-01, và ghi rõ ở đầu bản nháp đó là emulator. Khi có Storage thật chỉ cần thay ảnh và bỏ ghi chú.
 - **Đã làm:** `docs/report-drafts/s8-3-firebase-storage.md` (luồng, lỗi, rules, kiểm thử, bằng chứng, giới hạn). `docs/report-drafts/s8-7-slides.md`: ba slide, mỗi slide một thông điệp, cơ chế lỗi, ảnh bằng chứng thật và ghi chú người nói.
 - **Kiểm tra:** số liệu trong bản nháp đối chiếu với log rules (55/55, rules mở toang fail 9) và các test hiện có; mọi đường dẫn ảnh trong slide đều tồn tại.
-- **Còn vướng:** chưa có template slide chung; Storage chưa có trên project thật.
+- **Kịch bản clip (S8-12):** `docs/report-drafts/s8-12-clip-script.md`, 6 cảnh, mỗi cảnh có thao tác, màn Console, lời nói và thời lượng.
+- **Thử hàng đợi PM-FCM-02 trên thiết bị:** tắt mạng, phát hành hai chiến dịch, bật mạng lại. Chỉ một tin đến trước khi đăng xuất (logcat có một lần nhận), nên chưa tái hiện được hai tin cùng chờ; Sign-in sạch trong 72 giây sau đăng xuất. Ghi nhận là ca một tin.
+- **Còn vướng:** chưa có template slide chung; Storage chưa có trên project thật; clip chưa quay.

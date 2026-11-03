@@ -12,10 +12,10 @@ Thắng, Hoàng và Thái An đã đồng ý các phần của PR #4 chạm vào
 
 ```text
 Toàn dự án   [███████████░░░░░░░░░░░░░░░░░░░░░░░░░░░░░]  28%
-Charlie      [████████████████████████░░░░░░░░░░░░░░░░]  61%
+Charlie      [█████████████████████████░░░░░░░░░░░░░░░]  62%
 ```
 
-Code và tích hợp Firebase (18 task, giai đoạn 0–5): **82%**. Test, AI review, báo cáo, nộp bài (11 task, giai đoạn 6–9): **27%**.
+Code và tích hợp Firebase (18 task, giai đoạn 0–5): **82%**. Test, AI review, báo cáo, nộp bài (11 task, giai đoạn 6–9): **29%**.
 
 Mỗi task chấm theo phần tiêu chí nghiệm thu đã đạt và có bằng chứng. Đây là ước lượng của Charlie, chưa được leader duyệt. Số của Thái An, Thắng, Hoàng lấy từ bảng task (đã xong 100%, đang làm 50%), nên có thể thấp hơn thực tế. Task đã nghiệm thu chính thức: 0/29.
 
@@ -50,7 +50,7 @@ Mỗi task chấm theo phần tiêu chí nghiệm thu đã đạt và có bằng
 | S7-3-CM | 0% | Chờ finding được chấp nhận |
 | S8-3 | 75% | Nháp đủ Auth, FCM, Storage (Storage là emulator); còn ảnh Console Storage và gửi Thắng |
 | S8-7 | 40% | Nội dung 3 slide có ảnh bằng chứng; còn dựng theo template chung |
-| S8-12 | 0% | Chưa quay; bằng chứng Auth và push đã sẵn |
+| S8-12 | 15% | Có kịch bản 6 cảnh; chưa quay |
 | S8-17-CM | 70% | Đã ghi theo từng đợt; cập nhật đến khi chốt |
 | S9-5-CM | 0% | Làm cuối dự án |
 
@@ -61,8 +61,8 @@ Mỗi task chấm theo phần tiêu chí nghiệm thu đã đạt và có bằng
 | Trạng thái | Số lượng | IDs |
 |---|---:|---|
 | Có kiểm chứng/evidence, chờ nghiệm thu | 6 | S0-3-CM, S2-3, S2-4, S3-3, S3-4, S3-9 |
-| Đang thực hiện / PR | 18 | S0-4, S3-1, S3-2, S3-5, S3-7, S4-10, S4-11, S4-12, S4-13, S4-14, S4-15, S5-4, S6-4, S6-7, S7-1-CM, S8-3, S8-7, S8-17-CM |
-| Chưa bắt đầu | 5 | S6-14, S7-2-CM, S7-3-CM, S8-12, S9-5-CM |
+| Đang thực hiện / PR | 19 | S0-4, S3-1, S3-2, S3-5, S3-7, S4-10, S4-11, S4-12, S4-13, S4-14, S4-15, S5-4, S6-4, S6-7, S7-1-CM, S8-3, S8-7, S8-12, S8-17-CM |
+| Chưa bắt đầu | 4 | S6-14, S7-2-CM, S7-3-CM, S9-5-CM |
 | **Tổng** | **29** | |
 
 Chi tiết IDs/owner/dependency tại [task Charlie](task-charlie.md) và [master 112 task](danh-sach-task-full.md). Chưa tự đánh Done thay leader; S7-1 đang thực hiện, chưa có AI PR review output để tính đủ Stage 7. Merge vào `main` không đồng nghĩa task đã được nghiệm thu.

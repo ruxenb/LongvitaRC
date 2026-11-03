@@ -2,7 +2,7 @@
 
 > **Thành viên:** Charlie (CharlieMinh)  
 > **Vai trò:** **Design System in Code + Firebase Core Services** (Theme, 9 Common Widgets, Firebase Auth, Cloud Storage, FCM, PDF Export, Màn Sign-in & Profile/Demo Area)  
-> **Cập nhật tiến độ 02/11/2026:** **29 task = 6 chờ nghiệm thu + 18 đang thực hiện/PR + 0 skeleton + 5 chưa bắt đầu.** Chưa tự đánh Done/Accepted toàn task; xem [progress và evidence](charlie-progress.md). Ba lỗi regression đã sửa và xác nhận không có nghĩa S3-5/S4-12 hoàn tất mọi điều kiện. IDs/phân công/phụ thuộc của leader được giữ nguyên.
+> **Cập nhật tiến độ 02/11/2026:** **29 task = 6 chờ nghiệm thu + 19 đang thực hiện/PR + 0 skeleton + 4 chưa bắt đầu.** Chưa tự đánh Done/Accepted toàn task; xem [progress và evidence](charlie-progress.md). Ba lỗi regression đã sửa và xác nhận không có nghĩa S3-5/S4-12 hoàn tất mọi điều kiện. IDs/phân công/phụ thuộc của leader được giữ nguyên.
 
 ---
 
@@ -54,6 +54,6 @@
 | **S7-3-CM** | 7. Review | Sửa $\ge 1$ finding đã chấp nhận; commit riêng ghi ID finding; dẫn link commit vào bảng | — | S7-2-CM | Fix commit liên kết | Fixes 0.25 | Cao | 4 | | Chưa bắt đầu | Chưa có accepted PR finding/fix theo Stage 7; PM fix commits ghi riêng. |
 | **S8-3** | 8. Report | Soạn mục Báo cáo: Firebase Auth, Storage, FCM — mỗi dịch vụ 1 mục kèm failure handling và ảnh chụp console | — | S4-15 | Bản thảo gửi Thắng | Firebase 2.0 | Cao | 4 | | Đang thực hiện | Có nháp Auth, FCM, Storage tại docs/report-drafts/. Phần Storage dựa trên bằng chứng Storage Emulator; còn ảnh Console khi có DEC-01 và gửi Thắng. |
 | **S8-7** | 8. Report | Soạn Slide: 1 slide cho mỗi dịch vụ Auth, Storage, FCM — cơ chế xử lý lỗi + bằng chứng minh họa | — | S8-3 | Slide gửi Thắng | Slides 1.0 | Cao | 4 | | Đang thực hiện | Nội dung 3 slide Auth, FCM, Storage có ảnh bằng chứng tại docs/report-drafts/s8-7-slides.md; còn dựng theo template chung. |
-| **S8-12** | 8. Report | Quay video: sign-in, export + upload (mở console xác minh), nhận push notification từ xa | — | S6-1 | Đoạn video clip gửi Thắng | Video 1.0 | Cao | 4 | | Chưa bắt đầu | Chưa có clip bàn giao cuối. |
+| **S8-12** | 8. Report | Quay video: sign-in, export + upload (mở console xác minh), nhận push notification từ xa | — | S6-1 | Đoạn video clip gửi Thắng | Video 1.0 | Cao | 4 | | Đang thực hiện | Có kịch bản 6 cảnh tại docs/report-drafts/s8-12-clip-script.md; chưa quay. Cảnh upload chờ DEC-01 hoặc quay trên Storage Emulator có ghi rõ. |
 | **S8-17-CM** | 8. Report | Cập nhật worklog cá nhân `docs/worklog-charlie.md` để đối chiếu lịch sử Git | — | S8-16 | `docs/worklog-charlie.md` | Mục 11 | Thấp | 4 | | Đang thực hiện | Đã bắt đầu từ commit và evidence thật; cập nhật dần đến khi chốt theo lịch team. |
 | **S9-5-CM** | 9. Nộp bài | Luyện vấn đáp 5 phút: chạy 1 test ARTEMIS, đổi 1 giá trị Remote Config live, giải thích 1 ViewModel và 1 review | — | S8-16 | Sẵn sàng vấn đáp | Mục 11 | Cao | 4 | | Chưa bắt đầu | Chưa luyện vấn đáp theo kịch bản cuối. |
