@@ -1,0 +1,6 @@
+'Longvita' | View click=false enabled=true [16,40][304,68]
+'Thực đơn trường thọ cho cả tuần' | View click=false enabled=true [16,188][304,260]
+'Đăng nhập để lưu thực đơn, danh sách đi chợ và báo cáo của bạn trên mọi lần mở ứng dụng.' | View click=false enabled=true [16,272][304,350]
+'Bạn đã đóng cửa sổ chọn tài khoản. Đăng nhập lại khi bạn sẵn sàng.' | View click=false enabled=true [16,414][304,528]
+'Ẩn thông báo' | Button click=true enabled=true [252,426][300,474]
+'Đăng nhập bằng Google' | Button click=true enabled=true [16,544][304,600]

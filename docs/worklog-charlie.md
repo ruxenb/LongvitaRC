@@ -106,3 +106,14 @@ Task S8-17-CM. Ghi theo commit và evidence thật, cập nhật dần. Trạng 
 
 - **Đã làm:** phần Auth, gồm luồng, xử lý lỗi, kiểm thử, bằng chứng, giới hạn. Mỗi ca lỗi ghi rõ đã kiểm trên emulator hay chỉ bằng fake.
 - **Còn vướng:** phần Storage và FCM chờ bằng chứng thật (S4-15).
+
+### Tin đến khi app đang mở, TalkBack, nháp FCM (S4-12, S4-14, S8-3) — [PR #5](https://github.com/ruxenb/LongvitaRC/pull/5)
+
+- **Vấn đề:** khi app đang mở, Android không đưa tin lên khay, nên tin chỉ âm thầm vào hộp thư. Hướng dẫn S4-12 yêu cầu phải có phản hồi thấy được.
+- **Đã làm:** `AuthGate` hiện thanh thông báo trên màn đang xem, nút "Xem" mở hộp thư. Chỉ tin mới mới hiện; bấm tin, tin trùng, tin của người khác, tin sau khi đăng xuất thì không.
+- **Kiểm tra:** 257/257 test. Thật: hai chiến dịch Console, thanh thông báo hiện trên Home, "Xem" mở Profile, hộp thư có cả hai tin.
+- **TalkBack:** lệnh chạm của adb bỏ qua chế độ chạm để khám phá, nên dùng console của emulator để chạm và vuốt. Sign-in đi hết; Profile đi đến hộp thư; vuốt giả lập đôi khi nhảy về nút Quay lại, nên phần cuối Profile mới kiểm nhãn.
+- **Báo cáo:** nháp FCM trong `docs/report-drafts/s8-3-firebase-fcm.md`.
+- **Lỗi tìm thấy khi review (PM-FCM-02):** thanh thông báo nằm ở `ScaffoldMessenger` gốc nên còn trên Sign-in sau khi đăng xuất, và callback chỉ kiểm `mounted` nên "Xem" mở được Profile khi chưa đăng nhập. Sửa bằng cách ghi epoch phiên lúc lấy tin, kiểm lại lúc callback chạy, và đóng thanh thông báo của phiên đã kết thúc. 8 regression, 6 trong đó fail trên code cũ. 265/265 test; thử đăng xuất trên emulator với tin thật.
+- **Lượt 2 (hàng đợi):** `close()` của SDK chỉ ẩn snackbar đứng đầu và assert điều đó, nên hai tin rồi đăng xuất vẫn để lọt tin thứ hai. Sửa bằng cách cho nội dung thông báo tự kiểm phiên khi được dựng (messenger chỉ dựng snackbar đầu hàng) và tự gỡ nếu phiên đã hết; không đụng snackbar của màn khác. 5 regression hàng đợi, 270/270 test.
+- **Còn vướng:** PR #5 chờ AI review, chưa merge; token theo user và route theo đích chờ contract cuối.

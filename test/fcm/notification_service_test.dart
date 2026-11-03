@@ -228,6 +228,48 @@ void main() {
       expect(service.takePendingTarget(), planTarget);
     });
 
+    group('arrival while the app is open', () {
+      test('is reported once for a new foreground message', () async {
+        service.bindUser('uid-a');
+        await service.initialize();
+
+        gateway.foreground.add(message(id: 'fg'));
+        await settle();
+
+        expect(service.takeArrival()?.messageId, 'fg');
+        expect(service.takeArrival(), isNull);
+      });
+
+      test('is not reported for a tap or a duplicate', () async {
+        service.bindUser('uid-a');
+        await service.initialize();
+
+        gateway.opened.add(message(id: 'tap'));
+        await settle();
+        expect(service.takeArrival(), isNull);
+
+        gateway.foreground.add(message(id: 'tap'));
+        await settle();
+        expect(service.takeArrival(), isNull);
+      });
+
+      test('is not reported for another recipient or after sign-out',
+          () async {
+        service.bindUser('uid-a');
+        await service.initialize();
+
+        gateway.foreground.add(RemoteMessage(
+            messageId: 'b', data: payload(id: 'b', recipient: 'uid-b')));
+        await settle();
+        expect(service.takeArrival(), isNull);
+
+        gateway.foreground.add(message(id: 'a'));
+        await settle();
+        service.clearHistory();
+        expect(service.takeArrival(), isNull);
+      });
+    });
+
     test('a denied permission still receives a tap, with no crash', () async {
       gateway.grant = false;
       service.bindUser('uid-a');

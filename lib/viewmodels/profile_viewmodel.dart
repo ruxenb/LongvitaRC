@@ -95,6 +95,16 @@ class ProfileViewModel extends BaseViewModel implements SessionScoped {
   /// True once after a notification was tapped.
   bool takeNotificationOpenRequest() => notificationService.takeOpenRequest();
 
+  /// A message received while the app was open, once, so a screen can show it.
+  AppNotification? takeArrivedNotification() => notificationService.takeArrival();
+
+  /// Identifies the current session. It changes on every sign-out and user
+  /// change, so the same user signing back in gets a new value.
+  int get sessionEpoch => _epoch.current;
+
+  /// True when [epoch] belongs to a session that has ended.
+  bool isSessionStale(int epoch) => _epoch.isStale(epoch);
+
   /// Picks up messages that arrived while the app was in the background.
   Future<void> refreshInbox() => notificationService.drainPending();
 

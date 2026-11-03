@@ -275,14 +275,28 @@ class AppSnackBarContent extends StatelessWidget {
 /// Shows [AppSnackBarContent] as a floating snackbar with a 16 margin
 /// (328 wide on a 360 screen). The action hides the snackbar before calling
 /// [onAction]; what Undo restores is decided by the caller's ViewModel.
+///
+/// [wrap] lets a caller put the content inside its own widget, for example
+/// one that hides content that is no longer valid when its turn comes.
 ScaffoldFeatureController<SnackBar, SnackBarClosedReason> showAppSnackBar(
   BuildContext context, {
   required String message,
   String? actionLabel,
   VoidCallback? onAction,
   Duration duration = const Duration(seconds: 4),
+  Widget Function(Widget content)? wrap,
 }) {
   final messenger = ScaffoldMessenger.of(context);
+  final content = AppSnackBarContent(
+    message: message,
+    actionLabel: actionLabel,
+    onAction: onAction == null
+        ? null
+        : () {
+            messenger.hideCurrentSnackBar(reason: SnackBarClosedReason.action);
+            onAction();
+          },
+  );
   return messenger.showSnackBar(
     SnackBar(
       duration: duration,
@@ -291,17 +305,7 @@ ScaffoldFeatureController<SnackBar, SnackBarClosedReason> showAppSnackBar(
       elevation: 0,
       padding: EdgeInsets.zero,
       margin: const EdgeInsets.all(AppSpacing.s16),
-      content: AppSnackBarContent(
-        message: message,
-        actionLabel: actionLabel,
-        onAction: onAction == null
-            ? null
-            : () {
-                messenger.hideCurrentSnackBar(
-                    reason: SnackBarClosedReason.action);
-                onAction();
-              },
-      ),
+      content: wrap == null ? content : wrap(content),
     ),
   );
 }
