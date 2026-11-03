@@ -9,7 +9,7 @@
 
 - Tổng số task của Thắng: **28**.
 - Đã hoàn thành và có bằng chứng: **6/28 (21%)**.
-- Đang làm: **S3-6, S5-10, S8-17-VLQ, S9-1, S9-4**.
+- Đang làm: **S3-6, S5-10, S8-1, S8-9, S8-16, S8-17-VLQ, S9-1, S9-4, S9-5-VLQ**.
 - **S0-3-VLQ đã hoàn thành**: Android toolchain/emulator không còn là blocker.
 - Các task test/review/report/nộp bài chưa hoàn thành vì còn phụ thuộc tính năng, Firebase runtime, bằng chứng ARTEMIS hoặc sản phẩm của thành viên khác.
 
@@ -94,6 +94,20 @@ Hồ sơ tại
   ngày 03/11; planning/MVVM skeleton có trước feature integration.
 - Hai task vẫn **Đang làm** vì phải rerun trước submission và chưa có ngưỡng
   commit/ngày được giảng viên xác nhận.
+
+### S8-1, S8-9, S8-16 và S9-5-VLQ — Chuẩn bị trước
+
+- Đã thêm `scripts/project-env.ps1`, `scripts/verify-setup.ps1` và
+  `scripts/start-emulator.ps1` để chuẩn hóa Java 21, Android/Flutter và cache
+  Gradle/Pub/npm/uv trên ổ T cho từng PowerShell session.
+- `verify-setup.ps1 -RestoreDependencies` đã restore thành công dependencies
+  Flutter và ARTEMIS; analyzer sạch, 270/270 Flutter tests pass và 7 ARTEMIS
+  tests collect được ngày 03/11/2026.
+- Đã thêm `e2e_test/.env.example` không chứa secret và hướng dẫn setup vào
+  README. Việc này mở đầu S8-16 nhưng chưa thay thế video/deliverable links cuối.
+- Đã soạn bản nháp báo cáo S8-1, sáu thông điệp slide S8-9 và kịch bản vấn đáp
+  S9-5-VLQ trong `docs/report-drafts/`. Các phần phụ thuộc cloud/flow còn thiếu
+  được ghi rõ, không trình bày như kết quả đã chạy.
 
 ## 4. Firebase: trạng thái và phần còn thiếu
 
