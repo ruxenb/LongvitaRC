@@ -11,11 +11,11 @@ Thắng, Hoàng và Thái An đã đồng ý các phần của PR #4 chạm vào
 ## Mức hoàn thành công việc
 
 ```text
-Toàn dự án   [████████████░░░░░░░░░░░░░░░░░░░░░░░░░░░░]  29%
-Charlie      [███████████████████████████░░░░░░░░░░░░░]  68%
+Toàn dự án   [████████████░░░░░░░░░░░░░░░░░░░░░░░░░░░░]  30%
+Charlie      [████████████████████████████░░░░░░░░░░░░]  70%
 ```
 
-Code và tích hợp Firebase (18 task, giai đoạn 0–5): **82%**. Test, AI review, báo cáo, nộp bài (11 task, giai đoạn 6–9): **45%**.
+Code và tích hợp Firebase (18 task, giai đoạn 0–5): **84%**. Test, AI review, báo cáo, nộp bài (11 task, giai đoạn 6–9): **46%**.
 
 Mỗi task chấm theo phần tiêu chí nghiệm thu đã đạt và có bằng chứng. Đây là ước lượng của Charlie, chưa được leader duyệt. Số của Thái An, Thắng, Hoàng lấy từ bảng task (đã xong 100%, đang làm 50%), nên có thể thấp hơn thực tế. Task đã nghiệm thu chính thức: 0/29.
 
@@ -29,7 +29,7 @@ Mỗi task chấm theo phần tiêu chí nghiệm thu đã đạt và có bằng
 | S2-3 | 100% | Đủ theo tiêu chí, chờ nghiệm thu |
 | S2-4 | 100% | Đủ theo tiêu chí, chờ nghiệm thu |
 | S3-1 | 90% | Build, init, Crashlytics đều chạy; còn chốt ghim phiên bản |
-| S3-2 | 25% | 1/4 máy |
+| S3-2 | 55% | SHA của Charlie, An, Thắng đã đăng ký (03/11); còn An, Thắng đăng nhập thử và SHA của Hoàng |
 | S3-3 | 90% | Chạy thật; lỗi mạng và lỗi hồ sơ mới test bằng fake |
 | S3-4 | 95% | Đủ trạng thái; còn chốt layout và ngôn ngữ |
 | S3-5 | 85% | Chạy thật; còn A/B bằng hai tài khoản và Hoàng duyệt A3 |
@@ -45,7 +45,7 @@ Mỗi task chấm theo phần tiêu chí nghiệm thu đã đạt và có bằng
 | S6-4 | 80% | TC-01, TC-01b, TC-11 chạy thật bằng ARTEMIS và pass; còn đủ 3 lượt và lượt chính thức |
 | S6-7 | 75% | TC-08, TC-08b (Storage Emulator), TC-09, TC-10 (push gửi tay) chạy thật và pass; còn đủ 3 lượt, Storage thật |
 | S6-14 | 70% | TC-09 tìm ra lỗi báo sai Remote Config; đã sửa và chạy lại pass; còn lỗi từ lượt chính thức |
-| S7-1-CM | 40% | Đã có PR; còn chạy AI review và lưu output |
+| S7-1-CM | 60% | CodeRabbit review PR #7: 11 góp ý có file:dòng; còn lưu output và ghi code-review.md |
 | S7-2-CM | 0% | Chờ output AI review |
 | S7-3-CM | 0% | Chờ finding được chấp nhận |
 | S8-3 | 75% | Nháp đủ Auth, FCM, Storage (Storage là emulator); còn ảnh Console Storage và gửi Thắng |
