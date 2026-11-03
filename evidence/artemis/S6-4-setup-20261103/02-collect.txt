@@ -1,0 +1,9 @@
+test_auth.py::test_tc01_sign_in_with_google
+test_auth.py::test_tc01b_cancelled_sign_in_stays_on_sign_in
+test_auth.py::test_tc11_sign_out_cannot_return_with_back
+test_export.py::test_tc08_export_uploads_and_shows_url
+test_export.py::test_tc08b_saved_pdf_opens_in_the_native_viewer
+test_profile.py::test_tc09_remote_config_refresh_reports_a_result
+test_profile.py::test_tc10_push_opens_profile_from_the_shade
+
+7 tests collected in 0.01s

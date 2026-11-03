@@ -126,4 +126,11 @@ Task S8-17-CM. Ghi theo commit và evidence thật, cập nhật dần. Trạng 
 - **Kiểm tra:** số liệu trong bản nháp đối chiếu với log rules (55/55, rules mở toang fail 9) và các test hiện có; mọi đường dẫn ảnh trong slide đều tồn tại.
 - **Kịch bản clip (S8-12):** `docs/report-drafts/s8-12-clip-script.md`, 6 cảnh, mỗi cảnh có thao tác, màn Console, lời nói và thời lượng.
 - **Thử hàng đợi PM-FCM-02 trên thiết bị:** tắt mạng, phát hành hai chiến dịch, bật mạng lại. Chỉ một tin đến trước khi đăng xuất (logcat có một lần nhận), nên chưa tái hiện được hai tin cùng chờ; Sign-in sạch trong 72 giây sau đăng xuất. Ghi nhận là ca một tin.
-- **Còn vướng:** chưa có template slide chung; Storage chưa có trên project thật; clip chưa quay.
+- **Còn vướng:** chưa có template slide chung; Storage chưa có trên project thật; clip chưa quay (Charlie tự quay sau).
+
+### Cài ARTEMIS client, ôn vấn đáp (S6-4, S6-7, S9-5-CM) — nhánh `feature/charlie-report-02`
+
+- **Đã làm:** cài `artemis-client` đúng commit ghim vào venv ngoài repo; kiểm bằng `inspect` rằng mọi hàm và trường mà script gọi đều có; pytest nhận đủ 7 test; chạy khi chưa có daemon thì cả 7 lỗi ở fixture, không test nào pass. Ghi `asyncio_default_fixture_loop_scope` trong `pyproject.toml` để bỏ cảnh báo và giữ hành vi ở bản pytest-asyncio sau.
+- **Quyết định:** chưa cài daemon. Script khởi động của ARTEMIS tự cài công cụ và helper APK, và cần key LLM; làm khi có key S0-5.
+- **Vấn đáp:** `docs/report-drafts/s9-5-viva-charlie.md`, kịch bản 5 phút và câu hỏi thường gặp, dẫn dòng code trên `main`. Lệnh test dự phòng đã chạy: 13/13.
+- **Còn vướng:** key S0-5; chưa thử đổi Remote Config trên Console.
