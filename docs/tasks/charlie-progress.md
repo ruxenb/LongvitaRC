@@ -2,20 +2,20 @@
 
 Đây là bàn giao nền tảng mobile của cùng Assignment, không tuyên bố toàn bộ các task đã hoàn tất. Lab 3 = Assignment; Figma Lab 2 là tham chiếu đóng băng, UI được cải thiện trong code.
 
-**Đã merge vào `main` theo yêu cầu của leader, sau khi Charlie tự kiểm tra:** [#1 — design system, Firebase Auth và nền tảng PDF/FCM](https://github.com/ruxenb/LongvitaRC/pull/1), [#2 — lưu, mở, chia sẻ PDF](https://github.com/ruxenb/LongvitaRC/pull/2). [#3 — màn Profile và Firebase Demo Area](https://github.com/ruxenb/LongvitaRC/pull/3), [#4 — push thật, Storage trên emulator, Crashlytics, harness ARTEMIS](https://github.com/ruxenb/LongvitaRC/pull/4). Cả bốn PR **chưa có review trên GitHub của thành viên khác hay AI**, nên các điểm cần chốt bên dưới vẫn còn mở. CodeRabbit chưa được cài, chờ leader xác nhận; S7-1-CM sẽ chạy AI review trên [PR #5](https://github.com/ruxenb/LongvitaRC/pull/5).
+**Đã merge vào `main` theo yêu cầu của leader, sau khi Charlie tự kiểm tra:** [#1 — design system, Firebase Auth và nền tảng PDF/FCM](https://github.com/ruxenb/LongvitaRC/pull/1), [#2 — lưu, mở, chia sẻ PDF](https://github.com/ruxenb/LongvitaRC/pull/2). [#3 — màn Profile và Firebase Demo Area](https://github.com/ruxenb/LongvitaRC/pull/3), [#4 — push thật, Storage trên emulator, Crashlytics, harness ARTEMIS](https://github.com/ruxenb/LongvitaRC/pull/4), [#5 — thông báo khi app đang mở, TalkBack, nháp FCM](https://github.com/ruxenb/LongvitaRC/pull/5) (merge 03/11, `30ca6e3`). Cả năm PR **chưa có review trên GitHub của thành viên khác hay AI**, nên các điểm cần chốt bên dưới vẫn còn mở. CodeRabbit chưa được cài, chờ leader xác nhận; S7-1-CM sẽ chạy AI review trên PR kế tiếp, và PR đó chỉ merge sau khi có output AI review.
 
 Thắng, Hoàng và Thái An đã đồng ý các phần của PR #4 chạm vào việc của họ (theo Charlie, 02/11).
 
-**Đợt 03/11, [PR #5](https://github.com/ruxenb/LongvitaRC/pull/5), được giữ mở cho AI review (S7-1-CM):** tin đến khi app đang mở hiện thanh thông báo có nút "Xem" (S4-12), TalkBack thật (S4-14), nháp báo cáo FCM (S8-3). Analyzer sạch, 270/270 tests. Đã sửa lỗi tìm thấy khi review (PM-FCM-02): thanh thông báo của phiên cũ còn trên Sign-in sau khi đăng xuất, và nút "Xem" của nó mở được Profile khi chưa đăng nhập. Giờ mọi thao tác của thanh thông báo kiểm đúng phiên lúc chạy, và nội dung thông báo của phiên đã hết tự gỡ khi tới lượt hiện, kể cả khi đang chờ sau snackbar khác; snackbar của màn khác giữ nguyên. Có regression cho đăng xuất, A → B, A → đăng xuất → A và hàng đợi nhiều thông báo; đã thử đăng xuất trên emulator với tin thật. **Thắng xem giúp `auth_gate.dart`.**
+**Đợt 03/11, [PR #5](https://github.com/ruxenb/LongvitaRC/pull/5), đã vào `main` (`30ca6e3`) sau khi lỗi PM-FCM-02 được xác minh đã sửa; chưa có AI review:** tin đến khi app đang mở hiện thanh thông báo có nút "Xem" (S4-12), TalkBack thật (S4-14), nháp báo cáo FCM (S8-3). Analyzer sạch, 270/270 tests. Đã sửa lỗi tìm thấy khi review (PM-FCM-02): thanh thông báo của phiên cũ còn trên Sign-in sau khi đăng xuất, và nút "Xem" của nó mở được Profile khi chưa đăng nhập. Giờ mọi thao tác của thanh thông báo kiểm đúng phiên lúc chạy, và nội dung thông báo của phiên đã hết tự gỡ khi tới lượt hiện, kể cả khi đang chờ sau snackbar khác; snackbar của màn khác giữ nguyên. Có regression cho đăng xuất, A → B, A → đăng xuất → A và hàng đợi nhiều thông báo; đã thử đăng xuất trên emulator với tin thật. **Thắng xem giúp `auth_gate.dart`.**
 
 ## Mức hoàn thành công việc
 
 ```text
-Toàn dự án   [███████████░░░░░░░░░░░░░░░░░░░░░░░░░░░░░]  27%
-Charlie      [████████████████████████░░░░░░░░░░░░░░░░]  59%
+Toàn dự án   [███████████░░░░░░░░░░░░░░░░░░░░░░░░░░░░░]  28%
+Charlie      [████████████████████████░░░░░░░░░░░░░░░░]  61%
 ```
 
-Code và tích hợp Firebase (18 task, giai đoạn 0–5): **82%**. Test, AI review, báo cáo, nộp bài (11 task, giai đoạn 6–9): **22%**.
+Code và tích hợp Firebase (18 task, giai đoạn 0–5): **82%**. Test, AI review, báo cáo, nộp bài (11 task, giai đoạn 6–9): **27%**.
 
 Mỗi task chấm theo phần tiêu chí nghiệm thu đã đạt và có bằng chứng. Đây là ước lượng của Charlie, chưa được leader duyệt. Số của Thái An, Thắng, Hoàng lấy từ bảng task (đã xong 100%, đang làm 50%), nên có thể thấp hơn thực tế. Task đã nghiệm thu chính thức: 0/29.
 
@@ -48,8 +48,8 @@ Mỗi task chấm theo phần tiêu chí nghiệm thu đã đạt và có bằng
 | S7-1-CM | 40% | Đã có PR; còn chạy AI review và lưu output |
 | S7-2-CM | 0% | Chờ output AI review |
 | S7-3-CM | 0% | Chờ finding được chấp nhận |
-| S8-3 | 55% | Xong nháp Auth và FCM; còn Storage |
-| S8-7 | 0% | Chưa soạn |
+| S8-3 | 75% | Nháp đủ Auth, FCM, Storage (Storage là emulator); còn ảnh Console Storage và gửi Thắng |
+| S8-7 | 40% | Nội dung 3 slide có ảnh bằng chứng; còn dựng theo template chung |
 | S8-12 | 0% | Chưa quay; bằng chứng Auth và push đã sẵn |
 | S8-17-CM | 70% | Đã ghi theo từng đợt; cập nhật đến khi chốt |
 | S9-5-CM | 0% | Làm cuối dự án |
@@ -61,8 +61,8 @@ Mỗi task chấm theo phần tiêu chí nghiệm thu đã đạt và có bằng
 | Trạng thái | Số lượng | IDs |
 |---|---:|---|
 | Có kiểm chứng/evidence, chờ nghiệm thu | 6 | S0-3-CM, S2-3, S2-4, S3-3, S3-4, S3-9 |
-| Đang thực hiện / PR | 17 | S0-4, S3-1, S3-2, S3-5, S3-7, S4-10, S4-11, S4-12, S4-13, S4-14, S4-15, S5-4, S6-4, S6-7, S7-1-CM, S8-3, S8-17-CM |
-| Chưa bắt đầu | 6 | S6-14, S7-2-CM, S7-3-CM, S8-7, S8-12, S9-5-CM |
+| Đang thực hiện / PR | 18 | S0-4, S3-1, S3-2, S3-5, S3-7, S4-10, S4-11, S4-12, S4-13, S4-14, S4-15, S5-4, S6-4, S6-7, S7-1-CM, S8-3, S8-7, S8-17-CM |
+| Chưa bắt đầu | 5 | S6-14, S7-2-CM, S7-3-CM, S8-12, S9-5-CM |
 | **Tổng** | **29** | |
 
 Chi tiết IDs/owner/dependency tại [task Charlie](task-charlie.md) và [master 112 task](danh-sach-task-full.md). Chưa tự đánh Done thay leader; S7-1 đang thực hiện, chưa có AI PR review output để tính đủ Stage 7. Merge vào `main` không đồng nghĩa task đã được nghiệm thu.

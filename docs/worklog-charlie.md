@@ -116,4 +116,12 @@ Task S8-17-CM. Ghi theo commit và evidence thật, cập nhật dần. Trạng 
 - **Báo cáo:** nháp FCM trong `docs/report-drafts/s8-3-firebase-fcm.md`.
 - **Lỗi tìm thấy khi review (PM-FCM-02):** thanh thông báo nằm ở `ScaffoldMessenger` gốc nên còn trên Sign-in sau khi đăng xuất, và callback chỉ kiểm `mounted` nên "Xem" mở được Profile khi chưa đăng nhập. Sửa bằng cách ghi epoch phiên lúc lấy tin, kiểm lại lúc callback chạy, và đóng thanh thông báo của phiên đã kết thúc. 8 regression, 6 trong đó fail trên code cũ. 265/265 test; thử đăng xuất trên emulator với tin thật.
 - **Lượt 2 (hàng đợi):** `close()` của SDK chỉ ẩn snackbar đứng đầu và assert điều đó, nên hai tin rồi đăng xuất vẫn để lọt tin thứ hai. Sửa bằng cách cho nội dung thông báo tự kiểm phiên khi được dựng (messenger chỉ dựng snackbar đầu hàng) và tự gỡ nếu phiên đã hết; không đụng snackbar của màn khác. 5 regression hàng đợi, 270/270 test.
-- **Còn vướng:** PR #5 chờ AI review, chưa merge; token theo user và route theo đích chờ contract cuối.
+- **Merge:** 03/11, `30ca6e3`, sau khi PM xác minh PM-FCM-02 tại `0321aee`; theo quyết định của Charlie, chưa có AI review.
+- **Còn vướng:** S7-1-CM chuyển sang PR kế tiếp; token theo user và route theo đích chờ contract cuối.
+
+### Báo cáo Storage và nội dung slide (S8-3, S8-7) — nhánh `feature/charlie-report-02`
+
+- **Quyết định:** viết phần Storage ngay bằng bằng chứng Storage Emulator thay vì chờ DEC-01, và ghi rõ ở đầu bản nháp đó là emulator. Khi có Storage thật chỉ cần thay ảnh và bỏ ghi chú.
+- **Đã làm:** `docs/report-drafts/s8-3-firebase-storage.md` (luồng, lỗi, rules, kiểm thử, bằng chứng, giới hạn). `docs/report-drafts/s8-7-slides.md`: ba slide, mỗi slide một thông điệp, cơ chế lỗi, ảnh bằng chứng thật và ghi chú người nói.
+- **Kiểm tra:** số liệu trong bản nháp đối chiếu với log rules (55/55, rules mở toang fail 9) và các test hiện có; mọi đường dẫn ảnh trong slide đều tồn tại.
+- **Còn vướng:** chưa có template slide chung; Storage chưa có trên project thật.
