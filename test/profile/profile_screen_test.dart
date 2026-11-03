@@ -52,10 +52,21 @@ class ScriptedStorage extends FakeStorageService {
 }
 
 class ScriptedRemoteConfig extends FakeRemoteConfig {
+  /// What the SDK reports: true for any newly fetched config, changed or not.
   bool nextRefresh = false;
 
+  /// Applied by the next refresh, like a value edited on the Console.
+  int? nextMaxRecommendations;
+  int _maxRecommendations = 5;
+
   @override
-  Future<bool> forceFetchAndActivate() async => nextRefresh;
+  int get maxRecommendations => _maxRecommendations;
+
+  @override
+  Future<bool> forceFetchAndActivate() async {
+    _maxRecommendations = nextMaxRecommendations ?? _maxRecommendations;
+    return nextRefresh;
+  }
 }
 
 /// No file system in widget tests, where real file futures never complete.
@@ -818,11 +829,28 @@ void main() {
 
     testWidgets('refresh reports new values', (tester) async {
       final h = await pumpProfile(tester);
-      h.remoteConfig.nextRefresh = true;
+      h.remoteConfig
+        ..nextRefresh = true
+        ..nextMaxRecommendations = 7;
 
       await tapKey(tester, 'profile-refresh-config');
 
       expect(find.text('Đã áp dụng giá trị mới.'), findsOneWidget);
+      expect(find.text('7'), findsOneWidget);
+    });
+
+    // Found with ARTEMIS TC-09: the SDK reports every fresh fetch as activated,
+    // so each tap claimed new values while nothing had changed.
+    testWidgets('a fetch with the same values does not claim new values',
+        (tester) async {
+      final h = await pumpProfile(tester);
+      h.remoteConfig.nextRefresh = true;
+
+      await tapKey(tester, 'profile-refresh-config');
+
+      expect(find.text('Đã áp dụng giá trị mới.'), findsNothing);
+      expect(find.textContaining('Không có giá trị mới'), findsOneWidget);
+      expect(find.text('5'), findsOneWidget);
     });
 
     testWidgets('refresh does not claim success when nothing was applied',

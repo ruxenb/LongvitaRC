@@ -297,5 +297,8 @@ class FakeRemoteConfig implements RemoteConfigService {
   String get bannerAnnouncement => '';
 
   @override
+  double get proteinTargetRatio => 0.8;
+
+  @override
   dynamic noSuchMethod(Invocation invocation) => null;
 }

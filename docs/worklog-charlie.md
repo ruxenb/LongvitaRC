@@ -116,4 +116,29 @@ Task S8-17-CM. Ghi theo commit và evidence thật, cập nhật dần. Trạng 
 - **Báo cáo:** nháp FCM trong `docs/report-drafts/s8-3-firebase-fcm.md`.
 - **Lỗi tìm thấy khi review (PM-FCM-02):** thanh thông báo nằm ở `ScaffoldMessenger` gốc nên còn trên Sign-in sau khi đăng xuất, và callback chỉ kiểm `mounted` nên "Xem" mở được Profile khi chưa đăng nhập. Sửa bằng cách ghi epoch phiên lúc lấy tin, kiểm lại lúc callback chạy, và đóng thanh thông báo của phiên đã kết thúc. 8 regression, 6 trong đó fail trên code cũ. 265/265 test; thử đăng xuất trên emulator với tin thật.
 - **Lượt 2 (hàng đợi):** `close()` của SDK chỉ ẩn snackbar đứng đầu và assert điều đó, nên hai tin rồi đăng xuất vẫn để lọt tin thứ hai. Sửa bằng cách cho nội dung thông báo tự kiểm phiên khi được dựng (messenger chỉ dựng snackbar đầu hàng) và tự gỡ nếu phiên đã hết; không đụng snackbar của màn khác. 5 regression hàng đợi, 270/270 test.
-- **Còn vướng:** PR #5 chờ AI review, chưa merge; token theo user và route theo đích chờ contract cuối.
+- **Merge:** 03/11, `30ca6e3`, sau khi PM xác minh PM-FCM-02 tại `0321aee`; theo quyết định của Charlie, chưa có AI review.
+- **Còn vướng:** S7-1-CM chuyển sang PR kế tiếp; token theo user và route theo đích chờ contract cuối.
+
+### Báo cáo Storage và nội dung slide (S8-3, S8-7) — nhánh `feature/charlie-report-02`
+
+- **Quyết định:** viết phần Storage ngay bằng bằng chứng Storage Emulator thay vì chờ DEC-01, và ghi rõ ở đầu bản nháp đó là emulator. Khi có Storage thật chỉ cần thay ảnh và bỏ ghi chú.
+- **Đã làm:** `docs/report-drafts/s8-3-firebase-storage.md` (luồng, lỗi, rules, kiểm thử, bằng chứng, giới hạn). `docs/report-drafts/s8-7-slides.md`: ba slide, mỗi slide một thông điệp, cơ chế lỗi, ảnh bằng chứng thật và ghi chú người nói.
+- **Kiểm tra:** số liệu trong bản nháp đối chiếu với log rules (55/55, rules mở toang fail 9) và các test hiện có; mọi đường dẫn ảnh trong slide đều tồn tại.
+- **Kịch bản clip (S8-12):** `docs/report-drafts/s8-12-clip-script.md`, 6 cảnh, mỗi cảnh có thao tác, màn Console, lời nói và thời lượng.
+- **Thử hàng đợi PM-FCM-02 trên thiết bị:** tắt mạng, phát hành hai chiến dịch, bật mạng lại. Chỉ một tin đến trước khi đăng xuất (logcat có một lần nhận), nên chưa tái hiện được hai tin cùng chờ; Sign-in sạch trong 72 giây sau đăng xuất. Ghi nhận là ca một tin.
+- **Còn vướng:** chưa có template slide chung; Storage chưa có trên project thật; clip chưa quay (Charlie tự quay sau).
+
+### Cài ARTEMIS client, ôn vấn đáp (S6-4, S6-7, S9-5-CM) — nhánh `feature/charlie-report-02`
+
+- **Đã làm:** cài `artemis-client` đúng commit ghim vào venv ngoài repo; kiểm bằng `inspect` rằng mọi hàm và trường mà script gọi đều có; pytest nhận đủ 7 test; chạy khi chưa có daemon thì cả 7 lỗi ở fixture, không test nào pass. Ghi `asyncio_default_fixture_loop_scope` trong `pyproject.toml` để bỏ cảnh báo và giữ hành vi ở bản pytest-asyncio sau.
+- **Quyết định:** chưa cài daemon. Script khởi động của ARTEMIS tự cài công cụ và helper APK, và cần key LLM; làm khi có key S0-5.
+- **Vấn đáp:** `docs/report-drafts/s9-5-viva-charlie.md`, kịch bản 5 phút và câu hỏi thường gặp, dẫn dòng code trên `main`. Lệnh test dự phòng đã chạy: 13/13.
+- **Còn vướng:** key S0-5; chưa thử đổi Remote Config trên Console.
+
+### ARTEMIS chạy thật (S6-4, S6-7, S6-14) — nhánh `feature/charlie-artemis-01`
+
+- **Đầu vào:** key Gemini miễn phí do Charlie tạo (nằm ngoài repo); daemon ARTEMIS cùng commit ghim, model `gemini-3.5-flash-lite` vì `gemini-3.8-flash` bị giới hạn 5 request/phút và đang quá tải; UIAutomator thay helper vì emulator không cho bật accessibility service qua adb.
+- **Sửa script:** ở commit ghim, nhánh Flash bỏ qua Outputter nên SDK không có output; dùng tóm tắt từng bước của agent làm quan sát và ghi nguồn. Tắt app trước mỗi test để điều kiện đầu vào độc lập. Chỉnh kịch bản (chờ, chiều vuốt) và assertion (TC-09 quá lỏng, TC-11 kiểm sai phạm vi).
+- **Lỗi app tìm được:** TC-09 cho thấy mỗi lần bấm "Cập nhật Remote Config" đều báo "Đã áp dụng giá trị mới." dù không đổi gì. SDK coi mọi lần fetch mới là đã kích hoạt; ViewModel giờ so giá trị trước và sau (`fd0951c`), có widget test.
+- **Kết quả:** một lượt đủ 7/7 pass. TC-08 kiểm thêm file trên Storage Emulator bằng URL đọc từ màn hình (18.955 byte, `%PDF-1.5`).
+- **Còn vướng:** mới một lượt đủ; chưa có lượt chính thức S6-9; TC-08 chưa trên Storage thật; TC-10 cần gửi push tay.

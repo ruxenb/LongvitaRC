@@ -1,0 +1,15 @@
+============================= test session starts =============================
+platform win32 -- Python 3.12.10, pytest-9.2.0, pluggy-1.7.0 -- C:\Users\phamv\AppData\Local\Temp\claude\C--Users-phamv-OneDrive-Desktop-PRM-Assignment\b006fee5-726f-4bae-a432-4bd37d35c64f\scratchpad\artemis-venv\Scripts\python.exe
+rootdir: C:\Users\phamv\OneDrive\Desktop\PRM\Assignment\LongvitaRC\e2e_test
+configfile: pyproject.toml
+plugins: asyncio-1.4.1.post1
+asyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=function, asyncio_default_test_loop_scope=function
+collecting ... collected 5 items
+
+test_auth.py::test_tc01b_cancelled_sign_in_stays_on_sign_in PASSED       [ 20%]
+test_auth.py::test_tc01_sign_in_with_google PASSED                       [ 40%]
+test_profile.py::test_tc09_remote_config_refresh_reports_a_result PASSED [ 60%]
+test_export.py::test_tc08_export_uploads_and_shows_url PASSED            [ 80%]
+test_export.py::test_tc08b_saved_pdf_opens_in_the_native_viewer PASSED   [100%]
+
+======================== 5 passed in 350.99s (0:05:50) ========================

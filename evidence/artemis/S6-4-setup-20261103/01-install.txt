@@ -1,0 +1,5 @@
+# pip list (venv ngoài repo, Python Python 3.12.10)
+artemis-client    0.1.0
+pytest            9.2.0
+pytest-asyncio    1.4.1.post1
+python-dotenv     1.2.4
