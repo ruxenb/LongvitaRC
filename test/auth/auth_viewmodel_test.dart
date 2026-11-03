@@ -25,6 +25,47 @@ class HeldProfileAuth extends FakeAuthService {
 UserModel named(String uid, String name) =>
     testUser(uid).copyWith(displayName: name);
 
+/// A telemetry call that finishes only when the test releases it.
+class Held {
+  final started = Completer<void>();
+  final release = Completer<void>();
+
+  Future<void> run() {
+    started.complete();
+    return release.future;
+  }
+}
+
+class HeldCrashlytics extends FakeCrashlytics {
+  final held = Held();
+
+  @override
+  Future<void> recordError(dynamic exception, StackTrace? stack,
+      {dynamic reason, bool fatal = false}) {
+    errors.add(exception);
+    return held.run();
+  }
+}
+
+class HeldAnalytics extends FakeAnalytics {
+  Held? login;
+  Held? logout;
+  Object? logoutError;
+
+  @override
+  Future<void> logLogin({String method = 'google'}) {
+    events.add('login:$method');
+    return login?.run() ?? Future.value();
+  }
+
+  @override
+  Future<void> logLogout() async {
+    events.add('logout');
+    if (logoutError != null) throw logoutError!;
+    await logout?.run();
+  }
+}
+
 void main() {
   late FakeAuthService auth;
   late FakeAnalytics analytics;
@@ -328,6 +369,157 @@ void main() {
       held.requests.single.complete(named('uid-a', 'A'));
       await settle();
       expect(vm.currentUser?.displayName, 'A');
+    });
+  });
+
+  // PM-S3-5-03 (remaining) and PM-S3-5-05: the state used to change only after
+  // an awaited Crashlytics or Analytics call, by which time another session
+  // could have started. Telemetry now runs after the state change.
+  group('telemetry finishing late does not change a newer session', () {
+    late HeldProfileAuth held;
+    late HeldCrashlytics heldCrash;
+    late HeldAnalytics heldAnalytics;
+
+    AuthViewModel buildHeld() {
+      final vm = AuthViewModel(
+        authService: held,
+        analytics: heldAnalytics,
+        crashlytics: heldCrash,
+        sessionScoped: [session],
+      );
+      addTearDown(vm.dispose);
+      return vm;
+    }
+
+    setUp(() {
+      heldCrash = HeldCrashlytics();
+      heldAnalytics = HeldAnalytics();
+    });
+
+    for (final (name, error) in [
+      ('typed', const AuthFailure(AuthFailureKind.profileRead) as Object),
+      ('generic', StateError('profile failed')),
+    ]) {
+      for (final next in ['uid-b', 'uid-a']) {
+        test('$name profile error of A reported late: $next stays signed in',
+            () async {
+          held = HeldProfileAuth(initialUid: 'uid-a');
+          final vm = buildHeld();
+          await settle();
+          held.requests.first.completeError(error);
+          await heldCrash.held.started.future;
+          expect(vm.state, isA<AuthProfileError>(),
+              reason: 'shown while A is still current');
+
+          held.emitUid(null);
+          await settle();
+          held.nextSignIn = AuthSignInSucceeded(next);
+          final signIn = vm.signInWithGoogle();
+          await settle();
+          held.requests[1].complete(named(next, 'new'));
+          await signIn;
+          expect(vm.currentUser?.uid, next);
+
+          heldCrash.held.release.complete();
+          await settle();
+          expect(vm.currentUser?.uid, next);
+          expect(vm.currentUser?.displayName, 'new');
+          expect(heldCrash.errors, [error], reason: 'still reported once');
+        });
+      }
+    }
+
+    for (final next in ['uid-b', 'uid-a']) {
+      test('logout event of A finishing late: $next stays signed in', () async {
+        held = HeldProfileAuth(initialUid: 'uid-a');
+        final logout = heldAnalytics.logout = Held();
+        final vm = buildHeld();
+        await settle();
+        held.requests.first.complete(named('uid-a', 'A'));
+        await settle();
+
+        final oldSignOut = vm.signOut();
+        await logout.started.future;
+        expect(vm.state, isA<AuthSignedOut>());
+
+        held.nextSignIn = AuthSignInSucceeded(next);
+        final signIn = vm.signInWithGoogle();
+        await settle();
+        held.requests[1].complete(named(next, 'new'));
+        await signIn;
+        expect(vm.currentUser?.uid, next);
+
+        logout.release.complete();
+        await oldSignOut;
+        expect(vm.currentUser?.uid, next);
+        expect(session.calls, ['start:uid-a', 'clear', 'start:$next']);
+      });
+    }
+
+    test('login event finishing after logout does not load a profile again',
+        () async {
+      auth = FakeAuthService();
+      final login = heldAnalytics.login = Held();
+      final vm = AuthViewModel(
+          authService: auth, analytics: heldAnalytics, crashlytics: heldCrash);
+      addTearDown(vm.dispose);
+      await settle();
+      auth.nextSignIn = const AuthSignInSucceeded('uid-a');
+      final oldSignIn = vm.signInWithGoogle();
+      await login.started.future;
+      await settle();
+      expect(vm.currentUser?.uid, 'uid-a');
+
+      await vm.signOut();
+      await settle();
+      final loads = auth.loadProfileCalls;
+
+      login.release.complete();
+      await oldSignIn;
+      await settle();
+      expect(vm.state, isA<AuthSignedOut>());
+      expect(auth.loadProfileCalls, loads);
+    });
+
+    test('a pending login event does not block the next sign-in', () async {
+      auth = FakeAuthService();
+      final login = heldAnalytics.login = Held();
+      final vm = AuthViewModel(
+          authService: auth, analytics: heldAnalytics, crashlytics: heldCrash);
+      addTearDown(vm.dispose);
+      await settle();
+      auth.nextSignIn = const AuthSignInSucceeded('uid-a');
+      unawaited(vm.signInWithGoogle());
+      await login.started.future;
+      await settle();
+      await vm.signOut();
+      await settle();
+
+      heldAnalytics.login = null;
+      auth.nextSignIn = const AuthSignInSucceeded('uid-b');
+      await vm.signInWithGoogle();
+      await settle();
+
+      expect(vm.currentUser?.uid, 'uid-b');
+      login.release.complete();
+      await settle();
+      expect(vm.currentUser?.uid, 'uid-b');
+    });
+
+    test('a failed logout event is recorded and sign-out still completes',
+        () async {
+      auth = FakeAuthService(initialUid: 'uid-a');
+      final analytics = HeldAnalytics()..logoutError = StateError('offline');
+      final vm = AuthViewModel(
+          authService: auth, analytics: analytics, crashlytics: crashlytics);
+      addTearDown(vm.dispose);
+      await settle();
+
+      await vm.signOut();
+
+      expect(vm.state, isA<AuthSignedOut>());
+      expect(auth.currentUid, isNull);
+      expect(crashlytics.errors.single, isA<StateError>());
     });
   });
 }

@@ -145,3 +145,49 @@ PM tự chạy analyzer sạch/294 tests pass; reproduction 03 cũ pass (hai pro
 | 05-B | SDK stream đã đưa A vào app khi logLogin còn giữ; A logout; thả logging cũ thì VM khởi động lại AuthLoadingProfile(A) dù SDK UID=null và bị kẹt | Giữ đúng signed-out, không load profile từ operation đã hết phiên |
 
 Bốn probe mới fail, là tests bổ sung độc lập với fake logger delays, không thuộc suite 294 và chưa native. Phần fixes profile generation/dedup/cache đã làm đúng cho các ca trước; còn thiếu bảo vệ async completion nói trên. Native after-fix r01–r08 được giữ, A→B sau fix vẫn chỉ có baseline trước sửa. SDK-error notice/retry và bảo vệ ý định logout qua restart còn cần quyết định owner; A3/retention chưa chốt. Chưa hoàn tất phần kỹ thuật hoặc toàn S3-5.
+
+## Sau sửa phần còn lại của PM-S3-5-03 và PM-S3-5-05
+
+Mọi phần ở trên giữ nguyên: baseline `0e3ef5a`, lượt sửa `9710d81`, và các mục PM. PM-S3-5-04 đã Closed và không đổi.
+
+### Nguyên nhân và cách sửa (`lib/viewmodels/auth_viewmodel.dart`)
+
+Trước đây state chỉ đổi sau khi chờ một lời gọi telemetry (Crashlytics `recordError`, Analytics `logLogin`/`logLogout`). Khi lời gọi đó xong muộn, phiên khác có thể đã bắt đầu.
+
+- **03 remaining:** lỗi tải profile được hiện ngay (`AuthProfileError`) lúc phiên vẫn hiện hành, rồi mới `await recordError`. Sau await không còn đổi state.
+- **05-A:** `signOut` lấy thế hệ phiên khi bắt đầu. Sau `authService.signOut()`, chỉ dọn local và đặt `AuthSignedOut` nếu chưa có phiên mới. Nếu SDK đã đăng xuất, stream đã tự dọn trước đó. Log chạy sau và không đổi state. Lỗi SDK vẫn ghi `Sign-out failed`. Lỗi riêng của sự kiện logout được ghi là `Logout event failed`, không còn bị coi là lỗi đăng xuất.
+- **05-B:** `signInWithGoogle` bắt đầu tải profile ngay khi có kết quả, dùng chung lần tải với stream. `logLogin` chạy song song. Cờ chống bấm lặp được trả ngay khi màn chọn tài khoản đóng, nên log đang chờ không chặn lần đăng nhập sau.
+- **Không đổi:** API, service telemetry, fake. Log vẫn được gửi; không tạo Future nào bị bỏ lơ mà không xử lý lỗi.
+- **Ảnh hưởng nhỏ:** sự kiện logout giờ được gửi sau khi dọn phiên, nên có thể không còn gắn user ID. Ở code cũ, khi stream báo không có user trước thì cũng đã như vậy.
+
+### Test
+
+| Ca (`test/auth/auth_viewmodel_test.dart`, group "telemetry finishing late…") | Fail trên `9710d81` |
+|---|---|
+| Lỗi profile typed của A được ghi muộn; B, và cả cùng UID A, vẫn đăng nhập (2 test) | Có |
+| Lỗi profile generic, cùng hai biến thể (2 test) | Có |
+| Sự kiện logout của A xong muộn; B, và cả cùng UID A, vẫn đăng nhập, không bị `clear` (2 test) | Có |
+| Sự kiện login xong sau khi đã đăng xuất: vẫn `AuthSignedOut`, không tải profile lại | Có |
+| Sự kiện login đang chờ không chặn lần đăng nhập sau | Có |
+| Lỗi sự kiện logout được ghi lại, đăng xuất vẫn hoàn tất | Không (đối chứng) |
+
+4 probe completion của PM: trước là 0/4 pass, giờ 4/4. Probe 03 gốc và probe SDK vẫn pass.
+
+### Kiểm bằng lệnh
+
+- `flutter analyze --no-pub`: No issues found.
+- `flutter test --no-pub`: **303/303 pass** (294 + 9).
+- `git diff --check`: sạch.
+
+### Native smoke trên bản này (`after-fix-2/`)
+
+| Ca | Ảnh | Kết quả |
+|---|---|---|
+| Mở app khôi phục phiên A | s01 | Home của A |
+| Xuất PDF → Hủy → Đồng ý | s02 | Hủy giữ A. Đồng ý thì `reports/` trống và về Sign-in |
+| Force-stop rồi mở lại | s03 | Vẫn ở Sign-in |
+| A đăng nhập lại (cùng UID) | s04, s05 | Không còn export hay thực đơn cũ |
+| Xuất PDF → đăng xuất | s06 | `plan_1793730517967.pdf` còn khi đang trong phiên, bị dọn khi đăng xuất |
+| A → B | s07, s08, s09 | B (email đã làm mờ) không thấy marker nào của A. Hộp thư "Chưa có thông báo nào.", lịch sử B `[]`, lịch sử A giữ nguyên 2601 byte |
+
+Các race trong 03 và 05 chỉ kiểm bằng test có điều khiển, không tái hiện trên máy. Đề xuất xử lý khi SDK sign-out lỗi, A3 và chính sách giữ dữ liệu vẫn chờ phối hợp, chưa làm.

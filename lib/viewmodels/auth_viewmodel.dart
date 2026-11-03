@@ -86,23 +86,29 @@ class AuthViewModel extends BaseViewModel {
     _signInInFlight = true;
     _setState(const AuthSigningIn());
 
+    final AuthSignInResult result;
     try {
-      final result = await authService.signInWithGoogle();
-      switch (result) {
-        case AuthSignInSucceeded(:final uid):
-          await analytics.logLogin(method: 'google');
-          // The auth stream also reports this uid; both paths share one load.
-          await _loadProfile(uid);
-        case AuthSignInCancelled():
-          _setState(const AuthSignedOut(
-              notice: AuthFailure(AuthFailureKind.cancelled)));
-        case AuthSignInFailed(:final failure):
-          await crashlytics.recordError(failure, StackTrace.current,
-              reason: 'Google sign-in failed (${failure.kind.name})');
-          _setState(AuthSignedOut(notice: failure));
-      }
+      result = await authService.signInWithGoogle();
     } finally {
+      // The picker is closed; a later attempt must not wait for telemetry.
       _signInInFlight = false;
+    }
+    // State changes first, while this attempt is still current; reporting
+    // comes after and never decides the session (PM-S3-5-05).
+    switch (result) {
+      case AuthSignInSucceeded(:final uid):
+        // The auth stream also reports this uid; both paths share one load.
+        final load = _loadProfile(uid);
+        await _sendTelemetry(() => analytics.logLogin(method: 'google'),
+            reason: 'Login event failed');
+        await load;
+      case AuthSignInCancelled():
+        _setState(const AuthSignedOut(
+            notice: AuthFailure(AuthFailureKind.cancelled)));
+      case AuthSignInFailed(:final failure):
+        _setState(AuthSignedOut(notice: failure));
+        await crashlytics.recordError(failure, StackTrace.current,
+            reason: 'Google sign-in failed (${failure.kind.name})');
     }
   }
 
@@ -115,18 +121,30 @@ class AuthViewModel extends BaseViewModel {
   Future<void> signOut() async {
     if (_signOutInFlight || _state is AuthInitializing) return;
     _signOutInFlight = true;
-    _authGeneration++;
+    final generation = ++_authGeneration;
+    Object? error;
+    StackTrace? errorStack;
     try {
       await authService.signOut();
-      await analytics.logLogout();
     } catch (e, s) {
-      await crashlytics.recordError(e, s, reason: 'Sign-out failed');
+      error = e;
+      errorStack = s;
     } finally {
       _signOutInFlight = false;
     }
-    // Clear locally even if the SDK call failed: the user asked to leave.
-    _endSession();
-    _setState(const AuthSignedOut());
+    // Clear locally even if the SDK call failed: the user asked to leave. Not
+    // when a newer session began meanwhile, which the auth stream reports
+    // after ending this one (PM-S3-5-05).
+    if (generation == _authGeneration) {
+      _endSession();
+      _setState(const AuthSignedOut());
+    }
+    if (error != null) {
+      await crashlytics.recordError(error, errorStack,
+          reason: 'Sign-out failed');
+    } else {
+      await _sendTelemetry(analytics.logLogout, reason: 'Logout event failed');
+    }
   }
 
   /// Dismisses the cancel/failure notice on the sign-in screen.
@@ -193,14 +211,27 @@ class AuthViewModel extends BaseViewModel {
       _setState(AuthSignedIn(user));
     } on AuthFailure catch (failure, s) {
       if (!_isCurrentLoad(uid, generation)) return;
+      // Show the error before reporting it: once reported, another session
+      // may have started (PM-S3-5-03).
+      _setState(AuthProfileError(uid, failure));
       await crashlytics.recordError(failure, s,
           reason: 'Profile load failed (${failure.kind.name})');
-      _setState(AuthProfileError(uid, failure));
     } catch (e, s) {
       if (!_isCurrentLoad(uid, generation)) return;
-      await crashlytics.recordError(e, s, reason: 'Profile load failed');
       _setState(AuthProfileError(
           uid, AuthFailure(AuthFailureKind.unknown, cause: e)));
+      await crashlytics.recordError(e, s, reason: 'Profile load failed');
+    }
+  }
+
+  /// Sends an Analytics event. A failure is recorded, never thrown: the
+  /// session state has already changed and must not depend on telemetry.
+  Future<void> _sendTelemetry(Future<void> Function() send,
+      {required String reason}) async {
+    try {
+      await send();
+    } catch (e, s) {
+      await crashlytics.recordError(e, s, reason: reason);
     }
   }
 
