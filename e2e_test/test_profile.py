@@ -35,5 +35,6 @@ async def test_tc10_push_opens_profile_from_the_shade(run_case):
         "The title of the screen that opened, and the notification titles listed there.",
     )
 
-    assert "Hồ sơ" in output
-    assert title in output
+    after_tap = output.after("tap", title)
+    assert "Hồ sơ" in after_tap
+    assert title in after_tap

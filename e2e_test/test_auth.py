@@ -16,8 +16,9 @@ async def test_tc01_sign_in_with_google(run_case):
         "The title of the screen shown after signing in, and the role text on it.",
     )
 
-    assert "Longvita" in output
-    assert "USER" in output.upper()
+    # The screen the task ended on, not the sign-in screen it started from.
+    assert "Longvita" in output.last
+    assert "USER" in output.last.upper()
 
 
 async def test_tc01b_cancelled_sign_in_stays_on_sign_in(run_case):
@@ -29,8 +30,9 @@ async def test_tc01b_cancelled_sign_in_stays_on_sign_in(run_case):
         "The notice shown after closing the picker, and the label of the sign-in button.",
     )
 
-    assert "đóng cửa sổ chọn tài khoản" in output
-    assert "Đăng nhập bằng Google" in output
+    after_back = output.after("back")
+    assert "đóng cửa sổ chọn tài khoản" in after_back
+    assert "Đăng nhập bằng Google" in after_back
 
 
 async def test_tc11_sign_out_cannot_return_with_back(run_case):

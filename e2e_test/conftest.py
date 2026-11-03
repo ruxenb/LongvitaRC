@@ -29,14 +29,46 @@ ADB = os.getenv("ADB", "adb")
 EVIDENCE_DIR = Path(__file__).parent.parent / "evidence" / "artemis" / "raw"
 
 
-def _step_summaries(task_id: str) -> str | None:
+class Observation(str):
+    """What the agent saw: the whole text, plus one entry per step.
+
+    Each step summary describes one action and the screen it led to. Assert on
+    the steps from the relevant action onwards, so a value seen on an earlier
+    screen cannot pass a check for an action that failed later.
+    """
+
+    steps: list[str]
+
+    def __new__(cls, steps: list[str]):
+        obj = super().__new__(cls, "\n".join(steps))
+        obj.steps = steps
+        return obj
+
+    @property
+    def last(self) -> str:
+        """The final step: the screen the task ended on."""
+        return self.steps[-1] if self.steps else ""
+
+    def after(self, *words: str) -> str:
+        """The steps from the last one that mentions every word (any case).
+
+        Empty when no step mentions them, so a missing action fails the check.
+        """
+        wanted = [w.lower() for w in words]
+        for index in range(len(self.steps) - 1, -1, -1):
+            step = self.steps[index].lower()
+            if all(w in step for w in wanted):
+                return "\n".join(self.steps[index:])
+        return ""
+
+
+def _step_summaries(task_id: str) -> list[str]:
     """What the agent reported seeing after each step, oldest first."""
     url = f"{BASE_URL}/api/sessions/{urllib.parse.quote(task_id)}/replay_steps"
     with urllib.request.urlopen(url, timeout=30) as response:
         steps = json.load(response)
-    summaries = [s.get("summary") or "" for s in sorted(steps, key=lambda s: s.get("step_number", 0))]
-    text = "\n".join(s for s in summaries if s.strip())
-    return text or None
+    ordered = sorted(steps, key=lambda s: s.get("step_number", 0))
+    return [s["summary"] for s in ordered if (s.get("summary") or "").strip()]
 
 
 @pytest.fixture
@@ -62,10 +94,10 @@ def run_case(artemis, request):
     Each case starts with the app closed, unless it is marked `keep_app` (a push
     case needs the app left in the background). Sign-in survives a restart.
 
-    Returns the agent's observed output as text, for assertions on real values.
+    Returns an `Observation`, for assertions on real values.
     """
 
-    async def run(goal: str, expected_output: str) -> str:
+    async def run(goal: str, expected_output: str) -> Observation:
         if request.node.get_closest_marker("keep_app") is None:
             _stop_app()
         started = time.time()
@@ -74,13 +106,13 @@ def run_case(artemis, request):
             expected_output=expected_output,
             enable_outputter=True,
         )
-        output, source = result.output, "output"
-        if output is None:
+        if result.output is not None:
+            observation, source = Observation([str(result.output)]), "output"
+        else:
             # At the pinned ARTEMIS commit the Flash profile skips the Outputter,
             # so the task carries no output. The agent's own per-step summaries
             # of what it saw on screen are the observation in that case.
-            output, source = _step_summaries(result.task_id), "replay_steps"
-        output = "" if output is None else str(output)
+            observation, source = Observation(_step_summaries(result.task_id)), "replay_steps"
 
         EVIDENCE_DIR.mkdir(parents=True, exist_ok=True)
         record = {
@@ -92,14 +124,14 @@ def run_case(artemis, request):
             "turns": result.turns,
             "seconds": round(time.time() - started, 1),
             "output_source": source,
-            "output": output,
+            "output": str(observation),
             "error": result.error,
         }
         with (EVIDENCE_DIR / "runs.jsonl").open("a", encoding="utf-8") as file:
             file.write(json.dumps(record, ensure_ascii=False, default=str) + "\n")
 
         assert result.succeeded, f"{result.status}: {result.error}"
-        assert output.strip(), "the agent reported success but observed nothing"
-        return output
+        assert observation.strip(), "the agent reported success but observed nothing"
+        return observation
 
     return run

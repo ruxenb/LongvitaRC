@@ -29,4 +29,5 @@ async def test_tc08b_saved_pdf_opens_in_the_native_viewer(run_case):
         "The name of the system screen that opened, and any heading readable in the PDF.",
     )
 
-    assert "LONGVITA" in output.upper()
+    # The heading must be seen after the tap that opens the viewer.
+    assert "LONGVITA" in output.after("tap", "Mở PDF đã lưu").upper()
