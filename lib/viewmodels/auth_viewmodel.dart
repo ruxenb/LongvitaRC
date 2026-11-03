@@ -28,9 +28,18 @@ class AuthViewModel extends BaseViewModel {
   /// Uid whose session data is currently held by participants.
   String? _sessionUid;
 
-  /// Guards against overlapping profile loads for the same uid.
+  /// Changes whenever a session ends: Firebase reports no user or another
+  /// user, or sign-out starts. A profile load belongs to the value it started
+  /// under, so the same uid signing back in neither reuses nor accepts the
+  /// load of the ended session (PM-S3-5-03).
+  int _authGeneration = 0;
+  String? _lastStreamUid;
+
+  /// One profile load per uid and session: the sign-in result and the auth
+  /// stream both ask for it.
   Future<void>? _profileLoad;
   String? _profileLoadUid;
+  int? _profileLoadGeneration;
 
   /// Set while the Google picker is open so repeated taps are ignored.
   bool _signInInFlight = false;
@@ -106,6 +115,7 @@ class AuthViewModel extends BaseViewModel {
   Future<void> signOut() async {
     if (_signOutInFlight || _state is AuthInitializing) return;
     _signOutInFlight = true;
+    _authGeneration++;
     try {
       await authService.signOut();
       await analytics.logLogout();
@@ -127,6 +137,11 @@ class AuthViewModel extends BaseViewModel {
   }
 
   void _onAuthUid(String? uid) {
+    final previous = _lastStreamUid;
+    _lastStreamUid = uid;
+    if (uid == null || (previous != null && previous != uid)) {
+      _authGeneration++;
+    }
     if (uid == null) {
       _endSession();
       // A signed-out state keeps its cancel/failure notice; an attempt in
@@ -143,30 +158,46 @@ class AuthViewModel extends BaseViewModel {
   }
 
   Future<void> _loadProfile(String uid) {
-    if (_profileLoad != null && _profileLoadUid == uid) return _profileLoad!;
-    _profileLoadUid = uid;
-    return _profileLoad = _doLoadProfile(uid).whenComplete(() {
-      if (_profileLoadUid == uid) {
+    final generation = _authGeneration;
+    final pending = _profileLoad;
+    if (pending != null &&
+        _profileLoadUid == uid &&
+        _profileLoadGeneration == generation) {
+      return pending;
+    }
+    late final Future<void> load;
+    load = _doLoadProfile(uid, generation).whenComplete(() {
+      // A newer load may have replaced this one; leave its handle alone.
+      if (identical(_profileLoad, load)) {
         _profileLoad = null;
         _profileLoadUid = null;
+        _profileLoadGeneration = null;
       }
     });
+    _profileLoad = load;
+    _profileLoadUid = uid;
+    _profileLoadGeneration = generation;
+    return load;
   }
 
-  Future<void> _doLoadProfile(String uid) async {
+  /// False once the session the load started in has ended, or the user changed.
+  bool _isCurrentLoad(String uid, int generation) =>
+      generation == _authGeneration && authService.currentUid == uid;
+
+  Future<void> _doLoadProfile(String uid, int generation) async {
     _setState(AuthLoadingProfile(uid));
     try {
       final user = await authService.loadProfile(uid);
-      if (authService.currentUid != uid) return; // signed out meanwhile
+      if (!_isCurrentLoad(uid, generation)) return;
       _startSession(user);
       _setState(AuthSignedIn(user));
     } on AuthFailure catch (failure, s) {
-      if (authService.currentUid != uid) return;
+      if (!_isCurrentLoad(uid, generation)) return;
       await crashlytics.recordError(failure, s,
           reason: 'Profile load failed (${failure.kind.name})');
       _setState(AuthProfileError(uid, failure));
     } catch (e, s) {
-      if (authService.currentUid != uid) return;
+      if (!_isCurrentLoad(uid, generation)) return;
       await crashlytics.recordError(e, s, reason: 'Profile load failed');
       _setState(AuthProfileError(
           uid, AuthFailure(AuthFailureKind.unknown, cause: e)));

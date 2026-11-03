@@ -3,6 +3,7 @@
 // the plan a user is viewing, which waits for S4-3.
 //
 // Set QA_PDF_OUT to a file path to keep the generated PDF for visual checks.
+import 'dart:async';
 import 'dart:io';
 import 'dart:typed_data';
 
@@ -195,6 +196,76 @@ void main() {
 
       expect(await store.find(uid: 'uid-a', exportId: 'e1'), isNull);
       expect(await store.find(uid: 'uid-b', exportId: 'e1'), isNotNull);
+    });
+
+    // PM-S3-5-04: sign-out removes a user's files without waiting. The same
+    // user signing back in must not lose a PDF saved after that removal.
+    group('operations of one user run in call order', () {
+      late Completer<void> hold;
+      late LocalReportStore gated;
+
+      setUp(() {
+        hold = Completer<void>();
+        var first = true;
+        // Holds the first lookup, which belongs to the removal under test.
+        gated = LocalReportStore(baseDirectory: () async {
+          if (first) {
+            first = false;
+            await hold.future;
+          }
+          return dir;
+        });
+      });
+
+      test('a removal still running does not delete a later save', () async {
+        await store.save(uid: 'uid-a', exportId: 'old', bytes: bytes);
+
+        final removal = gated.deleteAll(uid: 'uid-a');
+        var saved = false;
+        final save = gated
+            .save(uid: 'uid-a', exportId: 'new', bytes: bytes)
+            .then((file) => saved = true);
+        await Future<void>.delayed(const Duration(milliseconds: 20));
+        expect(saved, isFalse, reason: 'the save waits for the removal');
+
+        hold.complete();
+        await removal;
+        await save;
+
+        expect(await gated.find(uid: 'uid-a', exportId: 'old'), isNull);
+        expect(await gated.read(uid: 'uid-a', exportId: 'new'), bytes);
+      });
+
+      test('a save queued before the removal is removed with it', () async {
+        final save = gated.save(uid: 'uid-a', exportId: 'e1', bytes: bytes);
+        final removal = gated.deleteAll(uid: 'uid-a');
+
+        hold.complete();
+        await save;
+        await removal;
+
+        expect(await gated.find(uid: 'uid-a', exportId: 'e1'), isNull);
+      });
+
+      test('another user does not wait for the removal', () async {
+        final removal = gated.deleteAll(uid: 'uid-a');
+
+        await gated.save(uid: 'uid-b', exportId: 'e1', bytes: bytes);
+        expect(await gated.find(uid: 'uid-b', exportId: 'e1'), isNotNull);
+
+        hold.complete();
+        await removal;
+      });
+
+      test('a failed operation does not block the next one', () async {
+        await expectLater(
+            gated.save(uid: 'uid-a', exportId: '../x', bytes: bytes),
+            throwsArgumentError);
+        hold.complete();
+
+        await gated.save(uid: 'uid-a', exportId: 'e1', bytes: bytes);
+        expect(await gated.find(uid: 'uid-a', exportId: 'e1'), isNotNull);
+      });
     });
 
     test('deleteAll rejects an id that could leave the folder', () async {

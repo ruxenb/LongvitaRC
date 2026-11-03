@@ -80,3 +80,54 @@ Native chỉ kiểm đăng xuất sau khi upload đã xong. Các race trên dùn
 Hai regression PM fail đúng invariant trên code hiện tại; không phải finding 01/02 cũ và chưa tái hiện native. Probe thứ ba xác nhận conditional SDK-failure behavior bằng fake: UI signed-out không notice, SDK vẫn UID A, recreate VM thì A restore. Không được coi đây là đã gây lỗi Firebase trên Android thật. Chưa đổi production hoặc sửa expected tests cũ trong lượt PM.
 
 Kết quả native ở phần trên vẫn có giá trị cho các trình tự đã thực hiện; chúng không phủ các lịch async cố ý giữ này. S3-5 giữ Đang thực hiện, gồm code fixes 03/04 và input A3/policy/SDK failure behavior, không chỉ còn chờ owner.
+
+## Sau sửa PM-S3-5-03 và PM-S3-5-04
+
+Các phần trên (ảnh 01–16, kết quả, các con số 279 và 148) là baseline của `0e3ef5a`, giữ nguyên. Phần này là kết quả trên code đã sửa.
+
+### Sửa
+
+| Finding | Thay đổi | Regression (fail trên code cũ / tổng) |
+|---|---|---|
+| PM-S3-5-03 | `AuthViewModel`: mỗi lần tải profile gắn với "thế hệ" của phiên. Thế hệ tăng khi Firebase báo không có user, khi đổi sang user khác, hoặc khi bắt đầu đăng xuất. Lần tải chỉ được dùng chung trong cùng UID và cùng thế hệ. Kết quả và lỗi của thế hệ cũ bị bỏ qua, không ghi Crashlytics. `whenComplete` chỉ xóa handle nếu đó đúng là lần tải của chính nó. `AuthService`: profile lưu tạm chỉ nhận kết quả của lần tải mới nhất; khi đăng xuất hoặc Firebase báo không có user thì các lần tải đang chạy bị vô hiệu | `test/auth/auth_viewmodel_test.dart`: 4/6 (2 ca đối chứng: A→B, và một lần tải chung trong cùng phiên). `test/auth/auth_service_profile_cache_test.dart`: 2/3 (1 ca đối chứng) |
+| PM-S3-5-04 | `LocalReportStore`: mọi thao tác file của cùng UID (save, find, read, delete, deleteAll) chạy lần lượt theo thứ tự gọi. Việc dọn của phiên cũ được xếp hàng trước, nên PDF mới chỉ được ghi sau khi dọn xong. File cũ bị dọn, file mới còn. UID khác không phải chờ. Một thao tác lỗi không chặn thao tác sau | `test/report/report_service_test.dart`: 2/4. `test/report/session_cleanup_test.dart`: 1/2, dùng `LocalReportStore` và ổ đĩa thật trong thư mục tạm; kiểm cả mở và chia sẻ PDF mới |
+
+**Thứ tự gate trong regression 04:** việc xuất PDF mới bắt đầu trong lúc việc dọn cũ còn bị giữ, sau đó thả việc dọn, rồi mới chờ xuất xong. Probe của PM chờ xuất xong rồi mới thả, nên sẽ treo với cách sửa này. Điều kiện kiểm giữ nguyên: file cũ bị dọn, file mới còn và mở/chia sẻ được.
+
+Probe 03 của PM chạy trên code mới: `loads=2, final=PROFILE FROM NEW SESSION`, pass. Probe SDK vẫn pass, vì hành vi đó chưa đổi.
+
+### Kiểm bằng lệnh
+
+- `flutter analyze --no-pub`: No issues found.
+- `flutter test --no-pub`: **294/294 pass**, gồm 279 test cũ và 15 test mới.
+- `git diff --check`: sạch.
+
+### Chạy lại native trên code đã sửa
+
+Cùng thiết bị, build debug với Storage Emulator; tài khoản A do Charlie đăng nhập. Ảnh trong `after-fix/`.
+
+| Ca | Ảnh | Kết quả |
+|---|---|---|
+| Mở app: khôi phục phiên A (đi qua đường tải profile đã sửa) | — | Vào Home của A |
+| Xuất PDF → Hủy đăng xuất | r01, r02 | `plan_1793728893288.pdf` vẫn còn |
+| Đồng ý đăng xuất | r03 | Về Sign-in, `reports/` trống |
+| Back, rồi force-stop và mở lại | r04 | Về launcher, sau đó vẫn ở Sign-in |
+| A đăng nhập lại (cùng UID) → Profile | r05, r06 | Không còn export cũ |
+| Xuất PDF ngay → Mở PDF → Back | r07, r08 | Chỉ còn `plan_1793729017067.pdf`, mở được trong PrintActivity, Back về app, file vẫn còn |
+
+Race của 03 và 04 vẫn chỉ kiểm bằng test có điều khiển. Trên máy, việc dọn xong trước khi đăng nhập Google hoàn tất, nên lịch race không tự xảy ra. Ca A→B không chạy lại native; phần auth sửa có test đối chứng A→B.
+
+### Khi `FirebaseAuth.signOut` lỗi: hiện trạng và đề xuất (chưa làm)
+
+**Hiện trạng** (PM xác nhận bằng fake; chưa gây được lỗi Firebase thật):
+- App vẫn dọn dữ liệu phiên trên máy và hiện Sign-in, không có thông báo.
+- Phiên Firebase của A có thể còn, và `authStateChanges` không phát gì, nên trong lúc app đang chạy A không tự quay lại.
+- Lần khởi động sau, Firebase khôi phục A và app vào thẳng Home của A.
+- Nếu người khác đăng nhập Google trên màn Sign-in, `signInWithCredential` thay A bằng người đó.
+
+**Đề xuất cho PM và Thắng** (cần đồng ý trước khi làm, vì đổi contract hoặc thêm dữ liệu lưu):
+1. **Báo lỗi và cho thử lại (nên làm trước):** vẫn dọn dữ liệu trên máy ngay để bảo vệ riêng tư. Hiện Sign-in kèm thông báo "Chưa đăng xuất được khỏi tài khoản trên máy này" và nút "Thử đăng xuất lại" gọi lại `authService.signOut()`. Cần thêm một loại lỗi (`AuthFailureKind`) và câu chữ trong `AuthMessages`. Đây là model và UI dùng chung với AuthGate của Thắng, nên cần Thắng đồng ý.
+2. **Ghi lại ý định đăng xuất (nếu nhóm cần chắc chắn qua lần khởi động sau):** ghi một cờ trên máy trước khi gọi SDK, xóa khi đăng xuất thành công. Lúc khởi động, nếu cờ còn mà SDK vẫn có user thì gọi `signOut` lại trước khi vào Home. Cần thêm nơi lưu trữ và đổi luồng khởi động (StartupGate/AuthGate của Thắng).
+3. **Không đổi gì:** chấp nhận rủi ro thấp và ghi giới hạn. Trên Android, `FirebaseAuth.signOut` chỉ xóa phiên trên máy, nên hiếm khi lỗi; nhưng chưa có bằng chứng nó không bao giờ lỗi.
+
+Không dùng `setPersistence(NONE)`: tùy chọn này chỉ có trên web.

@@ -2,9 +2,28 @@ import 'dart:async';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:longvita/models/auth_state.dart';
+import 'package:longvita/models/user_model.dart';
 import 'package:longvita/viewmodels/auth_viewmodel.dart';
 
 import 'auth_fakes.dart';
+
+/// Profile loads that finish only when the test completes them, in any order.
+class HeldProfileAuth extends FakeAuthService {
+  HeldProfileAuth({super.initialUid});
+
+  final requests = <Completer<UserModel>>[];
+
+  @override
+  Future<UserModel> loadProfile(String uid) {
+    loadProfileCalls++;
+    final request = Completer<UserModel>();
+    requests.add(request);
+    return request.future;
+  }
+}
+
+UserModel named(String uid, String name) =>
+    testUser(uid).copyWith(displayName: name);
 
 void main() {
   late FakeAuthService auth;
@@ -202,5 +221,113 @@ void main() {
 
     expect(vm.state, isA<AuthSignedOut>());
     expect(session.calls, ['start:uid-a', 'clear']);
+  });
+
+  // PM-S3-5-03: loads were shared by uid only, so when Firebase reported no
+  // user while a restored profile was loading and the same user signed back
+  // in, the new session reused, and then accepted, the old load.
+  group('a profile load belongs to the session it started in', () {
+    late HeldProfileAuth held;
+
+    /// Restored session of A with its profile load still pending, then
+    /// Firebase reports no user and A signs in again.
+    Future<AuthViewModel> reSignInDuringOldLoad({String again = 'uid-a'}) async {
+      held = HeldProfileAuth(initialUid: 'uid-a');
+      auth = held;
+      final vm = build();
+      await settle();
+      expect(held.requests, hasLength(1));
+      held.emitUid(null);
+      await settle();
+      expect(vm.state, isA<AuthSignedOut>());
+      held.nextSignIn = AuthSignInSucceeded(again);
+      unawaited(vm.signInWithGoogle());
+      await settle();
+      return vm;
+    }
+
+    test('same uid: the new session loads again and ignores the old result',
+        () async {
+      final vm = await reSignInDuringOldLoad();
+      expect(held.requests, hasLength(2), reason: 'not reused across sessions');
+
+      held.requests[0].complete(named('uid-a', 'old'));
+      await settle();
+      expect(vm.state, isA<AuthLoadingProfile>());
+      expect(session.calls, isEmpty);
+
+      held.requests[1].complete(named('uid-a', 'new'));
+      await settle();
+      expect(vm.currentUser?.displayName, 'new');
+      expect(session.calls, ['start:uid-a']);
+    });
+
+    test('same uid: an old result arriving last changes nothing', () async {
+      final vm = await reSignInDuringOldLoad();
+
+      held.requests[1].complete(named('uid-a', 'new'));
+      await settle();
+      held.requests[0].complete(named('uid-a', 'old'));
+      await settle();
+
+      expect(vm.currentUser?.displayName, 'new');
+      expect(session.calls, ['start:uid-a']);
+    });
+
+    test('same uid: an old failure is neither shown nor recorded', () async {
+      final vm = await reSignInDuringOldLoad();
+
+      held.requests[1].complete(named('uid-a', 'new'));
+      await settle();
+      held.requests[0].completeError(
+          const AuthFailure(AuthFailureKind.profileRead));
+      await settle();
+
+      expect(vm.state, isA<AuthSignedIn>());
+      expect(crashlytics.errors, isEmpty);
+    });
+
+    test('A then B: the old load of A is ignored', () async {
+      final vm = await reSignInDuringOldLoad(again: 'uid-b');
+
+      held.requests[0].complete(named('uid-a', 'old A'));
+      held.requests[1].complete(named('uid-b', 'B'));
+      await settle();
+
+      expect(vm.currentUser?.uid, 'uid-b');
+      expect(session.calls, ['start:uid-b']);
+    });
+
+    test('the end of an old load leaves the new one shared', () async {
+      final vm = await reSignInDuringOldLoad();
+
+      held.requests[0].complete(named('uid-a', 'old'));
+      await settle();
+      // The stream repeats the uid of the new session while it still loads.
+      held.emitUid('uid-a');
+      await settle();
+      expect(held.requests, hasLength(2), reason: 'one load per session');
+
+      held.requests[1].complete(named('uid-a', 'new'));
+      await settle();
+      expect(vm.currentUser?.displayName, 'new');
+      expect(session.calls, ['start:uid-a']);
+    });
+
+    test('within one session the sign-in result and the stream share a load',
+        () async {
+      held = HeldProfileAuth();
+      auth = held;
+      final vm = build();
+      await settle();
+      held.nextSignIn = const AuthSignInSucceeded('uid-a');
+      unawaited(vm.signInWithGoogle());
+      await settle();
+
+      expect(held.requests, hasLength(1));
+      held.requests.single.complete(named('uid-a', 'A'));
+      await settle();
+      expect(vm.currentUser?.displayName, 'A');
+    });
   });
 }
