@@ -483,6 +483,115 @@ void main() {
         expect(find.byType(ProfileScreen), findsOneWidget);
       });
 
+      group('queued behind another snackbar', () {
+        Future<void> receive(WidgetTester tester, Harness h, String id) async {
+          h.gateway.foreground.add(RemoteMessage(
+            messageId: id,
+            data: const {'recipient_uid': 'uid-a'},
+            notification: RemoteNotification(title: id),
+          ));
+          await settle(tester);
+          await tester.pump(const Duration(milliseconds: 300));
+        }
+
+        void feedback(WidgetTester tester, String text) => showAppSnackBar(
+              tester.element(find.byType(Scaffold).last),
+              message: text,
+              duration: const Duration(seconds: 20),
+            );
+
+        /// Lets every snackbar in the queue take its turn and expire.
+        Future<void> drainQueue(WidgetTester tester) async {
+          for (var i = 0; i < 12; i++) {
+            await tester.pump(const Duration(seconds: 2));
+          }
+          await tester.pumpAndSettle();
+        }
+
+        testWidgets('two messages, then sign-out: neither ever shows again',
+            (tester) async {
+          final h = await pumpGate(tester);
+          await receive(tester, h, 'private-a-1');
+          await receive(tester, h, 'private-a-2');
+          expect(find.text('Thông báo mới: private-a-1'), findsOneWidget);
+
+          await signOut(tester, h);
+          expect(tester.takeException(), isNull);
+          expect(find.textContaining('private-a-'), findsNothing);
+
+          // Check every frame while the queue drains, not only at the end.
+          for (var i = 0; i < 30; i++) {
+            await tester.pump(const Duration(milliseconds: 200));
+            expect(find.textContaining('private-a-'), findsNothing);
+          }
+          expect(tester.takeException(), isNull);
+          expect(find.text('Đăng nhập bằng Google'), findsOneWidget);
+        });
+
+        testWidgets('waiting behind other feedback: the feedback stays, the '
+            'message never shows', (tester) async {
+          final h = await pumpGate(tester);
+          feedback(tester, 'Unrelated feedback');
+          await tester.pump(const Duration(milliseconds: 300));
+          await receive(tester, h, 'private-a-queued');
+          expect(find.text('Unrelated feedback'), findsOneWidget);
+
+          await signOut(tester, h);
+          expect(tester.takeException(), isNull);
+          expect(find.text('Unrelated feedback'), findsOneWidget);
+
+          await drainQueue(tester);
+          expect(tester.takeException(), isNull);
+          expect(find.textContaining('private-a-queued'), findsNothing);
+        });
+
+        testWidgets('feedback waiting behind a message still shows after '
+            'sign-out', (tester) async {
+          final h = await pumpGate(tester);
+          await receive(tester, h, 'private-a-1');
+          feedback(tester, 'Later feedback');
+          await tester.pump();
+
+          await signOut(tester, h);
+          await tester.pumpAndSettle();
+
+          expect(tester.takeException(), isNull);
+          expect(find.textContaining('private-a-'), findsNothing);
+          expect(find.text('Later feedback'), findsOneWidget);
+        });
+
+        testWidgets('queued messages of A never reach B', (tester) async {
+          final h = await pumpGate(tester);
+          await receive(tester, h, 'private-a-1');
+          await receive(tester, h, 'private-a-2');
+
+          h.auth.emitUid('uid-b');
+          await settle(tester);
+          expect(h.session.currentUser?.uid, 'uid-b');
+          await drainQueue(tester);
+
+          expect(tester.takeException(), isNull);
+          expect(find.textContaining('private-a-'), findsNothing);
+        });
+
+        testWidgets('A signs back in: old queue stays gone, a new message '
+            'shows', (tester) async {
+          final h = await pumpGate(tester);
+          await receive(tester, h, 'private-a-1');
+          await receive(tester, h, 'private-a-2');
+          await signOut(tester, h);
+          await signIn(tester, h, 'uid-a');
+
+          await receive(tester, h, 'private-a-3');
+          expect(find.text('Thông báo mới: private-a-3'), findsOneWidget);
+          await drainQueue(tester);
+
+          expect(tester.takeException(), isNull);
+          expect(find.textContaining('private-a-1'), findsNothing);
+          expect(find.textContaining('private-a-2'), findsNothing);
+        });
+      });
+
       testWidgets('a message for B shows nothing to A', (tester) async {
         final h = await pumpGate(tester);
 

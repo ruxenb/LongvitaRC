@@ -28,11 +28,6 @@ class _AuthGateState extends State<AuthGate> {
   bool _wasSignedIn = false;
   late final ProfileViewModel _profile;
 
-  /// Snackbars this gate showed for messages, each with the session it
-  /// belongs to. They outlive a screen change, so they are closed here when
-  /// that session ends; other snackbars are left alone.
-  final List<({int epoch, ScaffoldFeatureController controller})> _shown = [];
-
   @override
   void initState() {
     super.initState();
@@ -47,7 +42,6 @@ class _AuthGateState extends State<AuthGate> {
   }
 
   void _onProfileChanged() {
-    _closeEndedSessions();
     _openTappedNotification();
     _showArrivedNotification();
   }
@@ -71,6 +65,10 @@ class _AuthGateState extends State<AuthGate> {
 
   /// A message received while the app is open shows on whatever screen is in
   /// front, since Android puts nothing in the notification shade then.
+  ///
+  /// The snackbar may wait in the shared queue behind feedback of another
+  /// screen, so it cannot be pulled out from here when the session ends.
+  /// Its content checks the session instead whenever it is built.
   void _showArrivedNotification() {
     final epoch = _profile.sessionEpoch;
     if (!_isCurrent(epoch)) return;
@@ -79,15 +77,14 @@ class _AuthGateState extends State<AuthGate> {
     final text = arrival.title ?? arrival.body;
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!_isCurrent(epoch)) return;
-      final controller = showAppSnackBar(
+      final notice = _NoticeTicket(epoch);
+      showAppSnackBar(
         context,
         message: text == null ? 'Có thông báo mới.' : 'Thông báo mới: $text',
         actionLabel: 'Xem',
         onAction: () => _openProfile(epoch),
+        wrap: (content) => _SessionNotice(ticket: notice, child: content),
       );
-      final entry = (epoch: epoch, controller: controller);
-      _shown.add(entry);
-      controller.closed.whenComplete(() => _shown.remove(entry));
     });
   }
 
@@ -97,19 +94,6 @@ class _AuthGateState extends State<AuthGate> {
         .pushNamedAndRemoveUntil(ProfileScreen.routeName, (route) => route.isFirst);
   }
 
-  /// Removes message snackbars of a session that is no longer in progress,
-  /// whether shown or still queued.
-  void _closeEndedSessions() {
-    final signedIn =
-        mounted && context.read<AuthViewModel>().state is AuthSignedIn;
-    for (final entry in List.of(_shown)) {
-      if (!signedIn || _profile.isSessionStale(entry.epoch)) {
-        _shown.remove(entry);
-        entry.controller.close();
-      }
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     final state = context.watch<AuthViewModel>().state;
@@ -117,9 +101,7 @@ class _AuthGateState extends State<AuthGate> {
     final signedIn = state is AuthSignedIn;
     if (_wasSignedIn && !signedIn) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (!mounted) return;
-        _closeEndedSessions();
-        Navigator.of(context).popUntil((route) => route.isFirst);
+        if (mounted) Navigator.of(context).popUntil((route) => route.isFirst);
       });
     }
     if (signedIn && !_wasSignedIn) {
@@ -139,6 +121,46 @@ class _AuthGateState extends State<AuthGate> {
       AuthProfileError(:final failure) => AuthRecoveryScreen(failure: failure),
       AuthSignedIn() => const HomeScreen(),
     };
+  }
+}
+
+/// One message snackbar. Every copy of its content shares it, because during
+/// a route change the messenger builds the snackbar in more than one Scaffold.
+class _NoticeTicket {
+  final int epoch;
+  bool removed = false;
+
+  _NoticeTicket(this.epoch);
+}
+
+/// Shows [child] only while the session that received the message lasts.
+///
+/// A messenger builds only the snackbar at the head of its queue, so when
+/// this is built it is the current snackbar. If the session has ended by
+/// then, it shows nothing and removes itself. Snackbars of other screens,
+/// ahead of it or behind it, are left alone.
+class _SessionNotice extends StatelessWidget {
+  final _NoticeTicket ticket;
+  final Widget child;
+
+  const _SessionNotice({required this.ticket, required this.child});
+
+  @override
+  Widget build(BuildContext context) {
+    final signedIn = context.watch<AuthViewModel>().state is AuthSignedIn;
+    final profile = context.watch<ProfileViewModel>();
+    if (signedIn && !profile.isSessionStale(ticket.epoch)) return child;
+
+    if (!ticket.removed) {
+      final messenger = ScaffoldMessenger.of(context);
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        // Still mounted means still the head of the queue.
+        if (ticket.removed || !context.mounted) return;
+        ticket.removed = true;
+        messenger.removeCurrentSnackBar();
+      });
+    }
+    return const SizedBox.shrink();
   }
 }
 
