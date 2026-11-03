@@ -3,6 +3,7 @@
 ## Nguồn và quyết định
 
 - PR nguồn: [#7](https://github.com/ruxenb/LongvitaRC/pull/7), code được review tại `cdf90e54d6c91be253e343c848ecfe23f69fd9cf`, merge `bc89635`.
+- PR bàn giao fix/evidence: [#8](https://github.com/ruxenb/LongvitaRC/pull/8), giữ mở để review và nghiệm thu.
 - Công cụ: GitHub App `coderabbitai[bot]`, cấu hình do Thái An thêm. Có **11 inline findings: 5 Major / 6 Minor**, không tính template EX-xx.
 - [Bảng quyết định](../../../docs/code-review.md#11-charlie--coderabbit-trên-pr-7-03112026): **8 Accepted / 2 Modified / 1 Rejected**, với file:dòng, lý do, source và commit sửa. CR-05 giữ quyết định Charlie về bằng chứng email/UID của chính mình và không rewrite lịch sử repo chung.
 - Các commit của Claude được giữ nguyên, tích hợp main `97cbaa9` vào nhánh `feature/charlie-review-delivery-01`. Codex tiếp quản phần bàn giao/sửa follow-up theo yêu cầu Charlie. Chưa tự merge hoặc nghiệm thu task thay leader.

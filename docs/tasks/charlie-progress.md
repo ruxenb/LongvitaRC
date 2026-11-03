@@ -4,6 +4,8 @@
 
 **Snapshot 03/11/2026:** PR #1–#7 đã vào main; base tích hợp gói review là `97cbaa9`. CodeRabbit đã được Thái An cài và review [PR #7](https://github.com/ruxenb/LongvitaRC/pull/7) với 11 góp ý. Gói S7-1/2/3 trên `feature/charlie-review-delivery-01` lưu output, quyết định và các commit sửa; chờ team nghiệm thu, không tự merge PR. [Evidence/verification](../../evidence/review/PR7-coderabbit-20261103/README.md).
 
+**PR bàn giao đang mở:** [#8 — hoàn thiện S7-2/S7-3 và kiểm assertions ARTEMIS](https://github.com/ruxenb/LongvitaRC/pull/8). Các trạng thái S7 dưới đây là của gói PR này, chưa phải main đã merge; giữ mở cho review, không auto-merge.
+
 Thắng, Hoàng và Thái An đã đồng ý các phần của PR #4 chạm vào việc của họ (theo Charlie, 02/11).
 
 **Đợt 03/11, [PR #5](https://github.com/ruxenb/LongvitaRC/pull/5), đã vào `main` (`30ca6e3`) sau khi lỗi PM-FCM-02 được xác minh đã sửa; chưa có AI review:** tin đến khi app đang mở hiện thanh thông báo có nút "Xem" (S4-12), TalkBack thật (S4-14), nháp báo cáo FCM (S8-3). Analyzer sạch, 270/270 tests. Đã sửa lỗi tìm thấy khi review (PM-FCM-02): thanh thông báo của phiên cũ còn trên Sign-in sau khi đăng xuất, và nút "Xem" của nó mở được Profile khi chưa đăng nhập. Giờ mọi thao tác của thanh thông báo kiểm đúng phiên lúc chạy, và nội dung thông báo của phiên đã hết tự gỡ khi tới lượt hiện, kể cả khi đang chờ sau snackbar khác; snackbar của màn khác giữ nguyên. Có regression cho đăng xuất, A → B, A → đăng xuất → A và hàng đợi nhiều thông báo; đã thử đăng xuất trên emulator với tin thật. **Thắng xem giúp `auth_gate.dart`.**

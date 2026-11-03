@@ -145,6 +145,8 @@ Task S8-17-CM. Ghi theo commit và evidence thật, cập nhật dần. Trạng 
 
 ### Bàn giao gói S7-2/S7-3 — Codex tiếp quản 03/11/2026
 
+- **PR:** [#8](https://github.com/ruxenb/LongvitaRC/pull/8), đã push, đang mở cho review; không auto-merge.
+
 - Theo yêu cầu Charlie, giữ nguyên các commit/tác giả của Claude và tích hợp main 97cbaa9 vào nhánh feature/charlie-review-delivery-01. Giữ bản nháp trên GitHub, không khôi phục các file Charlie xóa ở working tree chính.
 - Lưu 11 inline comments/review/summary thật của CodeRabbit PR #7; đối chiếu 8 Accepted, 2 Modified, 1 Rejected. Ghi link source và fix commit trong docs/code-review.md. Không tính template EX-xx.
 - Follow-up d41abe0 (PR7-CR-08): phát hiện final output vẫn bị gộp thành một bước; chuyển sang replay từng bước và fail khi thiếu replay. Probe trước sửa fail đúng lỗi; sau sửa bộ kiểm assertions độc lập 23/23 pass.
