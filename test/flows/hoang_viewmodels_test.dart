@@ -6,6 +6,7 @@ import 'package:longvita/models/meal_plan_model.dart';
 import 'package:longvita/models/recipe_model.dart';
 import 'package:longvita/models/view_state.dart';
 import 'package:longvita/services/data_failure.dart';
+import 'package:longvita/services/data_service.dart';
 import 'package:longvita/services/i_data_service.dart';
 import 'package:longvita/viewmodels/ingredient_viewmodel.dart';
 import 'package:longvita/viewmodels/meal_plan_viewmodel.dart';
@@ -143,6 +144,17 @@ class MemoryData implements IDataService {
   dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
 }
 
+class HeldSearchData extends MemoryData {
+  final calls = <Completer<List<RecipeModel>>>[];
+
+  @override
+  Future<List<RecipeModel>> getRecipes({String? category}) {
+    final call = Completer<List<RecipeModel>>();
+    calls.add(call);
+    return call.future;
+  }
+}
+
 class HeldShoppingData extends MemoryData {
   final oldSave = Completer<void>();
 
@@ -191,6 +203,69 @@ void main() {
   tearDown(() {
     plans.dispose();
     shopping.dispose();
+  });
+
+  test('PR10-CR-02: deterministic document ID prevents retry duplication', () {
+    final original = fixturePlan();
+    final same = original.copyWith(title: 'Modified name');
+    expect(DataService.draftDocumentId(original),
+        DataService.draftDocumentId(same));
+    expect(DataService.draftDocumentId(original),
+        isNot(DataService.draftDocumentId(original.copyWith(
+            createdAt: DateTime(2026, 11, 5)))));
+    expect(DataService.writeTimeout, const Duration(seconds: 15));
+  });
+
+  test('PR10-CR-03: older recipe search cannot overwrite newer results', () async {
+    final held = HeldSearchData();
+    final vm = MealPlanViewModel(
+        dataService: held, analytics: analytics, crashlytics: crash,
+        remoteConfig: FakeRemoteConfig());
+    final older = vm.searchRecipes('đậu');
+    final latest = vm.searchRecipes('rau');
+    held.calls[1].complete([beans, vegetables]);
+    await latest;
+    expect((vm.recipesState as ViewStateSuccess<List<RecipeModel>>)
+        .data.single.id, 'veg');
+    held.calls[0].complete([beans, vegetables]);
+    await older;
+    expect((vm.recipesState as ViewStateSuccess<List<RecipeModel>>)
+        .data.single.id, 'veg');
+    vm.dispose();
+  });
+
+  test('PR10-CR-03: stale search errors do not override newer data', () async {
+    final held = HeldSearchData();
+    final vm = MealPlanViewModel(
+        dataService: held, analytics: analytics, crashlytics: crash,
+        remoteConfig: FakeRemoteConfig());
+    final older = vm.searchRecipes('đậu');
+    final latest = vm.searchRecipes('rau');
+    held.calls[1].complete([vegetables]);
+    await latest;
+    held.calls[0].completeError(Exception('old request failed'));
+    await older;
+    expect((vm.recipesState as ViewStateSuccess<List<RecipeModel>>)
+        .data.single.id, 'veg');
+    vm.dispose();
+  });
+
+  test('PR10-CR-03: stale alternatives cannot overwrite newest options', () async {
+    final held = HeldSearchData();
+    final vm = MealPlanViewModel(
+        dataService: held, analytics: analytics, crashlytics: crash,
+        remoteConfig: FakeRemoteConfig());
+    final older = vm.loadAlternatives(beans);
+    final latest = vm.loadAlternatives(vegetables);
+    held.calls[1].complete([beans, vegetables]);
+    await latest;
+    expect((vm.alternativesState as ViewStateSuccess<List<RecipeModel>>)
+        .data.single.id, 'beans');
+    held.calls[0].complete([beans, vegetables]);
+    await older;
+    expect((vm.alternativesState as ViewStateSuccess<List<RecipeModel>>)
+        .data.single.id, 'beans');
+    vm.dispose();
   });
 
   test('HOANG-F03: missing Firestore citation must not be fabricated', () {

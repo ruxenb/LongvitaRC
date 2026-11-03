@@ -18,6 +18,8 @@ class MealPlanViewModel extends BaseViewModel implements SessionScoped {
   final RemoteConfigService remoteConfig;
 
   final SessionEpoch _epoch = SessionEpoch();
+  int _searchSeq = 0;
+  int _alternativeSeq = 0;
   String? _sessionUid;
   MealPlanModel? _activePlan;
   ViewState<MealPlanModel> _currentPlanState = const ViewStateIdle();
@@ -51,6 +53,8 @@ class MealPlanViewModel extends BaseViewModel implements SessionScoped {
   @override
   void clearSession() {
     _epoch.advance();
+    _searchSeq++;
+    _alternativeSeq++;
     _sessionUid = null;
     _activePlan = null;
     _currentPlanState = const ViewStateIdle();
@@ -215,11 +219,12 @@ class MealPlanViewModel extends BaseViewModel implements SessionScoped {
   /// S05/09: query and text matching are ViewModel concerns.
   Future<void> searchRecipes(String term) async {
     final epoch = _epoch.current;
+    final seq = ++_searchSeq;
     _recipesState = const ViewStateLoading('Đang tra cứu công thức...');
     notifyListeners();
     try {
       final all = await dataService.getRecipes();
-      if (_epoch.isStale(epoch)) return;
+      if (_epoch.isStale(epoch) || seq != _searchSeq) return;
       final needle = term.trim().toLowerCase();
       final result = needle.isEmpty
           ? all
@@ -242,7 +247,7 @@ class MealPlanViewModel extends BaseViewModel implements SessionScoped {
         );
       }
     } catch (error, trace) {
-      if (_epoch.isStale(epoch)) return;
+      if (_epoch.isStale(epoch) || seq != _searchSeq) return;
       _recipesState = ViewStateError(DataFailure.from(error).message, error);
       notifyListeners();
       await crashlytics.recordError(
@@ -256,12 +261,13 @@ class MealPlanViewModel extends BaseViewModel implements SessionScoped {
   /// S06: pick alternatives with similar nutrition and never offer same ID.
   Future<void> loadAlternatives(RecipeModel recipe) async {
     final epoch = _epoch.current;
+    final seq = ++_alternativeSeq;
     _alternativesState = const ViewStateLoading('Đang tìm món thay thế...');
     _replaceState = const ViewStateIdle();
     notifyListeners();
     try {
       final all = await dataService.getRecipes();
-      if (_epoch.isStale(epoch)) return;
+      if (_epoch.isStale(epoch) || seq != _alternativeSeq) return;
       final filtered = all
           .where(
             (candidate) =>
@@ -291,7 +297,7 @@ class MealPlanViewModel extends BaseViewModel implements SessionScoped {
           : ViewStateSuccess(candidates);
       notifyListeners();
     } catch (error, trace) {
-      if (_epoch.isStale(epoch)) return;
+      if (_epoch.isStale(epoch) || seq != _alternativeSeq) return;
       _alternativesState = ViewStateError(
         DataFailure.from(error).message,
         error,
@@ -376,8 +382,11 @@ class MealPlanViewModel extends BaseViewModel implements SessionScoped {
       return !_epoch.isStale(epoch);
     } catch (error, trace) {
       if (_epoch.isStale(epoch)) return false;
+      final failure = DataFailure.from(error);
       _replaceState = ViewStateError(
-        'Chưa cập nhật được món; món gốc vẫn được giữ. ${DataFailure.from(error).message}',
+        failure.kind == DataFailureKind.offline
+            ? 'Chưa cập nhật được món trên màn hình. Lệnh ghi có thể được đồng bộ sau khi có mạng; hãy tải lại thực đơn để kiểm tra. ${failure.message}'
+            : 'Chưa cập nhật được món; món gốc vẫn được giữ. ${failure.message}',
         error,
       );
       notifyListeners();

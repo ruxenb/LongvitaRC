@@ -237,7 +237,9 @@ class WeeklyPlanScreen extends StatelessWidget {
       context,
       ok
           ? 'Đã lưu kế hoạch lên Firestore.'
-          : 'Chưa lưu được. Thực đơn trên màn hình vẫn được giữ.',
+          : (vm.saveState is ViewStateError<bool>
+                ? (vm.saveState as ViewStateError<bool>).message
+                : 'Chưa xác nhận lưu. Thực đơn trên màn hình vẫn được giữ.'),
       actionLabel: ok ? null : 'Thử lại',
       onAction: ok ? null : () => _save(context),
     );

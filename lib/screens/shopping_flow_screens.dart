@@ -51,7 +51,7 @@ class _IngredientSummaryScreenState extends State<IngredientSummaryScreen> {
     if (mounted) {
       flowSnack(
         context,
-        saved ? 'Đã lưu số lượng nguyên liệu.' : 'Chưa đồng bộ. Hãy thử lại.',
+        saved ? 'Đã lưu số lượng nguyên liệu.' : 'Chưa có xác nhận đồng bộ. Thay đổi có thể được lưu khi có mạng; hãy tải lại để kiểm tra.',
         actionLabel: saved ? null : 'Thử lại',
         onAction: saved ? null : () => vm.persistChanges(),
       );
@@ -253,7 +253,7 @@ class ShoppingListScreen extends StatelessWidget {
     if (!success && context.mounted) {
       flowSnack(
         context,
-        'Checklist chưa lưu được. Kiểm tra mạng rồi thử lại.',
+        'Chưa có xác nhận đồng bộ. Checklist có thể được lưu khi có mạng; hãy tải lại để kiểm tra.',
         actionLabel: 'Thử lại',
         onAction: () => vm.persistChanges(),
       );

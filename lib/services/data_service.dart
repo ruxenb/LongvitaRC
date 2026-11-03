@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../models/announcement_model.dart';
@@ -10,6 +12,12 @@ import 'i_data_service.dart';
 /// Business data comes from Cloud Firestore. Empty catalogue is an explicit
 /// state, never a pretext for showing fabricated sample recipes.
 class DataService implements IDataService {
+  static const writeTimeout = Duration(seconds: 15);
+
+  /// Stable ID lets an offline queued create be retried without duplicating it.
+  static String draftDocumentId(MealPlanModel plan) =>
+      '${plan.uid}_${plan.createdAt.toUtc().microsecondsSinceEpoch}';
+
   final FirebaseFirestore _firestore;
   DataService({FirebaseFirestore? firestore})
     : _firestore = firestore ?? FirebaseFirestore.instance;
@@ -99,7 +107,10 @@ class DataService implements IDataService {
     }
     try {
       if (plan.id.isNotEmpty && plan.id != 'temp_new') {
-        await _plansRef.doc(plan.id).set(plan.toMap(), SetOptions(merge: true));
+        await _plansRef
+            .doc(plan.id)
+            .set(plan.toMap(), SetOptions(merge: true))
+            .timeout(writeTimeout);
         return plan.id;
       }
       if (plan.status != 'draft') {
@@ -108,8 +119,15 @@ class DataService implements IDataService {
           'Thực đơn mới phải ở trạng thái bản nháp.',
         );
       }
-      final doc = await _plansRef.add(plan.toMap());
-      return doc.id;
+      final id = draftDocumentId(plan);
+      await _plansRef.doc(id).set(plan.toMap()).timeout(writeTimeout);
+      return id;
+    } on TimeoutException catch (error) {
+      throw DataFailure(
+        DataFailureKind.offline,
+        'Chưa có xác nhận từ máy chủ. Thay đổi có thể đồng bộ khi có mạng; hãy kiểm tra lại trước khi thử lưu.',
+        error,
+      );
     } catch (error) {
       throw DataFailure.from(error);
     }
@@ -124,7 +142,13 @@ class DataService implements IDataService {
     try {
       final updates = <String, dynamic>{'status': status};
       if (reason != null) updates['reviewerReason'] = reason;
-      await _plansRef.doc(planId).update(updates);
+      await _plansRef.doc(planId).update(updates).timeout(writeTimeout);
+    } on TimeoutException catch (error) {
+      throw DataFailure(
+        DataFailureKind.offline,
+        'Chưa có xác nhận từ máy chủ. Yêu cầu có thể đồng bộ sau khi có mạng; hãy kiểm tra trạng thái.',
+        error,
+      );
     } catch (error) {
       throw DataFailure.from(error);
     }
@@ -189,12 +213,20 @@ class DataService implements IDataService {
       );
     }
     try {
-      await _shoppingRef(uid, planId).set({
-        'uid': uid,
-        'planId': planId,
-        'updatedAt': DateTime.now().toUtc().toIso8601String(),
-        'items': items.map((item) => item.toMap()).toList(),
-      });
+      await _shoppingRef(uid, planId)
+          .set({
+            'uid': uid,
+            'planId': planId,
+            'updatedAt': DateTime.now().toUtc().toIso8601String(),
+            'items': items.map((item) => item.toMap()).toList(),
+          })
+          .timeout(writeTimeout);
+    } on TimeoutException catch (error) {
+      throw DataFailure(
+        DataFailureKind.offline,
+        'Chưa có xác nhận từ máy chủ. Checklist có thể đồng bộ khi có mạng; hãy tải lại để kiểm tra.',
+        error,
+      );
     } catch (error) {
       throw DataFailure.from(error);
     }

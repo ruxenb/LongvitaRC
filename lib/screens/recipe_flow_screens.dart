@@ -271,7 +271,7 @@ class _MealAlternativesScreenState extends State<MealAlternativesScreen> {
           FlowSection(
             title: 'Thay món ${widget.original.name}',
             child: const Text(
-              'Món gốc được giữ nguyên nếu cập nhật Firestore thất bại.',
+              'Món đang xem chỉ thay đổi khi máy chủ xác nhận. Nếu mất mạng, thao tác có thể đồng bộ sau; hãy tải lại thực đơn để kiểm tra.',
             ),
           ),
           if (state is ViewStateEmpty<List<RecipeModel>>)

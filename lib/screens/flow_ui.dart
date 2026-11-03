@@ -76,6 +76,8 @@ class FlowItemCard extends StatelessWidget {
   Widget build(BuildContext context) => Card(
     child: Semantics(
       button: onTap != null,
+      excludeSemantics: true,
+      onTap: onTap,
       label: title + (subtitle == null ? '' : '. ${subtitle!}'),
       child: ListTile(
         minVerticalPadding: 12,

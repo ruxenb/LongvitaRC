@@ -217,7 +217,7 @@ class IngredientViewModel extends BaseViewModel implements SessionScoped {
     } catch (error, trace) {
       if (_epoch.isStale(epoch) || _planId != planId) return false;
       _persistenceState = ViewStateError(
-        'Thay đổi chưa được đồng bộ. ${DataFailure.from(error).message}',
+        'Chưa xác nhận lưu. ${DataFailure.from(error).message}',
         error,
       );
       notifyListeners();
