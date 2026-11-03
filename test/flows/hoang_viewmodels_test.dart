@@ -193,6 +193,23 @@ void main() {
     shopping.dispose();
   });
 
+  test('HOANG-F03: missing Firestore citation must not be fabricated', () {
+    final recipe = RecipeModel.fromMap({
+      'name': 'Firestore recipe',
+      'description': '',
+      'category': 'dau',
+      'proteinGrams': 10,
+      'calories': 300,
+      'ingredients': <Object>[],
+      'instructions': <Object>[],
+    }, 'real-doc');
+    expect(
+      recipe.sourceNote,
+      isEmpty,
+      reason: 'No default book attribution when source was never provided',
+    );
+  });
+
   test('S4-4: no hardcoded recipes when Firestore is empty', () async {
     data.recipes = [];
     await plans.generatePlan(uid: 'uid-1', weightKg: 60, age: 30);
