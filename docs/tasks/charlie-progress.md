@@ -2,11 +2,11 @@
 
 Đây là bàn giao nền tảng mobile của cùng Assignment, không tuyên bố toàn bộ các task đã hoàn tất. Lab 3 = Assignment; Figma Lab 2 là tham chiếu đóng băng, UI được cải thiện trong code.
 
-**Đã merge vào `main` theo yêu cầu của leader, sau khi Charlie tự kiểm tra:** [#1 — design system, Firebase Auth và nền tảng PDF/FCM](https://github.com/ruxenb/LongvitaRC/pull/1), [#2 — lưu, mở, chia sẻ PDF](https://github.com/ruxenb/LongvitaRC/pull/2). [#3 — màn Profile và Firebase Demo Area](https://github.com/ruxenb/LongvitaRC/pull/3), [#4 — push thật, Storage trên emulator, Crashlytics, harness ARTEMIS](https://github.com/ruxenb/LongvitaRC/pull/4). Cả bốn PR **chưa có review trên GitHub của thành viên khác hay AI**, nên các điểm cần chốt bên dưới vẫn còn mở. CodeRabbit chưa được cài, chờ leader xác nhận; S7-1-CM cần chạy AI review trên PR kế tiếp.
+**Đã merge vào `main` theo yêu cầu của leader, sau khi Charlie tự kiểm tra:** [#1 — design system, Firebase Auth và nền tảng PDF/FCM](https://github.com/ruxenb/LongvitaRC/pull/1), [#2 — lưu, mở, chia sẻ PDF](https://github.com/ruxenb/LongvitaRC/pull/2). [#3 — màn Profile và Firebase Demo Area](https://github.com/ruxenb/LongvitaRC/pull/3), [#4 — push thật, Storage trên emulator, Crashlytics, harness ARTEMIS](https://github.com/ruxenb/LongvitaRC/pull/4). Cả bốn PR **chưa có review trên GitHub của thành viên khác hay AI**, nên các điểm cần chốt bên dưới vẫn còn mở. CodeRabbit chưa được cài, chờ leader xác nhận; S7-1-CM sẽ chạy AI review trên [PR #5](https://github.com/ruxenb/LongvitaRC/pull/5).
 
 Thắng, Hoàng và Thái An đã đồng ý các phần của PR #4 chạm vào việc của họ (theo Charlie, 02/11).
 
-**Đợt 03/11, trên nhánh `feature/charlie-fcm-feedback-01`, PR sẽ được giữ mở cho AI review:** tin đến khi app đang mở hiện thanh thông báo có nút "Xem" (S4-12), TalkBack thật (S4-14), nháp báo cáo FCM (S8-3). Analyzer sạch, 257/257 tests.
+**Đợt 03/11, [PR #5](https://github.com/ruxenb/LongvitaRC/pull/5), được giữ mở cho AI review (S7-1-CM):** tin đến khi app đang mở hiện thanh thông báo có nút "Xem" (S4-12), TalkBack thật (S4-14), nháp báo cáo FCM (S8-3). Analyzer sạch, 257/257 tests.
 
 ## Mức hoàn thành công việc
 
