@@ -1,5 +1,7 @@
 # S3-5 — Đăng xuất và cách ly phiên, 04/11/2026
 
+> **PM review evidence commit 0e3ef5a:** giữ các kết quả native normal-path dưới đây. Phần kỹ thuật cần sửa hai lỗi mới PM-S3-5-03/04, tái hiện bằng probe có điều khiển (không phải native): profile Auth cũ bị reuse qua phiên mới cùng UID; cleanup cũ xóa PDF mới cùng UID. Bộ 279 tests cũ chưa phủ hai ca này. S3-5 chưa hoàn tất kỹ thuật và còn A3/policy pending; xem mục PM review cuối tài liệu.
+
 - **Code:** `main` `96c9f57` (sau khi merge PR #9). Đợt này không đổi code: không tái hiện được lỗi nào.
 - **Thiết bị:** AVD `LocalMate_API_35`, Android 15.
 - **Bản build:** debug, app thật (entrypoint `lib/main.dart`), build với `--dart-define=STORAGE_EMULATOR_HOST=10.0.2.2`. Xuất PDF tải lên Firebase Storage Emulator trên máy, không lên Storage thật. Không dùng QA host Sign-in của S4-14.
@@ -48,7 +50,7 @@ Câu task gốc ghi "xóa toàn bộ dữ liệu người dùng cục bộ". Hi�
 
 - **Gọi hủy upload:** `clearSession` gọi `cancelActiveUpload()` nếu đang tải lên. Khi mạng chậm, SDK có thể chỉ dừng ở lần thử lại kế tiếp.
 - **SDK xác nhận hủy:** không chờ. Nếu upload cũ vẫn hoàn tất, bản cloud nằm dưới `reports/<uid cũ>/`, vẫn là dữ liệu của chính người đó.
-- **Vô hiệu hóa kết quả:** mọi kết quả, tiến trình và lỗi muộn của phiên cũ bị bỏ qua nhờ `_activeOperation` và `SessionEpoch`, kể cả khi cùng UID đăng nhập lại. Test: `session_race_test`.
+- **Vô hiệu hóa kết quả đã có test:** các kết quả export/upload và MealPlan trong `session_race_test` được bỏ qua nhờ `_activeOperation`/`SessionEpoch`, kể cả cùng UID. Không suy rộng thành mọi tác vụ: PM-S3-5-03/04 bên dưới chỉ ra hai ranh giới còn lỗi.
 - **Đăng xuất giữa lúc lưu PDF:** file vừa lưu bị xóa và upload không bắt đầu. Test: `profile_export_test` (`logout during save…`).
 
 Native chỉ kiểm đăng xuất sau khi upload đã xong. Các race trên dùng test có điều khiển (fake), không phải bằng chứng native.
@@ -57,7 +59,7 @@ Native chỉ kiểm đăng xuất sau khi upload đã xong. Các race trên dùn
 
 - `flutter analyze --no-pub`: No issues found.
 - `flutter test --no-pub`: 279/279 pass. Riêng `test/auth`, `test/fcm` và `test/report/profile_export_test.dart`: 148/148 pass.
-- Không có test mới: không tìm thấy lỗi tái hiện được, và các ca trong ma trận đã có test.
+- Ở lượt Dev không có test mới vì chưa tìm thấy lỗi tái hiện được. Sau đó PM chạy ba probe riêng: hai regression fail và một observation pass; không cộng chúng vào suite 279 hoặc gọi là native runs. Cần bổ sung regression chính thức cho các fix.
 
 ## Giới hạn
 
@@ -66,4 +68,15 @@ Native chỉ kiểm đăng xuất sau khi upload đã xong. Các race trên dùn
 - Analytics và Crashlytics user ID chưa xem trên Console.
 - Chưa thử trên máy thật.
 - **A3 của Hoàng chưa có duyệt:** các guard trong MealPlan/Ingredient VM do Charlie viết (PR #1). Không tìm thấy review hay comment của Hoàng trên GitHub. Merge hoặc CodeRabbit không được tính là Hoàng đã duyệt.
-- **Quan sát, chưa tái hiện, chưa mở finding:** việc xóa thư mục PDF chạy nền (không chờ). Về lý thuyết, nếu cùng UID đăng nhập lại và xuất PDF trước khi việc xóa xong, file mới có thể bị xóa theo. Trên máy, đăng nhập Google mất vài giây còn việc xóa xong gần như ngay, nên không gặp.
+- **Quan sát ban đầu của Dev:** chưa gặp cleanup PDF chạy nền xóa file mới trên máy. Sau review, PM đã tái hiện bằng probe điều khiển dùng LocalReportStore/filesystem thật; chuyển thành PM-S3-5-04 bên dưới. Native vẫn chưa tái hiện ca race này.
+
+## PM review trên code của 0e3ef5a
+
+| Finding | Tái hiện có điều khiển | Expected |
+|---|---|---|
+| PM-S3-5-03 | Auth restore A đang load profile → stream null → A đăng nhập lại → response profile cũ hoàn tất. Chỉ có 1 load, profile của phiên cũ đi vào phiên mới. AuthViewModel deduplicate và kiểm kết quả chỉ theo UID | Phiên mới load profile mới; stale callback không thay state/identity/role hoặc handle của operation mới |
+| PM-S3-5-04 | Giữ việc xóa folder reports/A của logout cũ → A đăng nhập lại và lưu export mới → thả cleanup cũ. File mới bị xóa dù VM vẫn giữ lastExport. Dùng LocalReportStore và filesystem thật trong sandbox, thời điểm directory lookup được giữ bằng fake | File cũ được dọn đúng policy; file đã tạo hợp lệ trong phiên mới vẫn còn để mở/chia sẻ/retry |
+
+Hai regression PM fail đúng invariant trên code hiện tại; không phải finding 01/02 cũ và chưa tái hiện native. Probe thứ ba xác nhận conditional SDK-failure behavior bằng fake: UI signed-out không notice, SDK vẫn UID A, recreate VM thì A restore. Không được coi đây là đã gây lỗi Firebase trên Android thật. Chưa đổi production hoặc sửa expected tests cũ trong lượt PM.
+
+Kết quả native ở phần trên vẫn có giá trị cho các trình tự đã thực hiện; chúng không phủ các lịch async cố ý giữ này. S3-5 giữ Đang thực hiện, gồm code fixes 03/04 và input A3/policy/SDK failure behavior, không chỉ còn chờ owner.

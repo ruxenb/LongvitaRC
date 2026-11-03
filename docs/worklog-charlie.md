@@ -183,3 +183,7 @@ Giữ 14ec763 và PM docs 17a8ff9. f83206a hoàn thiện test RC pending bằng 
 ### S3-5 — đăng xuất và cách ly phiên, kiểm native
 
 PR #9 (S4-14) đã merge vào main tại `96c9f57`; S3-5 bắt đầu từ commit này, nhánh `feature/charlie-session-02`. Rà AuthViewModel, ba participant SessionScoped, PDF, upload và FCM so với test: không tái hiện được lỗi nào, nên không đổi code. Native trên emulator với hai tài khoản Google thật do Charlie đăng nhập: Hủy, Đồng ý, Back, mở lại app, A→B, đăng xuất từ Home, A→đăng xuất→A đều đạt. PDF trên máy của UID bị xóa, bản trên Storage Emulator vẫn còn, lịch sử thông báo giữ theo UID. Email của tài khoản B được làm mờ trong ảnh. Analyzer sạch, 279/279 tests pass. Còn chờ: Hoàng duyệt A3, nhóm chốt giữ PDF và lịch sử thông báo. Evidence: `evidence/auth/S3-5-20261104/`.
+
+### S3-5 — PM review evidence 0e3ef5a: Changes requested
+
+Giữ các ca native normal-path và redaction email B. PM đọc source/tests/evidence, chạy ba probe độc lập: hai regression fail (PM-S3-5-03: profile Auth phiên cũ cùng UID bị reuse; PM-S3-5-04: cleanup logout cũ xóa PDF phiên mới), một observation pass (SDK sign-out ném lỗi giả → UI signed-out nhưng UID còn, recreate VM restore). Probe riêng không thuộc 279 tests và không phải native runs. Chưa sửa production; chuyển việc tiếp theo thành fix/regression 03/04, vẫn chờ A3/retention và làm rõ SDK failure behavior. Các findings 01/02 cũ giữ Closed; không tăng task hoàn thành hoặc chuyển task khác.
