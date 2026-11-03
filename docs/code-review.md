@@ -94,3 +94,19 @@ Các dòng dưới đây được giữ làm mẫu kế hoạch; không xác nh�
 ## 4. Disclosure xác nhận cho gói Charlie
 
 CodeRabbit GitHub App sinh 11 góp ý trên PR #7; Claude Code đánh giá ban đầu và viết các commit sửa; Codex audit lại quyết định/source, sửa tiếp CR-08, viết 23 kiểm tra assertions độc lập và bàn giao PR theo yêu cầu Charlie. ARTEMIS/Gemini đã được Charlie chạy trước đó như evidence riêng; Codex không chạy lại ARTEMIS/không dùng key trong gói bàn giao này. Bảng công cụ ở mục 3 là nguồn kế hoạch, không tự xác nhận mọi thành viên đã dùng mọi tool.
+
+
+---
+
+## 5. Hoàng — Phát hiện kiểm tra thủ công (04/11/2026)
+
+Phần này do ChatGPT GPT-6 hỗ trợ rà soát và viết code, dùng Flutter analyze/widget tests để kiểm chứng. **Chưa phải kết quả CodeRabbit/Copilot/SonarCloud trên PR**, do đó KHÔNG dùng thay bằng chứng S7-1-HD. Không chỉnh sửa findings hoặc trạng thái review của Charlie ở trên.
+
+| ID | Loại/mức | Phạm vi | Phát hiện thực tế | Quyết định/lý do | Commit sửa |
+|---|---|---|---|---|---|
+| HOANG-F01 | Correctness / Major | lib/screens/home_screen.dart, StreamBuilder announcements | Nếu stream kết thúc không có dữ liệu, nhánh !hasData vẫn hiện Loading vô hạn; widget test Home/Profile trước sửa timeout | Accepted. Chỉ Loading khi waiting; stream kết thúc rỗng hiện Empty. Hồi quy Home->Profile->Back pass | 0dc6253 |
+| HOANG-F02 | Correctness / Major | lib/viewmodels/ingredient_viewmodel.dart, clearSession + persistChanges | Future lưu checklist của user A bị treo sẽ giữ write queue và chặn user B khi đăng nhập, dù ViewModel đã clear state | Accepted. Reset hàng đợi khi thay phiên nhưng mỗi write cũ vẫn giữ UID đã capture; epoch chặn UI callback cũ. Regression test HOANG-F02 pass | d078f89 |
+
+Reviewer phải chạy công cụ AI trên Pull Request sau khi push; đính kèm output nguyên bản, URL comment và quyết định Accept/Modify/Reject nếu có. Không chế tạo thêm finding hoặc nói bot đã review khi chưa xảy ra.
+
+Disclosure thực tế: ChatGPT GPT-6 hỗ trợ viết/kiểm tra code, tạo unit/widget tests, tài liệu và slides; Flutter analyze và Flutter test chạy trên laptop ASUS. Không dùng Claude/Codex/CodeRabbit/SonarCloud cho phần việc Hoàng trong phiên làm việc này.
