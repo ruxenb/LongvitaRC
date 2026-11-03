@@ -106,6 +106,7 @@ Phần này do ChatGPT GPT-6 hỗ trợ rà soát và viết code, dùng Flutter
 |---|---|---|---|---|---|
 | HOANG-F01 | Correctness / Major | lib/screens/home_screen.dart, StreamBuilder announcements | Nếu stream kết thúc không có dữ liệu, nhánh !hasData vẫn hiện Loading vô hạn; widget test Home/Profile trước sửa timeout | Accepted. Chỉ Loading khi waiting; stream kết thúc rỗng hiện Empty. Hồi quy Home->Profile->Back pass | 0dc6253 |
 | HOANG-F02 | Correctness / Major | lib/viewmodels/ingredient_viewmodel.dart, clearSession + persistChanges | Future lưu checklist của user A bị treo sẽ giữ write queue và chặn user B khi đăng nhập, dù ViewModel đã clear state | Accepted. Reset hàng đợi khi thay phiên nhưng mỗi write cũ vẫn giữ UID đã capture; epoch chặn UI callback cũ. Regression test HOANG-F02 pass | d078f89 |
+| HOANG-F03 | Data integrity / Major | lib/models/recipe_model.dart, sourceNote default | Model gốc tự gán tên sách TS. Longo cho recipe thiếu trích dẫn nguồn, khiến S05/S09 có thể hiển thị nguồn chưa được xác minh | Accepted. Khi thiếu sourceNote, giữ giá trị rỗng và hiển thị thông báo chưa xác minh; fake unit regression HOANG-F03 pass | 3c80cb2 |
 
 Reviewer phải chạy công cụ AI trên Pull Request sau khi push; đính kèm output nguyên bản, URL comment và quyết định Accept/Modify/Reject nếu có. Không chế tạo thêm finding hoặc nói bot đã review khi chưa xảy ra.
 

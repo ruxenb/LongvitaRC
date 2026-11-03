@@ -16,16 +16,16 @@ This is a technical evidence matrix, NOT the formal Accepted status in the team-
 | S4-6 | S05/S06/S09, substitutions and non-destructive failed save | Real E2E including actual alternatives |
 | S4-7 | FlowStateView, DataFailure, Home stream error/empty | Offline Android test and UX sign-off |
 | S4-8 | Labels and action names in new widgets/screens | TalkBack native traversal |
-| S4-9 | Fake-backed ViewModel unit tests + isolation regression | Final full suite 294/294 passed |
+| S4-9 | Fake-backed ViewModel unit tests + isolation regression | Full suite 295/295 passed after HOANG-F03 |
 | S4-16 | 360/412dp x 1x/2x widget tests pass | Contrast and 14sp measurement; native screenshots |
 | S4-17 | docs/hoang-accessibility-audit.md, mapping & deviations | Page 03/06 metadata audited in docs/hoang-figma-deviation-audit.md; native screenshot comparison and team acceptance still required |
 | S5-3 | Search/details/replace/shopping/generated events in UI/VM | Firebase DebugView verified event parameters, no PII |
 | S6-5 | e2e_test/test_flows.py, test_search.py written | Run with ARTEMIS daemon and signed-in device |
 | S6-6 | e2e_test/test_detail.py written | Run with ARTEMIS and native evidence |
 | S6-13 | HOANG-F01 and HOANG-F02 implementation fixes | Further ARTEMIS-discovered issues pending |
-| S7-1-HD | Branch + commits 0dc6253, d078f89 | Remote PR + real AI review |
-| S7-2-HD | Two manual code findings documented | Needs external AI reviewer output and decisions |
-| S7-3-HD | HOANG-F02 fix has separate git commit d078f89 | Reviewer acceptance and PR link |
+| S7-1-HD | Branch + commits 0dc6253, d078f89 | PR #10 opened, CodeRabbit requested; reviewer output pending |
+| S7-2-HD | Two manual code findings documented | Three manual findings F01/F02/F03 documented; CodeRabbit reviewer output pending |
+| S7-3-HD | HOANG-F02 and HOANG-F03 have separate fix commits d078f89 and 3c80cb2 | Reviewer acceptance and PR link |
 | S8-2 | report/hoang-implementation-report.md | Real screenshots for submission |
 | S8-6 | slides/Longvita_Hoang_4_Slides_20261104.pptx | Slide visual review, native screenshots |
 | S8-11 | Planned demo storyboard | Android video, actually record 3 flows/error branches |

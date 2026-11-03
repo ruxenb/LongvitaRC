@@ -38,7 +38,7 @@ Figma Page 03/06 được nhóm giữ làm baseline đóng băng theo quyết đ
 
 ## 5. Kiểm thử đã có bằng chứng
 - flutter analyze: clean sau giai đoạn triển khai đầu.
-- Toàn bộ Flutter tests: 294/294 pass sau khi thêm 6 widget tests và bugfix cô lập phiên.
+- Toàn bộ Flutter tests: 295/295 pass sau khi thêm 6 widget tests và bugfix cô lập phiên.
 - Unit tests Hoàng: 8/8 pass ban đầu, sau thêm HOANG-F02 thành 9/9 pass.
 - A11y & responsive widget tests bổ sung: 6/6 pass.
 - Mẫu kiểm tra thực tế: mất mạng -> Error/Retry; Firestore trống -> Empty; lưu lỗi -> giữ nguyên plan; thay món lỗi -> giữ món; số lượng âm -> dialog validation; Undo; checkbox bền vững trong fake service; cô lập phiên.
