@@ -210,6 +210,7 @@ class EmptyView extends StatelessWidget {
         ),
         Semantics(
           header: true,
+          headingLevel: 2,
           child: Text(title,
               textAlign: TextAlign.center, style: AppTypography.headingM),
         ),
@@ -262,6 +263,7 @@ class ErrorView extends StatelessWidget {
           ),
           Semantics(
             header: true,
+            headingLevel: 2,
             child: Text(title,
                 textAlign: TextAlign.center, style: AppTypography.headingM),
           ),

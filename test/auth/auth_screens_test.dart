@@ -320,6 +320,24 @@ void main() {
       });
     }
 
+    testWidgets('sign-in headline is a heading for screen readers',
+        (tester) async {
+      final handle = tester.ensureSemantics();
+      await pumpGate(tester);
+      expect(
+          tester.getSemantics(find.text('Thực đơn trường thọ cho cả tuần')),
+          isSemantics(
+              label: 'Thực đơn trường thọ cho cả tuần', isHeader: true));
+      // Android reports a heading only when headingLevel is set.
+      expect(tester.getSemantics(find.text('Longvita')).headingLevel, 1);
+      expect(
+          tester
+              .getSemantics(find.text('Thực đơn trường thọ cho cả tuần'))
+              .headingLevel,
+          2);
+      handle.dispose();
+    });
+
     testWidgets('sign-in textScale 2.0 at 360 has no overflow', (tester) async {
       final key = GlobalKey();
       final h = await pumpGate(tester, key: key, textScale: 2.0);

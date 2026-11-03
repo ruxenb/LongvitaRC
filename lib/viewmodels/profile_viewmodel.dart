@@ -180,7 +180,7 @@ class ProfileViewModel extends BaseViewModel implements SessionScoped {
     }
 
     final operation = _activeOperation = Object();
-    _exportState = const ViewStateLoading('Đang khởi tạo tài liệu PDF...');
+    _exportState = const ViewStateLoading('Đang khởi tạo tài liệu PDF…');
     _uploadProgress = 0.0;
     notifyListeners();
 
@@ -230,7 +230,7 @@ class ProfileViewModel extends BaseViewModel implements SessionScoped {
     if (!canRetryUpload || export == null || currentUser == null) return;
 
     final operation = _activeOperation = Object();
-    _exportState = const ViewStateLoading('Đang tải lại PDF lên Cloud Storage...');
+    _exportState = const ViewStateLoading('Đang tải lại PDF lên Cloud Storage…');
     _uploadProgress = 0.0;
     notifyListeners();
 
@@ -309,7 +309,7 @@ class ProfileViewModel extends BaseViewModel implements SessionScoped {
     Uint8List bytes,
     Object operation,
   ) async {
-    _exportState = const ViewStateLoading('Đang tải PDF lên Cloud Storage...');
+    _exportState = const ViewStateLoading('Đang tải PDF lên Cloud Storage…');
     _uploading = true;
     notifyListeners();
 

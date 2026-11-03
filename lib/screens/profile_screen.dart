@@ -61,6 +61,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               const SizedBox(height: AppSpacing.s24),
               Semantics(
                 header: true,
+                headingLevel: 2,
                 child: const Text(
                   'Firebase Demo Area',
                   style: AppTypography.headingM,
@@ -91,6 +92,7 @@ class _IdentityCard extends StatelessWidget {
     final auth = context.read<AuthViewModel>();
     final confirmed = await showDialog<bool>(
       context: context,
+      barrierLabel: AppDialog.barrierLabel,
       builder: (dialogContext) => AppDialog.confirmation(
         icon: AppIcons.infoOutline,
         title: 'Đăng xuất?',
@@ -134,14 +136,25 @@ class _IdentityCard extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(user.displayName, style: AppTypography.title),
-                    const SizedBox(height: AppSpacing.s4),
-                    // A long address breaks before the @ rather than inside a word.
-                    Text(
-                      user.email.replaceFirst('@', '​@'),
-                      semanticsLabel: user.email,
-                      style: AppTypography.supporting
-                          .copyWith(color: AppColors.textSecondary),
+                    // One stop for who is signed in; the card itself has no
+                    // label, so focus does not frame the whole card.
+                    Semantics(
+                      container: true,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(user.displayName, style: AppTypography.title),
+                          const SizedBox(height: AppSpacing.s4),
+                          // A long address breaks before the @ rather than
+                          // inside a word.
+                          Text(
+                            user.email.replaceFirst('@', '​@'),
+                            semanticsLabel: user.email,
+                            style: AppTypography.supporting
+                                .copyWith(color: AppColors.textSecondary),
+                          ),
+                        ],
+                      ),
                     ),
                     const SizedBox(height: AppSpacing.s8),
                     AppBadge(
@@ -167,6 +180,10 @@ class _IdentityCard extends StatelessWidget {
 }
 
 /// Title and one line of explanation shared by the demo cards.
+///
+/// Each is its own semantics node. Text that is not its own node merges into
+/// the card's node, which then reads before everything in the card and, here,
+/// would turn the description into part of the heading.
 class _CardHeader extends StatelessWidget {
   final String title;
   final String description;
@@ -179,14 +196,19 @@ class _CardHeader extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Semantics(
+          container: true,
           header: true,
+          headingLevel: 3,
           child: Text(title, style: AppTypography.title),
         ),
         const SizedBox(height: AppSpacing.s4),
-        Text(
-          description,
-          style:
-              AppTypography.supporting.copyWith(color: AppColors.textSecondary),
+        Semantics(
+          container: true,
+          child: Text(
+            description,
+            style: AppTypography.supporting
+                .copyWith(color: AppColors.textSecondary),
+          ),
         ),
       ],
     );
@@ -299,7 +321,12 @@ class _ExportCard extends StatelessWidget {
             const SizedBox(height: AppSpacing.s16),
             const _Notice(message: 'Đã tải PDF lên Cloud Storage.'),
             const SizedBox(height: AppSpacing.s8),
-            SelectableText(state.data, style: AppTypography.supporting),
+            // Without its own node the read-only field merges into the card,
+            // making the whole card a text field read before its actions.
+            Semantics(
+              container: true,
+              child: SelectableText(state.data, style: AppTypography.supporting),
+            ),
           ],
           if (profile.canRetryUpload) ...[
             const SizedBox(height: AppSpacing.s16),
@@ -343,10 +370,14 @@ class _ExportProgress extends StatelessWidget {
   Widget build(BuildContext context) {
     final percent = (progress * 100).round();
 
+    // A live region speaks again whenever its label changes, so the
+    // percentage is the value: TalkBack announces each phase once and reads
+    // the current percentage when focused.
     return Semantics(
       container: true,
       liveRegion: true,
-      label: '$message $percent%',
+      label: message,
+      value: '$percent%',
       child: ExcludeSemantics(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -395,9 +426,13 @@ class _InboxCard extends StatelessWidget {
           ],
           const SizedBox(height: AppSpacing.s16),
           if (items.isEmpty)
-            Text(
-              'Chưa có thông báo nào.',
-              style: AppTypography.body.copyWith(color: AppColors.textSecondary),
+            Semantics(
+              container: true,
+              child: Text(
+                'Chưa có thông báo nào.',
+                style:
+                    AppTypography.body.copyWith(color: AppColors.textSecondary),
+              ),
             ),
           for (final (index, item) in items.indexed) ...[
             if (index > 0) const SizedBox(height: AppSpacing.s16),
@@ -534,6 +569,7 @@ class _CrashlyticsCard extends StatelessWidget {
     final profile = context.read<ProfileViewModel>();
     final confirmed = await showDialog<bool>(
       context: context,
+      barrierLabel: AppDialog.barrierLabel,
       builder: (dialogContext) => AppDialog.error(
         title: 'Gây crash thử?',
         message: 'Ứng dụng sẽ đóng ngay để gửi báo cáo lên Crashlytics. '

@@ -49,8 +49,11 @@ class AppTopBar extends StatelessWidget implements PreferredSizeWidget {
                 const SizedBox(width: AppSpacing.s8),
               ],
               Expanded(
+                // Android reports a heading only from headingLevel; the
+                // header flag alone is not enough for TalkBack.
                 child: Semantics(
                   header: true,
+                  headingLevel: 1,
                   child: Text(
                     title,
                     maxLines: 1,
