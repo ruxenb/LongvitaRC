@@ -114,4 +114,5 @@ Task S8-17-CM. Ghi theo commit và evidence thật, cập nhật dần. Trạng 
 - **Kiểm tra:** 257/257 test. Thật: hai chiến dịch Console, thanh thông báo hiện trên Home, "Xem" mở Profile, hộp thư có cả hai tin.
 - **TalkBack:** lệnh chạm của adb bỏ qua chế độ chạm để khám phá, nên dùng console của emulator để chạm và vuốt. Sign-in đi hết; Profile đi đến hộp thư; vuốt giả lập đôi khi nhảy về nút Quay lại, nên phần cuối Profile mới kiểm nhãn.
 - **Báo cáo:** nháp FCM trong `docs/report-drafts/s8-3-firebase-fcm.md`.
+- **Lỗi tìm thấy khi review (PM-FCM-02):** thanh thông báo nằm ở `ScaffoldMessenger` gốc nên còn trên Sign-in sau khi đăng xuất, và callback chỉ kiểm `mounted` nên "Xem" mở được Profile khi chưa đăng nhập. Sửa bằng cách ghi epoch phiên lúc lấy tin, kiểm lại lúc callback chạy, và đóng thanh thông báo của phiên đã kết thúc. 8 regression, 6 trong đó fail trên code cũ. 265/265 test; thử đăng xuất trên emulator với tin thật.
 - **Còn vướng:** PR #5 chờ AI review, chưa merge; token theo user và route theo đích chờ contract cuối.
