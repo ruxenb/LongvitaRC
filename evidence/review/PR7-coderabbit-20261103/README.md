@@ -54,3 +54,7 @@ Hai log assertions được giữ nội dung kết quả; chỉ bỏ trailing wh
 - Khi Codex tiếp quản, ADB không thấy thiết bị và `127.0.0.1:8000/api/status` không có daemon. **Không có lượt ARTEMIS thật mới trong gói này.** TC-10/TC-11 sau sửa và TC-09b cần sửa Console vẫn chờ kiểm trên thiết bị; các lượt >=3 và exploratory còn ở S6.
 - Flutter app/tests/config không đổi so với main `97cbaa9`; audit cùng tree Flutter đã có analyzer sạch, 271/271. Gói này kiểm lại Python/collection và không nhận là một lượt Flutter/Android/cloud mới.
 - S7-1/2/3 ở trạng thái **Chờ nghiệm thu**, không phải Accepted; các vấn đề native của S6 và nghiệm thu chung vẫn mở.
+
+## Follow-up trước merge PR #8
+
+Ba findings mới đã được đối chiếu/sửa, bộ kiểm assertions hiện có 30/30 pass. [Nguồn và evidence](../PR8-coderabbit-20261103/README.md). Log 23/23 ở thư mục này giữ nguyên snapshot bàn giao ban đầu; không phải lượt native.

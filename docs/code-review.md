@@ -43,6 +43,18 @@
 
 ---
 
+### 1.2 Charlie — phản hồi CodeRabbit trên PR #8 trước merge
+
+Nguồn: [3 comments của bot trên PR #8](https://github.com/ruxenb/LongvitaRC/pull/8), head được review `2833d74`; [raw output và kiểm chứng](../evidence/review/PR8-coderabbit-20261103/README.md). Cả ba **Accepted** sau khi đối chiếu và tái hiện. Tách khỏi 11 findings của PR #7.
+
+| ID | Mức | Vị trí tại head review | Loại | Quyết định / lý do | Commit |
+|---|---|---|---|---|---|
+| PR8-CR-01 | Minor | `docs/report-drafts/s8-7-slides.md:26` | Documentation | Accepted: tin thiếu recipient_uid có thể sang phiên kế; thu hẹp claim thay vì sửa contract tạm | [e0e39e3](https://github.com/ruxenb/LongvitaRC/commit/e0e39e3) |
+| PR8-CR-02 | Major | `e2e_test/test_export.py:57` | Correctness | Accepted: chữ Longvita sau khi mở viewer lỗi vẫn làm assertion cũ pass; kiểm kết quả VIEWER và HEADING riêng ở bước cuối | [bcaa8a5](https://github.com/ruxenb/LongvitaRC/commit/bcaa8a5) |
+| PR8-CR-03 | Major | `e2e_test/test_profile.py:68` | Correctness | Accepted: title trong mô tả tap chưa chứng minh inbox có tin; kiểm title ở quan sát cuối | [bcaa8a5](https://github.com/ruxenb/LongvitaRC/commit/bcaa8a5) |
+
+Hai ca tái hiện trước sửa fail đúng rủi ro false-pass; bộ kiểm assertions sau sửa 30/30 pass. Không gọi đây là 30 ARTEMIS runs hoặc báo đã chạy lại native. PM-DOC-01 sửa câu quyền đọc hồ sơ được ghi riêng, không thêm vào số bot findings.
+
 ## 2. Kịch Bản & Mẫu Tham Khảo Chuẩn Appendix C (Reference Guide)
 
 > [!NOTE]

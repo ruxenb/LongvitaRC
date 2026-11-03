@@ -1,0 +1,25 @@
+FF                                                                       [100%]
+================================== FAILURES ===================================
+________________ test_viewer_rejects_app_name_when_open_failed ________________
+
+    async def test_viewer_rejects_app_name_when_open_failed():
+>       with pytest.raises(AssertionError):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE AssertionError
+
+test_support\e2e_review\test_assertions.py:79: Failed
+____________ test_push_rejects_tap_title_missing_from_final_inbox _____________
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x00000195646DB980>
+
+    async def test_push_rejects_tap_title_missing_from_final_inbox(monkeypatch):
+        monkeypatch.setenv("FCM_TEST_TITLE", "Expected push")
+>       with pytest.raises(AssertionError):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE AssertionError
+
+test_support\e2e_review\test_assertions.py:135: Failed
+=========================== short test summary info ===========================
+FAILED test_support\e2e_review\test_assertions.py::test_viewer_rejects_app_name_when_open_failed
+FAILED test_support\e2e_review\test_assertions.py::test_push_rejects_tap_title_missing_from_final_inbox
+2 failed, 23 deselected in 0.16s

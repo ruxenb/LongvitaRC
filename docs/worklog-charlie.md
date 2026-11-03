@@ -153,3 +153,7 @@ Task S8-17-CM. Ghi theo commit và evidence thật, cập nhật dần. Trạng 
 - Không có thiết bị ADB hoặc daemon ARTEMIS khi tiếp quản; không chạy model, không báo native re-run/RC Console đã xong. Giữ nguyên 31 raw task records và tách khỏi pytest pass rate.
 - S7-1/2/3 chuyển Chờ nghiệm thu; Charlie 9 chờ nghiệm thu / 20 đang làm / 0 chưa bắt đầu, Accepted vẫn 0/29. Không tự tăng % dự án.
 - Verification, hashes, lệnh tái hiện và giới hạn: evidence/review/PR7-coderabbit-20261103/README.md.
+
+### PR #8 trước merge — phản hồi 3 findings mới
+
+CodeRabbit check hoàn tất nhưng còn 2 Major/1 Minor. Chấp nhận cả ba: bcaa8a5 sửa viewer-result/heading và push-title cuối; e0e39e3 thu hẹp claim broadcast, đồng thời sửa PM-DOC-01 về quyền đọc hồ sơ. Hai ca false-pass cũ tái hiện được; sau sửa 30/30 assertion checks pass. Native TC-08b/10/11 vẫn cần re-run khi có thiết bị/daemon, không gộp vào các test fixture. Evidence: evidence/review/PR8-coderabbit-20261103/.

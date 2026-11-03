@@ -44,7 +44,7 @@ Các điểm % cũ trong bảng dưới là ước lượng Dev của các phầ
 | S6-14 | 70% | TC-09 tìm ra lỗi báo sai Remote Config; đã sửa và chạy lại pass; còn lỗi từ lượt chính thức |
 | S7-1-CM | Chờ nghiệm thu | CodeRabbit review PR #7 có 11 góp ý; raw JSON, source links và manifest đã nằm trong evidence/review/PR7-coderabbit-20261103/. Chờ team nghiệm thu, không tính PM findings cũ thành AI output. |
 | S7-2-CM | Chờ nghiệm thu | Đã đối chiếu 11 góp ý thật, ghi 8 Accepted/2 Modified/1 Rejected cùng lý do và file:dòng trong docs/code-review.md mục 1.1; chờ nghiệm thu. |
-| S7-3-CM | Chờ nghiệm thu | 8 commit sửa ghi ID được giữ nguyên, có follow-up bc75206/d41abe0; 23/23 kiểm assertions độc lập pass. TC-10/11 native và TC-09b Console chưa chạy lại; các giới hạn nằm ở verification README. Chờ review PR và nghiệm thu. |
+| S7-3-CM | Chờ nghiệm thu | 8 commit sửa ghi ID được giữ nguyên, có follow-up bc75206/d41abe0; 30/30 kiểm assertions độc lập pass. TC-10/11 native và TC-09b Console chưa chạy lại; các giới hạn nằm ở verification README. Chờ review PR và nghiệm thu. |
 | S8-3 | 75% | Nháp đủ Auth, FCM, Storage (Storage là emulator); còn ảnh Console Storage và gửi Thắng |
 | S8-7 | 40% | Nội dung 3 slide có ảnh bằng chứng; còn dựng theo template chung |
 | S8-12 | 15% | Có kịch bản 6 cảnh; chưa quay |
@@ -139,4 +139,4 @@ Tiếp theo: S4-10 với active plan khi có S4-3, S4-12 theo contract FCM cuố
 
 ## Gói review bàn giao 03/11 — S7-2/S7-3
 
-Codex tiếp quản từ Claude theo yêu cầu Charlie. Giữ 8 commit fix ghi ID và các follow-up; tích hợp main 97cbaa9. `docs/code-review.md` ghi đủ 11 quyết định; raw JSON khớp GitHub PR #7. Kiểm assertions riêng 23/23 pass, không cộng vào ARTEMIS. ADB không có thiết bị, daemon không chạy khi tiếp quản nên không báo TC-10/11 hoặc RC-09b native đã pass. Xem [verification](../../evidence/review/PR7-coderabbit-20261103/README.md); các lượt đủ/3-run vẫn thuộc S6.
+Codex tiếp quản từ Claude theo yêu cầu Charlie. Giữ 8 commit fix ghi ID và các follow-up; tích hợp main 97cbaa9. `docs/code-review.md` ghi đủ 11 quyết định; raw JSON khớp GitHub PR #7. Kiểm assertions riêng 30/30 pass, không cộng vào ARTEMIS. ADB không có thiết bị, daemon không chạy khi tiếp quản nên không báo TC-10/11 hoặc RC-09b native đã pass. Xem [verification](../../evidence/review/PR7-coderabbit-20261103/README.md); các lượt đủ/3-run vẫn thuộc S6.
