@@ -4,10 +4,14 @@ Needs a working Storage: the real project once DEC-01 allows it, or a debug buil
 with STORAGE_EMULATOR_HOST and the local emulator. State which one in the run notes.
 """
 
+import os
 import re
 import urllib.request
 
-from conftest import screen_texts
+from conftest import screen_packages, screen_texts
+
+PDF_VIEWER_PACKAGE = os.getenv("PDF_VIEWER_PACKAGE", "com.android.printspooler")
+PDF_HEADING = re.compile(r"(?:heading|titled|report title|tiêu đề)[^.;\n]{0,100}\bLONGVITA\b", re.I)
 
 # reports/{uid}/{exportId}.pdf in a Storage download URL, with its access token.
 REPORT_URL = re.compile(
@@ -49,17 +53,14 @@ async def test_tc08b_saved_pdf_opens_in_the_native_viewer(run_case):
         "Open the Longvita app signed in. Create a meal plan with 'Tạo thực đơn mẫu ngay' "
         "if none exists, open 'Hồ sơ', and tap 'Xuất báo cáo PDF'. When it finishes tap "
         "'Mở PDF đã lưu'. Check whether the system PDF preview actually opened. "
-        "Read the heading printed inside the PDF, not the app name. End your final "
-        "observation with two separate lines: VIEWER: yes (or no), then HEADING: "
-        "followed by the heading actually visible in the PDF. If the viewer failed, "
-        "report VIEWER: no and HEADING: unavailable.",
-        "Two lines in the final observation: VIEWER: yes/no and HEADING: printed PDF heading.",
+        "Read the heading printed inside the PDF, not the app name. Keep the system "
+        "preview open at the end and describe its title and the printed heading. "
+        "If no heading is visible, say that instead of supplying the app name.",
+        "The system preview title and the heading actually visible inside the PDF.",
     )
 
-    # A mention of the app after a failed tap is not a viewer result (PR8-CR-02).
-    # Missing/ambiguous fields fail closed; no earlier step supplies the heading.
+    # The pinned Flash summarizer emits one paragraph, not VIEWER/HEADING fields.
+    # Confirm the native viewer independently, then the heading in the final step.
     assert output.after("tap", "Mở PDF đã lưu"), "the open action was not observed"
-    viewer = re.findall(r"^\s*VIEWER:\s*(yes|no)\s*$", output.last, re.I | re.M)
-    headings = re.findall(r"^\s*HEADING:[ \t]*(\S[^\r\n]*)$", output.last, re.I | re.M)
-    assert [value.lower() for value in viewer] == ["yes"], output.last
-    assert len(headings) == 1 and re.search(r"\bLONGVITA\b", headings[0], re.I), output.last
+    assert PDF_VIEWER_PACKAGE in screen_packages(), "system PDF preview is not the current UI"
+    assert PDF_HEADING.search(output.last), output.last

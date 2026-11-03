@@ -87,8 +87,8 @@ def _adb(*args: str) -> subprocess.CompletedProcess:
     return subprocess.run(command, check=True, capture_output=True, timeout=60)
 
 
-def screen_texts() -> list[str]:
-    """Every text and label on the device screen now, read with uiautomator.
+def _screen_xml() -> str:
+    """Read the current native UI hierarchy once through uiautomator.
 
     For values the agent's summary may shorten or misread, such as a long URL.
     ARTEMIS keeps its own UIAutomator session open for a few seconds after a
@@ -102,9 +102,19 @@ def screen_texts() -> list[str]:
             if attempt == 9:
                 raise
             time.sleep(2)
-    xml = _adb("exec-out", "cat", "/sdcard/artemis-screen.xml").stdout.decode("utf-8")
+    return _adb("exec-out", "cat", "/sdcard/artemis-screen.xml").stdout.decode("utf-8")
+
+
+def screen_texts() -> list[str]:
+    """Every text and label currently exposed by Android's UI hierarchy."""
+    xml = _screen_xml()
     values = re.findall(r'(?:text|content-desc)="([^"]+)"', xml)
     return [html.unescape(v) for v in values]
+
+
+def screen_packages() -> set[str]:
+    """Packages owning nodes in the current UI, independent of LLM summaries."""
+    return set(re.findall(r'package="([^"]+)"', _screen_xml()))
 
 
 def _stop_app() -> None:

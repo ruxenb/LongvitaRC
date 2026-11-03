@@ -4,6 +4,7 @@ Negative observations represent the false-pass risks from PR7-CR-08..11.
 No daemon, account, emulator, Console edit or network request is used here.
 """
 import sys
+import json
 import urllib.error
 from pathlib import Path
 from types import SimpleNamespace
@@ -61,7 +62,8 @@ async def test_sign_out_rejects_app_home_or_unknown_result(last):
         ))
 
 
-async def test_viewer_heading_must_follow_open_action():
+async def test_viewer_heading_must_follow_open_action(monkeypatch):
+    monkeypatch.setattr(export_cases, "screen_packages", lambda: {export_cases.PDF_VIEWER_PACKAGE})
     with pytest.raises(AssertionError):
         await export_cases.test_tc08b_saved_pdf_opens_in_the_native_viewer(observe(
             "LONGVITA on the dashboard.",
@@ -69,14 +71,16 @@ async def test_viewer_heading_must_follow_open_action():
         ))
 
 
-async def test_viewer_accepts_heading_observed_after_open():
+async def test_viewer_accepts_heading_observed_after_open(monkeypatch):
+    monkeypatch.setattr(export_cases, "screen_packages", lambda: {export_cases.PDF_VIEWER_PACKAGE})
     await export_cases.test_tc08b_saved_pdf_opens_in_the_native_viewer(observe(
         "Tap Mở PDF đã lưu: Android print preview opens.",
-        "VIEWER: yes\nHEADING: LONGVITA — THỰC ĐƠN",
+        "The system print preview shows Select a printer and the printed heading 'LONGVITA — THỰC ĐƠN'.",
     ))
 
 
-async def test_viewer_rejects_app_name_when_open_failed():
+async def test_viewer_rejects_app_name_when_open_failed(monkeypatch):
+    monkeypatch.setattr(export_cases, "screen_packages", lambda: {"vn.edu.fpt.longvita"})
     with pytest.raises(AssertionError):
         await export_cases.test_tc08b_saved_pdf_opens_in_the_native_viewer(observe(
             "Tap Mở PDF đã lưu: Longvita still shows Không mở được file PDF đã lưu.",
@@ -84,17 +88,42 @@ async def test_viewer_rejects_app_name_when_open_failed():
 
 
 @pytest.mark.parametrize("last", [
-    "VIEWER: no\nHEADING: LONGVITA",
-    "VIEWER: yes\nLongvita app is still visible.",
-    "VIEWER: yes\nHEADING: A different document",
-    "VIEWER: yes\nVIEWER: no\nHEADING: LONGVITA",
-    "HEADING: LONGVITA",
+    "Longvita app is still visible.",
+    "The preview shows the heading 'A different document'.",
+    "Select a printer is shown above a blank preview pane.",
+    "I see Longvita mentioned in the app title, with no printed heading visible.",
+    "No PDF content is visible in the system dialog.",
 ])
-async def test_viewer_requires_unambiguous_success_and_pdf_heading(last):
+async def test_viewer_requires_a_printed_heading_in_final_observation(monkeypatch, last):
+    monkeypatch.setattr(export_cases, "screen_packages", lambda: {export_cases.PDF_VIEWER_PACKAGE})
     with pytest.raises(AssertionError):
         await export_cases.test_tc08b_saved_pdf_opens_in_the_native_viewer(observe(
             "Tap Mở PDF đã lưu.", last,
         ))
+
+
+async def test_viewer_rejects_good_llm_description_while_app_is_still_foreground(monkeypatch):
+    monkeypatch.setattr(export_cases, "screen_packages", lambda: {"vn.edu.fpt.longvita"})
+    with pytest.raises(AssertionError):
+        await export_cases.test_tc08b_saved_pdf_opens_in_the_native_viewer(observe(
+            "Tap Mở PDF đã lưu: printed heading LONGVITA.",
+        ))
+
+
+def test_native_packages_come_from_ui_hierarchy_not_agent_text(monkeypatch):
+    monkeypatch.setattr(harness, "_screen_xml", lambda: '<hierarchy><node package="com.android.printspooler" text="Select a printer"/><node package="com.android.systemui"/></hierarchy>')
+    assert harness.screen_packages() == {"com.android.printspooler", "com.android.systemui"}
+
+
+async def test_viewer_accepts_recorded_single_paragraph_replay(monkeypatch):
+    """Producer-compatibility check using an existing recorded TC-08b summary."""
+    records = Path(__file__).resolve().parents[2] / "evidence/artemis/raw/runs.jsonl"
+    raw = [json.loads(line) for line in records.read_text(encoding="utf-8").splitlines() if line.strip()]
+    recorded = next(r for r in raw if r["task_id"].startswith("46f57d95"))
+    monkeypatch.setattr(export_cases, "screen_packages", lambda: {export_cases.PDF_VIEWER_PACKAGE})
+    await export_cases.test_tc08b_saved_pdf_opens_in_the_native_viewer(observe(
+        *recorded["output"].splitlines(),
+    ))
 
 
 VALID_URL = ("http://10.0.2.2:9199/v0/b/test-bucket/o/reports%2F"
