@@ -4,6 +4,13 @@ Precondition for each test: the test Google account is on the device. Each test
 states the app state it starts from and reports what it saw.
 """
 
+import re
+
+# Signs of Android's launcher in the agent's description, as opposed to the app.
+LAUNCHER = re.compile(r"launcher|device'?s home screen|app icons|app drawer|\bdock\b", re.I)
+# Signs that Back went back into the signed-in app.
+APP_HOME = re.compile(r"Longvita Dashboard|Dashbo|ROLE: USER|Hành Động Nhanh|Tạo thực đơn mẫu ngay|Hồ sơ")
+
 
 async def test_tc01_sign_in_with_google(run_case):
     """TC-01. The bottom navigation in the plan waits for the S01 screen."""
@@ -44,9 +51,10 @@ async def test_tc11_sign_out_cannot_return_with_back(run_case):
         "after pressing Back: the launcher, the sign-in screen or the home screen.",
     )
 
-    assert "Đăng nhập bằng Google" in output or "sign-in" in output.lower()
-    # Earlier steps show the home screen before signing out; only what is on
-    # screen after Back matters: the launcher or Sign-in, never the dashboard.
-    after_back = output.strip().splitlines()[-1]
-    assert "Dashboard" not in after_back
-    assert "home screen" in after_back.lower() or "Đăng nhập bằng Google" in after_back
+    assert "Đăng nhập bằng Google" in output.after("tap", "Đồng ý")
+    # Only the screen after Back counts. "Home screen" alone is ambiguous: it
+    # may be Android's launcher or the app's own dashboard.
+    after_back = output.after("back")
+    assert after_back, "the agent did not report pressing Back"
+    assert not APP_HOME.search(after_back), after_back
+    assert LAUNCHER.search(after_back) or "Đăng nhập bằng Google" in after_back, after_back
