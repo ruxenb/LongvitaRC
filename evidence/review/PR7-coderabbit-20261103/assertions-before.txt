@@ -1,0 +1,39 @@
+....................F                                                    [100%]
+================================== FAILURES ===================================
+____________ test_agent_output_cannot_replace_action_scoped_replay ____________
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001F5DEA266F0>
+tmp_path = WindowsPath('C:/Users/phamv/AppData/Local/Temp/pytest-of-phamv/pytest-0/test_agent_output_cannot_repla0')
+
+    async def test_agent_output_cannot_replace_action_scoped_replay(monkeypatch, tmp_path):
+        class Client:
+            async def run(self, *_args, **_kwargs):
+                return SimpleNamespace(task_id="fixture-task", status="completed",
+                    device_serial="fixture-device", turns=2, succeeded=True, error=None,
+                    output="LONGVITA was on Home. Tap M\u1edf PDF \u0111\xe3 l\u01b0u failed.")
+
+        monkeypatch.setattr(harness, "_stop_app", lambda: None)
+        monkeypatch.setattr(harness, "_step_summaries", lambda _: [
+            "LONGVITA was on Home.", "Tap M\u1edf PDF \u0111\xe3 l\u01b0u: failed to open viewer.",
+        ])
+        monkeypatch.setattr(harness, "EVIDENCE_DIR", tmp_path)
+        request = SimpleNamespace(node=SimpleNamespace(nodeid="assertion-fixture", get_closest_marker=lambda _: None))
+        run = harness.run_case.__wrapped__(Client(), request)
+        output = await run("fixture goal", "fixture expectation")
+>       assert "LONGVITA" not in output.after("tap", "M\u1edf PDF \u0111\xe3 l\u01b0u")
+E       AssertionError: assert 'LONGVITA' not in 'LONGVITA wa... l\u01b0u failed.'
+E
+E         'LONGVITA' is contained here:
+E           LONGVITA was on Home. Tap M\u1edf PDF \u0111\xe3 l\u01b0u failed.
+E         ? ++++++++
+
+test_support\e2e_review\test_assertions.py:168: AssertionError
+============================== warnings summary ===============================
+e2e_test\test_profile.py:50
+  C:\Users\phamv\OneDrive\Desktop\PRM\Assignment\Longvita_Private\s7-delivery-worktree\e2e_test\test_profile.py:50: PytestUnknownMarkWarning: Unknown pytest.mark.keep_app - is this a typo?  You can register custom marks to avoid this warning - for details, see https://docs.pytest.org/en/stable/how-to/mark.html
+    @pytest.mark.keep_app
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ===========================
+FAILED test_support\e2e_review\test_assertions.py::test_agent_output_cannot_replace_action_scoped_replay
+1 failed, 20 passed, 1 warning in 0.20s

@@ -1,0 +1,24 @@
+{
+  "source_findings": 11,
+  "decisions": {
+    "Accepted": 8,
+    "Rejected": 1,
+    "Modified": 2
+  },
+  "fix_commit_links_resolve": true,
+  "task_statuses": {
+    "docs/tasks/task-charlie.md": {
+      "Chờ nghiệm thu": 9,
+      "Đang thực hiện": 20
+    },
+    "docs/tasks/danh-sach-task-full.md": {
+      "Chờ nghiệm thu": 9,
+      "Đang thực hiện": 20
+    }
+  },
+  "artemis_raw_records": 31,
+  "private_docs_in_tree": [],
+  "python_ast_parse": "pass",
+  "assertion_regressions": "23 passed; fixtures only, not ARTEMIS",
+  "native_rerun": "not run: no ADB device or daemon"
+}

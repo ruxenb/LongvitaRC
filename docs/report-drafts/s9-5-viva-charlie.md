@@ -1,6 +1,6 @@
 # Ôn vấn đáp S9-5-CM — Charlie
 
-> Kịch bản 5 phút theo `task-charlie.md`: chạy một test, đổi một giá trị Remote Config live, giải thích một ViewModel và một quyết định review. Dòng code dẫn theo `main` `30ca6e3`. Phần ARTEMIS chỉ làm được khi nhóm có key S0-5; nếu chưa có, dùng phương án dự phòng ghi bên dưới và nói rõ lý do.
+> Kịch bản 5 phút theo `task-charlie.md`: chạy một test, đổi một giá trị Remote Config live, giải thích một ViewModel và một quyết định review. Dòng code dẫn theo `main` `bc89635` (sau PR #7). Phần ARTEMIS chỉ làm được khi nhóm có key S0-5; nếu chưa có, dùng phương án dự phòng ghi bên dưới và nói rõ lý do.
 
 ## 1. Chạy một test (khoảng 1 phút)
 
@@ -28,7 +28,7 @@ Nói: đây là 13 regression cho lỗi PM-FCM-02. Trên code trước khi sửa
 3. Trên app bấm "Cập nhật Remote Config": hiện "Đã áp dụng giá trị mới." và thẻ đổi thành 7.
 4. Trả lại giá trị 5 sau buổi vấn đáp.
 
-Nói: app nạp giá trị mặc định trong app trước (`setDefaults`), nên luôn có giá trị hợp lệ kể cả khi mất mạng. Bản debug cho fetch lại sau 5 giây, bản release sau 1 giờ (`lib/firebase/remote_config_service.dart:31`). Nút cập nhật gọi `forceFetchAndActivate()`; nếu không có gì mới, app nói thẳng là vẫn dùng giá trị hiện có, không báo thành công giả.
+Nói: app nạp giá trị mặc định trong app trước (`setDefaults`), nên luôn có giá trị hợp lệ kể cả khi mất mạng. Bản debug cho fetch lại sau 5 giây, bản release sau 1 giờ (`lib/firebase/remote_config_service.dart:31`). Nút cập nhật gọi `forceFetchAndActivate()`. SDK coi mọi lần fetch mới là đã kích hoạt, kể cả khi giá trị không đổi, nên `refreshRemoteConfig` (`profile_viewmodel.dart`, dòng 151) so giá trị trước và sau, và chỉ báo "Đã áp dụng giá trị mới." khi có thay đổi thật. Lỗi này do ARTEMIS TC-09 tìm ra và được sửa ở `fd0951c`.
 
 **Cần chuẩn bị:** chưa thử bước 2 trên Console lần nào. Phối hợp với Thái An (chủ Remote Config) và thử trước buổi vấn đáp.
 
@@ -37,9 +37,9 @@ Nói: app nạp giá trị mặc định trong app trước (`setDefaults`), nê
 File `lib/viewmodels/profile_viewmodel.dart`.
 
 - **Vai trò:** cầu nối giữa màn Hồ sơ và các service Storage, FCM, Remote Config, Crashlytics, Analytics. Màn hình không gọi Firebase SDK trực tiếp.
-- **Xuất PDF** (`exportAndUploadPdf`, dòng 161): dựng PDF, lưu trên máy trước, rồi mới tải lên. Mất mạng thì file vẫn còn, thử lại dùng cùng export ID nên không tạo file mới.
-- **Một thao tác mỗi lúc:** mỗi lần xuất tạo một `Object()` làm token; kết quả chỉ được áp dụng nếu token đó còn là thao tác hiện tại (`_isActive`, dòng 284). Vì vậy file, URL, tiến độ và trạng thái luôn thuộc cùng một lần xuất (lỗi PM-PDF-01).
-- **Hủy:** `cancelUpload` (dòng 249) báo đã hủy ngay, vì khi mất mạng SDK chỉ dừng ở lần thử lại kế tiếp. Lỗi này tìm thấy khi chạy thật, test giả không phát hiện được.
+- **Xuất PDF** (`exportAndUploadPdf`, dòng 173): dựng PDF, lưu trên máy trước, rồi mới tải lên. Mất mạng thì file vẫn còn, thử lại dùng cùng export ID nên không tạo file mới.
+- **Một thao tác mỗi lúc:** mỗi lần xuất tạo một `Object()` làm token; kết quả chỉ được áp dụng nếu token đó còn là thao tác hiện tại (`_isActive`, dòng 296). Vì vậy file, URL, tiến độ và trạng thái luôn thuộc cùng một lần xuất (lỗi PM-PDF-01).
+- **Hủy:** `cancelUpload` (dòng 261) báo đã hủy ngay, vì khi mất mạng SDK chỉ dừng ở lần thử lại kế tiếp. Lỗi này tìm thấy khi chạy thật, test giả không phát hiện được.
 - **Phiên đăng nhập:** `onSessionStarted` (dòng 89) gắn hộp thư FCM với người dùng và mới xin quyền thông báo lúc này, nên người dùng mới thấy Sign-in trước. `clearSession` (dòng 114) tăng `SessionEpoch`, hủy upload, xóa PDF trên máy của người đó, xóa hộp thư. Kết quả async về muộn của phiên cũ bị bỏ qua nhờ epoch.
 
 ## 4. Giải thích một quyết định review: PM-FCM-02 (khoảng 1,5 phút)

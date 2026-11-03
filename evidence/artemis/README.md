@@ -17,7 +17,7 @@ Bộ test `e2e_test/` chạy bằng `artemis-client` ghim commit `351ca84` với
 
 Xem `full-pass-batch1.txt`, `full-pass-batch2.txt` (output của pytest) và `raw/runs.jsonl` (mỗi dòng một lần chạy).
 
-**7/7 pass** trong một lượt chạy bằng code cuối (đợt 1: 5 test trong 5 phút 50 giây; đợt 2: push gửi tay rồi TC-10, TC-11 trong 2 phút 9 giây). Đây là 7 dòng cuối của `raw/runs.jsonl`.
+**7/7 pass** trong một lượt chạy bằng code cuối (đợt 1: 5 test trong 5 phút 50 giây; đợt 2: push gửi tay rồi TC-10, TC-11 trong 2 phút 9 giây). Lượt này là các record 17–23 của `raw/runs.jsonl` (task IDs trong bảng); các lần chạy local sau đó được giữ thêm, nên không xác định batch bằng “7 dòng cuối”.
 
 | Test | Task ARTEMIS | Thời gian | Kết quả pytest |
 |---|---|---:|---|
@@ -58,5 +58,12 @@ TC-10 dùng chiến dịch Console "ARTEMIS TC10 lan 2"; tin lên khay sau 52 gi
 - Tóm tắt từng bước do LLM viết, có thể sai chi tiết nhỏ (đã thấy sai tên bucket và một ký tự UID). Assertion chỉ dựa vào chữ hiển thị ngắn, ổn định.
 - TC-08 chạy trên Storage Emulator, không phải project thật.
 - TC-10 cần người gửi push từ Console trước khi chạy.
-- `runs.jsonl` có các lượt chạy khi đang sửa script (đầu danh sách), giữ nguyên để thấy quá trình; lượt chạy đủ nằm ở cuối, khớp với hai file log.
+- `runs.jsonl` có các lượt chạy khi đang sửa script (đầu danh sách), giữ nguyên để thấy quá trình; lượt đủ tương ứng record 17–23, khớp task IDs trong bảng và hai file log.
 - Dữ liệu chạy có email và UID thật của Charlie.
+
+## Sau review PR #7 — giới hạn bằng chứng
+
+- `runs.jsonl` có thêm 8 task records do Charlie/Claude chạy trước bàn giao (tổng 31). `status=completed` là trạng thái agent, không tự chứng minh assertions pytest pass; chưa có log pytest riêng trong gói này cho cả 8 task. Giữ nguyên raw history.
+- Các assertions được siết theo CR-08..11. Follow-up d41abe0 luôn lấy replay từng bước; final output không được gộp thành một bước để làm assertions, chỉ lưu trong `agent_output`. Record mới có `steps` và `observation_error`. Replay rỗng/lỗi thì test fail, không fallback thành SUCCESS.
+- Codex chưa chạy lại ARTEMIS thật: ADB không thấy thiết bị và daemon không chạy khi tiếp quản. TC-10/11 sau fix và TC-09b cần Console edit vẫn chưa có live evidence mới; ba lượt mỗi ca và exploratory còn thuộc S6.
+- 23/23 kiểm assertions tại `test_support/e2e_review/` là regression độc lập dùng quan sát fixture, không cộng vào 8 case ARTEMIS hoặc pass rate. [Verification](../review/PR7-coderabbit-20261103/README.md).

@@ -2,7 +2,9 @@
 
 Đây là bàn giao nền tảng mobile của cùng Assignment, không tuyên bố toàn bộ các task đã hoàn tất. Lab 3 = Assignment; Figma Lab 2 là tham chiếu đóng băng, UI được cải thiện trong code.
 
-**Đã merge vào `main` theo yêu cầu của leader, sau khi Charlie tự kiểm tra:** [#1 — design system, Firebase Auth và nền tảng PDF/FCM](https://github.com/ruxenb/LongvitaRC/pull/1), [#2 — lưu, mở, chia sẻ PDF](https://github.com/ruxenb/LongvitaRC/pull/2). [#3 — màn Profile và Firebase Demo Area](https://github.com/ruxenb/LongvitaRC/pull/3), [#4 — push thật, Storage trên emulator, Crashlytics, harness ARTEMIS](https://github.com/ruxenb/LongvitaRC/pull/4), [#5 — thông báo khi app đang mở, TalkBack, nháp FCM](https://github.com/ruxenb/LongvitaRC/pull/5) (merge 03/11, `30ca6e3`). Cả năm PR **chưa có review trên GitHub của thành viên khác hay AI**, nên các điểm cần chốt bên dưới vẫn còn mở. CodeRabbit chưa được cài, chờ leader xác nhận; S7-1-CM sẽ chạy AI review trên PR kế tiếp, và PR đó chỉ merge sau khi có output AI review.
+**Snapshot 03/11/2026:** PR #1–#7 đã vào main; base tích hợp gói review là `97cbaa9`. CodeRabbit đã được Thái An cài và review [PR #7](https://github.com/ruxenb/LongvitaRC/pull/7) với 11 góp ý. Gói S7-1/2/3 trên `feature/charlie-review-delivery-01` lưu output, quyết định và các commit sửa; chờ team nghiệm thu, không tự merge PR. [Evidence/verification](../../evidence/review/PR7-coderabbit-20261103/README.md).
+
+**PR bàn giao đang mở:** [#8 — hoàn thiện S7-2/S7-3 và kiểm assertions ARTEMIS](https://github.com/ruxenb/LongvitaRC/pull/8). Các trạng thái S7 dưới đây là của gói PR này, chưa phải main đã merge; giữ mở cho review, không auto-merge.
 
 Thắng, Hoàng và Thái An đã đồng ý các phần của PR #4 chạm vào việc của họ (theo Charlie, 02/11).
 
@@ -10,26 +12,21 @@ Thắng, Hoàng và Thái An đã đồng ý các phần của PR #4 chạm vào
 
 ## Mức hoàn thành công việc
 
-```text
-Toàn dự án   [████████████░░░░░░░░░░░░░░░░░░░░░░░░░░░░]  29%
-Charlie      [███████████████████████████░░░░░░░░░░░░░]  68%
-```
+**29 task: 9 chờ nghiệm thu / 20 đang thực hiện / 0 chưa bắt đầu; 0/29 Accepted chính thức.** Ba task S7 đã được đóng gói để review, không chỉ mới làm ở local.
 
-Code và tích hợp Firebase (18 task, giai đoạn 0–5): **82%**. Test, AI review, báo cáo, nộp bài (11 task, giai đoạn 6–9): **45%**.
-
-Mỗi task chấm theo phần tiêu chí nghiệm thu đã đạt và có bằng chứng. Đây là ước lượng của Charlie, chưa được leader duyệt. Số của Thái An, Thắng, Hoàng lấy từ bảng task (đã xong 100%, đang làm 50%), nên có thể thấp hơn thực tế. Task đã nghiệm thu chính thức: 0/29.
+Các điểm % cũ trong bảng dưới là ước lượng Dev của các phần ngoài S7, giữ để tham khảo; không tính lại thành % toàn dự án khi các owner dùng cách đo khác nhau. S7 dùng trạng thái chờ nghiệm thu. Các bản nháp report/slide/clip/viva được giữ trên GitHub theo lựa chọn Charlie, dù working copies ở máy chính đã được xóa.
 
 <details>
 <summary>Chi tiết 29 task</summary>
 
-| Task | % | Lý do |
+| Task | Ước lượng Dev / trạng thái | Lý do |
 |---|---:|---|
 | S0-3-CM | 95% | Công cụ chạy đủ; còn FlutterFire CLI chưa có trong PATH |
 | S0-4 | 70% | Project, README, 2/3 thành viên; còn Hoàng và DEC-01 |
 | S2-3 | 100% | Đủ theo tiêu chí, chờ nghiệm thu |
 | S2-4 | 100% | Đủ theo tiêu chí, chờ nghiệm thu |
 | S3-1 | 90% | Build, init, Crashlytics đều chạy; còn chốt ghim phiên bản |
-| S3-2 | 25% | 1/4 máy |
+| S3-2 | 55% | SHA của Charlie, An, Thắng đã đăng ký (03/11); còn An, Thắng đăng nhập thử và SHA của Hoàng |
 | S3-3 | 90% | Chạy thật; lỗi mạng và lỗi hồ sơ mới test bằng fake |
 | S3-4 | 95% | Đủ trạng thái; còn chốt layout và ngôn ngữ |
 | S3-5 | 85% | Chạy thật; còn A/B bằng hai tài khoản và Hoàng duyệt A3 |
@@ -45,9 +42,9 @@ Mỗi task chấm theo phần tiêu chí nghiệm thu đã đạt và có bằng
 | S6-4 | 80% | TC-01, TC-01b, TC-11 chạy thật bằng ARTEMIS và pass; còn đủ 3 lượt và lượt chính thức |
 | S6-7 | 75% | TC-08, TC-08b (Storage Emulator), TC-09, TC-10 (push gửi tay) chạy thật và pass; còn đủ 3 lượt, Storage thật |
 | S6-14 | 70% | TC-09 tìm ra lỗi báo sai Remote Config; đã sửa và chạy lại pass; còn lỗi từ lượt chính thức |
-| S7-1-CM | 40% | Đã có PR; còn chạy AI review và lưu output |
-| S7-2-CM | 0% | Chờ output AI review |
-| S7-3-CM | 0% | Chờ finding được chấp nhận |
+| S7-1-CM | Chờ nghiệm thu | CodeRabbit review PR #7 có 11 góp ý; raw JSON, source links và manifest đã nằm trong evidence/review/PR7-coderabbit-20261103/. Chờ team nghiệm thu, không tính PM findings cũ thành AI output. |
+| S7-2-CM | Chờ nghiệm thu | Đã đối chiếu 11 góp ý thật, ghi 8 Accepted/2 Modified/1 Rejected cùng lý do và file:dòng trong docs/code-review.md mục 1.1; chờ nghiệm thu. |
+| S7-3-CM | Chờ nghiệm thu | 8 commit sửa ghi ID được giữ nguyên, có follow-up bc75206/d41abe0; 49/49 kiểm assertions độc lập pass. TC-10/11 native và TC-09b Console chưa chạy lại; các giới hạn nằm ở verification README. Chờ review PR và nghiệm thu. |
 | S8-3 | 75% | Nháp đủ Auth, FCM, Storage (Storage là emulator); còn ảnh Console Storage và gửi Thắng |
 | S8-7 | 40% | Nội dung 3 slide có ảnh bằng chứng; còn dựng theo template chung |
 | S8-12 | 15% | Có kịch bản 6 cảnh; chưa quay |
@@ -60,12 +57,12 @@ Mỗi task chấm theo phần tiêu chí nghiệm thu đã đạt và có bằng
 
 | Trạng thái | Số lượng | IDs |
 |---|---:|---|
-| Có kiểm chứng/evidence, chờ nghiệm thu | 6 | S0-3-CM, S2-3, S2-4, S3-3, S3-4, S3-9 |
-| Đang thực hiện / PR | 21 | S0-4, S3-1, S3-2, S3-5, S3-7, S4-10, S4-11, S4-12, S4-13, S4-14, S4-15, S5-4, S6-4, S6-7, S6-14, S7-1-CM, S8-3, S8-7, S8-12, S8-17-CM, S9-5-CM |
-| Chưa bắt đầu | 2 | S7-2-CM, S7-3-CM |
+| Có kiểm chứng/evidence, chờ nghiệm thu | 9 | S0-3-CM, S2-3, S2-4, S3-3, S3-4, S3-9, S7-1-CM, S7-2-CM, S7-3-CM |
+| Đang thực hiện / PR | 20 | S0-4, S3-1, S3-2, S3-5, S3-7, S4-10, S4-11, S4-12, S4-13, S4-14, S4-15, S5-4, S6-4, S6-7, S6-14, S8-3, S8-7, S8-12, S8-17-CM, S9-5-CM |
+| Chưa bắt đầu | 0 | — |
 | **Tổng** | **29** | |
 
-Chi tiết IDs/owner/dependency tại [task Charlie](task-charlie.md) và [master 112 task](danh-sach-task-full.md). Chưa tự đánh Done thay leader; S7-1 đang thực hiện, chưa có AI PR review output để tính đủ Stage 7. Merge vào `main` không đồng nghĩa task đã được nghiệm thu.
+Chi tiết IDs/owner/dependency tại [task Charlie](task-charlie.md) và [master 112 task](danh-sach-task-full.md). Chưa tự đánh Done thay leader; S7-1/2/3 có output/quyết định/fix links thật và đang chờ nghiệm thu; chưa tuyên bố toàn Stage 7 của nhóm hoàn tất. Merge vào `main` không đồng nghĩa task đã được nghiệm thu.
 
 ## Phần đã bàn giao
 
@@ -78,7 +75,7 @@ Chi tiết IDs/owner/dependency tại [task Charlie](task-charlie.md) và [maste
 - **FCM thật (S4-12, S4-15):** tin từ Console về đủ foreground, background, terminated; bấm tin mở Profile; lịch sử lưu trên máy theo UID. [Bằng chứng](../../evidence/fcm/S4-15-push-20261102/README.md). Tin đến khi app đang mở hiện thanh thông báo trên màn đang xem, nút "Xem" mở hộp thư ([bằng chứng 03/11](../../evidence/fcm/S4-12-foreground-20261103/README.md)). Đây là contract tạm nhóm đã đồng ý.
 - **TalkBack (S4-14):** [chạy thật trên emulator](../../evidence/a11y/S4-14-talkback-20261103/README.md). Sign-in đọc đúng thứ tự, nút nào cũng có tên. Profile đi tuần tự đến hộp thư; phần Remote Config, Crashlytics mới kiểm nhãn.
 - **Crashlytics:** có plugin Gradle, [crash thử đã lên Console](../../evidence/crashlytics/S4-13-test-crash-20261102/README.md). **Thái An cần chốt:** chưa nối `FlutterError.onError` và `PlatformDispatcher.onError` (S5-6), nên lỗi Flutter không bắt được chưa tự lên Crashlytics.
-- **ARTEMIS (S6-4, S6-7):** bỏ `DummyArtemisClient` trả SUCCESS giả, dùng `artemis-client` thật, ghim commit `351ca84`, viết `test_auth.py`, `test_export.py`, `test_profile.py`. **Chưa chạy lần nào:** cần key mô hình (S0-5). Ngày 03/11 đã cài client đúng commit ghim; 7 test được nhận, và khi thiếu daemon cả 7 lỗi ở fixture chứ không pass ([log](../../evidence/artemis/S6-4-setup-20261103/README.md)). **Ngày 03/11 đã chạy thật:** 7/7 test pass trong một lượt đủ, với key Gemini miễn phí của Charlie, Storage Emulator và push gửi tay ([kết quả](../../evidence/artemis/README.md)). Lần chạy tìm ra một lỗi app (Remote Config báo sai) và đã sửa.
+- **ARTEMIS (S6-4, S6-7):** bỏ `DummyArtemisClient` trả SUCCESS giả, dùng `artemis-client` thật, ghim commit `351ca84`, viết `test_auth.py`, `test_export.py`, `test_profile.py`. **Snapshot trước đợt chạy thật:** khi chưa có key S0-5, bộ test chưa chạy được. Ngày 03/11 đã cài client đúng commit ghim; 7 test được nhận, và khi thiếu daemon cả 7 lỗi ở fixture chứ không pass ([log](../../evidence/artemis/S6-4-setup-20261103/README.md)). **Ngày 03/11 đã chạy thật:** 7/7 test pass trong một lượt đủ, với key Gemini miễn phí của Charlie, Storage Emulator và push gửi tay ([kết quả](../../evidence/artemis/README.md)). Lần chạy tìm ra một lỗi app (Remote Config báo sai) và đã sửa.
 - **Profile (S4-13), đã vào `main` qua PR #3:** danh tính, đăng xuất, xuất PDF với tiến độ và URL, hộp thư FCM, giá trị và nút cập nhật Remote Config, crash thử có xác nhận. Có route `/profile`, Home bỏ khối xuất tạm và chỉ còn lối sang Profile, đăng xuất từ Profile có hộp xác nhận theo TC-11. Nút đăng xuất trên Home vẫn không hỏi xác nhận, Hoàng xem có đổi không.
 - **PDF (S4-10), đã vào `main` qua PR #2:** TTF tiếng Việt regular/bold, lưu trên máy trước khi upload, export ID giữ nguyên khi thử lại, mở và chia sẻ qua `IReportViewer`. Mỗi lúc chỉ chạy một export hoặc retry, nên file, URL, tiến độ và trạng thái luôn thuộc cùng một lần xuất. Đăng xuất hủy upload đang chạy và xóa PDF của user đó trên máy, không đụng bản đã lên Storage. Từ PR #4, Home không còn các nút xuất, mở, chia sẻ, thử lại; mọi thao tác PDF nằm ở Profile. Chưa chứng minh đúng plan đang xem vì chờ S4-3.
 
@@ -138,4 +135,8 @@ Thắng, Hoàng, Thái An đã đồng ý dùng tạm (theo Charlie, 02/11): m�
 | Gửi theo token từng user hay topic chung; có lưu token theo UID, xóa khi đăng xuất không | Thái An, Thắng |
 | Tin **không có** `recipient_uid` hiện đến người đăng nhập kế tiếp: có chấp nhận không | Thái An, Thắng |
 
-Tiếp theo: S4-10 với active plan khi có S4-3, S4-12 routing/history/token/push thật khi có contract, S4-13 gỡ khối tạm trên Home cùng Hoàng, S3-7/S4-11 khi DEC-01 rõ. Giữ nguyên ba fix regression đã xác nhận và các task owners.
+Tiếp theo: S4-10 với active plan khi có S4-3, S4-12 theo contract FCM cuối, S4-13 kiểm chứng upload và Remote Config Console, S3-7/S4-11 khi DEC-01 rõ. Home đã chuyển phần PDF sang Profile từ PR #4. Giữ nguyên các fix regression đã xác nhận và các task owners.
+
+## Gói review bàn giao 03/11 — S7-2/S7-3
+
+Codex tiếp quản từ Claude theo yêu cầu Charlie. Giữ 8 commit fix ghi ID và các follow-up; tích hợp main 97cbaa9. `docs/code-review.md` ghi đủ 11 quyết định; raw JSON khớp GitHub PR #7. Kiểm assertions riêng 49/49 pass, không cộng vào ARTEMIS. ADB không có thiết bị, daemon không chạy khi tiếp quản nên không báo TC-10/11 hoặc RC-09b native đã pass. Xem [verification](../../evidence/review/PR7-coderabbit-20261103/README.md); các lượt đủ/3-run vẫn thuộc S6.

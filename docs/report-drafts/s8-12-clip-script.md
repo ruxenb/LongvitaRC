@@ -6,7 +6,8 @@
 
 - **Màn hình thiết bị:** `adb shell screenrecord --time-limit 180 /sdcard/<cảnh>.mp4`, mỗi cảnh một file (giới hạn 3 phút một file), rồi `adb pull`. Claude chạy phần này.
 - **Màn hình Console:** quay bằng công cụ quay màn hình trên máy của Charlie, hoặc dùng ảnh chụp Console đã có trong `evidence/` nếu không quay được.
-- **Lời nói:** Charlie đọc khi dựng, theo phần "Nói" của từng cảnh. Không đọc email hay UID; nếu nhóm muốn che thông tin cá nhân thì làm mờ khi dựng.
+- **Lời nói:** Charlie đọc khi dựng, theo phần "Nói" của từng cảnh. Không đọc email hay UID thành tiếng.
+- **Che thông tin cá nhân (bắt buộc):** làm mờ mọi email và UID trong mọi khung hình Console và mọi ảnh đưa vào clip trước khi chia sẻ, kể cả tab Authentication → Users ở cảnh 1.
 
 ## Cảnh
 
@@ -22,7 +23,7 @@
 ## Cần chuẩn bị
 
 - Charlie đăng nhập trên emulator khi quay cảnh 1 (Claude không nhập mật khẩu).
-- Bốn chiến dịch Console cho cảnh 2 đến 4, gửi trước khoảng 2 phút cho mỗi cảnh.
+- Ba chiến dịch Console, mỗi cảnh 2, 3, 4 một chiến dịch, gửi trước khoảng 2 phút cho mỗi cảnh.
 - Cảnh 5: chờ DEC-01, hoặc nhóm đồng ý quay trên Storage Emulator có ghi chú rõ. Nếu cả hai đều không được thì bỏ cảnh 5 và ghi giới hạn này vào báo cáo.
 - Ảnh dự phòng cho phần Console: `evidence/auth/S3-9-20261102/console-auth-users.jpg`, `evidence/fcm/S4-15-push-20261102/00-console-campaigns.jpg`, `evidence/fcm/S4-12-foreground-20261103/00-console-campaigns.jpg`.
 
