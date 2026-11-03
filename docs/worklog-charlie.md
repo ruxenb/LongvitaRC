@@ -142,3 +142,12 @@ Task S8-17-CM. Ghi theo commit và evidence thật, cập nhật dần. Trạng 
 - **Lỗi app tìm được:** TC-09 cho thấy mỗi lần bấm "Cập nhật Remote Config" đều báo "Đã áp dụng giá trị mới." dù không đổi gì. SDK coi mọi lần fetch mới là đã kích hoạt; ViewModel giờ so giá trị trước và sau (`fd0951c`), có widget test.
 - **Kết quả:** một lượt đủ 7/7 pass. TC-08 kiểm thêm file trên Storage Emulator bằng URL đọc từ màn hình (18.955 byte, `%PDF-1.5`).
 - **Còn vướng:** mới một lượt đủ; chưa có lượt chính thức S6-9; TC-08 chưa trên Storage thật; TC-10 cần gửi push tay.
+
+### Bàn giao gói S7-2/S7-3 — Codex tiếp quản 03/11/2026
+
+- Theo yêu cầu Charlie, giữ nguyên các commit/tác giả của Claude và tích hợp main 97cbaa9 vào nhánh feature/charlie-review-delivery-01. Giữ bản nháp trên GitHub, không khôi phục các file Charlie xóa ở working tree chính.
+- Lưu 11 inline comments/review/summary thật của CodeRabbit PR #7; đối chiếu 8 Accepted, 2 Modified, 1 Rejected. Ghi link source và fix commit trong docs/code-review.md. Không tính template EX-xx.
+- Follow-up d41abe0 (PR7-CR-08): phát hiện final output vẫn bị gộp thành một bước; chuyển sang replay từng bước và fail khi thiếu replay. Probe trước sửa fail đúng lỗi; sau sửa bộ kiểm assertions độc lập 23/23 pass.
+- Không có thiết bị ADB hoặc daemon ARTEMIS khi tiếp quản; không chạy model, không báo native re-run/RC Console đã xong. Giữ nguyên 31 raw task records và tách khỏi pytest pass rate.
+- S7-1/2/3 chuyển Chờ nghiệm thu; Charlie 9 chờ nghiệm thu / 20 đang làm / 0 chưa bắt đầu, Accepted vẫn 0/29. Không tự tăng % dự án.
+- Verification, hashes, lệnh tái hiện và giới hạn: evidence/review/PR7-coderabbit-20261103/README.md.
