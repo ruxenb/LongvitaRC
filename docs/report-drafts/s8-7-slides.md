@@ -13,7 +13,7 @@
 - Hủy chọn tài khoản là thông báo thông tin, không phải lỗi.
 - Đăng xuất: xóa dữ liệu phiên, gỡ user ID khỏi Analytics và Crashlytics, xóa màn đã mở.
 - Kết quả về muộn sau khi đổi phiên bị bỏ qua (`SessionEpoch`).
-- Firestore rules: chỉ chủ tài khoản đọc hồ sơ, không tự đổi role. 41/41 test trên emulator.
+- Firestore rules: người dùng đọc hồ sơ của mình; staff/admin được đọc theo quyền. Người dùng không tự nâng role. 41/41 test trên emulator.
 
 **Ảnh:** `evidence/auth/S3-9-20261102/signed-in.png` cạnh `evidence/auth/S3-9-20261102/console-auth-users.jpg`.
 
@@ -23,12 +23,12 @@
 
 ## Slide 2 — Firebase Cloud Messaging
 
-**Thông điệp:** Tin gửi từ Console đến được ở cả ba trạng thái app, không trùng, và không lộ sang phiên sau.
+**Thông điệp:** Tin từ Console đến ở ba trạng thái app và được chống trùng; tin có `recipient_uid` được lọc theo người đăng nhập.
 
 **Nội dung trên slide:**
 - Foreground: thanh thông báo trên màn đang xem, nút "Xem" mở hộp thư.
 - Background, terminated: tin trên khay hệ thống, bấm mở Profile.
-- Một tin qua nhiều callback chỉ có một mục; tin có `recipient_uid` của người khác bị loại. Tin không có `recipient_uid` hiện cho người đang đăng nhập (contract tạm, nhóm chưa chốt).
+- Một tin qua nhiều callback chỉ có một mục; tin có `recipient_uid` của người khác bị loại. Broadcast không có `recipient_uid` có thể được giữ khi chưa đăng nhập và xuất hiện ở phiên kế tiếp theo contract tạm; chưa có cam kết cô lập theo người nhận cho loại tin này.
 - Lịch sử lưu trên máy theo UID, còn sau khi khởi động lại.
 - Đăng xuất: thông báo của phiên cũ biến mất, nút "Xem" cũ vô hiệu (PM-FCM-02).
 
