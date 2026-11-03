@@ -48,7 +48,8 @@ async def test_tc08b_saved_pdf_opens_in_the_native_viewer(run_case):
     output = await run_case(
         "Open the Longvita app signed in. Create a meal plan with 'Tạo thực đơn mẫu ngay' "
         "if none exists, open 'Hồ sơ', and tap 'Xuất báo cáo PDF'. When it finishes tap "
-        "'Mở PDF đã lưu'.",
+        "'Mở PDF đã lưu'. When the system screen opens, read its title and the heading "
+        "printed at the top of the PDF page shown in it.",
         "The name of the system screen that opened, and any heading readable in the PDF.",
     )
 

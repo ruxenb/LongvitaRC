@@ -90,8 +90,17 @@ def screen_texts() -> list[str]:
     """Every text and label on the device screen now, read with uiautomator.
 
     For values the agent's summary may shorten or misread, such as a long URL.
+    ARTEMIS keeps its own UIAutomator session open for a few seconds after a
+    task, and a dump made meanwhile is killed, so it is retried for a while.
     """
-    _adb("shell", "uiautomator", "dump", "/sdcard/artemis-screen.xml")
+    for attempt in range(10):
+        try:
+            _adb("shell", "uiautomator", "dump", "/sdcard/artemis-screen.xml")
+            break
+        except subprocess.CalledProcessError:
+            if attempt == 9:
+                raise
+            time.sleep(2)
     xml = _adb("exec-out", "cat", "/sdcard/artemis-screen.xml").stdout.decode("utf-8")
     values = re.findall(r'(?:text|content-desc)="([^"]+)"', xml)
     return [html.unescape(v) for v in values]

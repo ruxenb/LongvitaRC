@@ -8,8 +8,10 @@ from conftest import screen_texts
 REFRESH_GOAL = (
     "Open the Longvita app signed in and open 'Hồ sơ'. Scroll to 'Remote Config', read "
     "the value of 'Số món gợi ý tối đa', and tap 'Cập nhật Remote Config' once. "
-    "Within 2 seconds, read the message in the dark bar that appears at the bottom "
-    "of the screen, then read the value again."
+    "When the update finishes, a dark message bar shows at the bottom of the screen "
+    "for about 4 seconds. Wait 1 second and look at the bottom of the screen; if no "
+    "bar is there yet, wait 1 more second and look again, up to 3 times. Read the "
+    "bar's message, then read the value again."
 )
 REFRESH_EXPECTED = "The value before, the message shown, and the value after."
 
