@@ -86,6 +86,7 @@ class NotificationService {
   /// Saves run one after another, so an older inbox never overwrites a newer.
   Future<void> _lastSave = Future.value();
   NotificationPermission _permission = NotificationPermission.unknown;
+  AppNotification? _arrival;
 
   /// Called when [inbox] gains an entry or [permission] is resolved.
   void Function()? onChanged;
@@ -165,7 +166,10 @@ class NotificationService {
 
   /// Empties the in-app inbox on sign-out. The saved history stays for the same
   /// user, and a next user only ever loads their own.
-  void clearHistory() => _inbox.clear();
+  void clearHistory() {
+    _inbox.clear();
+    _arrival = null;
+  }
 
   /// Completes when every save requested so far has finished.
   @visibleForTesting
@@ -178,6 +182,14 @@ class NotificationService {
   /// True once after a message was tapped. Under the temporary contract every
   /// tap opens the notification center, whatever its target.
   bool takeOpenRequest() => _inbox.takeOpenRequest();
+
+  /// The latest message that reached the inbox while the app was open, once.
+  /// Android shows no system notification then, so the app must show it.
+  AppNotification? takeArrival() {
+    final arrival = _arrival;
+    _arrival = null;
+    return arrival;
+  }
 
   Future<String?> getToken() async {
     try {
@@ -193,6 +205,7 @@ class NotificationService {
     final added = _inbox.receive(notification, tapped: tapped);
     final uid = _inbox.boundUid;
     if (added && uid != null) unawaited(_save(uid));
+    if (added && !tapped) _arrival = notification;
     // A tap on a message already in the inbox adds nothing but must still open.
     if (added || tapped) onChanged?.call();
   }

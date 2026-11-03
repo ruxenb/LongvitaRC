@@ -299,6 +299,57 @@ void main() {
       expect(find.byType(ProfileScreen), findsNothing);
     });
 
+    testWidgets('a message received on Home shows there and View opens it',
+        (tester) async {
+      final h = await pumpGate(tester);
+
+      h.gateway.foreground.add(push('m1', title: 'Tin mới'));
+      await settle(tester);
+      await tester.pump();
+
+      expect(find.text('Thông báo mới: Tin mới'), findsOneWidget);
+      expect(find.byType(ProfileScreen), findsNothing);
+
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Xem'));
+      await tester.pumpAndSettle();
+      expect(find.byType(ProfileScreen), findsOneWidget);
+      expect(find.text('Tin mới'), findsOneWidget);
+    });
+
+    testWidgets('a message received on another screen shows there',
+        (tester) async {
+      final h = await pumpGate(tester);
+      final navigator = tester.state<NavigatorState>(find.byType(Navigator));
+      unawaited(navigator.push(MaterialPageRoute<void>(
+        builder: (_) => const Scaffold(body: Text('Màn khác')),
+      )));
+      await tester.pumpAndSettle();
+
+      h.gateway.foreground.add(push('m1', body: 'Nội dung'));
+      await settle(tester);
+      await tester.pump();
+
+      expect(find.text('Màn khác'), findsOneWidget);
+      expect(find.text('Thông báo mới: Nội dung'), findsOneWidget);
+    });
+
+    testWidgets('a repeated message shows nothing new', (tester) async {
+      final h = await pumpGate(tester);
+      h.gateway.foreground.add(push('m1', title: 'Tin mới'));
+      await settle(tester);
+      await tester.pump();
+      ScaffoldMessenger.of(tester.element(find.byType(HomeScreen)))
+          .removeCurrentSnackBar();
+      await tester.pumpAndSettle();
+
+      h.gateway.foreground.add(push('m1', title: 'Tin mới'));
+      await settle(tester);
+      await tester.pump();
+
+      expect(find.text('Thông báo mới: Tin mới'), findsNothing);
+    });
+
     testWidgets('a message already in the inbox still opens, once',
         (tester) async {
       final h = await pumpGate(tester);

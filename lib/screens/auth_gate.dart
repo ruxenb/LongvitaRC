@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../models/auth_state.dart';
 import '../viewmodels/auth_viewmodel.dart';
 import '../viewmodels/profile_viewmodel.dart';
+import '../widgets/app_supporting.dart';
 import '../widgets/state_views.dart';
 import '../theme/app_spacing.dart';
 import 'auth_recovery_screen.dart';
@@ -32,24 +33,48 @@ class _AuthGateState extends State<AuthGate> {
     super.initState();
     _profile = context.read<ProfileViewModel>();
     _profile.addListener(_openTappedNotification);
+    _profile.addListener(_showArrivedNotification);
   }
 
   @override
   void dispose() {
     _profile.removeListener(_openTappedNotification);
+    _profile.removeListener(_showArrivedNotification);
     super.dispose();
   }
+
+  bool get _signedIn => context.read<AuthViewModel>().state is AuthSignedIn;
 
   /// A tap waits here until someone is signed in. Temporary contract: every
   /// tap opens the notification center on Profile (owners agreed 02/11/2026).
   void _openTappedNotification() {
-    if (!mounted || context.read<AuthViewModel>().state is! AuthSignedIn) return;
+    if (!mounted || !_signedIn) return;
     if (!_profile.takeNotificationOpenRequest()) return;
+    WidgetsBinding.instance.addPostFrameCallback((_) => _openProfile());
+  }
+
+  /// A message received while the app is open shows on whatever screen is in
+  /// front, since Android puts nothing in the notification shade then.
+  void _showArrivedNotification() {
+    if (!mounted || !_signedIn) return;
+    final arrival = _profile.takeArrivedNotification();
+    if (arrival == null) return;
+    final text = arrival.title ?? arrival.body;
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!mounted) return;
-      Navigator.of(context).pushNamedAndRemoveUntil(
-          ProfileScreen.routeName, (route) => route.isFirst);
+      showAppSnackBar(
+        context,
+        message: text == null ? 'Có thông báo mới.' : 'Thông báo mới: $text',
+        actionLabel: 'Xem',
+        onAction: _openProfile,
+      );
     });
+  }
+
+  void _openProfile() {
+    if (!mounted) return;
+    Navigator.of(context)
+        .pushNamedAndRemoveUntil(ProfileScreen.routeName, (route) => route.isFirst);
   }
 
   @override
