@@ -1,6 +1,6 @@
 # Nháp báo cáo S8-3 — Firebase Cloud Messaging
 
-> Bản nháp của Charlie, gửi Thắng ghép ở S8-5. Viết từ bằng chứng push thật ngày 02/11/2026 (S4-15). Nhóm đã đồng ý dùng contract tạm cho đích và lịch sử thông báo; khi có contract chính thức thì phần 2 và 7 cần sửa theo.
+> Bản nháp của Charlie, gửi Thắng ghép ở S8-5. Viết từ bằng chứng push thật ngày 02/11 và 03/11/2026 (S4-15, S4-12). Nhóm đã đồng ý dùng contract tạm cho đích và lịch sử thông báo; khi có contract chính thức thì phần 2 và 7 cần sửa theo.
 
 ## 1. Vai trò trong ứng dụng
 
@@ -38,7 +38,7 @@ Giao diện không gọi Firebase SDK trực tiếp. SDK nằm sau `FcmGateway`,
 
 ## 4. Kiểm thử
 
-- **Chạy thật trên emulator** với tin gửi từ Firebase Console: nhận tin ở foreground, background và terminated; bấm tin mở Profile; lịch sử còn sau khi khởi động lại.
+- **Chạy thật trên emulator** với tin gửi từ Firebase Console: nhận tin ở foreground, background và terminated; bấm tin mở Profile; lịch sử còn sau khi khởi động lại; tin đến khi đang ở Home hiện thanh thông báo, bấm "Xem" mở hộp thư.
 - **Kiểm tra tự động:** `test/fcm/` phủ phân tích payload, chống trùng, hộp thư theo user, lịch sử và tin chờ từ nền. `test/profile/` phủ việc bấm tin mở Profile và thanh thông báo khi app đang mở.
 
 ## 5. Bằng chứng
@@ -51,7 +51,13 @@ Thư mục `evidence/fcm/S4-15-push-20261102/`:
 - `06-history-after-restart.png`: lịch sử còn sau khi khởi động lại.
 - `07`, `08`: bấm tin mở thẳng Profile.
 
-Tin đến sau khoảng 45 giây đến 2 phút kể từ khi phát hành chiến dịch.
+Thư mục `evidence/fcm/S4-12-foreground-20261103/`:
+
+- `01`, `02`: tin đến khi đang ở Home, hiện "Thông báo mới: …" kèm nút "Xem".
+- `03`: bấm "Xem" mở Profile.
+- `04`: hộp thư có cả tin mới lẫn tin của ngày trước.
+
+Tin đến sau khoảng 45 giây đến 2,5 phút kể từ khi phát hành chiến dịch.
 
 ## 6. Giới hạn
 

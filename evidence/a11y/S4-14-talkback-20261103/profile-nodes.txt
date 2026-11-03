@@ -1,0 +1,23 @@
+'Quay lại' | Button click=true enabled=true
+'Hồ sơ' | View click=false enabled=true
+'Pham Van Minh (K18 HCM) / minhpvse183365@fpt.edu.vn' | View click=false enabled=true
+'Vai trò: user' | View click=false enabled=true
+'Đăng xuất' | Button click=true enabled=true
+'Firebase Demo Area' | View click=false enabled=true
+'Báo cáo PDF / Chưa có thực đơn để xuất. Hãy tạo thực đơn trước.' | View click=false enabled=true
+'Xuất báo cáo PDF' | Button click=false enabled=false
+'Thông báo / Tin nhắn đã nhận, lưu trên máy này theo từng tài khoản.' | View click=false enabled=true
+'Longvita thử nút Xem / Bấm Xem trên thanh thông báo để mở Hồ sơ' | View click=false enabled=true
+'Longvita thử snackbar / Tin thử S4-12 khi app đang mở ở Home' | View click=false enabled=true
+'Longvita mở Profile tắt / Bấm tin này khi app đã tắt' | View click=false enabled=true
+'Longvita mở Profile nền / Bấm tin này khi app chạy nền' | View click=false enabled=true
+'Longvita thử terminated / Tin thử S4-15 khi app đã tắt' | View click=false enabled=true
+'Longvita thử background / Tin thử S4-15 khi app chạy nền' | View click=false enabled=true
+'Longvita thử foreground / Tin thử S4-15 khi app đang mở' | View click=false enabled=true
+'Remote Config / Giá trị đang áp dụng trong ứng dụng.' | View click=false enabled=true
+'Số món gợi ý tối đa: 5' | View click=false enabled=true
+'Điểm trường thọ: Bật' | View click=false enabled=true
+'Banner: Chào mừng đến với Longvita - Dinh dưỡng trường thọ theo TS. Valter Longo' | View click=false enabled=true
+'Cập nhật Remote Config' | Button click=true enabled=true
+'Crashlytics / Gây một lỗi thử để kiểm tra báo cáo trên Console.' | View click=false enabled=true
+'Gây crash thử' | Button click=true enabled=true

@@ -1,4 +1,4 @@
-# Charlie — bàn giao kỹ thuật cho team, 02/11/2026
+# Charlie — bàn giao kỹ thuật cho team, 03/11/2026
 
 Đây là bàn giao nền tảng mobile của cùng Assignment, không tuyên bố toàn bộ các task đã hoàn tất. Lab 3 = Assignment; Figma Lab 2 là tham chiếu đóng băng, UI được cải thiện trong code.
 
@@ -6,14 +6,16 @@
 
 Thắng, Hoàng và Thái An đã đồng ý các phần của PR #4 chạm vào việc của họ (theo Charlie, 02/11).
 
+**Đợt 03/11, trên nhánh `feature/charlie-fcm-feedback-01`, PR sẽ được giữ mở cho AI review:** tin đến khi app đang mở hiện thanh thông báo có nút "Xem" (S4-12), TalkBack thật (S4-14), nháp báo cáo FCM (S8-3). Analyzer sạch, 257/257 tests.
+
 ## Mức hoàn thành công việc
 
 ```text
 Toàn dự án   [███████████░░░░░░░░░░░░░░░░░░░░░░░░░░░░░]  27%
-Charlie      [███████████████████████░░░░░░░░░░░░░░░░░]  58%
+Charlie      [████████████████████████░░░░░░░░░░░░░░░░]  59%
 ```
 
-Code và tích hợp Firebase (18 task, giai đoạn 0–5): **81%**. Test, AI review, báo cáo, nộp bài (11 task, giai đoạn 6–9): **20%**.
+Code và tích hợp Firebase (18 task, giai đoạn 0–5): **82%**. Test, AI review, báo cáo, nộp bài (11 task, giai đoạn 6–9): **22%**.
 
 Mỗi task chấm theo phần tiêu chí nghiệm thu đã đạt và có bằng chứng. Đây là ước lượng của Charlie, chưa được leader duyệt. Số của Thái An, Thắng, Hoàng lấy từ bảng task (đã xong 100%, đang làm 50%), nên có thể thấp hơn thực tế. Task đã nghiệm thu chính thức: 0/29.
 
@@ -35,9 +37,9 @@ Mỗi task chấm theo phần tiêu chí nghiệm thu đã đạt và có bằng
 | S3-9 | 100% | Đủ theo tiêu chí, chờ nghiệm thu |
 | S4-10 | 80% | PDF, lưu, mở, chia sẻ xong; còn thực đơn thật từ S4-3 |
 | S4-11 | 85% | Đủ các ca trên emulator; còn upload lên project thật |
-| S4-12 | 85% | Push thật 3 trạng thái, lịch sử, bấm mở màn; còn token theo user, route theo đích |
+| S4-12 | 90% | Push thật 3 trạng thái, lịch sử, bấm mở màn, thanh thông báo khi app đang mở; còn token theo user, route theo đích |
 | S4-13 | 90% | Đủ khu vực; còn upload thật và đổi Remote Config từ Console |
-| S4-14 | 75% | Nhãn đủ, kiểm bằng widget test; còn TalkBack thật |
+| S4-14 | 85% | TalkBack thật: Sign-in đi hết, Profile phần lớn; còn phần cuối Profile và máy thật |
 | S4-15 | 50% | FCM đủ; Storage trên Console chờ DEC-01 |
 | S5-4 | 80% | login, logout đã thấy trên DebugView; còn export_report thật |
 | S6-4 | 40% | Script đã viết; chưa chạy, cần key và 3 lần chạy |
@@ -46,7 +48,7 @@ Mỗi task chấm theo phần tiêu chí nghiệm thu đã đạt và có bằng
 | S7-1-CM | 40% | Đã có PR; còn chạy AI review và lưu output |
 | S7-2-CM | 0% | Chờ output AI review |
 | S7-3-CM | 0% | Chờ finding được chấp nhận |
-| S8-3 | 35% | Xong phần Auth; bằng chứng FCM đã có, chưa viết FCM và Storage |
+| S8-3 | 55% | Xong nháp Auth và FCM; còn Storage |
 | S8-7 | 0% | Chưa soạn |
 | S8-12 | 0% | Chưa quay; bằng chứng Auth và push đã sẵn |
 | S8-17-CM | 70% | Đã ghi theo từng đợt; cập nhật đến khi chốt |
@@ -73,7 +75,8 @@ Chi tiết IDs/owner/dependency tại [task Charlie](task-charlie.md) và [maste
 - **Analytics:** callers theo API mới của Thái An. Export params lấy từ PDF bytes thực. Chưa có eating window thật thì không gửi generate event; Hoàng nối dữ liệu S02, không điền số giả. `login` (`method=google`) và `logout` đã thấy trên [DebugView](../../evidence/analytics/S5-4-debugview-20261102/README.md), mỗi lần thao tác một event; `export_report` chưa kiểm thật vì chờ DEC-01.
 - **FCM preparation:** gateway và 4 callback, parser, inbox/dedup theo phiên. Payload gốc đi cùng entry đã chấp nhận; first accepted message thắng trong một phiên, tap duplicate dùng target đã chấp nhận. Chưa phải live FCM hoàn chỉnh.
 - **Storage (S3-7, S4-11):** lỗi có kiểu (mất mạng, bị từ chối, chưa cấu hình, hết dung lượng), hủy thật, thử lại cùng ID. Rules owner-only có 14 test. Upload thành công bằng SDK thật **trên Storage Emulator**, [bằng chứng](../../evidence/storage/S4-11-emulator-20261102/README.md). Chưa deploy và chưa có file trên project thật vì DEC-01.
-- **FCM thật (S4-12, S4-15):** tin từ Console về đủ foreground, background, terminated; bấm tin mở Profile; lịch sử lưu trên máy theo UID. [Bằng chứng](../../evidence/fcm/S4-15-push-20261102/README.md). Đây là contract tạm nhóm đã đồng ý.
+- **FCM thật (S4-12, S4-15):** tin từ Console về đủ foreground, background, terminated; bấm tin mở Profile; lịch sử lưu trên máy theo UID. [Bằng chứng](../../evidence/fcm/S4-15-push-20261102/README.md). Tin đến khi app đang mở hiện thanh thông báo trên màn đang xem, nút "Xem" mở hộp thư ([bằng chứng 03/11](../../evidence/fcm/S4-12-foreground-20261103/README.md)). Đây là contract tạm nhóm đã đồng ý.
+- **TalkBack (S4-14):** [chạy thật trên emulator](../../evidence/a11y/S4-14-talkback-20261103/README.md). Sign-in đọc đúng thứ tự, nút nào cũng có tên. Profile đi tuần tự đến hộp thư; phần Remote Config, Crashlytics mới kiểm nhãn.
 - **Crashlytics:** có plugin Gradle, [crash thử đã lên Console](../../evidence/crashlytics/S4-13-test-crash-20261102/README.md). **Thái An cần chốt:** chưa nối `FlutterError.onError` và `PlatformDispatcher.onError` (S5-6), nên lỗi Flutter không bắt được chưa tự lên Crashlytics.
 - **ARTEMIS (S6-4, S6-7):** bỏ `DummyArtemisClient` trả SUCCESS giả, dùng `artemis-client` thật, ghim commit `351ca84`, viết `test_auth.py`, `test_export.py`, `test_profile.py`. **Chưa chạy lần nào:** cần key mô hình (S0-5). Thiếu SDK hoặc daemon thì test fail.
 - **Profile (S4-13), đã vào `main` qua PR #3:** danh tính, đăng xuất, xuất PDF với tiến độ và URL, hộp thư FCM, giá trị và nút cập nhật Remote Config, crash thử có xác nhận. Có route `/profile`, Home bỏ khối xuất tạm và chỉ còn lối sang Profile, đăng xuất từ Profile có hộp xác nhận theo TC-11. Nút đăng xuất trên Home vẫn không hỏi xác nhận, Hoàng xem có đổi không.
