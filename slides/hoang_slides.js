@@ -191,7 +191,7 @@ function pill(slide,text,x,y,w,fill=C.light){
   ],7.08,2.72,5.20,1.70,12.2);
   rect(s,0.55,4.94,5.96,1.42,C.white);
   heading(s,'ĐÃ CÓ BẰNG CHỨNG',0.85,5.16,5.25);
-  txt(s,'305/305 Flutter tests • 6/6 A11y widget tests\n360/412dp • scale 1x/2x • flutter analyze sạch',
+  txt(s,'305/305 Flutter • 22/22 Firestore Rules\n360/412dp • scale 1x/2x • analyzer sạch',
       0.86,5.62,5.20,0.48,{fontSize:13,bold:true});
   rect(s,6.77,4.94,5.99,1.42,C.white);
   heading(s,'CÒN CHỜ XÁC MINH',7.08,5.16,5.2);

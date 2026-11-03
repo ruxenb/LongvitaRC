@@ -41,6 +41,7 @@ Figma Page 03/06 được nhóm giữ làm baseline đóng băng theo quyết đ
 - Toàn bộ Flutter tests: 305/305 pass sau khi thêm 6 widget tests và bugfix cô lập phiên.
 - Unit tests Hoàng: 8/8 pass ban đầu, sau thêm HOANG-F02 thành 9/9 pass.
 - A11y & responsive widget tests bổ sung: 6/6 pass.
+- Firestore Emulator rules tests trên project demo-longvita: **22/22 pass**, kiểm tra quyền owner/staff, ngăn truy cập khác UID, bảo vệ trạng thái bản nháp; chưa deploy lên Firebase thật.
 - Mẫu kiểm tra thực tế: mất mạng -> Error/Retry; Firestore trống -> Empty; lưu lỗi -> giữ nguyên plan; thay món lỗi -> giữ món; số lượng âm -> dialog validation; Undo; checkbox bền vững trong fake service; cô lập phiên.
 
 Kiểm thử trên fake service không xác nhận dữ liệu Firebase production, Google Account Picker, hay khả năng điều khiển ARTEMIS trên emulator.

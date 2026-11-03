@@ -28,7 +28,7 @@ The model MealPlanModel defaults to status=draft. Saved plans contain seven Dail
 
 ## Security notes
 - firebase/firestore.rules includes owner-only access for shopping lists and a max item count of 500. It checks top-level document shape, not every individual nested ingredient field. This requires additional rule tests/review.
-- Rules have NOT been deployed to the shared Firebase project. Deployment requires team review.
+- Rules have NOT been deployed to the shared Firebase project. Deployment requires team review. Local Firestore Emulator security-rules tests passed 22/22 on 2026-11-04 (test/firestore/hoang_rules.test.cjs); see docs/hoang-firestore-rules-test.md.
 - Recipe records and citations must be reviewed before being loaded to Firestore; no production data was seeded in this work.
 - Data timestamps are ISO-8601 strings in current rules and models; changing to server timestamps requires coordinated migration.
 - Nutrition recommendations are illustrative estimates; they do not substitute professional medical advice.
