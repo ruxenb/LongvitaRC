@@ -58,6 +58,7 @@ __pycache__/
 venv/
 env/
 .uv/
+.uv-cache/
 
 # Firebase rules tests
 /firebase/node_modules/
