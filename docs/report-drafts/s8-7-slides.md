@@ -23,12 +23,12 @@
 
 ## Slide 2 — Firebase Cloud Messaging
 
-**Thông điệp:** Tin gửi từ Console đến được ở cả ba trạng thái app, đúng người, không trùng, và không lộ sang phiên sau.
+**Thông điệp:** Tin gửi từ Console đến được ở cả ba trạng thái app, không trùng, và không lộ sang phiên sau.
 
 **Nội dung trên slide:**
 - Foreground: thanh thông báo trên màn đang xem, nút "Xem" mở hộp thư.
 - Background, terminated: tin trên khay hệ thống, bấm mở Profile.
-- Một tin qua nhiều callback chỉ có một mục; tin của người khác bị loại.
+- Một tin qua nhiều callback chỉ có một mục; tin có `recipient_uid` của người khác bị loại. Tin không có `recipient_uid` hiện cho người đang đăng nhập (contract tạm, nhóm chưa chốt).
 - Lịch sử lưu trên máy theo UID, còn sau khi khởi động lại.
 - Đăng xuất: thông báo của phiên cũ biến mất, nút "Xem" cũ vô hiệu (PM-FCM-02).
 
