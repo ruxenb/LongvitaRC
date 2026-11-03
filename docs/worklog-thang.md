@@ -1,19 +1,34 @@
 # Worklog — Thắng VLQ
 
 > **Vai trò:** Technical Architect & Co-Lead  
-> **Ngày cập nhật:** 02/11/2026  
-> **Nhánh kiểm tra:** `main`  
+> **Ngày cập nhật:** 03/11/2026
+> **Nhánh kiểm tra:** `Thang` (base gồm nội dung PR #6)
 > **Mục đích:** Ghi bằng chứng hoàn thành, phần còn thiếu, lỗi đã phát hiện và điều kiện tiếp tục cho các task do Thắng phụ trách.
 
 ## 1. Tóm tắt trạng thái
 
 - Tổng số task của Thắng: **28**.
-- Đã hoàn thành và có bằng chứng: **5/28 (18%)**.
-- Đang làm: **S3-6**.
-- Bị chặn bởi môi trường máy: **S0-3-VLQ**.
+- Đã hoàn thành và có bằng chứng: **6/28 (21%)**.
+- Đang làm: **S3-6, S5-10, S8-17-VLQ, S9-1, S9-4**.
+- **S0-3-VLQ đã hoàn thành**: Android toolchain/emulator không còn là blocker.
 - Các task test/review/report/nộp bài chưa hoàn thành vì còn phụ thuộc tính năng, Firebase runtime, bằng chứng ARTEMIS hoặc sản phẩm của thành viên khác.
 
 ## 2. Task đã hoàn thành
+
+### S0-3-VLQ — Toolchain Android trên máy Thắng
+
+Kiểm chứng ngày 03/11/2026:
+
+- Flutter `3.47.9`, Dart `3.13.7`, Java 21.
+- Android SDK API 34/35/36, Build Tools, Platform Tools/ADB, NDK, CMake và
+  emulator cài trên ổ `T:`.
+- AVD `Longvita_API_36` boot thành công; `flutter devices` nhận Android API 36.
+- `flutter doctor -v`: **No issues found**, licenses đã chấp nhận.
+- `flutter build apk --debug`: thành công; APK được cài và app chạy trên AVD.
+- Firebase CLI `15.34.2`, FlutterFire CLI `1.4.1`, Python `3.12.16`, uv và
+  ARTEMIS client đều hoạt động; `pytest --collect-only` nhận 7 test.
+- Debug certificate của máy Thắng đã lấy SHA-1/SHA-256; đang chờ owner thêm
+  fingerprint vào Firebase để kiểm Google Sign-In runtime bằng certificate này.
 
 ### S0-6 — Kết nối đầu vào Lab 2
 
@@ -49,37 +64,54 @@ Kiểm chứng ngày 02/11/2026:
 
 ## 3. Task đang làm hoặc bị chặn
 
-### S0-3-VLQ — Bị chặn bởi Android toolchain
-
-Kết quả `flutter doctor -v` ngày 02/11/2026:
-
-- Flutter stable `3.47.9`, Dart `3.13.7`, Windows, Chrome và Visual Studio: đạt.
-- Android SDK: **không được tìm thấy**.
-- ADB/Android emulator hoặc Android device: **chưa có**.
-
-Cần cài Android SDK Platform 34, Platform Tools, Build Tools và emulator/device; cấu hình bằng `flutter config --android-sdk <đường-dẫn-sdk>` nếu SDK ở vị trí riêng; sau đó chạy lại `flutter doctor -v` và `flutter devices`.
-
 ### S3-6 — Đang làm
 
-AuthGate đã xử lý loading, signed-in và signed-out. Chưa thể hoàn thành vì chưa đủ routes/screens `S01–S10`, chưa kiểm tra Back từ S04/S08/S09, chưa có Android runtime và Firebase Android chưa được cấu hình hoàn chỉnh.
+AuthGate đã xử lý loading, signed-in và signed-out. Bộ 270 test ngày 03/11 pass,
+gồm protected route bị loại sau logout, Home → Profile → Back, notification không
+stack Profile và session A→B không rò state/tác vụ cũ.
 
-Cần hoàn thành các screen/routes, route contract, Android SDK/emulator/device và chạy smoke test auth + toàn bộ Back path.
+Chưa thể hoàn thành vì routes/screens S02–S10 chưa tồn tại và Google Sign-In bằng
+debug certificate của máy Thắng còn chờ Firebase thêm SHA. Sau khi có SHA cần
+smoke test auth + Back path trên Android runtime.
+
+### S5-10 — Đang làm
+
+Đã lập [`docs/failure-case-matrix.md`](failure-case-matrix.md), đối chiếu failure
+handling hiện có cho sáu Firebase services và tách rõ bằng chứng fake, widget,
+Firebase Emulator và project thật. Storage cancel/denied đã có emulator evidence;
+Auth cancel và FCM foreground có Android evidence; các ca cloud/manual còn thiếu
+được ghi thành blocker thay vì suy diễn là pass.
+
+### S9-1 và S9-4 — Audit giữa kỳ
+
+Hồ sơ tại
+[`evidence/audit/S9-1-S9-4-20261103/README.md`](../evidence/audit/S9-1-S9-4-20261103/README.md):
+
+- Không thấy secret credential pattern hoặc tracked keystore/service-account key
+  trong cây hiện tại và toàn bộ reachable Git history.
+- Đã khử username khỏi 18 đường dẫn máy trong evidence text, giữ nguyên kết quả.
+- Lịch sử snapshot có 71 commit trước audit: 2 ngày 01/11, 55 ngày 02/11 và 14
+  ngày 03/11; planning/MVVM skeleton có trước feature integration.
+- Hai task vẫn **Đang làm** vì phải rerun trước submission và chưa có ngưỡng
+  commit/ngày được giảng viên xác nhận.
 
 ## 4. Firebase: trạng thái và phần còn thiếu
 
 Người dùng đã được mời vào Firebase project, nhưng quyền Console không tự động hoàn tất cấu hình ứng dụng trong repo.
 
-Hiện có Firebase packages, Firestore/Storage rules, Remote Config defaults, service wrappers và ViewModel consumers.
+Hiện có Firebase packages, `google-services.json`, Firestore/Storage rules, Remote
+Config defaults, service wrappers, ViewModel consumers và evidence thật cho một
+số dịch vụ trên project `longvita-8da7e`.
 
 Chưa có hoặc chưa được xác minh:
 
-- `android/app/google-services.json` chưa xuất hiện trong checkout.
-- Chưa ghi Firebase project ID trong README.
-- Chưa xác minh SHA-1 debug của máy Thắng trên Firebase Console.
-- Chưa chạy app Android kết nối project thật.
-- Chưa có evidence Auth/Storage/FCM/Analytics/Crashlytics/Remote Config.
+- SHA-1/SHA-256 debug của máy Thắng chưa được xác nhận đã thêm trên Firebase Console.
+- Chưa xác minh Google Sign-In bằng debug certificate của máy Thắng.
+- Storage project thật và Remote Config before/after Console còn thiếu.
+- ARTEMIS daemon/model key và raw runs còn thiếu.
 
-Cần phối hợp Charlie/Thái An để chạy `flutterfire configure`, lấy đúng `google-services.json`, đăng ký SHA-1 và đối chiếu project ID.
+Cần phối hợp Charlie/Thái An thêm cả SHA-1/SHA-256 của máy Thắng, tải lại
+`google-services.json` nếu Firebase thay đổi OAuth client, rồi rebuild/smoke test.
 
 ## 5. Lỗi đã phát hiện và cách xử lý
 
@@ -99,25 +131,38 @@ Nguyên nhân là chạy Dart analyzer trước khi có `.dart_tool/package_conf
 
 Đã sửa mapping nhóm tuổi, số bữa, cửa sổ ăn 12 giờ, số bữa cá, kích thước PDF và cờ shopping list. Sau sửa, analyzer sạch và test pass.
 
-### E-04 — Android toolchain chưa sẵn sàng
+### E-04 — Android toolchain chưa sẵn sàng — Đã xử lý
 
-`flutter doctor` báo `Unable to locate Android SDK`. Đây là blocker môi trường, không phải lỗi Dart source; chưa thể chạy Android/Firebase runtime.
+Đã cài Android SDK/ADB/AVD trên ổ T, chấp nhận licenses, build/cài/chạy APK và
+đạt `flutter doctor` sạch ngày 03/11/2026.
+
+### E-05 — Evidence chứa định danh máy/người dùng — Đã xử lý phần phát hiện
+
+Review PR #6 loại ảnh chứa tên/email thật và thay traceback ARTEMIS chứa username
+bằng bản tóm tắt khử PII (`55bdf3e`). Audit S9-1 tiếp tục phát hiện 18 evidence
+text files có prefix đường dẫn máy cũ; đã thay prefix bằng `<user-home>/` mà không
+đổi assertions/kết quả.
 
 ## 6. Các task chưa thể làm sớm
 
-- **S5-10:** cần sáu Firebase service hoạt động trên Android và evidence failure cases.
+- **S5-10:** đã bắt đầu matrix; cần chạy thủ công phần cloud/runtime còn thiếu.
 - **S6-1:** cần flow, accessibility, instrumentation và failure testing hoàn tất.
 - **S6-12:** cần ARTEMIS chỉ ra lỗi thuộc phạm vi Thắng.
-- **S7-1-VLQ đến S7-4:** cần feature-freeze, PR/review output và findings của cả nhóm.
+- **S7-1-VLQ đến S7-4:** PR #6 đã có 5 findings và 1 fix commit trong hồ sơ review,
+  nhưng review riêng của Thắng/feature-freeze và tối thiểu 3 fix commits toàn nhóm
+  vẫn chưa đạt.
 - **S8-1/S8-5/S8-9/S8-10:** cần chức năng, evidence và review hoàn chỉnh.
 - **S8-14/S8-15:** cần finding đã sửa và clip demo của các thành viên.
 - **S8-16:** README còn thiếu project ID/data source đã xác minh, AI disclosure cuối và video public.
 - **S8-17-VLQ:** worklog đã khởi tạo nhưng chỉ hoàn thành khi cập nhật đến cuối dự án.
-- **S9-1 đến S9-6:** là kiểm tra/nộp cuối kỳ, chưa đủ điều kiện.
+- **S9-1/S9-4:** đã audit giữa kỳ nhưng phải chạy lại trước nộp; S9-2/S9-3/S9-5/S9-6
+  chưa đủ điều kiện.
 
-## 7. Trạng thái Git trước commit
+## 7. Review PR #6 trên nhánh Thang
 
-- Base trước thay đổi: `main` tại commit `614e731`.
-- Thay đổi gồm tài liệu nguồn Lab 2, service contracts, task tracker, worklog và hai sửa lỗi Analytics contract.
-- Không thêm API key, service account, keystore hoặc secret.
-- `google-services.json` chưa có trong commit này.
+- `55bdf3e`: xử lý privacy/evidence findings từ Bugbot và Security Review.
+- `c42519f`: ghi 5 findings, quyết định, lý do và giới hạn vào
+  `docs/code-review.md` và `evidence/review/PR-6-THANG-20261103/`.
+- Analyzer sạch, 270/270 Flutter tests pass và 7 ARTEMIS cases collect được.
+- Hai commit đã push lên `origin/Thang`; PR #6 gốc không tự nhận nếu Charlie chưa
+  cherry-pick/merge từ nhánh này.
