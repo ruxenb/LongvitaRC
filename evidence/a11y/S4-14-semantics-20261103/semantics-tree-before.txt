@@ -1,0 +1,607 @@
+# Semantics tree BEFORE the S4-14 fixes (widget test, fake services, uid-a). Base b2101a3.
+===== no plan, one message
+SemanticsNode#0
+ └─SemanticsNode#1
+   └─SemanticsNode#2
+     └─SemanticsNode#3
+       │ flags: scopesRoute
+       ├─SemanticsNode#16
+       │   actions: tap
+       │   flags: isButton, hasEnabledState, isEnabled
+       │   label: "Quay lại"
+       ├─SemanticsNode#17
+       │   flags: isHeader
+       │   label: "Hồ sơ"
+       └─SemanticsNode#4
+         │ flags: hasImplicitScrolling
+         ├─SemanticsNode#18
+         │ │ label:
+         │ │   "User uid-a
+         │ │   uid-a@example.test"
+         │ │
+         │ ├─SemanticsNode#19
+         │ │   label: "Vai trò: user"
+         │ │
+         │ └─SemanticsNode#20
+         │     actions: tap
+         │     flags: isButton, hasEnabledState, isEnabled
+         │     label: "Đăng xuất"
+         ├─SemanticsNode#5
+         │   flags: isHeader
+         │   label: "Firebase Demo Area"
+         ├─SemanticsNode#6
+         │ │ flags: isHeader
+         │ │ label:
+         │ │   "Báo cáo PDF
+         │ │   Chưa có thực đơn để xuất. Hãy tạo thực đơn trước."
+         │ │
+         │ └─SemanticsNode#7
+         │     flags: isButton, hasEnabledState
+         │     label: "Xuất báo cáo PDF"
+         ├─SemanticsNode#8
+         │ │ flags: isHeader
+         │ │ label:
+         │ │   "Thông báo
+         │ │   Tin nhắn đã nhận, lưu trên máy này theo từng tài khoản."
+         │ │
+         │ └─SemanticsNode#21
+         │     label:
+         │       "Tin mới
+         │       Nội dung"
+         ├─SemanticsNode#9
+         │ │ flags: isHeader
+         │ │ label:
+         │ │   "Remote Config
+         │ │   Giá trị đang áp dụng trong ứng dụng."
+         │ │
+         │ ├─SemanticsNode#10
+         │ │   label: "Số món gợi ý tối đa: 5"
+         │ │
+         │ ├─SemanticsNode#11
+         │ │   label: "Điểm trường thọ: Bật"
+         │ │
+         │ ├─SemanticsNode#12
+         │ │   label: "Banner: Trống"
+         │ │
+         │ └─SemanticsNode#13
+         │     actions: tap
+         │     flags: isButton, hasEnabledState, isEnabled
+         │     label: "Cập nhật Remote Config"
+         └─SemanticsNode#14
+           │ flags: isHeader
+           │ label:
+           │   "Crashlytics
+           │   Gây một lỗi thử để kiểm tra báo cáo trên Console."
+           └─SemanticsNode#15
+               actions: tap
+               flags: isButton, hasEnabledState, isEnabled
+               label: "Gây crash thử"
+===== uploading 40%
+SemanticsNode#0
+ └─SemanticsNode#1
+   └─SemanticsNode#2
+     └─SemanticsNode#3
+       │ flags: scopesRoute
+       ├─SemanticsNode#16
+       │   actions: tap
+       │   flags: isButton, hasEnabledState, isEnabled
+       │   label: "Quay lại"
+       ├─SemanticsNode#17
+       │   flags: isHeader
+       │   label: "Hồ sơ"
+       └─SemanticsNode#4
+         │ flags: hasImplicitScrolling
+         ├─SemanticsNode#18
+         │ │ label:
+         │ │   "User uid-a
+         │ │   uid-a@example.test"
+         │ │
+         │ ├─SemanticsNode#19
+         │ │   label: "Vai trò: user"
+         │ │
+         │ └─SemanticsNode#20
+         │     actions: tap
+         │     flags: isButton, hasEnabledState, isEnabled
+         │     label: "Đăng xuất"
+         ├─SemanticsNode#5
+         │   flags: isHeader
+         │   label: "Firebase Demo Area"
+         ├─SemanticsNode#6
+         │ │ flags: isHeader
+         │ │ label:
+         │ │   "Báo cáo PDF
+         │ │   Xuất thực đơn đang có, lưu trên máy rồi tải lên Cloud Storage."
+         │ │
+         │ ├─SemanticsNode#7
+         │ │   flags: isButton, hasEnabledState
+         │ │   label: "Đang xuất PDF…"
+         │ │
+         │ ├─SemanticsNode#22
+         │ │   flags: isLiveRegion
+         │ │   label: "Đang tải PDF lên Cloud Storage... 40%"
+         │ │
+         │ ├─SemanticsNode#23
+         │ │   actions: tap
+         │ │   flags: isButton, hasEnabledState, isEnabled
+         │ │   label: "Hủy tải lên"
+         │ │
+         │ ├─SemanticsNode#24
+         │ │   actions: tap
+         │ │   flags: isButton, hasEnabledState, isEnabled
+         │ │   label: "Mở PDF đã lưu"
+         │ │
+         │ └─SemanticsNode#25
+         │     actions: tap
+         │     flags: isButton, hasEnabledState, isEnabled
+         │     label: "Chia sẻ PDF đã lưu"
+         ├─SemanticsNode#8
+         │ │ flags: isHeader
+         │ │ label:
+         │ │   "Thông báo
+         │ │   Tin nhắn đã nhận, lưu trên máy này theo từng tài khoản."
+         │ │
+         │ └─SemanticsNode#21
+         │     label:
+         │       "Tin mới
+         │       Nội dung"
+         ├─SemanticsNode#9
+         │ │ flags: isHeader
+         │ │ label:
+         │ │   "Remote Config
+         │ │   Giá trị đang áp dụng trong ứng dụng."
+         │ │
+         │ ├─SemanticsNode#10
+         │ │   label: "Số món gợi ý tối đa: 5"
+         │ │
+         │ ├─SemanticsNode#11
+         │ │   label: "Điểm trường thọ: Bật"
+         │ │
+         │ ├─SemanticsNode#12
+         │ │   label: "Banner: Trống"
+         │ │
+         │ └─SemanticsNode#13
+         │     actions: tap
+         │     flags: isButton, hasEnabledState, isEnabled
+         │     label: "Cập nhật Remote Config"
+         └─SemanticsNode#14
+           │ flags: isHeader
+           │ label:
+           │   "Crashlytics
+           │   Gây một lỗi thử để kiểm tra báo cáo trên Console."
+           └─SemanticsNode#15
+               actions: tap
+               flags: isButton, hasEnabledState, isEnabled
+               label: "Gây crash thử"
+===== after error
+SemanticsNode#0
+ └─SemanticsNode#1
+   └─SemanticsNode#2
+     └─SemanticsNode#3
+       │ flags: scopesRoute
+       ├─SemanticsNode#16
+       │   actions: tap
+       │   flags: isButton, hasEnabledState, isEnabled
+       │   label: "Quay lại"
+       ├─SemanticsNode#17
+       │   flags: isHeader
+       │   label: "Hồ sơ"
+       └─SemanticsNode#4
+         │ flags: hasImplicitScrolling
+         ├─SemanticsNode#18
+         │ │ label:
+         │ │   "User uid-a
+         │ │   uid-a@example.test"
+         │ │
+         │ ├─SemanticsNode#19
+         │ │   label: "Vai trò: user"
+         │ │
+         │ └─SemanticsNode#20
+         │     actions: tap
+         │     flags: isButton, hasEnabledState, isEnabled
+         │     label: "Đăng xuất"
+         ├─SemanticsNode#5
+         │   flags: isHeader
+         │   label: "Firebase Demo Area"
+         ├─SemanticsNode#6
+         │ │ flags: isHeader
+         │ │ label:
+         │ │   "Báo cáo PDF
+         │ │   Xuất thực đơn đang có, lưu trên máy rồi tải lên Cloud Storage."
+         │ │
+         │ ├─SemanticsNode#7
+         │ │   actions: tap
+         │ │   flags: isButton, hasEnabledState, isEnabled
+         │ │   label: "Xuất báo cáo PDF"
+         │ │
+         │ ├─SemanticsNode#26
+         │ │   flags: isLiveRegion
+         │ │   label: "PDF đã lưu trên máy nhưng chưa tải lên được. Vui lòng thử
+         │ │     lại."
+         │ │
+         │ ├─SemanticsNode#27
+         │ │   actions: tap
+         │ │   flags: isButton, hasEnabledState, isEnabled
+         │ │   label: "Thử tải lên lại"
+         │ │
+         │ ├─SemanticsNode#24
+         │ │   actions: tap
+         │ │   flags: isButton, hasEnabledState, isEnabled
+         │ │   label: "Mở PDF đã lưu"
+         │ │
+         │ └─SemanticsNode#25
+         │     actions: tap
+         │     flags: isButton, hasEnabledState, isEnabled
+         │     label: "Chia sẻ PDF đã lưu"
+         ├─SemanticsNode#8
+         │ │ flags: isHeader
+         │ │ label:
+         │ │   "Thông báo
+         │ │   Tin nhắn đã nhận, lưu trên máy này theo từng tài khoản."
+         │ │
+         │ └─SemanticsNode#21
+         │     label:
+         │       "Tin mới
+         │       Nội dung"
+         ├─SemanticsNode#9
+         │ │ flags: isHeader
+         │ │ label:
+         │ │   "Remote Config
+         │ │   Giá trị đang áp dụng trong ứng dụng."
+         │ │
+         │ ├─SemanticsNode#10
+         │ │   label: "Số món gợi ý tối đa: 5"
+         │ │
+         │ ├─SemanticsNode#11
+         │ │   label: "Điểm trường thọ: Bật"
+         │ │
+         │ ├─SemanticsNode#12
+         │ │   label: "Banner: Trống"
+         │ │
+         │ └─SemanticsNode#13
+         │     actions: tap
+         │     flags: isButton, hasEnabledState, isEnabled
+         │     label: "Cập nhật Remote Config"
+         └─SemanticsNode#14
+           │ flags: isHeader
+           │ label:
+           │   "Crashlytics
+           │   Gây một lỗi thử để kiểm tra báo cáo trên Console."
+           └─SemanticsNode#15
+               actions: tap
+               flags: isButton, hasEnabledState, isEnabled
+               label: "Gây crash thử"
+===== crash dialog
+SemanticsNode#0
+ └─SemanticsNode#1
+   ├─SemanticsNode#29
+   │ │
+   │ └─SemanticsNode#30
+   │   │ flags: scopesRoute
+   │   │
+   │   └─SemanticsNode#31
+   │     │
+   │     └─SemanticsNode#32
+   │       │ role: dialog
+   │       │
+   │       └─SemanticsNode#33
+   │         │ flags: hasImplicitScrolling
+   │         │
+   │         ├─SemanticsNode#34
+   │         │   flags: isHeader
+   │         │   label: "Gây crash thử?"
+   │         │
+   │         ├─SemanticsNode#35
+   │         │   label: "Ứng dụng sẽ đóng ngay để gửi báo cáo lên Crashlytics. Chỉ
+   │         │     dùng để kiểm thử."
+   │         │
+   │         ├─SemanticsNode#36
+   │         │   actions: tap
+   │         │   flags: isButton, hasEnabledState, isEnabled
+   │         │   label: "Gây crash"
+   │         │
+   │         └─SemanticsNode#37
+   │             actions: tap
+   │             flags: isButton, hasEnabledState, isEnabled
+   │             label: "Hủy"
+   └─SemanticsNode#28
+       actions: dismiss, tap
+       label: "Dismiss"
+===== success
+SemanticsNode#0
+ └─SemanticsNode#1
+   └─SemanticsNode#2
+     └─SemanticsNode#3
+       │ flags: scopesRoute
+       ├─SemanticsNode#16
+       │   actions: tap
+       │   flags: isButton, hasEnabledState, isEnabled
+       │   label: "Quay lại"
+       ├─SemanticsNode#17
+       │   flags: isHeader
+       │   label: "Hồ sơ"
+       └─SemanticsNode#4
+         │ flags: hasImplicitScrolling
+         ├─SemanticsNode#18
+         │ │ label:
+         │ │   "User uid-a
+         │ │   uid-a@example.test"
+         │ │
+         │ ├─SemanticsNode#19
+         │ │   label: "Vai trò: user"
+         │ │
+         │ └─SemanticsNode#20
+         │     actions: tap
+         │     flags: isButton, hasEnabledState, isEnabled
+         │     label: "Đăng xuất"
+         ├─SemanticsNode#5
+         │   flags: isHeader
+         │   label: "Firebase Demo Area"
+         ├─SemanticsNode#6
+         │ │ actions: longPress
+         │ │ flags: isTextField, isHeader, isMultiline, isReadOnly,
+         │ │   isFocusable
+         │ │ label:
+         │ │   "Báo cáo PDF
+         │ │   Xuất thực đơn đang có, lưu trên máy rồi tải lên Cloud Storage."
+         │ │ value: "https://storage.test/report.pdf"
+         │ │ inputType: text
+         │ │
+         │ ├─SemanticsNode#7
+         │ │   actions: tap
+         │ │   flags: isButton, hasEnabledState, isEnabled
+         │ │   label: "Xuất báo cáo PDF"
+         │ │
+         │ ├─SemanticsNode#21
+         │ │   flags: isLiveRegion
+         │ │   label: "Đã tải PDF lên Cloud Storage."
+         │ │
+         │ ├─SemanticsNode#22
+         │ │   actions: tap
+         │ │   flags: isButton, hasEnabledState, isEnabled
+         │ │   label: "Mở PDF đã lưu"
+         │ │
+         │ └─SemanticsNode#23
+         │     actions: tap
+         │     flags: isButton, hasEnabledState, isEnabled
+         │     label: "Chia sẻ PDF đã lưu"
+         ├─SemanticsNode#8
+         │   flags: isHeader
+         │   label:
+         │     "Thông báo
+         │     Tin nhắn đã nhận, lưu trên máy này theo từng tài khoản.
+         │     Chưa có thông báo nào."
+         ├─SemanticsNode#9
+         │ │ flags: isHeader
+         │ │ label:
+         │ │   "Remote Config
+         │ │   Giá trị đang áp dụng trong ứng dụng."
+         │ │
+         │ ├─SemanticsNode#10
+         │ │   label: "Số món gợi ý tối đa: 5"
+         │ │
+         │ ├─SemanticsNode#11
+         │ │   label: "Điểm trường thọ: Bật"
+         │ │
+         │ ├─SemanticsNode#12
+         │ │   label: "Banner: Trống"
+         │ │
+         │ └─SemanticsNode#13
+         │     actions: tap
+         │     flags: isButton, hasEnabledState, isEnabled
+         │     label: "Cập nhật Remote Config"
+         └─SemanticsNode#14
+           │ flags: isHeader
+           │ label:
+           │   "Crashlytics
+           │   Gây một lỗi thử để kiểm tra báo cáo trên Console."
+           └─SemanticsNode#15
+               actions: tap
+               flags: isButton, hasEnabledState, isEnabled
+               label: "Gây crash thử"
+===== rc after tap
+SemanticsNode#0
+ └─SemanticsNode#1
+   └─SemanticsNode#2
+     └─SemanticsNode#3
+       │ flags: scopesRoute
+       ├─SemanticsNode#16
+       │   actions: tap
+       │   flags: isButton, hasEnabledState, isEnabled
+       │   label: "Quay lại"
+       ├─SemanticsNode#17
+       │   flags: isHeader
+       │   label: "Hồ sơ"
+       ├─SemanticsNode#4
+       │ │ flags: hasImplicitScrolling
+       │ │
+       │ ├─SemanticsNode#18
+       │ │ │ label:
+       │ │ │   "User uid-a
+       │ │ │   uid-a@example.test"
+       │ │ │
+       │ │ ├─SemanticsNode#19
+       │ │ │   label: "Vai trò: user"
+       │ │ │
+       │ │ └─SemanticsNode#20
+       │ │     actions: tap
+       │ │     flags: isButton, hasEnabledState, isEnabled
+       │ │     label: "Đăng xuất"
+       │ │
+       │ ├─SemanticsNode#5
+       │ │   flags: isHeader
+       │ │   label: "Firebase Demo Area"
+       │ │
+       │ ├─SemanticsNode#6
+       │ │ │ actions: longPress
+       │ │ │ flags: isTextField, isHeader, isMultiline, isReadOnly,
+       │ │ │   isFocusable
+       │ │ │ label:
+       │ │ │   "Báo cáo PDF
+       │ │ │   Xuất thực đơn đang có, lưu trên máy rồi tải lên Cloud Storage."
+       │ │ │ value: "https://storage.test/report.pdf"
+       │ │ │ inputType: text
+       │ │ │
+       │ │ ├─SemanticsNode#7
+       │ │ │   actions: tap
+       │ │ │   flags: isButton, hasEnabledState, isEnabled
+       │ │ │   label: "Xuất báo cáo PDF"
+       │ │ │
+       │ │ ├─SemanticsNode#21
+       │ │ │   flags: isLiveRegion
+       │ │ │   label: "Đã tải PDF lên Cloud Storage."
+       │ │ │
+       │ │ ├─SemanticsNode#22
+       │ │ │   actions: tap
+       │ │ │   flags: isButton, hasEnabledState, isEnabled
+       │ │ │   label: "Mở PDF đã lưu"
+       │ │ │
+       │ │ └─SemanticsNode#23
+       │ │     actions: tap
+       │ │     flags: isButton, hasEnabledState, isEnabled
+       │ │     label: "Chia sẻ PDF đã lưu"
+       │ │
+       │ ├─SemanticsNode#8
+       │ │   flags: isHeader
+       │ │   label:
+       │ │     "Thông báo
+       │ │     Tin nhắn đã nhận, lưu trên máy này theo từng tài khoản.
+       │ │     Chưa có thông báo nào."
+       │ │
+       │ ├─SemanticsNode#9
+       │ │ │ flags: isHeader
+       │ │ │ label:
+       │ │ │   "Remote Config
+       │ │ │   Giá trị đang áp dụng trong ứng dụng."
+       │ │ │
+       │ │ ├─SemanticsNode#10
+       │ │ │   label: "Số món gợi ý tối đa: 5"
+       │ │ │
+       │ │ ├─SemanticsNode#11
+       │ │ │   label: "Điểm trường thọ: Bật"
+       │ │ │
+       │ │ ├─SemanticsNode#12
+       │ │ │   label: "Banner: Trống"
+       │ │ │
+       │ │ └─SemanticsNode#13
+       │ │     actions: tap
+       │ │     flags: isButton, hasEnabledState, isEnabled
+       │ │     label: "Cập nhật Remote Config"
+       │ │
+       │ └─SemanticsNode#14
+       │   │ flags: isHeader
+       │   │ label:
+       │   │   "Crashlytics
+       │   │   Gây một lỗi thử để kiểm tra báo cáo trên Console."
+       │   │
+       │   └─SemanticsNode#15
+       │       actions: tap
+       │       flags: isButton, hasEnabledState, isEnabled
+       │       label: "Gây crash thử"
+       └─SemanticsNode#24
+           actions: dismiss, scrollDown, scrollUp
+           flags: isLiveRegion
+           label: "Không có giá trị mới hoặc chưa tải được. Vẫn dùng giá trị
+             hiện có."
+===== sign-out dialog
+SemanticsNode#0
+ └─SemanticsNode#1
+   ├─SemanticsNode#26
+   │ │
+   │ └─SemanticsNode#27
+   │   │ flags: scopesRoute
+   │   │
+   │   └─SemanticsNode#28
+   │     │
+   │     └─SemanticsNode#29
+   │       │ role: dialog
+   │       │
+   │       └─SemanticsNode#30
+   │         │ flags: hasImplicitScrolling
+   │         │
+   │         ├─SemanticsNode#31
+   │         │   flags: isHeader
+   │         │   label: "Đăng xuất?"
+   │         │
+   │         ├─SemanticsNode#32
+   │         │   label: "PDF đã lưu trên máy này sẽ bị xóa. Bản đã tải lên và thực
+   │         │     đơn đã lưu vẫn còn."
+   │         │
+   │         ├─SemanticsNode#33
+   │         │   actions: tap
+   │         │   flags: isButton, hasEnabledState, isEnabled
+   │         │   label: "Đồng ý"
+   │         │
+   │         └─SemanticsNode#34
+   │             actions: tap
+   │             flags: isButton, hasEnabledState, isEnabled
+   │             label: "Hủy"
+   └─SemanticsNode#25
+       actions: dismiss, tap
+       label: "Dismiss"
+===== signed out
+SemanticsNode#0
+ └─SemanticsNode#1
+   └─SemanticsNode#2
+     └─SemanticsNode#3
+       │ flags: scopesRoute
+       └─SemanticsNode#4
+         │ flags: hasImplicitScrolling
+         ├─SemanticsNode#5
+         │   flags: isHeader
+         │   label: "Longvita"
+         ├─SemanticsNode#6
+         │   label: "Thực đơn trường thọ cho cả tuần"
+         ├─SemanticsNode#7
+         │   label: "Đăng nhập để lưu thực đơn, danh sách đi chợ và báo cáo
+         │     của bạn trên mọi lần mở ứng dụng."
+         └─SemanticsNode#8
+             actions: tap
+             flags: isButton, hasEnabledState, isEnabled
+             label: "Đăng nhập bằng Google"
+===== signing in
+SemanticsNode#0
+ └─SemanticsNode#1
+   └─SemanticsNode#2
+     └─SemanticsNode#3
+       │ flags: scopesRoute
+       └─SemanticsNode#4
+         │ flags: hasImplicitScrolling
+         ├─SemanticsNode#5
+         │   flags: isHeader
+         │   label: "Longvita"
+         ├─SemanticsNode#6
+         │   label: "Thực đơn trường thọ cho cả tuần"
+         ├─SemanticsNode#7
+         │   label: "Đăng nhập để lưu thực đơn, danh sách đi chợ và báo cáo
+         │     của bạn trên mọi lần mở ứng dụng."
+         └─SemanticsNode#8
+             flags: isButton, hasEnabledState
+             label: "Đang mở tài khoản Google…"
+===== network failure
+SemanticsNode#0
+ └─SemanticsNode#1
+   └─SemanticsNode#2
+     └─SemanticsNode#3
+       │ flags: scopesRoute
+       └─SemanticsNode#4
+         │ flags: hasImplicitScrolling
+         ├─SemanticsNode#5
+         │   flags: isHeader
+         │   label: "Longvita"
+         ├─SemanticsNode#6
+         │   label: "Thực đơn trường thọ cho cả tuần"
+         ├─SemanticsNode#7
+         │   label: "Đăng nhập để lưu thực đơn, danh sách đi chợ và báo cáo
+         │     của bạn trên mọi lần mở ứng dụng."
+         ├─SemanticsNode#9
+         │ │ flags: isLiveRegion
+         │ │ label: "Không có kết nối mạng. Kiểm tra mạng rồi thử lại."
+         │ │
+         │ └─SemanticsNode#10
+         │     actions: tap
+         │     flags: isButton, hasEnabledState, isEnabled
+         │     label: "Ẩn thông báo"
+         └─SemanticsNode#8
+             actions: tap
+             flags: isButton, hasEnabledState, isEnabled
+             label: "Thử lại với Google"

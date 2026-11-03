@@ -19,6 +19,7 @@ import 'package:longvita/theme/app_theme.dart';
 import 'package:longvita/viewmodels/auth_viewmodel.dart';
 import 'package:longvita/viewmodels/meal_plan_viewmodel.dart';
 import 'package:longvita/viewmodels/profile_viewmodel.dart';
+import 'package:longvita/widgets/app_dialog.dart';
 import 'package:longvita/widgets/app_supporting.dart';
 import 'package:provider/provider.dart';
 
@@ -145,11 +146,13 @@ class Harness {
         child: MaterialApp(
           theme: AppTheme.lightTheme,
           routes: {ProfileScreen.routeName: (_) => const ProfileScreen()},
-          home: MediaQuery.withClampedTextScaling(
+          // Above the navigator, so dialogs are scaled too.
+          builder: (_, child) => MediaQuery.withClampedTextScaling(
             minScaleFactor: textScale,
             maxScaleFactor: textScale,
-            child: home,
+            child: child!,
           ),
+          home: home,
         ),
       );
 }
@@ -891,6 +894,7 @@ void main() {
       ('360 wide', const Size(360, 800), 1.0),
       ('412 wide', const Size(412, 915), 1.0),
       ('360 wide at text scale 2', const Size(360, 800), 2.0),
+      ('412 wide at text scale 2', const Size(412, 915), 2.0),
     ]) {
       testWidgets('no overflow: $name', (tester) async {
         final h = await pumpProfile(tester, size: size, textScale: scale);
@@ -918,5 +922,95 @@ void main() {
       }
       handle.dispose();
     });
+
+    // S4-14: text that is not its own node merges into the card's node, which
+    // TalkBack reads before everything in the card.
+    testWidgets('each card title is a heading of its own, after an upload',
+        (tester) async {
+      final handle = tester.ensureSemantics();
+      await pumpProfile(tester);
+      await tapKey(tester, 'profile-export');
+
+      for (final title in [
+        'Báo cáo PDF',
+        'Thông báo',
+        'Remote Config',
+        'Crashlytics',
+      ]) {
+        expect(tester.getSemantics(find.text(title)),
+            isSemantics(label: title, isHeader: true, isTextField: false),
+            reason: title);
+      }
+      expect(
+          tester.getSemantics(find.text('Chưa có thông báo nào.')),
+          isSemantics(
+              label: 'Chưa có thông báo nào.', isHeader: false));
+      expect(
+          tester.getSemantics(find.text('https://storage.test/report.pdf')),
+          isSemantics(
+            label: '',
+            value: 'https://storage.test/report.pdf',
+            isTextField: true,
+            isReadOnly: true,
+            isHeader: false,
+          ));
+      handle.dispose();
+    });
+
+    testWidgets('upload progress speaks its phase once, percentage as value',
+        (tester) async {
+      final handle = tester.ensureSemantics();
+      final h = await pumpProfile(tester);
+      h.storage.held = Completer();
+      await tapKey(tester, 'profile-export');
+
+      h.storage.lastOnProgress!(0.4);
+      await tester.pump();
+      final progress = find.byType(LinearProgressIndicator);
+      final label = tester.getSemantics(progress).label;
+      expect(label, isNot(contains('%')));
+      // TalkBack reads three ASCII dots as "3 period"; the UI uses '…'.
+      expect(label, isNot(contains('...')));
+      expect(tester.getSemantics(progress),
+          isSemantics(isLiveRegion: true, value: '40%'));
+
+      h.storage.lastOnProgress!(0.7);
+      await tester.pump();
+      expect(tester.getSemantics(progress),
+          isSemantics(isLiveRegion: true, label: label, value: '70%'));
+
+      h.storage.held!.complete('https://storage.test/report.pdf');
+      await settle(tester);
+      handle.dispose();
+    });
+
+    for (final (name, key, title) in [
+      ('sign-out', 'profile-sign-out', 'Đăng xuất?'),
+      ('test crash', 'profile-test-crash', 'Gây crash thử?'),
+    ]) {
+      testWidgets('$name dialog is announced, closes in Vietnamese, and fits '
+          'at text scale 2', (tester) async {
+        final handle = tester.ensureSemantics();
+        final h = await pumpProfile(tester, textScale: 2);
+        await tapKey(tester, key);
+
+        expect(tester.takeException(), isNull);
+        expect(
+            tester.getSemantics(find.byType(AppDialog)),
+            isSemantics(
+                label: title, scopesRoute: true, namesRoute: true));
+        expect(find.bySemanticsLabel('Dismiss'), findsNothing);
+        expect(find.bySemanticsLabel(AppDialog.barrierLabel), findsOneWidget);
+
+        await tester.ensureVisible(find.bySemanticsLabel('Hủy'));
+        await tester.tap(find.bySemanticsLabel('Hủy'));
+        await tester.pump(const Duration(milliseconds: 300)); // exit animation
+        await settle(tester);
+        expect(find.byType(AppDialog), findsNothing);
+        expect(h.session.currentUser, isNotNull);
+        expect(h.crashlytics.crashes, 0);
+        handle.dispose();
+      });
+    }
   });
 }

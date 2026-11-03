@@ -59,9 +59,12 @@ class SignInScreen extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: AppSpacing.s24),
-                    const Text(
-                      'Thực đơn trường thọ cho cả tuần',
-                      style: AppTypography.headingL,
+                    Semantics(
+                      header: true,
+                      child: const Text(
+                        'Thực đơn trường thọ cho cả tuần',
+                        style: AppTypography.headingL,
+                      ),
                     ),
                     const SizedBox(height: AppSpacing.s12),
                     Text(

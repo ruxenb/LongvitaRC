@@ -16,7 +16,15 @@ import 'app_button.dart';
 /// EditError pass an `AppTextField` with `errorText` and a null
 /// [onPrimary]: the primary button renders Disabled and the dialog stays
 /// open, so the user can fix the value or cancel without data changing.
+///
+/// Like Material's `AlertDialog`, the dialog names its route with [title], so
+/// TalkBack announces it when it opens. Pass [barrierLabel] to `showDialog`:
+/// on Android the barrier is a focusable "dismiss" control, and the app has
+/// no Vietnamese Material localizations, so its default label is English.
 class AppDialog extends StatelessWidget {
+  /// Spoken label of the area around the dialog, which closes it.
+  static const barrierLabel = 'Đóng';
+
   final IconData icon;
   final Color iconColor;
   final String title;
@@ -137,7 +145,7 @@ class AppDialog extends StatelessWidget {
       ),
     ];
 
-    return Dialog(
+    final dialog = Dialog(
       backgroundColor: Colors.transparent,
       elevation: 0,
       insetPadding: const EdgeInsets.symmetric(
@@ -164,6 +172,14 @@ class AppDialog extends StatelessWidget {
           ),
         ),
       ),
+    );
+
+    return Semantics(
+      scopesRoute: true,
+      namesRoute: true,
+      explicitChildNodes: true,
+      label: title,
+      child: dialog,
     );
   }
 }
