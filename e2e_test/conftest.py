@@ -7,8 +7,10 @@ the app must never report success.
 
 Setup: docs in README.md, section 5. Requires GEMINI_API_KEY on the daemon host.
 """
+import html
 import json
 import os
+import re
 import subprocess
 import time
 import urllib.parse
@@ -79,12 +81,25 @@ async def artemis():
     return client
 
 
+def _adb(*args: str) -> subprocess.CompletedProcess:
+    command = [ADB, *(["-s", DEVICE_SERIAL] if DEVICE_SERIAL else []), *args]
+    return subprocess.run(command, check=True, capture_output=True, timeout=60)
+
+
+def screen_texts() -> list[str]:
+    """Every text and label on the device screen now, read with uiautomator.
+
+    For values the agent's summary may shorten or misread, such as a long URL.
+    """
+    _adb("shell", "uiautomator", "dump", "/sdcard/artemis-screen.xml")
+    xml = _adb("exec-out", "cat", "/sdcard/artemis-screen.xml").stdout.decode("utf-8")
+    values = re.findall(r'(?:text|content-desc)="([^"]+)"', xml)
+    return [html.unescape(v) for v in values]
+
+
 def _stop_app() -> None:
     """Closes the app so a case cannot reuse what an earlier case left on screen."""
-    command = [ADB, "shell", "am", "force-stop", APP_PACKAGE]
-    if DEVICE_SERIAL:
-        command[1:1] = ["-s", DEVICE_SERIAL]
-    subprocess.run(command, check=True, capture_output=True, timeout=30)
+    _adb("shell", "am", "force-stop", APP_PACKAGE)
 
 
 @pytest.fixture
