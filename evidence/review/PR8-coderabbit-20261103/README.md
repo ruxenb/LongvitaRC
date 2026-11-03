@@ -1,6 +1,6 @@
 # PR #8 — kiểm tra trước merge, 03/11/2026
 
-**Bản hiện tại:** [1d3d995](https://github.com/ruxenb/LongvitaRC/commit/1d3d995) kiểm package ở root cửa sổ và từ chối heading phủ định, tiếp nối [0df2563](https://github.com/ruxenb/LongvitaRC/commit/0df2563) thay protocol VIEWER/HEADING bằng native UI package + heading trong replay cuối. Bộ kiểm assertions **40/40 pass**, có test dùng replay thật đã lưu. Các kết quả 30/30, 33/33 và parser hai dòng bên dưới là lịch sử các lượt trước.
+**Bản hiện tại:** [d7c7609](https://github.com/ruxenb/LongvitaRC/commit/d7c7609) thu hẹp phủ định vào heading/visibility; [d7ffa05](https://github.com/ruxenb/LongvitaRC/commit/d7ffa05) phân biệt Back/background. Tiếp nối `1d3d995` kiểm root cửa sổ và `0df2563` thay protocol hai dòng bằng native UI package + replay. Bộ kiểm assertions **49/49 pass**, có test dùng replay thật đã lưu. Các kết quả 30/30, 33/33, 40/40 và parser hai dòng bên dưới là lịch sử các lượt trước.
 
 CodeRabbit đã review head `2833d74`: 3 findings (2 Major, 1 Minor). Check SUCCESS chỉ xác nhận review chạy xong; ba findings được đối chiếu và sửa trước khi merge.
 
@@ -41,3 +41,12 @@ Hai Minor tại `f9f2130` được Accepted và sửa trong `1d3d995`:
 - [PR8-CR-07, 4455233159](https://github.com/ruxenb/LongvitaRC/pull/8#discussion_r4455233159): từ chối câu phủ định như “No heading LONGVITA is visible” và “Không có tiêu đề LONGVITA”. Replay dương đã lưu vẫn được chấp nhận.
 
 `round3-inline-comments.json` lưu nguồn của hai comments; `root-window-and-heading.txt` ghi **40/40 kiểm assertions độc lập pass** (chỉ bỏ trailing whitespace của pytest). Không có native rerun, không cộng 40 checks này vào số lượt ARTEMIS. Heading vẫn dựa vào quan sát agent, còn package được kiểm độc lập qua UIAutomator; không tuyên bố đây là phép so nội dung PDF tự động hoàn toàn.
+
+## Lượt 4 — phủ định đúng chủ thể và Back/background
+
+Hai Minor tại `06b8f9f` được Accepted:
+
+- [PR8-CR-08, 4455418593](https://github.com/ruxenb/LongvitaRC/pull/8#discussion_r4455418593): “The printed heading LONGVITA is visible, not the app name” phải pass. `d7c7609` thu hẹp các mẫu phủ định vào heading/visibility; thêm ca dương với phủ định mô tả nội dung khác và ca âm khi heading không hiện.
+- [PR8-CR-09, ngoài diff trong review 5753132961](https://github.com/ruxenb/LongvitaRC/pull/8#pullrequestreview-5753132961): `back` khớp nhầm `background`, làm kiểm Back pass dù thiếu hành động. `d7ffa05` bật whole-word chỉ ở hai Back checks; các callers khác giữ substring để nhận `tapped`.
+
+`round4-inline-comments.json` và `round4-review.json` lưu nguồn, kể cả finding ngoài diff không có inline thread. `heading-visibility-and-back.txt`: **49/49 checks pass**, chỉ chuẩn hóa trailing whitespace. Các ca âm background, ca dương Back, tap/tapped và replay heading đã lưu đều được kiểm. Không có native rerun mới; các giới hạn của lượt 3 vẫn áp dụng.

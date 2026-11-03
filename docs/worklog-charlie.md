@@ -165,3 +165,7 @@ CodeRabbit tìm đúng hai lỗi trong parser VIEWER/HEADING ban đầu (CR-04/0
 ### Follow-up PR #8 — root viewer và heading phủ định
 
 Hai Minor CR-06/07 tại f9f2130 được chấp nhận: 1d3d995 kiểm package của root cửa sổ, từ chối hierarchy mơ hồ và heading phủ định tiếng Anh/Việt. 40/40 kiểm assertions độc lập pass; replay dương đã lưu vẫn pass. Chưa chạy native mới. Nguồn và log trong evidence/review/PR8-coderabbit-20261103/.
+
+### Follow-up PR #8 — CR-08 và finding ngoài diff CR-09
+
+Hai Minor tại 06b8f9f được chấp nhận: d7c7609 thu hẹp phủ định vào heading/visibility, d7ffa05 phân biệt Back/background và giữ tap/tapped. 49/49 assertion checks pass, không phải native rerun. Lưu cả inline comment và toàn review có finding ngoài diff trong evidence/review/PR8-coderabbit-20261103/.
