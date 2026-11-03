@@ -71,8 +71,30 @@ async def test_viewer_heading_must_follow_open_action():
 
 async def test_viewer_accepts_heading_observed_after_open():
     await export_cases.test_tc08b_saved_pdf_opens_in_the_native_viewer(observe(
-        "Tap Mở PDF đã lưu: Android print preview shows LONGVITA.",
+        "Tap Mở PDF đã lưu: Android print preview opens.",
+        "VIEWER: yes\nHEADING: LONGVITA — THỰC ĐƠN",
     ))
+
+
+async def test_viewer_rejects_app_name_when_open_failed():
+    with pytest.raises(AssertionError):
+        await export_cases.test_tc08b_saved_pdf_opens_in_the_native_viewer(observe(
+            "Tap Mở PDF đã lưu: Longvita still shows Không mở được file PDF đã lưu.",
+        ))
+
+
+@pytest.mark.parametrize("last", [
+    "VIEWER: no\nHEADING: LONGVITA",
+    "VIEWER: yes\nLongvita app is still visible.",
+    "VIEWER: yes\nHEADING: A different document",
+    "VIEWER: yes\nVIEWER: no\nHEADING: LONGVITA",
+    "HEADING: LONGVITA",
+])
+async def test_viewer_requires_unambiguous_success_and_pdf_heading(last):
+    with pytest.raises(AssertionError):
+        await export_cases.test_tc08b_saved_pdf_opens_in_the_native_viewer(observe(
+            "Tap Mở PDF đã lưu.", last,
+        ))
 
 
 VALID_URL = ("http://10.0.2.2:9199/v0/b/test-bucket/o/reports%2F"
@@ -121,6 +143,15 @@ async def test_push_accepts_profile_and_exact_title_after_tapping(monkeypatch):
     await profile_cases.test_tc10_push_opens_profile_from_the_shade(observe(
         "Tap Expected push: Hồ sơ appears and its inbox contains Expected push.",
     ))
+
+
+async def test_push_rejects_tap_title_missing_from_final_inbox(monkeypatch):
+    monkeypatch.setenv("FCM_TEST_TITLE", "Expected push")
+    with pytest.raises(AssertionError):
+        await profile_cases.test_tc10_push_opens_profile_from_the_shade(observe(
+            "Tap Expected push: Hồ sơ opens.",
+            "Scrolled to inbox. Only an older announcement is visible.",
+        ))
 
 
 async def test_unchanged_config_ignores_old_notice_before_refresh():

@@ -48,10 +48,18 @@ async def test_tc08b_saved_pdf_opens_in_the_native_viewer(run_case):
     output = await run_case(
         "Open the Longvita app signed in. Create a meal plan with 'Tạo thực đơn mẫu ngay' "
         "if none exists, open 'Hồ sơ', and tap 'Xuất báo cáo PDF'. When it finishes tap "
-        "'Mở PDF đã lưu'. When the system screen opens, read its title and the heading "
-        "printed at the top of the PDF page shown in it.",
-        "The name of the system screen that opened, and any heading readable in the PDF.",
+        "'Mở PDF đã lưu'. Check whether the system PDF preview actually opened. "
+        "Read the heading printed inside the PDF, not the app name. End your final "
+        "observation with two separate lines: VIEWER: yes (or no), then HEADING: "
+        "followed by the heading actually visible in the PDF. If the viewer failed, "
+        "report VIEWER: no and HEADING: unavailable.",
+        "Two lines in the final observation: VIEWER: yes/no and HEADING: printed PDF heading.",
     )
 
-    # The heading must be seen after the tap that opens the viewer.
-    assert "LONGVITA" in output.after("tap", "Mở PDF đã lưu").upper()
+    # A mention of the app after a failed tap is not a viewer result (PR8-CR-02).
+    # Missing/ambiguous fields fail closed; no earlier step supplies the heading.
+    assert output.after("tap", "Mở PDF đã lưu"), "the open action was not observed"
+    viewer = re.findall(r"^\s*VIEWER:\s*(yes|no)\s*$", output.last, re.I | re.M)
+    headings = re.findall(r"^\s*HEADING:[ \t]*(\S[^\r\n]*)$", output.last, re.I | re.M)
+    assert [value.lower() for value in viewer] == ["yes"], output.last
+    assert len(headings) == 1 and re.search(r"\bLONGVITA\b", headings[0], re.I), output.last
