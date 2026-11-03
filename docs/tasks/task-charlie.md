@@ -2,7 +2,7 @@
 
 > **Thành viên:** Charlie (CharlieMinh)  
 > **Vai trò:** **Design System in Code + Firebase Core Services** (Theme, 9 Common Widgets, Firebase Auth, Cloud Storage, FCM, PDF Export, Màn Sign-in & Profile/Demo Area)  
-> **Cập nhật tiến độ 02/11/2026:** **29 task = 6 chờ nghiệm thu + 21 đang thực hiện/PR + 0 skeleton + 2 chưa bắt đầu.** Chưa tự đánh Done/Accepted toàn task; xem [progress và evidence](charlie-progress.md). Ba lỗi regression đã sửa và xác nhận không có nghĩa S3-5/S4-12 hoàn tất mọi điều kiện. IDs/phân công/phụ thuộc của leader được giữ nguyên.
+> **Cập nhật tiến độ 03/11/2026:** **29 task = 6 chờ nghiệm thu + 21 đang thực hiện/PR + 0 skeleton + 2 chưa bắt đầu.** Chưa tự đánh Done/Accepted toàn task; xem [progress và evidence](charlie-progress.md). Ba lỗi regression đã sửa và xác nhận không có nghĩa S3-5/S4-12 hoàn tất mọi điều kiện. IDs/phân công/phụ thuộc của leader được giữ nguyên.
 
 ---
 

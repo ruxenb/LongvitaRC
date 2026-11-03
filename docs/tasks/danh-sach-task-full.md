@@ -3,7 +3,7 @@
 > **Dự án:** Longvita — Cloud-Enabled Mobile App  
 > **Nguyên tắc phân công:** Mỗi việc xuất hiện đúng một lần, một người chịu trách nhiệm chính (`Phụ trách`).  
 > **Tiến độ đã đồng bộ:** 12/112 task hoàn thành (11%).
-> **Cập nhật Charlie 02/11/2026:** 29 task Charlie được đồng bộ: **6 chờ nghiệm thu, 17 đang thực hiện/PR, 0 skeleton, 6 chưa bắt đầu**. [Evidence/status chi tiết](charlie-progress.md). Không đổi IDs/owners/dependencies hoặc tự đánh Done thay leader; trạng thái các thành viên khác giữ theo nguồn owner, tổng tiến độ toàn nhóm do leader tổng hợp.
+> **Cập nhật Charlie 03/11/2026:** 29 task Charlie được đồng bộ: **6 chờ nghiệm thu, 21 đang thực hiện/PR, 0 skeleton, 2 chưa bắt đầu**. [Evidence/status chi tiết](charlie-progress.md). Không đổi IDs/owners/dependencies hoặc tự đánh Done thay leader; trạng thái các thành viên khác giữ theo nguồn owner, tổng tiến độ toàn nhóm do leader tổng hợp.
 
 ---
 
