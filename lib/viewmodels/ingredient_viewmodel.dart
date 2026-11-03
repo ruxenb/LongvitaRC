@@ -45,6 +45,10 @@ class IngredientViewModel extends BaseViewModel implements SessionScoped {
   @override
   void clearSession() {
     _epoch.advance();
+    // Never let an old session's pending cloud write block the next user.
+    // The old write still targets the captured old uid/plan, and its callback
+    // is discarded by SessionEpoch when it completes.
+    _writeTail = Future<void>.value();
     _uid = null;
     _planId = null;
     _ingredients = [];

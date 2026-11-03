@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:longvita/models/ingredient_model.dart';
 import 'package:longvita/models/meal_plan_model.dart';
@@ -139,6 +141,23 @@ class MemoryData implements IDataService {
 
   @override
   dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
+}
+
+class HeldShoppingData extends MemoryData {
+  final oldSave = Completer<void>();
+
+  @override
+  Future<void> saveShoppingItems(
+    String uid,
+    String planId,
+    List<IngredientModel> items,
+  ) async {
+    if (uid == 'uid-a') {
+      await oldSave.future;
+      return;
+    }
+    return super.saveShoppingItems(uid, planId, items);
+  }
 }
 
 void main() {
@@ -286,6 +305,35 @@ void main() {
     expect(third.state, isA<ViewStateEmpty<List<IngredientModel>>>());
     second.dispose();
     third.dispose();
+  });
+
+  test('HOANG-F02: old user save must not block new user', () async {
+    final held = HeldShoppingData();
+    final vm = IngredientViewModel(
+      dataService: held,
+      analytics: analytics,
+      crashlytics: crash,
+    );
+    vm.onSessionStarted(testUser('uid-a'));
+    await vm.loadForPlan(fixturePlan(id: 'old', uid: 'uid-a'));
+    final oldWrite = vm.persistChanges();
+
+    vm.clearSession();
+    vm.onSessionStarted(testUser('uid-b'));
+    await vm.loadForPlan(fixturePlan(id: 'new', uid: 'uid-b'));
+    expect(await vm.persistChanges(), true);
+    expect(
+      held.checklists['uid-b/new'],
+      isNotEmpty,
+      reason: 'New user save is independent of old pending request',
+    );
+    held.oldSave.complete();
+    expect(
+      await oldWrite,
+      false,
+      reason: 'Old session cannot update the new session state',
+    );
+    vm.dispose();
   });
 
   test(
