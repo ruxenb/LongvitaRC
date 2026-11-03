@@ -12,11 +12,18 @@ from conftest import active_window_package, screen_texts
 
 PDF_VIEWER_PACKAGE = os.getenv("PDF_VIEWER_PACKAGE", "com.android.printspooler")
 PDF_HEADING = re.compile(r"(?:heading|titled|report title|tiêu đề)[^.;\n]{0,100}\bLONGVITA\b", re.I)
+_HEADING = r"(?:heading|titled|report title|tiêu đề)"
+_NOT_VISIBLE = (
+    r"(?:not\s+(?:visible|shown|displayed|present)|absent|missing|unavailable|"
+    r"(?:không|chưa)\s+(?:hiển thị|hiện|thấy|có))\b"
+)
 NEGATED_HEADING = re.compile(
-    r"\b(?:no|not|without|absent|missing|không|chưa)\b[^.;\n]{0,60}"
-    r"(?:heading|titled|report title|tiêu đề)|"
-    r"(?:heading|titled|report title|tiêu đề)[^.;\n]{0,100}\bLONGVITA\b"
-    r"[^.;\n]{0,60}\b(?:not|absent|missing|unavailable|không|chưa)\b", re.I,
+    r"\b(?:no|without|missing|absent)\s+"
+    r"(?:(?:a|the|visible|printed|PDF|report)\s+){0,4}" + _HEADING + r"|"
+    r"\b(?:không|chưa)\s+(?:(?:có|thấy|hiển thị|hiện|in)\s+){0,3}" + _HEADING + r"|"
+    + _HEADING + r"[^.;\n]{0,100}\bLONGVITA\b['\"“”]?\s*"
+    r"(?:(?:is|was|remains|appears)\s+)?" + _NOT_VISIBLE + r"|"
+    + _HEADING + r"\s+(?:is\s+)?" + _NOT_VISIBLE + r"[^.;\n]{0,60}\bLONGVITA\b", re.I,
 )
 
 # reports/{uid}/{exportId}.pdf in a Storage download URL, with its access token.

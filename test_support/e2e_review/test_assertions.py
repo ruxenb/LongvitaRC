@@ -79,6 +79,18 @@ async def test_viewer_accepts_heading_observed_after_open(monkeypatch):
     ))
 
 
+@pytest.mark.parametrize("last", [
+    "The printed heading LONGVITA is visible, not the app name.",
+    "No app name is shown, but the printed heading LONGVITA is visible.",
+    "The printed heading LONGVITA is visible. The toolbar title is missing.",
+])
+async def test_viewer_accepts_heading_when_negation_describes_other_content(monkeypatch, last):
+    monkeypatch.setattr(export_cases, "active_window_package", lambda: export_cases.PDF_VIEWER_PACKAGE)
+    await export_cases.test_tc08b_saved_pdf_opens_in_the_native_viewer(observe(
+        "Tap Mở PDF đã lưu: Android print preview opens.", last,
+    ))
+
+
 async def test_viewer_rejects_app_name_when_open_failed(monkeypatch):
     monkeypatch.setattr(export_cases, "active_window_package", lambda: "vn.edu.fpt.longvita")
     with pytest.raises(AssertionError):
@@ -96,6 +108,9 @@ async def test_viewer_rejects_app_name_when_open_failed(monkeypatch):
     "No heading LONGVITA is visible in the blank preview.",
     "The heading LONGVITA is not visible in the blank preview.",
     "Không có tiêu đề LONGVITA trong bản xem trước.",
+    "The heading is not visible: LONGVITA cannot be read.",
+    "The heading LONGVITA is missing from the preview.",
+    "The heading LONGVITA không hiển thị trong bản xem trước.",
 ])
 async def test_viewer_requires_a_printed_heading_in_final_observation(monkeypatch, last):
     monkeypatch.setattr(export_cases, "active_window_package", lambda: export_cases.PDF_VIEWER_PACKAGE)
