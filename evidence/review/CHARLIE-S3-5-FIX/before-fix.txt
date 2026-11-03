@@ -1,4 +1,4 @@
-00:00 +0: loading C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/session_race_test.dart
+00:00 +0: loading <user-home>/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/session_race_test.dart
 00:00 +0: ProfileViewModel after switching to uid-b PM-S3-5-01: late upload is ignored
 00:00 +0 -1: ProfileViewModel after switching to uid-b PM-S3-5-01: late upload is ignored [E]
   Expected: null
@@ -149,8 +149,8 @@
 01:00 +5 -16: Some tests failed.
 
 Failing tests:
-  C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/session_race_test.dart: MealPlanViewModel after switching to uid-a PM-S3-5-02: late saved plans are ignored
-  C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/session_race_test.dart: MealPlanViewModel after switching to uid-a late generate is ignored
-  C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/session_race_test.dart: MealPlanViewModel after switching to uid-a late saved plans error is ignored
-  C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/session_race_test.dart: MealPlanViewModel after switching to uid-a late submit is ignored
+  <user-home>/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/session_race_test.dart: MealPlanViewModel after switching to uid-a PM-S3-5-02: late saved plans are ignored
+  <user-home>/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/session_race_test.dart: MealPlanViewModel after switching to uid-a late generate is ignored
+  <user-home>/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/session_race_test.dart: MealPlanViewModel after switching to uid-a late saved plans error is ignored
+  <user-home>/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/session_race_test.dart: MealPlanViewModel after switching to uid-a late submit is ignored
   ... and 12 more

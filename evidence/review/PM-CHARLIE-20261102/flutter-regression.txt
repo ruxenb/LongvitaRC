@@ -1,75 +1,75 @@
-00:00 +0: loading C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/auth_error_mapper_test.dart
-00:00 +0: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/auth_viewmodel_test.dart: starts in Initializing, then SignedOut without a notice
-00:00 +1: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/auth_error_mapper_test.dart: Google Sign-In sign_in_canceled is a cancel
-00:00 +2: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/auth_viewmodel_test.dart: success: credential then profile, session started, ids set
-00:00 +3: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/auth_viewmodel_test.dart: success: credential then profile, session started, ids set
-00:00 +4: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/auth_viewmodel_test.dart: success: credential then profile, session started, ids set
-00:00 +5: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/auth_viewmodel_test.dart: success: credential then profile, session started, ids set
-00:00 +6: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/auth_viewmodel_test.dart: success: credential then profile, session started, ids set
-00:00 +7: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/auth_error_mapper_test.dart: Firebase Auth operation-not-allowed (provider disabled) is configuration
-00:00 +8: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/auth_viewmodel_test.dart: cancel: SignedOut with cancelled notice, no profile load
-00:00 +9: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/auth_viewmodel_test.dart: cancel: SignedOut with cancelled notice, no profile load
-00:00 +10: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/auth_viewmodel_test.dart: cancel: SignedOut with cancelled notice, no profile load
-00:00 +11: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/auth_error_mapper_test.dart: Firestore profile permission-denied write is profileWrite
-00:00 +12: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/auth_viewmodel_test.dart: credential failure: SignedOut with its kind, recorded non-fatal
-00:00 +13: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/auth_viewmodel_test.dart: credential failure: SignedOut with its kind, recorded non-fatal
-00:00 +14: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/auth_viewmodel_test.dart: profile failure after sign-in is ProfileError, not cancel; retry works
-00:00 +15: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/auth_viewmodel_test.dart: profile failure can sign out instead of retrying
-00:00 +16: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/auth_viewmodel_test.dart: repeated taps while the picker is open start one sign-in
-00:00 +17: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/auth_viewmodel_test.dart: restored session loads the profile without a new sign-in
-00:00 +18: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/auth_viewmodel_test.dart: logout clears session data and identifiers, keeps cloud data
-00:00 +19: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/auth_screens_test.dart: (setUpAll)
-00:00 +20: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/auth_screens_test.dart: (setUpAll)
-00:00 +21: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/auth_screens_test.dart: (setUpAll)
-00:00 +22: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/auth_screens_test.dart: (setUpAll)
-00:00 +22: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/auth_screens_test.dart: signed out shows Sign-in with the Google action
-00:00 +23: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/auth_screens_test.dart: signed out shows Sign-in with the Google action
-00:00 +24: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/auth_screens_test.dart: signed out shows Sign-in with the Google action
-00:00 +25: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/auth_screens_test.dart: signed out shows Sign-in with the Google action
-00:01 +26: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/qa/design_system_qa_test.dart: screenshots (actual) buttons
-00:01 +27: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/qa/design_system_qa_test.dart: screenshots (actual) buttons
-00:01 +28: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/qa/design_system_qa_test.dart: screenshots (actual) buttons
-00:01 +29: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/qa/design_system_qa_test.dart: screenshots (actual) buttons
-00:01 +30: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/qa/design_system_qa_test.dart: screenshots (actual) buttons
-00:01 +31: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/auth_screens_test.dart: profile failure opens recovery, not Sign-in; retry recovers
-00:01 +32: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/qa/design_system_qa_test.dart: screenshots (actual) text-fields
-00:01 +33: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/qa/design_system_qa_test.dart: screenshots (actual) text-fields
-00:02 +34: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/qa/design_system_qa_test.dart: screenshots (actual) text-fields
-00:02 +34: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/auth_screens_test.dart: start-up failure shows error + retry, then the app
+00:00 +0: loading <user-home>/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/auth_error_mapper_test.dart
+00:00 +0: <user-home>/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/auth_viewmodel_test.dart: starts in Initializing, then SignedOut without a notice
+00:00 +1: <user-home>/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/auth_error_mapper_test.dart: Google Sign-In sign_in_canceled is a cancel
+00:00 +2: <user-home>/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/auth_viewmodel_test.dart: success: credential then profile, session started, ids set
+00:00 +3: <user-home>/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/auth_viewmodel_test.dart: success: credential then profile, session started, ids set
+00:00 +4: <user-home>/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/auth_viewmodel_test.dart: success: credential then profile, session started, ids set
+00:00 +5: <user-home>/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/auth_viewmodel_test.dart: success: credential then profile, session started, ids set
+00:00 +6: <user-home>/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/auth_viewmodel_test.dart: success: credential then profile, session started, ids set
+00:00 +7: <user-home>/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/auth_error_mapper_test.dart: Firebase Auth operation-not-allowed (provider disabled) is configuration
+00:00 +8: <user-home>/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/auth_viewmodel_test.dart: cancel: SignedOut with cancelled notice, no profile load
+00:00 +9: <user-home>/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/auth_viewmodel_test.dart: cancel: SignedOut with cancelled notice, no profile load
+00:00 +10: <user-home>/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/auth_viewmodel_test.dart: cancel: SignedOut with cancelled notice, no profile load
+00:00 +11: <user-home>/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/auth_error_mapper_test.dart: Firestore profile permission-denied write is profileWrite
+00:00 +12: <user-home>/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/auth_viewmodel_test.dart: credential failure: SignedOut with its kind, recorded non-fatal
+00:00 +13: <user-home>/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/auth_viewmodel_test.dart: credential failure: SignedOut with its kind, recorded non-fatal
+00:00 +14: <user-home>/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/auth_viewmodel_test.dart: profile failure after sign-in is ProfileError, not cancel; retry works
+00:00 +15: <user-home>/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/auth_viewmodel_test.dart: profile failure can sign out instead of retrying
+00:00 +16: <user-home>/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/auth_viewmodel_test.dart: repeated taps while the picker is open start one sign-in
+00:00 +17: <user-home>/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/auth_viewmodel_test.dart: restored session loads the profile without a new sign-in
+00:00 +18: <user-home>/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/auth_viewmodel_test.dart: logout clears session data and identifiers, keeps cloud data
+00:00 +19: <user-home>/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/auth_screens_test.dart: (setUpAll)
+00:00 +20: <user-home>/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/auth_screens_test.dart: (setUpAll)
+00:00 +21: <user-home>/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/auth_screens_test.dart: (setUpAll)
+00:00 +22: <user-home>/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/auth_screens_test.dart: (setUpAll)
+00:00 +22: <user-home>/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/auth_screens_test.dart: signed out shows Sign-in with the Google action
+00:00 +23: <user-home>/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/auth_screens_test.dart: signed out shows Sign-in with the Google action
+00:00 +24: <user-home>/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/auth_screens_test.dart: signed out shows Sign-in with the Google action
+00:00 +25: <user-home>/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/auth_screens_test.dart: signed out shows Sign-in with the Google action
+00:01 +26: <user-home>/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/qa/design_system_qa_test.dart: screenshots (actual) buttons
+00:01 +27: <user-home>/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/qa/design_system_qa_test.dart: screenshots (actual) buttons
+00:01 +28: <user-home>/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/qa/design_system_qa_test.dart: screenshots (actual) buttons
+00:01 +29: <user-home>/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/qa/design_system_qa_test.dart: screenshots (actual) buttons
+00:01 +30: <user-home>/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/qa/design_system_qa_test.dart: screenshots (actual) buttons
+00:01 +31: <user-home>/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/auth_screens_test.dart: profile failure opens recovery, not Sign-in; retry recovers
+00:01 +32: <user-home>/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/qa/design_system_qa_test.dart: screenshots (actual) text-fields
+00:01 +33: <user-home>/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/qa/design_system_qa_test.dart: screenshots (actual) text-fields
+00:02 +34: <user-home>/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/qa/design_system_qa_test.dart: screenshots (actual) text-fields
+00:02 +34: <user-home>/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/auth_screens_test.dart: start-up failure shows error + retry, then the app
 Firebase start-up failed: not-configured Exception: no google-services
-00:02 +35: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/qa/design_system_qa_test.dart: screenshots (actual) text-fields
-00:02 +36: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/auth_screens_test.dart: screenshots (actual) sign-in idle 360
-00:02 +37: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/qa/design_system_qa_test.dart: screenshots (actual) cards
-00:02 +38: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/qa/design_system_qa_test.dart: screenshots (actual) cards
-00:02 +39: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/auth_screens_test.dart: screenshots (actual) sign-in failure 360
-00:02 +40: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/qa/design_system_qa_test.dart: screenshots (actual) navigation
-00:02 +41: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/auth_screens_test.dart: screenshots (actual) sign-in loading 360
-00:02 +42: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/auth_screens_test.dart: screenshots (actual) sign-in loading 360
-00:02 +43: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/qa/design_system_qa_test.dart: screenshots (actual) dialogs
-00:02 +44: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/qa/design_system_qa_test.dart: screenshots (actual) dialogs
-00:03 +45: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/qa/design_system_qa_test.dart: screenshots (actual) dialogs
-00:03 +46: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/auth_screens_test.dart: screenshots (actual) sign-in cancelled 412
-00:03 +47: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/qa/design_system_qa_test.dart: screenshots (actual) states
-00:03 +48: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/qa/design_system_qa_test.dart: screenshots (actual) states
-00:03 +49: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/auth_screens_test.dart: screenshots (actual) sign-in loading 412
-00:03 +50: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/qa/design_system_qa_test.dart: screenshots (actual) supporting
-00:03 +51: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/qa/design_system_qa_test.dart: screenshots (actual) supporting
-00:03 +52: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/auth_screens_test.dart: screenshots (actual) sign-in textScale 2.0 at 360 has no overflow
-00:03 +53: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/qa/design_system_qa_test.dart: screenshots (actual) qa-responsive-360
-00:03 +54: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/qa/design_system_qa_test.dart: screenshots (actual) qa-responsive-360-text1_3
-00:03 +55: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/qa/design_system_qa_test.dart: screenshots (actual) qa-responsive-360-text2_0
-00:03 +56: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/qa/design_system_qa_test.dart: screenshots (actual) qa-responsive-412
-00:04 +57: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/qa/design_system_qa_test.dart: screenshots (actual) qa-responsive-412-text1_3
-00:04 +58: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/qa/design_system_qa_test.dart: screenshots (actual) qa-responsive-412-text2_0
-00:04 +59: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/qa/design_system_qa_test.dart: spec checks button heights: 52 min, 56 with icon; radius 12
-00:04 +60: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/qa/design_system_qa_test.dart: spec checks button states: disabled, loading, pressed colours
-00:04 +61: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/qa/design_system_qa_test.dart: spec checks semantics: button label once, enabled flags
-00:04 +62: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/qa/design_system_qa_test.dart: spec checks touch targets >= 48
-00:04 +63: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/qa/design_system_qa_test.dart: spec checks navigation: height 80, selected semantics, callback
-00:04 +64: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/qa/design_system_qa_test.dart: spec checks text field: 58 input, error replaces helper, focus border
-00:04 +65: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/qa/design_system_qa_test.dart: spec checks checkbox semantics and toggle
-00:04 +66: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/qa/design_system_qa_test.dart: spec checks EditError dialog keeps primary disabled; cancel closes
-00:04 +67: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/qa/design_system_qa_test.dart: spec checks snackbar Undo calls back and hides
-00:04 +68: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/qa/design_system_qa_test.dart: spec checks typography tokens match Figma styles
-00:04 +69: C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/qa/design_system_qa_test.dart: (tearDownAll)
+00:02 +35: <user-home>/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/qa/design_system_qa_test.dart: screenshots (actual) text-fields
+00:02 +36: <user-home>/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/auth_screens_test.dart: screenshots (actual) sign-in idle 360
+00:02 +37: <user-home>/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/qa/design_system_qa_test.dart: screenshots (actual) cards
+00:02 +38: <user-home>/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/qa/design_system_qa_test.dart: screenshots (actual) cards
+00:02 +39: <user-home>/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/auth_screens_test.dart: screenshots (actual) sign-in failure 360
+00:02 +40: <user-home>/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/qa/design_system_qa_test.dart: screenshots (actual) navigation
+00:02 +41: <user-home>/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/auth_screens_test.dart: screenshots (actual) sign-in loading 360
+00:02 +42: <user-home>/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/auth_screens_test.dart: screenshots (actual) sign-in loading 360
+00:02 +43: <user-home>/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/qa/design_system_qa_test.dart: screenshots (actual) dialogs
+00:02 +44: <user-home>/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/qa/design_system_qa_test.dart: screenshots (actual) dialogs
+00:03 +45: <user-home>/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/qa/design_system_qa_test.dart: screenshots (actual) dialogs
+00:03 +46: <user-home>/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/auth_screens_test.dart: screenshots (actual) sign-in cancelled 412
+00:03 +47: <user-home>/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/qa/design_system_qa_test.dart: screenshots (actual) states
+00:03 +48: <user-home>/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/qa/design_system_qa_test.dart: screenshots (actual) states
+00:03 +49: <user-home>/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/auth_screens_test.dart: screenshots (actual) sign-in loading 412
+00:03 +50: <user-home>/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/qa/design_system_qa_test.dart: screenshots (actual) supporting
+00:03 +51: <user-home>/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/qa/design_system_qa_test.dart: screenshots (actual) supporting
+00:03 +52: <user-home>/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/auth/auth_screens_test.dart: screenshots (actual) sign-in textScale 2.0 at 360 has no overflow
+00:03 +53: <user-home>/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/qa/design_system_qa_test.dart: screenshots (actual) qa-responsive-360
+00:03 +54: <user-home>/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/qa/design_system_qa_test.dart: screenshots (actual) qa-responsive-360-text1_3
+00:03 +55: <user-home>/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/qa/design_system_qa_test.dart: screenshots (actual) qa-responsive-360-text2_0
+00:03 +56: <user-home>/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/qa/design_system_qa_test.dart: screenshots (actual) qa-responsive-412
+00:04 +57: <user-home>/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/qa/design_system_qa_test.dart: screenshots (actual) qa-responsive-412-text1_3
+00:04 +58: <user-home>/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/qa/design_system_qa_test.dart: screenshots (actual) qa-responsive-412-text2_0
+00:04 +59: <user-home>/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/qa/design_system_qa_test.dart: spec checks button heights: 52 min, 56 with icon; radius 12
+00:04 +60: <user-home>/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/qa/design_system_qa_test.dart: spec checks button states: disabled, loading, pressed colours
+00:04 +61: <user-home>/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/qa/design_system_qa_test.dart: spec checks semantics: button label once, enabled flags
+00:04 +62: <user-home>/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/qa/design_system_qa_test.dart: spec checks touch targets >= 48
+00:04 +63: <user-home>/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/qa/design_system_qa_test.dart: spec checks navigation: height 80, selected semantics, callback
+00:04 +64: <user-home>/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/qa/design_system_qa_test.dart: spec checks text field: 58 input, error replaces helper, focus border
+00:04 +65: <user-home>/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/qa/design_system_qa_test.dart: spec checks checkbox semantics and toggle
+00:04 +66: <user-home>/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/qa/design_system_qa_test.dart: spec checks EditError dialog keeps primary disabled; cancel closes
+00:04 +67: <user-home>/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/qa/design_system_qa_test.dart: spec checks snackbar Undo calls back and hides
+00:04 +68: <user-home>/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/qa/design_system_qa_test.dart: spec checks typography tokens match Figma styles
+00:04 +69: <user-home>/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/qa/design_system_qa_test.dart: (tearDownAll)
 00:04 +69: All tests passed!

@@ -253,16 +253,16 @@ false for 'create' @ L7, evaluation error at L164:24 for 'create' @ L164, false 
 test at tests\storage.rules.test.js:69:3
 ✖ B cannot read the report of A (1007.3892ms)
   Error: Expected request to fail, but it succeeded.
-      at C:\Users\phamv\OneDrive\Desktop\PRM\Assignment\LongvitaRC\firebase\node_modules\@firebase\rules-unit-testing\dist\index.cjs.js:576:31
+      at <user-home>\OneDrive\Desktop\PRM\Assignment\LongvitaRC\firebase\node_modules\@firebase\rules-unit-testing\dist\index.cjs.js:576:31
       at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
-      at async TestContext.<anonymous> (C:\Users\phamv\OneDrive\Desktop\PRM\Assignment\LongvitaRC\firebase\tests\storage.rules.test.js:71:5)
+      at async TestContext.<anonymous> (<user-home>\OneDrive\Desktop\PRM\Assignment\LongvitaRC\firebase\tests\storage.rules.test.js:71:5)
       at async Test.run (node:internal/test_runner/test:1404:7)
       at async Suite.processPendingSubtests (node:internal/test_runner/test:969:7)
 
 test at tests\storage.rules.test.js:74:3
 ✖ B cannot write into the folder of A (1037.0131ms)
   Error: Expected request to fail, but it succeeded.
-      at C:\Users\phamv\OneDrive\Desktop\PRM\Assignment\LongvitaRC\firebase\node_modules\@firebase\rules-unit-testing\dist\index.cjs.js:576:31
+      at <user-home>\OneDrive\Desktop\PRM\Assignment\LongvitaRC\firebase\node_modules\@firebase\rules-unit-testing\dist\index.cjs.js:576:31
       at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
       at async Test.run (node:internal/test_runner/test:1404:7)
       at async Suite.processPendingSubtests (node:internal/test_runner/test:969:7)
@@ -270,25 +270,25 @@ test at tests\storage.rules.test.js:74:3
 test at tests\storage.rules.test.js:77:3
 ✖ B cannot delete the report of A (2400.4786ms)
   Error: Expected request to fail, but it succeeded.
-      at C:\Users\phamv\OneDrive\Desktop\PRM\Assignment\LongvitaRC\firebase\node_modules\@firebase\rules-unit-testing\dist\index.cjs.js:576:31
+      at <user-home>\OneDrive\Desktop\PRM\Assignment\LongvitaRC\firebase\node_modules\@firebase\rules-unit-testing\dist\index.cjs.js:576:31
       at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
-      at async TestContext.<anonymous> (C:\Users\phamv\OneDrive\Desktop\PRM\Assignment\LongvitaRC\firebase\tests\storage.rules.test.js:79:5)
+      at async TestContext.<anonymous> (<user-home>\OneDrive\Desktop\PRM\Assignment\LongvitaRC\firebase\tests\storage.rules.test.js:79:5)
       at async Test.run (node:internal/test_runner/test:1404:7)
       at async Suite.processPendingSubtests (node:internal/test_runner/test:969:7)
 
 test at tests\storage.rules.test.js:82:3
 ✖ signed out cannot read a report (1539.6775ms)
   Error: Expected request to fail, but it succeeded.
-      at C:\Users\phamv\OneDrive\Desktop\PRM\Assignment\LongvitaRC\firebase\node_modules\@firebase\rules-unit-testing\dist\index.cjs.js:576:31
+      at <user-home>\OneDrive\Desktop\PRM\Assignment\LongvitaRC\firebase\node_modules\@firebase\rules-unit-testing\dist\index.cjs.js:576:31
       at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
-      at async TestContext.<anonymous> (C:\Users\phamv\OneDrive\Desktop\PRM\Assignment\LongvitaRC\firebase\tests\storage.rules.test.js:84:5)
+      at async TestContext.<anonymous> (<user-home>\OneDrive\Desktop\PRM\Assignment\LongvitaRC\firebase\tests\storage.rules.test.js:84:5)
       at async Test.run (node:internal/test_runner/test:1404:7)
       at async Suite.processPendingSubtests (node:internal/test_runner/test:969:7)
 
 test at tests\storage.rules.test.js:87:3
 ✖ signed out cannot write a report (973.7719ms)
   Error: Expected request to fail, but it succeeded.
-      at C:\Users\phamv\OneDrive\Desktop\PRM\Assignment\LongvitaRC\firebase\node_modules\@firebase\rules-unit-testing\dist\index.cjs.js:576:31
+      at <user-home>\OneDrive\Desktop\PRM\Assignment\LongvitaRC\firebase\node_modules\@firebase\rules-unit-testing\dist\index.cjs.js:576:31
       at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
       at async Test.run (node:internal/test_runner/test:1404:7)
       at async Suite.processPendingSubtests (node:internal/test_runner/test:969:7)
@@ -296,7 +296,7 @@ test at tests\storage.rules.test.js:87:3
 test at tests\storage.rules.test.js:92:3
 ✖ a signed-in user cannot write at the root (3016.6362ms)
   Error: Expected request to fail, but it succeeded.
-      at C:\Users\phamv\OneDrive\Desktop\PRM\Assignment\LongvitaRC\firebase\node_modules\@firebase\rules-unit-testing\dist\index.cjs.js:576:31
+      at <user-home>\OneDrive\Desktop\PRM\Assignment\LongvitaRC\firebase\node_modules\@firebase\rules-unit-testing\dist\index.cjs.js:576:31
       at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
       at async Test.run (node:internal/test_runner/test:1404:7)
       at async Promise.all (index 0)
@@ -306,7 +306,7 @@ test at tests\storage.rules.test.js:92:3
 test at tests\storage.rules.test.js:95:3
 ✖ a signed-in user cannot write directly under reports (1019.7621ms)
   Error: Expected request to fail, but it succeeded.
-      at C:\Users\phamv\OneDrive\Desktop\PRM\Assignment\LongvitaRC\firebase\node_modules\@firebase\rules-unit-testing\dist\index.cjs.js:576:31
+      at <user-home>\OneDrive\Desktop\PRM\Assignment\LongvitaRC\firebase\node_modules\@firebase\rules-unit-testing\dist\index.cjs.js:576:31
       at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
       at async Test.run (node:internal/test_runner/test:1404:7)
       at async Suite.processPendingSubtests (node:internal/test_runner/test:969:7)
@@ -314,16 +314,16 @@ test at tests\storage.rules.test.js:95:3
 test at tests\storage.rules.test.js:98:3
 ✖ a signed-in user cannot read another top folder (1024.0483ms)
   Error: Expected request to fail, but it succeeded.
-      at C:\Users\phamv\OneDrive\Desktop\PRM\Assignment\LongvitaRC\firebase\node_modules\@firebase\rules-unit-testing\dist\index.cjs.js:576:31
+      at <user-home>\OneDrive\Desktop\PRM\Assignment\LongvitaRC\firebase\node_modules\@firebase\rules-unit-testing\dist\index.cjs.js:576:31
       at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
-      at async TestContext.<anonymous> (C:\Users\phamv\OneDrive\Desktop\PRM\Assignment\LongvitaRC\firebase\tests\storage.rules.test.js:100:5)
+      at async TestContext.<anonymous> (<user-home>\OneDrive\Desktop\PRM\Assignment\LongvitaRC\firebase\tests\storage.rules.test.js:100:5)
       at async Test.run (node:internal/test_runner/test:1404:7)
       at async Suite.processPendingSubtests (node:internal/test_runner/test:969:7)
 
 test at tests\storage.rules.test.js:103:3
 ✖ a uid that only starts with the same text gets no access (972.6483ms)
   Error: Expected request to fail, but it succeeded.
-      at C:\Users\phamv\OneDrive\Desktop\PRM\Assignment\LongvitaRC\firebase\node_modules\@firebase\rules-unit-testing\dist\index.cjs.js:576:31
+      at <user-home>\OneDrive\Desktop\PRM\Assignment\LongvitaRC\firebase\node_modules\@firebase\rules-unit-testing\dist\index.cjs.js:576:31
       at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
       at async Test.run (node:internal/test_runner/test:1404:7)
       at async Suite.processPendingSubtests (node:internal/test_runner/test:969:7)
