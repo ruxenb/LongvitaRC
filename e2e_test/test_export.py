@@ -8,10 +8,16 @@ import os
 import re
 import urllib.request
 
-from conftest import screen_packages, screen_texts
+from conftest import active_window_package, screen_texts
 
 PDF_VIEWER_PACKAGE = os.getenv("PDF_VIEWER_PACKAGE", "com.android.printspooler")
 PDF_HEADING = re.compile(r"(?:heading|titled|report title|tiêu đề)[^.;\n]{0,100}\bLONGVITA\b", re.I)
+NEGATED_HEADING = re.compile(
+    r"\b(?:no|not|without|absent|missing|không|chưa)\b[^.;\n]{0,60}"
+    r"(?:heading|titled|report title|tiêu đề)|"
+    r"(?:heading|titled|report title|tiêu đề)[^.;\n]{0,100}\bLONGVITA\b"
+    r"[^.;\n]{0,60}\b(?:not|absent|missing|unavailable|không|chưa)\b", re.I,
+)
 
 # reports/{uid}/{exportId}.pdf in a Storage download URL, with its access token.
 REPORT_URL = re.compile(
@@ -62,5 +68,5 @@ async def test_tc08b_saved_pdf_opens_in_the_native_viewer(run_case):
     # The pinned Flash summarizer emits one paragraph, not VIEWER/HEADING fields.
     # Confirm the native viewer independently, then the heading in the final step.
     assert output.after("tap", "Mở PDF đã lưu"), "the open action was not observed"
-    assert PDF_VIEWER_PACKAGE in screen_packages(), "system PDF preview is not the current UI"
-    assert PDF_HEADING.search(output.last), output.last
+    assert active_window_package() == PDF_VIEWER_PACKAGE, "system PDF preview is not the active window"
+    assert PDF_HEADING.search(output.last) and not NEGATED_HEADING.search(output.last), output.last

@@ -63,7 +63,7 @@ async def test_sign_out_rejects_app_home_or_unknown_result(last):
 
 
 async def test_viewer_heading_must_follow_open_action(monkeypatch):
-    monkeypatch.setattr(export_cases, "screen_packages", lambda: {export_cases.PDF_VIEWER_PACKAGE})
+    monkeypatch.setattr(export_cases, "active_window_package", lambda: export_cases.PDF_VIEWER_PACKAGE)
     with pytest.raises(AssertionError):
         await export_cases.test_tc08b_saved_pdf_opens_in_the_native_viewer(observe(
             "LONGVITA on the dashboard.",
@@ -72,7 +72,7 @@ async def test_viewer_heading_must_follow_open_action(monkeypatch):
 
 
 async def test_viewer_accepts_heading_observed_after_open(monkeypatch):
-    monkeypatch.setattr(export_cases, "screen_packages", lambda: {export_cases.PDF_VIEWER_PACKAGE})
+    monkeypatch.setattr(export_cases, "active_window_package", lambda: export_cases.PDF_VIEWER_PACKAGE)
     await export_cases.test_tc08b_saved_pdf_opens_in_the_native_viewer(observe(
         "Tap Mở PDF đã lưu: Android print preview opens.",
         "The system print preview shows Select a printer and the printed heading 'LONGVITA — THỰC ĐƠN'.",
@@ -80,7 +80,7 @@ async def test_viewer_accepts_heading_observed_after_open(monkeypatch):
 
 
 async def test_viewer_rejects_app_name_when_open_failed(monkeypatch):
-    monkeypatch.setattr(export_cases, "screen_packages", lambda: {"vn.edu.fpt.longvita"})
+    monkeypatch.setattr(export_cases, "active_window_package", lambda: "vn.edu.fpt.longvita")
     with pytest.raises(AssertionError):
         await export_cases.test_tc08b_saved_pdf_opens_in_the_native_viewer(observe(
             "Tap Mở PDF đã lưu: Longvita still shows Không mở được file PDF đã lưu.",
@@ -93,9 +93,12 @@ async def test_viewer_rejects_app_name_when_open_failed(monkeypatch):
     "Select a printer is shown above a blank preview pane.",
     "I see Longvita mentioned in the app title, with no printed heading visible.",
     "No PDF content is visible in the system dialog.",
+    "No heading LONGVITA is visible in the blank preview.",
+    "The heading LONGVITA is not visible in the blank preview.",
+    "Không có tiêu đề LONGVITA trong bản xem trước.",
 ])
 async def test_viewer_requires_a_printed_heading_in_final_observation(monkeypatch, last):
-    monkeypatch.setattr(export_cases, "screen_packages", lambda: {export_cases.PDF_VIEWER_PACKAGE})
+    monkeypatch.setattr(export_cases, "active_window_package", lambda: export_cases.PDF_VIEWER_PACKAGE)
     with pytest.raises(AssertionError):
         await export_cases.test_tc08b_saved_pdf_opens_in_the_native_viewer(observe(
             "Tap Mở PDF đã lưu.", last,
@@ -103,16 +106,32 @@ async def test_viewer_requires_a_printed_heading_in_final_observation(monkeypatc
 
 
 async def test_viewer_rejects_good_llm_description_while_app_is_still_foreground(monkeypatch):
-    monkeypatch.setattr(export_cases, "screen_packages", lambda: {"vn.edu.fpt.longvita"})
+    monkeypatch.setattr(export_cases, "active_window_package", lambda: "vn.edu.fpt.longvita")
     with pytest.raises(AssertionError):
         await export_cases.test_tc08b_saved_pdf_opens_in_the_native_viewer(observe(
             "Tap Mở PDF đã lưu: printed heading LONGVITA.",
         ))
 
 
-def test_native_packages_come_from_ui_hierarchy_not_agent_text(monkeypatch):
-    monkeypatch.setattr(harness, "_screen_xml", lambda: '<hierarchy><node package="com.android.printspooler" text="Select a printer"/><node package="com.android.systemui"/></hierarchy>')
-    assert harness.screen_packages() == {"com.android.printspooler", "com.android.systemui"}
+def test_native_package_comes_from_window_root_not_agent_text(monkeypatch):
+    monkeypatch.setattr(harness, "_screen_xml", lambda: '<hierarchy><node package="com.android.printspooler" text="Select a printer"><node package="com.android.systemui"/></node></hierarchy>')
+    assert harness.active_window_package() == "com.android.printspooler"
+
+
+def test_descendant_viewer_package_does_not_replace_app_window_owner(monkeypatch):
+    monkeypatch.setattr(harness, "_screen_xml", lambda: '<hierarchy><node package="vn.edu.fpt.longvita"><node package="com.android.printspooler"/></node></hierarchy>')
+    assert harness.active_window_package() == "vn.edu.fpt.longvita"
+
+
+@pytest.mark.parametrize("xml", [
+    '<hierarchy/>',
+    '<hierarchy><node package="a"/><node package="b"/></hierarchy>',
+    '<hierarchy><node><node package="com.android.printspooler"/></node></hierarchy>',
+])
+def test_ambiguous_or_missing_window_owner_fails_closed(monkeypatch, xml):
+    monkeypatch.setattr(harness, "_screen_xml", lambda: xml)
+    with pytest.raises(ValueError, match="one active window root"):
+        harness.active_window_package()
 
 
 async def test_viewer_accepts_recorded_single_paragraph_replay(monkeypatch):
@@ -120,7 +139,7 @@ async def test_viewer_accepts_recorded_single_paragraph_replay(monkeypatch):
     records = Path(__file__).resolve().parents[2] / "evidence/artemis/raw/runs.jsonl"
     raw = [json.loads(line) for line in records.read_text(encoding="utf-8").splitlines() if line.strip()]
     recorded = next(r for r in raw if r["task_id"].startswith("46f57d95"))
-    monkeypatch.setattr(export_cases, "screen_packages", lambda: {export_cases.PDF_VIEWER_PACKAGE})
+    monkeypatch.setattr(export_cases, "active_window_package", lambda: export_cases.PDF_VIEWER_PACKAGE)
     await export_cases.test_tc08b_saved_pdf_opens_in_the_native_viewer(observe(
         *recorded["output"].splitlines(),
     ))

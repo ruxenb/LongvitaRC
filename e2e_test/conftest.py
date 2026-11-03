@@ -16,6 +16,7 @@ import time
 import urllib.parse
 import urllib.request
 import urllib.error
+import xml.etree.ElementTree as ET
 from pathlib import Path
 
 import pytest
@@ -112,9 +113,13 @@ def screen_texts() -> list[str]:
     return [html.unescape(v) for v in values]
 
 
-def screen_packages() -> set[str]:
-    """Packages owning nodes in the current UI, independent of LLM summaries."""
-    return set(re.findall(r'package="([^"]+)"', _screen_xml()))
+def active_window_package() -> str:
+    """The active hierarchy's root owner; descendants can belong to other apps."""
+    root = ET.fromstring(_screen_xml())
+    windows = [root] if root.tag == "node" else root.findall("node")
+    if len(windows) != 1 or not windows[0].get("package"):
+        raise ValueError("expected one active window root with a package")
+    return windows[0].attrib["package"]
 
 
 def _stop_app() -> None:
