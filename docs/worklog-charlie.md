@@ -157,3 +157,7 @@ Task S8-17-CM. Ghi theo commit và evidence thật, cập nhật dần. Trạng 
 ### PR #8 trước merge — phản hồi 3 findings mới
 
 CodeRabbit check hoàn tất nhưng còn 2 Major/1 Minor. Chấp nhận cả ba: bcaa8a5 sửa viewer-result/heading và push-title cuối; e0e39e3 thu hẹp claim broadcast, đồng thời sửa PM-DOC-01 về quyền đọc hồ sơ. Hai ca false-pass cũ tái hiện được; sau sửa 30/30 assertion checks pass. Native TC-08b/10/11 vẫn cần re-run khi có thiết bị/daemon, không gộp vào các test fixture. Evidence: evidence/review/PR8-coderabbit-20261103/.
+
+### Follow-up PR #8 — contract của Flash summarizer
+
+CodeRabbit tìm đúng hai lỗi trong parser VIEWER/HEADING ban đầu (CR-04/05). Đối chiếu source summarizer pin cho thấy producer chỉ sinh một đoạn; bỏ parser và dùng native UI packages + printed heading ở replay cuối (0df2563). 33/33 kiểm assertions pass, có dùng replay đã lưu để kiểm format. Chưa chạy lại native; không tính bộ fixture này thành ARTEMIS runs.
