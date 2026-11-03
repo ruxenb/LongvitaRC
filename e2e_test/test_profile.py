@@ -8,14 +8,18 @@ async def test_tc09_remote_config_refresh_reports_a_result(run_case):
     """TC-09. A value change also needs a Console edit: see evidence/remote-config."""
     output = await run_case(
         "Open the Longvita app signed in and open 'Hồ sơ'. Scroll to 'Remote Config', read "
-        "the value of 'Số món gợi ý tối đa', and tap 'Cập nhật Remote Config'. Read the "
-        "message that appears and the value again.",
+        "the value of 'Số món gợi ý tối đa', and tap 'Cập nhật Remote Config' once. "
+        "Within 2 seconds, read the message in the dark bar that appears at the bottom "
+        "of the screen, then read the value again.",
         "The value before, the message shown, and the value after.",
     )
 
-    assert "giá trị" in output.lower() or any(char.isdigit() for char in output)
+    # Without a Console edit the values stay the same, and the app must say so.
+    assert "Không có giá trị mới" in output
+    assert "Đã áp dụng giá trị mới" not in output
 
 
+@pytest.mark.keep_app
 async def test_tc10_push_opens_profile_from_the_shade(run_case):
     """TC-10. Send the message from the Console first, with the app in background.
 

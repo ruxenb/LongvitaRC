@@ -11,11 +11,11 @@ Thắng, Hoàng và Thái An đã đồng ý các phần của PR #4 chạm vào
 ## Mức hoàn thành công việc
 
 ```text
-Toàn dự án   [███████████░░░░░░░░░░░░░░░░░░░░░░░░░░░░░]  28%
-Charlie      [█████████████████████████░░░░░░░░░░░░░░░]  63%
+Toàn dự án   [████████████░░░░░░░░░░░░░░░░░░░░░░░░░░░░]  29%
+Charlie      [███████████████████████████░░░░░░░░░░░░░]  68%
 ```
 
-Code và tích hợp Firebase (18 task, giai đoạn 0–5): **82%**. Test, AI review, báo cáo, nộp bài (11 task, giai đoạn 6–9): **32%**.
+Code và tích hợp Firebase (18 task, giai đoạn 0–5): **82%**. Test, AI review, báo cáo, nộp bài (11 task, giai đoạn 6–9): **45%**.
 
 Mỗi task chấm theo phần tiêu chí nghiệm thu đã đạt và có bằng chứng. Đây là ước lượng của Charlie, chưa được leader duyệt. Số của Thái An, Thắng, Hoàng lấy từ bảng task (đã xong 100%, đang làm 50%), nên có thể thấp hơn thực tế. Task đã nghiệm thu chính thức: 0/29.
 
@@ -42,9 +42,9 @@ Mỗi task chấm theo phần tiêu chí nghiệm thu đã đạt và có bằng
 | S4-14 | 85% | TalkBack thật: Sign-in đi hết, Profile phần lớn; còn phần cuối Profile và máy thật |
 | S4-15 | 50% | FCM đủ; Storage trên Console chờ DEC-01 |
 | S5-4 | 80% | login, logout đã thấy trên DebugView; còn export_report thật |
-| S6-4 | 50% | Client ARTEMIS cài được, đúng API, thiếu daemon thì lỗi chứ không pass; còn key, daemon và 3 lần chạy |
-| S6-7 | 40% | Cùng bộ cài đã kiểm; chưa chạy, cần key và Storage |
-| S6-14 | 0% | Chờ lần chạy ARTEMIS chính thức |
+| S6-4 | 80% | TC-01, TC-01b, TC-11 chạy thật bằng ARTEMIS và pass; còn đủ 3 lượt và lượt chính thức |
+| S6-7 | 75% | TC-08, TC-08b (Storage Emulator), TC-09, TC-10 (push gửi tay) chạy thật và pass; còn đủ 3 lượt, Storage thật |
+| S6-14 | 70% | TC-09 tìm ra lỗi báo sai Remote Config; đã sửa và chạy lại pass; còn lỗi từ lượt chính thức |
 | S7-1-CM | 40% | Đã có PR; còn chạy AI review và lưu output |
 | S7-2-CM | 0% | Chờ output AI review |
 | S7-3-CM | 0% | Chờ finding được chấp nhận |
@@ -61,8 +61,8 @@ Mỗi task chấm theo phần tiêu chí nghiệm thu đã đạt và có bằng
 | Trạng thái | Số lượng | IDs |
 |---|---:|---|
 | Có kiểm chứng/evidence, chờ nghiệm thu | 6 | S0-3-CM, S2-3, S2-4, S3-3, S3-4, S3-9 |
-| Đang thực hiện / PR | 20 | S0-4, S3-1, S3-2, S3-5, S3-7, S4-10, S4-11, S4-12, S4-13, S4-14, S4-15, S5-4, S6-4, S6-7, S7-1-CM, S8-3, S8-7, S8-12, S8-17-CM, S9-5-CM |
-| Chưa bắt đầu | 3 | S6-14, S7-2-CM, S7-3-CM |
+| Đang thực hiện / PR | 21 | S0-4, S3-1, S3-2, S3-5, S3-7, S4-10, S4-11, S4-12, S4-13, S4-14, S4-15, S5-4, S6-4, S6-7, S6-14, S7-1-CM, S8-3, S8-7, S8-12, S8-17-CM, S9-5-CM |
+| Chưa bắt đầu | 2 | S7-2-CM, S7-3-CM |
 | **Tổng** | **29** | |
 
 Chi tiết IDs/owner/dependency tại [task Charlie](task-charlie.md) và [master 112 task](danh-sach-task-full.md). Chưa tự đánh Done thay leader; S7-1 đang thực hiện, chưa có AI PR review output để tính đủ Stage 7. Merge vào `main` không đồng nghĩa task đã được nghiệm thu.
@@ -78,7 +78,7 @@ Chi tiết IDs/owner/dependency tại [task Charlie](task-charlie.md) và [maste
 - **FCM thật (S4-12, S4-15):** tin từ Console về đủ foreground, background, terminated; bấm tin mở Profile; lịch sử lưu trên máy theo UID. [Bằng chứng](../../evidence/fcm/S4-15-push-20261102/README.md). Tin đến khi app đang mở hiện thanh thông báo trên màn đang xem, nút "Xem" mở hộp thư ([bằng chứng 03/11](../../evidence/fcm/S4-12-foreground-20261103/README.md)). Đây là contract tạm nhóm đã đồng ý.
 - **TalkBack (S4-14):** [chạy thật trên emulator](../../evidence/a11y/S4-14-talkback-20261103/README.md). Sign-in đọc đúng thứ tự, nút nào cũng có tên. Profile đi tuần tự đến hộp thư; phần Remote Config, Crashlytics mới kiểm nhãn.
 - **Crashlytics:** có plugin Gradle, [crash thử đã lên Console](../../evidence/crashlytics/S4-13-test-crash-20261102/README.md). **Thái An cần chốt:** chưa nối `FlutterError.onError` và `PlatformDispatcher.onError` (S5-6), nên lỗi Flutter không bắt được chưa tự lên Crashlytics.
-- **ARTEMIS (S6-4, S6-7):** bỏ `DummyArtemisClient` trả SUCCESS giả, dùng `artemis-client` thật, ghim commit `351ca84`, viết `test_auth.py`, `test_export.py`, `test_profile.py`. **Chưa chạy lần nào:** cần key mô hình (S0-5). Ngày 03/11 đã cài client đúng commit ghim; 7 test được nhận, và khi thiếu daemon cả 7 lỗi ở fixture chứ không pass ([log](../../evidence/artemis/S6-4-setup-20261103/README.md)).
+- **ARTEMIS (S6-4, S6-7):** bỏ `DummyArtemisClient` trả SUCCESS giả, dùng `artemis-client` thật, ghim commit `351ca84`, viết `test_auth.py`, `test_export.py`, `test_profile.py`. **Chưa chạy lần nào:** cần key mô hình (S0-5). Ngày 03/11 đã cài client đúng commit ghim; 7 test được nhận, và khi thiếu daemon cả 7 lỗi ở fixture chứ không pass ([log](../../evidence/artemis/S6-4-setup-20261103/README.md)). **Ngày 03/11 đã chạy thật:** 7/7 test pass trong một lượt đủ, với key Gemini miễn phí của Charlie, Storage Emulator và push gửi tay ([kết quả](../../evidence/artemis/README.md)). Lần chạy tìm ra một lỗi app (Remote Config báo sai) và đã sửa.
 - **Profile (S4-13), đã vào `main` qua PR #3:** danh tính, đăng xuất, xuất PDF với tiến độ và URL, hộp thư FCM, giá trị và nút cập nhật Remote Config, crash thử có xác nhận. Có route `/profile`, Home bỏ khối xuất tạm và chỉ còn lối sang Profile, đăng xuất từ Profile có hộp xác nhận theo TC-11. Nút đăng xuất trên Home vẫn không hỏi xác nhận, Hoàng xem có đổi không.
 - **PDF (S4-10), đã vào `main` qua PR #2:** TTF tiếng Việt regular/bold, lưu trên máy trước khi upload, export ID giữ nguyên khi thử lại, mở và chia sẻ qua `IReportViewer`. Mỗi lúc chỉ chạy một export hoặc retry, nên file, URL, tiến độ và trạng thái luôn thuộc cùng một lần xuất. Đăng xuất hủy upload đang chạy và xóa PDF của user đó trên máy, không đụng bản đã lên Storage. Từ PR #4, Home không còn các nút xuất, mở, chia sẻ, thử lại; mọi thao tác PDF nằm ở Profile. Chưa chứng minh đúng plan đang xem vì chờ S4-3.
 

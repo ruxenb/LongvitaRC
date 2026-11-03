@@ -11,7 +11,8 @@ async def test_tc01_sign_in_with_google(run_case):
         "Open the Longvita app. If the home screen is showing, sign out first from "
         "the profile icon. On the sign-in screen tap 'Đăng nhập bằng Google'. In the "
         "native Google account picker choose the test account, and wait for the app "
-        "to leave the sign-in screen.",
+        "to leave the sign-in screen. Then wait 3 seconds and read the screen title "
+        "and the role label on the home screen.",
         "The title of the screen shown after signing in, and the role text on it.",
     )
 
@@ -23,7 +24,8 @@ async def test_tc01b_cancelled_sign_in_stays_on_sign_in(run_case):
     output = await run_case(
         "Open the Longvita app on the sign-in screen, signing out first if needed. "
         "Tap 'Đăng nhập bằng Google'. When the native account picker opens, press the "
-        "Android Back button instead of choosing an account.",
+        "Android Back button instead of choosing an account. Then wait 3 seconds for "
+        "the sign-in screen to settle, and read the notice text and the button label.",
         "The notice shown after closing the picker, and the label of the sign-in button.",
     )
 
@@ -41,4 +43,8 @@ async def test_tc11_sign_out_cannot_return_with_back(run_case):
     )
 
     assert "Đăng nhập bằng Google" in output or "sign-in" in output.lower()
-    assert "Longvita Dashboard" not in output
+    # Earlier steps show the home screen before signing out; only what is on
+    # screen after Back matters: the launcher or Sign-in, never the dashboard.
+    after_back = output.strip().splitlines()[-1]
+    assert "Dashboard" not in after_back
+    assert "home screen" in after_back.lower() or "Đăng nhập bằng Google" in after_back

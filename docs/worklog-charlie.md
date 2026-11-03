@@ -134,3 +134,11 @@ Task S8-17-CM. Ghi theo commit và evidence thật, cập nhật dần. Trạng 
 - **Quyết định:** chưa cài daemon. Script khởi động của ARTEMIS tự cài công cụ và helper APK, và cần key LLM; làm khi có key S0-5.
 - **Vấn đáp:** `docs/report-drafts/s9-5-viva-charlie.md`, kịch bản 5 phút và câu hỏi thường gặp, dẫn dòng code trên `main`. Lệnh test dự phòng đã chạy: 13/13.
 - **Còn vướng:** key S0-5; chưa thử đổi Remote Config trên Console.
+
+### ARTEMIS chạy thật (S6-4, S6-7, S6-14) — nhánh `feature/charlie-artemis-01`
+
+- **Đầu vào:** key Gemini miễn phí do Charlie tạo (nằm ngoài repo); daemon ARTEMIS cùng commit ghim, model `gemini-3.5-flash-lite` vì `gemini-3.8-flash` bị giới hạn 5 request/phút và đang quá tải; UIAutomator thay helper vì emulator không cho bật accessibility service qua adb.
+- **Sửa script:** ở commit ghim, nhánh Flash bỏ qua Outputter nên SDK không có output; dùng tóm tắt từng bước của agent làm quan sát và ghi nguồn. Tắt app trước mỗi test để điều kiện đầu vào độc lập. Chỉnh kịch bản (chờ, chiều vuốt) và assertion (TC-09 quá lỏng, TC-11 kiểm sai phạm vi).
+- **Lỗi app tìm được:** TC-09 cho thấy mỗi lần bấm "Cập nhật Remote Config" đều báo "Đã áp dụng giá trị mới." dù không đổi gì. SDK coi mọi lần fetch mới là đã kích hoạt; ViewModel giờ so giá trị trước và sau (`fd0951c`), có widget test.
+- **Kết quả:** một lượt đủ 7/7 pass. TC-08 kiểm thêm file trên Storage Emulator bằng URL đọc từ màn hình (18.955 byte, `%PDF-1.5`).
+- **Còn vướng:** mới một lượt đủ; chưa có lượt chính thức S6-9; TC-08 chưa trên Storage thật; TC-10 cần gửi push tay.
