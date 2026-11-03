@@ -1,6 +1,6 @@
 # S3-5 — Đăng xuất và cách ly phiên, 04/11/2026
 
-> **PM re-review code 9710d81:** analyzer sạch, 294/294 tests khi PM chạy độc lập. PM-S3-5-04 Closed; reproduction cũ 03 pass, nhưng 03 còn callback sau await Crashlytics và có 05 mới (completions login/logout cũ). Bốn probe độc lập fail, không phải native. S3-5 vẫn Changes requested và chờ A3/policy/SDK-error decision. Các kết quả 0e3ef5a/279 tests bên dưới là lịch sử baseline.
+> **PM re-review f5ece29:** PM chạy analyzer sạch/303 tests và 4 completion probes pass; 03/04/05 Closed. Có finding mới 06: giữ Future credential result trong lúc auth stream đã đưa A vào app, logout A rồi thả result cũ làm VM kẹt AuthLoadingProfile dù SDK UID=null. Một probe điều khiển fail, chưa native; S3-5 còn Changes requested và input A3/policy/SDK-error. Các kết quả 0e3ef5a/9710d81 bên dưới là lịch sử baseline.
 
 - **Code:** `main` `96c9f57` (sau khi merge PR #9). Đợt này không đổi code: không tái hiện được lỗi nào.
 - **Thiết bị:** AVD `LocalMate_API_35`, Android 15.
@@ -191,3 +191,11 @@ Trước đây state chỉ đổi sau khi chờ một lời gọi telemetry (Cra
 | A → B | s07, s08, s09 | B (email đã làm mờ) không thấy marker nào của A. Hộp thư "Chưa có thông báo nào.", lịch sử B `[]`, lịch sử A giữ nguyên 2601 byte |
 
 Các race trong 03 và 05 chỉ kiểm bằng test có điều khiển, không tái hiện trên máy. Đề xuất xử lý khi SDK sign-out lỗi, A3 và chính sách giữ dữ liệu vẫn chờ phối hợp, chưa làm.
+
+## PM re-review f5ece29
+
+PM độc lập chạy analyzer sạch, 303/303 Flutter tests; 4/4 probes completion cũ pass, original profile probe và SDK-failure observation mỗi ca pass. **PM-S3-5-03/04/05 Closed** trong phạm vi kiểm. Đã xem ảnh s03/s05/s07–s09 (signed-out/restart, A vào lại, B không marker A và email B che); PM không tự thao tác emulator. Race tests không tính là native.
+
+**Finding mới PM-S3-5-06:** SDK UID stream đưa A vào app trước khi Future kết quả credential trả; A logout thành công; thả result thành công của request cũ, không đăng nhập lại SDK. AuthViewModel chưa kiểm attempt sau await SDK nên gọi lại profile loading, VM kẹt AuthLoadingProfile dù SDK UID=null. Một probe độc lập fail expected signed-out, chưa tái hiện native và không thuộc suite 303. Đây là SDK-result boundary, tách khỏi các ca telemetry 05 đã sửa. Cần bảo vệ lifecycle attempt và giữ dedup của các result/stream hợp lệ cùng phiên.
+
+S3-5 còn Changes requested cho 06 và Waiting input A3/retention/SDK-error decision. PM không tự sửa production hoặc thay policy. Các tests/evidence f5ece29 và baseline cũ giữ nguyên.
