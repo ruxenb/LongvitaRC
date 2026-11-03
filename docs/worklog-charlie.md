@@ -177,3 +177,9 @@ Sửa Semantics của các thẻ Profile, URL, tiến trình, danh tính, headin
 ### S4-14 — re-review f83206a đạt, 03/11/2026
 
 Giữ 14ec763 và PM docs 17a8ff9. f83206a hoàn thiện test RC pending bằng Completer và Semantics; Sign-in được đi TalkBack qua QA host dùng màn/VM thật với Auth giả; Share trên app thật mở ChooserActivity rồi Back. Trong lúc kiểm Sign-in phát hiện heading không được Android nhận; thêm headingLevel ở 8 vị trí, có test và ảnh điều hướng heading trên Sign-in/Profile. PM xác nhận lỗi này thuộc S4-14, chạy độc lập analyzer sạch/279 tests pass, xem ảnh 16–20 và diff; PM không tự thao tác TalkBack. Ba mục PM bổ sung đã đạt, S4-14 chuyển Chờ nghiệm thu, tổng Charlie 10 chờ/19 đang làm. Chưa push/PR tại thời điểm này; bước kế là giao gói lên PR để review, chưa tự merge hoặc chuyển S3-5. Các giới hạn QA/Auth giả, states fake, máy thật/TTS được giữ rõ trong README.
+
+## 04/11/2026
+
+### S3-5 — đăng xuất và cách ly phiên, kiểm native
+
+PR #9 (S4-14) đã merge vào main tại `96c9f57`; S3-5 bắt đầu từ commit này, nhánh `feature/charlie-session-02`. Rà AuthViewModel, ba participant SessionScoped, PDF, upload và FCM so với test: không tái hiện được lỗi nào, nên không đổi code. Native trên emulator với hai tài khoản Google thật do Charlie đăng nhập: Hủy, Đồng ý, Back, mở lại app, A→B, đăng xuất từ Home, A→đăng xuất→A đều đạt. PDF trên máy của UID bị xóa, bản trên Storage Emulator vẫn còn, lịch sử thông báo giữ theo UID. Email của tài khoản B được làm mờ trong ảnh. Analyzer sạch, 279/279 tests pass. Còn chờ: Hoàng duyệt A3, nhóm chốt giữ PDF và lịch sử thông báo. Evidence: `evidence/auth/S3-5-20261104/`.

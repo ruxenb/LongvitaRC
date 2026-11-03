@@ -4,7 +4,7 @@
 
 **Snapshot 03/11/2026:** PR #1–#7 đã vào main; base tích hợp gói review là `97cbaa9`. CodeRabbit đã được Thái An cài và review [PR #7](https://github.com/ruxenb/LongvitaRC/pull/7) với 11 góp ý. Gói S7-1/2/3 trên `feature/charlie-review-delivery-01` lưu output, quyết định và các commit sửa; chờ team nghiệm thu, không tự merge PR. [Evidence/verification](../../evidence/review/PR7-coderabbit-20261103/README.md).
 
-**Cập nhật sau snapshot:** [PR #8 — hoàn thiện S7-2/S7-3 và kiểm assertions ARTEMIS](https://github.com/ruxenb/LongvitaRC/pull/8) đã merge vào main tại `b2101a3`. Các trạng thái S7 dưới đây vẫn chờ nghiệm thu chính thức. Gói S4-14 đợt 2 ở nhánh local `feature/charlie-a11y-02`, code `f83206a`; PM re-review đạt, chạy lại analyzer sạch/279 tests pass và đóng ba mục bổ sung. Chưa push/PR gói S4-14 tại thời điểm re-review; bước tiếp là đưa gói này lên PR, chưa tự merge hoặc chuyển S3-5.
+**Cập nhật sau snapshot:** [PR #8 — hoàn thiện S7-2/S7-3 và kiểm assertions ARTEMIS](https://github.com/ruxenb/LongvitaRC/pull/8) đã merge vào main tại `b2101a3`. Các trạng thái S7 dưới đây vẫn chờ nghiệm thu chính thức. Gói S4-14 đợt 2 ở nhánh local `feature/charlie-a11y-02`, code `f83206a`; PM re-review đạt, chạy lại analyzer sạch/279 tests pass và đóng ba mục bổ sung. Chưa push/PR gói S4-14 tại thời điểm re-review; bước tiếp là đưa gói này lên PR, chưa tự merge hoặc chuyển S3-5. Sau đó [PR #9](https://github.com/ruxenb/LongvitaRC/pull/9) đã merge vào main tại `96c9f57`; S3-5 làm tiếp từ commit này (evidence/auth/S3-5-20261104).
 
 Thắng, Hoàng và Thái An đã đồng ý các phần của PR #4 chạm vào việc của họ (theo Charlie, 02/11).
 
@@ -29,7 +29,7 @@ Các điểm % cũ trong bảng dưới là ước lượng Dev của các phầ
 | S3-2 | 55% | SHA của Charlie, An, Thắng đã đăng ký (03/11); còn An, Thắng đăng nhập thử và SHA của Hoàng |
 | S3-3 | 90% | Chạy thật; lỗi mạng và lỗi hồ sơ mới test bằng fake |
 | S3-4 | 95% | Đủ trạng thái; còn chốt layout và ngôn ngữ |
-| S3-5 | 85% | Chạy thật; còn A/B bằng hai tài khoản và Hoàng duyệt A3 |
+| S3-5 | 90% | Native A/B và cùng UID đạt (04/11); chờ Hoàng duyệt A3 và nhóm chốt giữ PDF/lịch sử thông báo |
 | S3-7 | 70% | Rules và 14 test trên emulator; còn deploy lên project thật |
 | S3-9 | 100% | Đủ theo tiêu chí, chờ nghiệm thu |
 | S4-10 | 80% | PDF, lưu, mở, chia sẻ xong; còn thực đơn thật từ S4-3 |
