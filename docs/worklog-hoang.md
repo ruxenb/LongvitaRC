@@ -28,3 +28,10 @@
 - Review tasks S7-1/2/3 require an actual PR, AI reviewer output and distinct fix commit.
 - S8 slides, final report and demo video require evidence from a real Android session; written drafts must not be called recording evidence.
 - Formal task status belongs to team leader; this worklog records implementation only.
+
+
+## 2026-11-04 — Android certificate verification (same laptop)
+- Used JDK 21 keytool to read the existing C:\Users\ASUS\.android\debug.keystore (alias androiddebugkey); did not generate or replace a keystore.
+- SHA-1 and SHA-256 saved in docs/hoang-android-sha.md.
+- Compared only Android OAuth SHA-1 with the committed android/app/google-services.json: **mismatch**. Current config may be stale, so team must verify Firebase Console before changing it. No production Firebase changes performed.
+- android/app/build.gradle.kts still signs release with debug signing configuration; requires team-approved release signing plan before distribution.

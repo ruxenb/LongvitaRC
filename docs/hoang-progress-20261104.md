@@ -5,7 +5,7 @@ This is a technical evidence matrix, NOT the formal Accepted status in the team-
 
 | ID | Evidence/status | Outstanding acceptance |
 |---|---|---|
-| S0-3-HD | Flutter/Dart, FlutterFire, ADB and Android CLI installed D: | SDK package licences, Android device/emulator, complete flutter doctor |
+| S0-3-HD | Flutter/Dart, FlutterFire, ADB and Android CLI installed D: | Local Debug SHA-1/256 obtained; checked-in Android OAuth SHA-1 mismatch (see docs/hoang-android-sha.md); Android SDK licences, Firebase registration and native device still pending |
 | S1-2 | docs/hoang-firestore-schema.md; Firestore service and new checklist schema | Schema approval, reviewed Firestore data, rules deployment |
 | S1-5 | Sign-in/Profile screens exist in Charlie's scope; Figma baseline mapped | Editing Figma frozen per team decision 02/11, no proof of page update |
 | S4-1 | DataService, IDataService, DataFailure, existing models | Firestore Emulator 22/22 passed in test/firestore/hoang_rules.test.cjs; live Firebase/rules deployment still pending |

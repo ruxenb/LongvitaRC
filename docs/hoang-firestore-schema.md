@@ -36,3 +36,6 @@ The model MealPlanModel defaults to status=draft. Saved plans contain seven Dail
 ## Evidence and remaining tasks
 Code: lib/services/data_service.dart, i_data_service.dart, data_failure.dart, lib/models, lib/viewmodels.
 Automated fakes: test/flows/hoang_viewmodels_test.dart. Needs additional live Firestore/Emulator checks and a valid signed-in test account.
+
+## Android OAuth signing prerequisite
+Local ASUS Android Debug SHA-1 is different from the SHA-1 recorded for Android OAuth in the checked-in google-services.json. Confirm and add the laptop fingerprint through Firebase Console without replacing teammates' existing fingerprints. See docs/hoang-android-sha.md. No production changes have been made.

@@ -59,7 +59,7 @@ ARTEMIS scripts được viết tại e2e_test/test_flows.py, test_search.py, te
 
 ## 7. Công tác nghiệm thu còn thiếu
 1. Chấp nhận giấy phép Android SDK, cài platforms/build-tools, xác nhận thiết bị/emulator và Google Sign-In.
-2. Đăng ký SHA-1/SHA-256 trên Firebase project và có dữ liệu recipes đã kiểm chứng.
+2. Đã lấy được SHA-1/SHA-256 Debug từ laptop ASUS và thấy không khớp Android OAuth trong google-services.json. Nhóm cần bổ sung hai dấu vân tay vào Firebase Console, cập nhật cấu hình đúng sau kiểm tra; đồng thời cần recipes có nguồn đã kiểm chứng. Chi tiết tại docs/hoang-android-sha.md.
 3. Review/test/deploy Firestore rules cho shopping list mới, có tách quyền UID.
 4. Chạy ARTEMIS >=3 lượt cho test cases chính, chụp ảnh bằng chứng; kiểm tra Firebase Analytics DebugView.
 5. Xem lại Figma, TalkBack và độ tương phản thực tế.
