@@ -142,20 +142,32 @@ class ProfileViewModel extends BaseViewModel implements SessionScoped {
   String get bannerText => remoteConfigService.bannerAnnouncement;
   bool get isRefreshingConfig => _refreshingConfig;
 
-  /// Returns true when new values were applied. False means no change or a
+  /// Returns true when a value actually changed. False means no change or a
   /// failed fetch, which the service does not tell apart; the current values
   /// stay in use either way.
+  ///
+  /// The SDK reports every newly fetched config as activated, even when its
+  /// values are the same, so the values are compared here.
   Future<bool> refreshRemoteConfig() async {
     if (_refreshingConfig) return false;
     _refreshingConfig = true;
     notifyListeners();
     try {
-      return await remoteConfigService.forceFetchAndActivate();
+      final before = _configValues();
+      final activated = await remoteConfigService.forceFetchAndActivate();
+      return activated && _configValues() != before;
     } finally {
       _refreshingConfig = false;
       notifyListeners();
     }
   }
+
+  (int, bool, String, double) _configValues() => (
+        remoteConfigService.maxRecommendations,
+        remoteConfigService.enableLongevityScore,
+        remoteConfigService.bannerAnnouncement,
+        remoteConfigService.proteinTargetRatio,
+      );
 
   /// Does nothing while another export or retry runs: check [isExporting].
   Future<void> exportAndUploadPdf(MealPlanModel plan) async {
