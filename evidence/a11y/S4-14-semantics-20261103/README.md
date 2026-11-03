@@ -3,6 +3,7 @@
 Đợt hai của S4-14, tiếp theo [`../S4-14-talkback-20261103/`](../S4-14-talkback-20261103/). Đợt đó đi TalkBack hết Sign-in và nửa đầu Profile; Remote Config và Crashlytics mới chỉ kiểm nhãn bằng `uiautomator dump`.
 
 - **Code:** `14ec763`, nhánh `feature/charlie-a11y-02`, tách từ `main` `b2101a3` (sau khi merge PR #8). PM đã đọc diff/evidence và chạy lại analyzer sạch, 277/277 tests pass; PM chưa tự thực hiện cử chỉ TalkBack trong lượt review.
+- **Bổ sung sau PM review:** commit tiếp theo trên cùng nhánh, gồm ba mục PM-S4-14-01..03 và lỗi 8 tìm thấy khi làm mục 02. Xem mục [Bổ sung sau PM review](#bổ-sung-sau-pm-review-03112026).
 - **Thiết bị:** AVD `LocalMate_API_35`, Android 15, màn gốc 320×640 px ở mật độ 160 (320×640 dp), TalkBack 15.0 có sẵn trong image.
 - **Bản build:** debug với `--dart-define=STORAGE_EMULATOR_HOST=10.0.2.2`. Xuất PDF tải lên Storage Emulator ở máy, không lên Storage thật.
 - **Tài khoản:** của Charlie, đã đăng nhập sẵn. Ảnh có email và UID của Charlie, theo quyết định ngày 02/11.
@@ -28,8 +29,9 @@ Cây Semantics trước và sau khi sửa, lấy từ widget test: [`semantics-t
 | 6 | Tên và email nhập vào thẻ danh tính, khung tiêu điểm bao cả thẻ gồm vai trò và nút Đăng xuất | Tên và email thành một node riêng | ảnh 01 |
 | 7 | Sign-in: dòng tiêu đề lớn "Thực đơn trường thọ cho cả tuần" không phải heading | Đánh dấu heading | test `sign-in headline is a heading` |
 | — | Hộp thư trống: câu "Chưa có thông báo nào." sẽ nhập vào thẻ sau khi sửa lỗi 1 | Node riêng | test `each card title is a heading of its own` |
+| 8 | Trên Android **không tiêu đề nào là heading**. Flutter 3.47 chỉ đặt `isHeading` khi `headingLevel > 0` (`BaseRoleConfigurator.configureHeading`), nên `header: true` của lỗi 1 và 7 không có tác dụng với TalkBack. Ở chế độ đọc Headings, TalkBack báo "No previous heading" | Thêm `headingLevel` cho cả 8 tiêu đề: thanh tiêu đề, tên Longvita và tiêu đề hộp thoại cấp 1; tiêu đề Sign-in, "Firebase Demo Area" và `state_views` cấp 2; tiêu đề thẻ cấp 3 | test `every heading has a level`, `sign-in headline is a heading`; ảnh 15 (trước), 16 và 19 (sau) |
 
-Lỗi 5 chỉ thấy được khi chạy TalkBack thật; cây Semantics không cho thấy nó.
+Lỗi 5 và lỗi 8 chỉ thấy được khi chạy TalkBack thật. Cây Semantics không cho thấy lỗi 5, còn với lỗi 8 thì cây vẫn có cờ `isHeader`.
 
 Năm test Semantics mới fail trên code gốc `b2101a3` và pass sau khi sửa. Lỗi 5 được kiểm thêm trong test tiến trình. Test mới thứ sáu kiểm bố cục Profile ở 412 dp với cỡ chữ 2.0; nó pass cả trước và sau khi sửa.
 
@@ -67,20 +69,72 @@ TalkBack tắt. Kích thước được đặt bằng `wm size` và `wm density 
 
 Không có tràn bố cục: logcat không có "overflowed", không có sọc vàng đen, mọi nút còn đủ chữ. Widget test kiểm thêm Profile ở 360 và 412 với cỡ chữ 2.0, hai hộp thoại ở cỡ chữ 2.0, và Sign-in ở 360 với cỡ chữ 2.0.
 
+## Bổ sung sau PM review, 03/11/2026
+
+Ba mục còn thiếu theo PM review của `14ec763`. Thiết bị và cách kiểm giống phần trên.
+
+**Cử chỉ mới:**
+- Vuốt xuống rồi lên: đổi chế độ đọc (reading control).
+- Vuốt xuống, vuốt lên: sang mục kế tiếp, mục trước theo chế độ đọc đó.
+- Vuốt xuống rồi sang trái: Back của TalkBack.
+
+Chế độ đọc đã trả về "Characters" như ban đầu.
+
+### PM-S4-14-01 — Remote Config đang cập nhật (widget test)
+
+Test `while refreshing, the action says so and cannot be repeated`. Fake `ScriptedRemoteConfig` giữ fetch bằng một `Completer`.
+
+- **Lúc đang chờ:** nút là button, nhãn "Đang cập nhật…", disabled, không có tap action. Chạm lần nữa không tạo fetch thứ hai (`fetches == 1`), không hiện thông báo, giá trị vẫn là 5.
+- **Khi fetch xong:** nhãn về "Cập nhật Remote Config", enabled, có tap action. Hiện "Đã áp dụng giá trị mới.", giá trị thành 7.
+- **Kiểm ngược:** tạm bỏ `isLoading` của nút thì test fail đúng ở assertion pending. Code đã khôi phục.
+- Không sửa production. Đây là widget test với fake, không phải Remote Config thật.
+
+### PM-S4-14-02 — Sign-in trên bản mới (QA host, TalkBack thật)
+
+**Môi trường:**
+- `test/qa/sign_in_talkback_host.dart` chạy `SignInScreen` thật và `AuthViewModel` thật trên `FakeAuthService`. Build bằng `flutter build apk --debug -t test/qa/sign_in_talkback_host.dart`.
+- Không chạy Firebase và không mở Google sign-in thật: đây **không** phải bằng chứng đăng nhập Google/Firebase.
+- Mỗi lần bấm Google, picker giả "mở" 3 giây rồi lần lượt trả: hủy, lỗi mạng.
+- Bản debug có dải "DEBUG" ở góc màn.
+- Cài đè lên app giữ dữ liệu app, nên phiên của Charlie vẫn còn. Sau đó đã cài lại app thật từ code cuối.
+
+| Ảnh | Kết quả |
+|---|---|
+| `14-signin-qa-walk-order.png` | Thứ tự vuốt phải: Longvita → "Thực đơn trường thọ cho cả tuần" → mô tả → "Đăng nhập bằng Google" (Button). Icon lá được bỏ qua. QA host lần 1, trước lỗi 8; thứ tự này không đổi theo `headingLevel` |
+| `15-signin-headings-before-fix.png` | Chọn chế độ Headings, đứng ở mô tả rồi vuốt lên: "No previous heading". Đây là cách tìm ra lỗi 8 |
+| `16-signin-headings-after-fix.png` | Sau khi sửa: từ mô tả vuốt lên → "Thực đơn trường thọ cho cả tuần" → "Longvita" → "No previous heading"; vuốt xuống lại về tiêu đề |
+| `17-signin-google-loading-cancel.png` | Chạm đúp nút Google: nút thành "Đang mở tài khoản Google…" và bị tắt. Khi hủy, TalkBack đọc live region "Bạn đã đóng cửa sổ chọn tài khoản. Đăng nhập lại khi bạn sẵn sàng."; tiêu điểm giữ ở nút |
+| `18-signin-dismiss-and-retry.png` | Thông báo → "Ẩn thông báo"; chạm đúp thì thông báo mất. Tiêu điểm về "Longvita" và lần này TalkBack đọc cả "Heading". Bấm Google lần nữa: lỗi mạng được đọc ngay ("Không có kết nối mạng. Kiểm tra mạng rồi thử lại."), nút đổi thành "Thử lại với Google" (Button) |
+
+### PM-S4-14-03 — Chia sẻ PDF (TalkBack thật, app thật)
+
+| Ảnh | Kết quả |
+|---|---|
+| `20-share-pdf-talkback.png` | Trên bản app từ code cuối, chạm đúp "Chia sẻ PDF đã lưu". Bảng chia sẻ Android (ChooserActivity) mở với "Sharing 1 file", tệp `plan_….pdf`; không gửi đi đâu. Cử chỉ Back của TalkBack đưa về Profile (MainActivity), tiêu điểm vẫn ở "Chia sẻ PDF đã lưu". Vuốt trái/phải vẫn chạy |
+
+Lần thử trước trên bản `14ec763` (về bằng phím Back hệ thống) cho cùng kết quả.
+
+### Tiêu đề trên Profile sau lỗi 8
+
+`19-profile-headings-after-fix.png`: ở chế độ Headings, vuốt xuống từ "Quay lại" đi qua Hồ sơ → Firebase Demo Area → Báo cáo PDF → Thông báo → Remote Config → Crashlytics. Có lúc TalkBack báo "No next heading" khi tiêu đề kế tiếp còn nằm ngoài màn; lần vuốt sau nó cuộn tới tiêu đề đó.
+
 ## Kiểm bằng lệnh
 
 - `flutter analyze --no-pub`: No issues found.
-- `flutter test --no-pub`: 277/277 pass (271 trước đó + 6 mới).
+- `flutter test --no-pub`: 279/279 pass. Gồm 271 test trước đó, 6 test của `14ec763`, và 2 test mới: Remote Config đang chờ, heading có level.
+- Test heading cũng fail khi bỏ `headingLevel` (kiểm ngược), và pass khi có.
+- `git diff --check`: sạch.
 
 ## Giới hạn
 
-- Sign-in không đi lại bằng TalkBack đợt này: muốn vậy phải đăng xuất, rồi Charlie tự đăng nhập lại. Sign-in chỉ đổi một chỗ (lỗi 7), kiểm bằng widget test. Lần đi tuần tự trước vẫn là bằng chứng chính cho Sign-in.
+- Sign-in trên bản mới được đi bằng QA host với Auth giả. Đăng nhập Google/Firebase thật vẫn dựa vào evidence của S3-4.
+- Lúc đang mở picker, TalkBack không đọc nhãn mới "Đang mở tài khoản Google…" của nút đang được focus. Trên app thật, picker của Google mở ngay nên người dùng vẫn biết. Khi hủy hoặc lỗi thì có thông báo đọc ra.
+- Sau "Ẩn thông báo", tiêu điểm nhảy về đầu màn ("Longvita") vì node đang được focus đã mất. Không bị kẹt, nhưng chưa đặt lại tiêu điểm vào nút Google.
 - Các trạng thái sau chỉ kiểm bằng widget test với service giả, chưa thấy trên máy:
   - đang tải lên có %;
   - lỗi tải lên, "Thử tải lên lại" và "Hủy tải lên";
   - hộp thư trống;
   - thông báo bị tắt quyền;
-- Nút Remote Config đang tải ("Đang cập nhật…") **chưa có test quan sát trạng thái pending**: fake trả kết quả ngay, các test hiện chỉ kiểm kết quả sau refresh. Cần thêm test giữ Future chưa hoàn tất và kiểm label/enabled/tap action. Đây là đính chính sau PM review, không phải bằng chứng runtime có lỗi.
-- "Chia sẻ PDF đã lưu": TalkBack đọc đúng nhãn và vai trò nút, nhưng chưa chạm đúp mở bảng chia sẻ.
+  - Remote Config đang chờ.
 - Chưa thử trên máy thật. Chưa nghe kiểm cách phát âm (xem phần Cách kiểm).
-- Ngoài phạm vi, chưa sửa: `meal_plan_viewmodel.dart` và `ingredient_viewmodel.dart` còn chuỗi "..." sẽ bị đọc "3 Period". Các chuỗi này không thuộc màn của Charlie.
+- Ngoài phạm vi, chưa sửa: `meal_plan_viewmodel.dart` và `ingredient_viewmodel.dart` còn chuỗi "..." sẽ bị đọc "3 Period". Các màn khác dùng `Semantics(header: true)` mà không có `headingLevel` cũng sẽ không là heading trên Android; trong `lib/` hiện không còn chỗ nào như vậy.

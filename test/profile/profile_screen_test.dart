@@ -60,11 +60,17 @@ class ScriptedRemoteConfig extends FakeRemoteConfig {
   int? nextMaxRecommendations;
   int _maxRecommendations = 5;
 
+  /// When set, the fetch waits for it, like a slow network.
+  Completer<void>? held;
+  int fetches = 0;
+
   @override
   int get maxRecommendations => _maxRecommendations;
 
   @override
   Future<bool> forceFetchAndActivate() async {
+    fetches++;
+    await held?.future;
     _maxRecommendations = nextMaxRecommendations ?? _maxRecommendations;
     return nextRefresh;
   }
@@ -865,6 +871,52 @@ void main() {
       expect(find.textContaining('Không có giá trị mới'), findsOneWidget);
       expect(find.text('Đã áp dụng giá trị mới.'), findsNothing);
     });
+
+    // S4-14 (PM-S4-14-01): what TalkBack sees while the fetch is pending.
+    testWidgets('while refreshing, the action says so and cannot be repeated',
+        (tester) async {
+      final handle = tester.ensureSemantics();
+      final h = await pumpProfile(tester);
+      h.remoteConfig
+        ..held = Completer()
+        ..nextRefresh = true
+        ..nextMaxRecommendations = 7;
+      final button = find.byKey(const Key('profile-refresh-config'));
+
+      await tapKey(tester, 'profile-refresh-config');
+
+      expect(
+          tester.getSemantics(button),
+          isSemantics(
+            label: 'Đang cập nhật…',
+            isButton: true,
+            hasEnabledState: true,
+            isEnabled: false,
+            hasTapAction: false,
+          ));
+      await tester.tap(button);
+      await settle(tester);
+      expect(h.remoteConfig.fetches, 1);
+      expect(find.byType(SnackBar), findsNothing);
+      expect(find.text('5'), findsOneWidget);
+
+      h.remoteConfig.held!.complete();
+      await settle(tester);
+
+      expect(
+          tester.getSemantics(button),
+          isSemantics(
+            label: 'Cập nhật Remote Config',
+            isButton: true,
+            hasEnabledState: true,
+            isEnabled: true,
+            hasTapAction: true,
+          ));
+      expect(find.text('Đã áp dụng giá trị mới.'), findsOneWidget);
+      expect(find.text('7'), findsOneWidget);
+      expect(h.remoteConfig.fetches, 1);
+      handle.dispose();
+    });
   });
 
   group('Crashlytics', () {
@@ -954,6 +1006,37 @@ void main() {
             isReadOnly: true,
             isHeader: false,
           ));
+      handle.dispose();
+    });
+
+    // Found with TalkBack's Headings control: Android reports a heading only
+    // when headingLevel is set, so `header: true` alone was never a heading.
+    testWidgets('every heading has a level, so Android reports it',
+        (tester) async {
+      final handle = tester.ensureSemantics();
+      await pumpProfile(tester);
+      await tapKey(tester, 'profile-export');
+      final unleveled = find.semantics.byPredicate((node) {
+        final data = node.getSemanticsData();
+        return data.flagsCollection.isHeader && data.headingLevel == 0;
+      });
+
+      for (final (text, level) in [
+        ('Hồ sơ', 1),
+        ('Firebase Demo Area', 2),
+        ('Báo cáo PDF', 3),
+        ('Thông báo', 3),
+        ('Remote Config', 3),
+        ('Crashlytics', 3),
+      ]) {
+        expect(tester.getSemantics(find.text(text)).headingLevel, level,
+            reason: text);
+      }
+      expect(unleveled, findsNothing);
+
+      await tapKey(tester, 'profile-sign-out');
+      expect(tester.getSemantics(find.text('Đăng xuất?')).headingLevel, 1);
+      expect(unleveled, findsNothing);
       handle.dispose();
     });
 

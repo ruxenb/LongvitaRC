@@ -328,6 +328,13 @@ void main() {
           tester.getSemantics(find.text('Thực đơn trường thọ cho cả tuần')),
           isSemantics(
               label: 'Thực đơn trường thọ cho cả tuần', isHeader: true));
+      // Android reports a heading only when headingLevel is set.
+      expect(tester.getSemantics(find.text('Longvita')).headingLevel, 1);
+      expect(
+          tester
+              .getSemantics(find.text('Thực đơn trường thọ cho cả tuần'))
+              .headingLevel,
+          2);
       handle.dispose();
     });
 

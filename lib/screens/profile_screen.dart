@@ -61,6 +61,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               const SizedBox(height: AppSpacing.s24),
               Semantics(
                 header: true,
+                headingLevel: 2,
                 child: const Text(
                   'Firebase Demo Area',
                   style: AppTypography.headingM,
@@ -197,6 +198,7 @@ class _CardHeader extends StatelessWidget {
         Semantics(
           container: true,
           header: true,
+          headingLevel: 3,
           child: Text(title, style: AppTypography.title),
         ),
         const SizedBox(height: AppSpacing.s4),

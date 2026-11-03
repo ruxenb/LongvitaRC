@@ -33,8 +33,10 @@ class SignInScreen extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
+                    // headingLevel is what makes Android report a heading.
                     Semantics(
                       header: true,
+                      headingLevel: 1,
                       child: Text(
                         'Longvita',
                         style: AppTypography.brand
@@ -61,6 +63,7 @@ class SignInScreen extends StatelessWidget {
                     const SizedBox(height: AppSpacing.s24),
                     Semantics(
                       header: true,
+                      headingLevel: 2,
                       child: const Text(
                         'Thực đơn trường thọ cho cả tuần',
                         style: AppTypography.headingL,

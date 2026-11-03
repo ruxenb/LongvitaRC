@@ -117,6 +117,7 @@ class AppDialog extends StatelessWidget {
       ),
       Semantics(
         header: true,
+        headingLevel: 1,
         child: Text(title, style: AppTypography.headingM),
       ),
       if (message != null)
