@@ -226,3 +226,9 @@ PM đọc diff a0e65ef, ảnh Console/Home/Sign-in, trực tiếp kiểm certifi
 Dọn trailing whitespace trong README và hướng dẫn pull main bằng switch/pull --ff-only sau status sạch; sửa notes S3-5 trên hai bảng task và charlie-progress để phản ánh PR11 đã merge, bỏ câu giữ PR mở cũ. Không thay task IDs/owner/status hoặc phần code của thành viên nào.
 
 Đã push feature/charlie-signin-02 và mở [PR #12](https://github.com/ruxenb/LongvitaRC/pull/12) (S3-2 docs/evidence) sau PM review phần Charlie. Chưa merge hoặc auto-merge; chờ team native results và review. Không tự chuyển S3-1.
+
+### S3-2 — xác nhận owner feedback bốn máy, 04/11/2026
+
+Charlie cập nhật An, Thắng, Hoàng đều đã phản hồi đăng nhập Google thành công và hiện không lỗi. PM ghi đúng nguồn owner report qua Charlie; chưa có ảnh/Android/device/build SHA riêng trong lượt xác nhận, không tự điền dữ liệu đó hoặc ghi thành PM native runs. Cùng evidence Charlie trước đó, S3-2 chuyển Chờ nghiệm thu; Charlie tổng 11 chờ nghiệm thu/18 đang thực hiện, chưa thay leader nghiệm thu chính thức.
+
+PR12 CodeRabbit review 5764061581 có 1 Minor về school email trong evidence. PM xác minh cùng tài khoản trường của chính Charlie và quyết định cho phép giữ email/UID đã ghi ở docs/code-review.md mục PR7-CR-05: Rejected yêu cầu redact cho evidence này theo lựa chọn data owner; không phủ nhận identifier đang public. Quyết định không áp dụng cho tài khoản cá nhân/người khác; không sửa ảnh hay lịch sử. Không đổi app/config hay chạy tests cho docs-only.
