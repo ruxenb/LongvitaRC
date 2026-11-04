@@ -218,3 +218,9 @@ PR #11 (S3-5) đã merge vào main tại `e12719c`; S3-5 vẫn chờ A3, chính 
 **Máy Charlie:** APK build từ `e12719c` ký đúng SHA đã đăng ký. Charlie tự chọn tài khoản; đăng nhập Google → Home đúng tài khoản → đăng xuất đều đạt.
 
 **Còn chờ:** An, Thắng, Hoàng tự thử đăng nhập trên máy mình theo hướng dẫn trong `evidence/auth/S3-2-20261104/README.md`. Không đổi app ID, billing hay chính sách Auth.
+
+### S3-2 — PM review phần Charlie và chỉnh tài liệu
+
+PM đọc diff a0e65ef, ảnh Console/Home/Sign-in, trực tiếp kiểm certificate APK và resource generated cùng plugin Android 6.2.1: khớp cấu hình/Charlie; không đổi google-services.json. Bốn SHA-1 đối chiếu được trong ảnh, đuôi SHA-256 của Hoàng bị cắt nên giữ giới hạn evidence; OAuth clients là quan sát live của Dev, PM không tự mở lại Credentials. Không chạy lại Google sign-in hoặc suite/analyzer cho docs-only. S3-2 vẫn chờ native từ ba máy An/Thắng/Hoàng, tổng Charlie 10 chờ nghiệm thu/19 đang thực hiện không đổi.
+
+Dọn trailing whitespace trong README và hướng dẫn pull main bằng switch/pull --ff-only sau status sạch; sửa notes S3-5 trên hai bảng task và charlie-progress để phản ánh PR11 đã merge, bỏ câu giữ PR mở cũ. Không thay task IDs/owner/status hoặc phần code của thành viên nào.

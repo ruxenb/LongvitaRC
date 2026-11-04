@@ -42,7 +42,7 @@ Emulator này còn có tài khoản B. Ca A→B ở `evidence/auth/S3-5-20261104
 
 Mỗi bạn làm trên máy và bản build của mình:
 
-1. `git pull` lên `main` (`e12719c` hoặc mới hơn), rồi `flutter pub get`.
+1. Kiểm `git status --short` trước. Nếu còn thay đổi local thì giữ nguyên, không reset/clean/stash chỉ để cập nhật; phối hợp Charlie trước khi đổi nhánh. Khi working tree sạch: `git switch main`, `git pull --ff-only origin main`, `git rev-parse HEAD`, rồi `flutter pub get`. Baseline code là `e12719c` hoặc mới hơn; ghi đúng SHA đã build.
 2. Kiểm SHA-1 debug của máy, chọn một trong hai cách:
    - `cd android && ./gradlew signingReport` (Windows: `.\gradlew signingReport`), xem phần `Variant: debug`;
    - hoặc `keytool -list -v` trên `%USERPROFILE%\.android\debug.keystore` như trong `docs/hoang-android-sha.md`.
@@ -55,9 +55,17 @@ Mỗi bạn làm trên máy và bản build của mình:
    - ảnh Home sau khi đăng nhập (có thể che email cá nhân);
    - loại máy và phiên bản Android;
    - commit đã build.
-   
+
    Nếu lỗi: gửi chữ trên màn hình và các dòng `ApiException`/`PlatformException` trong log của `flutter run`.
 
 ## Trạng thái
 
 S3-2 vẫn **Đang thực hiện / chờ đầu vào**. Phần đăng ký đã đủ cả bốn máy: Console, OAuth client phía server, config. Đăng nhập thật mới đạt trên máy Charlie. Acceptance "mọi máy đăng nhập được" còn chờ An, Thắng và Hoàng tự thử theo hướng dẫn trên.
+
+## PM review local và giới hạn bằng chứng
+
+- PM đọc chữ ký APK hiện có bằng `apksigner verify --print-certs`: SHA-1 và SHA-256 khớp hàng Charlie. Đây là kiểm certificate của artifact; PM không tự chạy lại Google account picker hay thao tác Console trong lượt review.
+- PM kiểm `google-services.json`, resource `processDebugGoogleServices/values/values.xml` và source plugin đang cài (`google_sign_in_android 6.2.1`): đúng project/package/App ID; `default_web_client_id` đúng web OAuth client trong config, được plugin dùng khi không truyền serverClientId. [Google services plugin docs](https://firebase.google.com/docs/android/google-services-plugin-and-file) mô tả resource này lấy từ OAuth `client_type: 3`. Giữ nguyên config hiện tại có cơ sở; chưa dùng kết quả này để suy ba máy còn lại đăng nhập thành công.
+- Ảnh Console cho phép PM đối chiếu đủ bốn SHA-1. Phần cuối SHA-256 của Hoàng bị cắt ở ảnh thứ hai; “đủ 8 vân tay khớp từng ký tự” là quan sát Console của Dev, chưa được PM đọc độc lập đủ từ hai ảnh. Có thể bổ sung ảnh cuối danh sách khi cập nhật kết quả team; SHA-256 bổ sung không thay tiêu chí chính SHA-1 và đăng nhập trên bốn máy.
+- Bốn OAuth Android clients/package/timestamps là kiểm tra trực tiếp của Dev đã ghi ở trên; PM chưa tự mở lại Credentials. Không đổi Console, billing, code hoặc config trong lượt PM review.
+- Không chạy lại analyzer/tests vì diff chỉ là docs/evidence, source/config giống main e12719c. Kết quả 334 tests của bản nền không được ghi thành một lượt chạy mới cho task docs này. Giữ S3-2 Đang thực hiện / Waiting input ba máy; 70% ở tracker là ước lượng Dev, không phải 70% nghiệm thu hay 4/4 máy đã đạt.
