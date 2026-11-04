@@ -199,3 +199,57 @@ PM độc lập chạy analyzer sạch, 303/303 Flutter tests; 4/4 probes comple
 **Finding mới PM-S3-5-06:** SDK UID stream đưa A vào app trước khi Future kết quả credential trả; A logout thành công; thả result thành công của request cũ, không đăng nhập lại SDK. AuthViewModel chưa kiểm attempt sau await SDK nên gọi lại profile loading, VM kẹt AuthLoadingProfile dù SDK UID=null. Một probe độc lập fail expected signed-out, chưa tái hiện native và không thuộc suite 303. Đây là SDK-result boundary, tách khỏi các ca telemetry 05 đã sửa. Cần bảo vệ lifecycle attempt và giữ dedup của các result/stream hợp lệ cùng phiên.
 
 S3-5 còn Changes requested cho 06 và Waiting input A3/retention/SDK-error decision. PM không tự sửa production hoặc thay policy. Các tests/evidence f5ece29 và baseline cũ giữ nguyên.
+
+## Sau sửa PM-S3-5-06
+
+Mọi phần ở trên giữ nguyên, gồm baseline và các lượt `9710d81`, `f5ece29`. PM-S3-5-03, 04 và 05 đã Closed, không làm lại.
+
+### Nguyên nhân và cách sửa (`lib/viewmodels/auth_viewmodel.dart`)
+
+**Nguyên nhân:** sau `await authService.signInWithGoogle()`, kết quả được áp dụng mà không kiểm lần đăng nhập đó còn hợp lệ không. Nếu stream đã đưa A vào app, A đăng xuất, rồi kết quả cũ mới trả về, thì `_loadProfile(A)` chạy lại khi SDK không còn user, và VM kẹt ở `AuthLoadingProfile`.
+
+**Cách sửa:**
+- Mỗi lần đăng nhập là một attempt có định danh (`_signInAttempt`) được gắn **trước** khi chờ SDK, thay cho cờ `_signInInFlight`.
+- Attempt bị bỏ khi bắt đầu `signOut()`, hoặc khi stream báo không có user mà state không còn ở `AuthSigningIn` (tức user đã vào app). Khi còn ở màn chọn tài khoản thì attempt vẫn tự báo kết quả như trước.
+- Sau await, kết quả chỉ được áp dụng nếu attempt vẫn là attempt hiện tại. Kết quả của attempt bị bỏ không đổi state, không gửi `logLogin`, và không gỡ attempt mới.
+- **Luồng hợp lệ:**
+  - Stream đã đăng nhập đúng UID đó: kết quả không tải profile lại.
+  - Stream đang tải: kết quả dùng chung lần tải đó.
+  - Kết quả đến trước stream: như trước.
+- Kết quả báo thành công nhưng `currentUid` không còn là UID đó: không mở màn tải; nếu đang `AuthSigningIn` thì về `AuthSignedOut`.
+- **Lỗi có sẵn được sửa cùng lúc:** khi stream đăng nhập trước kết quả trong cùng phiên, code cũ tải profile hai lần và gọi `onSessionStarted` hai lần.
+- **Không đổi:** `IAuthService`, AuthGate, chính sách giữ dữ liệu.
+
+### Test
+
+| Ca (`test/auth/auth_viewmodel_test.dart`, group "a sign-in result belongs to its attempt") | Fail trên `f5ece29` |
+|---|---|
+| Kết quả đến sau khi đăng xuất: vẫn `AuthSignedOut`, không tải thêm, không gửi `logLogin` | Có |
+| Kết quả cũ không ảnh hưởng attempt mới, với B và với cùng UID A (2 test). Gồm: attempt mới không bị chặn, bấm lặp vẫn bị bỏ qua, attempt mới đăng nhập đúng | Có |
+| Kết quả đến sau khi stream đã đăng nhập (cùng phiên): một lần tải, một lần `start`, vẫn gửi `logLogin` | Có (lỗi có sẵn: tải hai lần) |
+| Kết quả đến khi stream còn đang tải: dùng chung lần tải | Không (đối chứng) |
+
+**Probe của PM:**
+- `pm_auth_sdk_completion_probe_test.dart`: trước 0/1 pass, giờ 1/1 (`SDK=null, state=AuthSignedOut`).
+- 4 probe completion, probe 03 gốc và probe SDK vẫn pass.
+- Probe 04 cũ vẫn treo với cơ chế xếp hàng; điều này đã biết khi đóng 04.
+
+### Kiểm bằng lệnh
+
+- `flutter analyze --no-pub`: No issues found.
+- `flutter test --no-pub`: **308/308 pass** (303 + 5).
+- `git diff --check`: sạch.
+
+### Native smoke trên bản này (`after-fix-3/`)
+
+Emulator khởi động lại; cài bản build từ code này. Storage Emulator không chạy trong lượt này, nên không kiểm xuất PDF; bản sửa không đụng phần đó.
+
+| Ca | Ảnh | Kết quả |
+|---|---|---|
+| Mở app khôi phục phiên A | t01 | Home của A |
+| Profile → Đăng xuất → Đồng ý | t02 | Sign-in |
+| Force-stop rồi mở lại | t03 | Vẫn Sign-in |
+| Charlie đăng nhập A bằng Google (đường kết quả đăng nhập và stream thật) | t04, t05 | Vào Home của A, không kẹt màn tải. Profile không còn export cũ |
+| Đăng xuất lại | t06 | Sign-in |
+
+Race của 06 chỉ kiểm bằng test có điều khiển; không gây được trên Android. Đề xuất xử lý khi SDK sign-out lỗi, A3, chính sách giữ dữ liệu và tin không có `recipient_uid` vẫn chờ phối hợp.

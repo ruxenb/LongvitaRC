@@ -41,8 +41,10 @@ class AuthViewModel extends BaseViewModel {
   String? _profileLoadUid;
   int? _profileLoadGeneration;
 
-  /// Set while the Google picker is open so repeated taps are ignored.
-  bool _signInInFlight = false;
+  /// The sign-in attempt in progress; repeated taps are ignored while set.
+  /// A session that ends abandons it, so its SDK result, arriving later,
+  /// changes nothing (PM-S3-5-06).
+  Object? _signInAttempt;
   bool _signOutInFlight = false;
 
   AuthViewModel({
@@ -82,23 +84,37 @@ class AuthViewModel extends BaseViewModel {
   }
 
   Future<void> signInWithGoogle() async {
-    if (_signInInFlight || _state is! AuthSignedOut) return;
-    _signInInFlight = true;
+    if (_signInAttempt != null || _state is! AuthSignedOut) return;
+    final attempt = _signInAttempt = Object();
     _setState(const AuthSigningIn());
 
     final AuthSignInResult result;
     try {
       result = await authService.signInWithGoogle();
-    } finally {
-      // The picker is closed; a later attempt must not wait for telemetry.
-      _signInInFlight = false;
+    } catch (_) {
+      if (identical(_signInAttempt, attempt)) _signInAttempt = null;
+      rethrow;
     }
+    // Abandoned by a sign-out, or replaced by a newer attempt: the result
+    // belongs to a session that has ended.
+    if (!identical(_signInAttempt, attempt)) return;
+    // The picker is closed; a later attempt must not wait for telemetry.
+    _signInAttempt = null;
     // State changes first, while this attempt is still current; reporting
     // comes after and never decides the session (PM-S3-5-05).
     switch (result) {
       case AuthSignInSucceeded(:final uid):
-        // The auth stream also reports this uid; both paths share one load.
-        final load = _loadProfile(uid);
+        if (authService.currentUid != uid) {
+          // Firebase no longer has this user: nothing to load.
+          if (_state is AuthSigningIn) _setState(const AuthSignedOut());
+          return;
+        }
+        // The auth stream also reports this uid. If it already signed the
+        // user in there is nothing to load; otherwise both share one load.
+        final current = _state;
+        final load = current is AuthSignedIn && current.user.uid == uid
+            ? null
+            : _loadProfile(uid);
         await _sendTelemetry(() => analytics.logLogin(method: 'google'),
             reason: 'Login event failed');
         await load;
@@ -121,6 +137,7 @@ class AuthViewModel extends BaseViewModel {
   Future<void> signOut() async {
     if (_signOutInFlight || _state is AuthInitializing) return;
     _signOutInFlight = true;
+    _signInAttempt = null;
     final generation = ++_authGeneration;
     Object? error;
     StackTrace? errorStack;
@@ -161,6 +178,9 @@ class AuthViewModel extends BaseViewModel {
       _authGeneration++;
     }
     if (uid == null) {
+      // An attempt still in the picker reports its own outcome; one whose
+      // user already got in ends with that session.
+      if (_state is! AuthSigningIn) _signInAttempt = null;
       _endSession();
       // A signed-out state keeps its cancel/failure notice; an attempt in
       // progress reports its own outcome.

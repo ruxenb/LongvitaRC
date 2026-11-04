@@ -25,6 +25,21 @@ class HeldProfileAuth extends FakeAuthService {
 UserModel named(String uid, String name) =>
     testUser(uid).copyWith(displayName: name);
 
+/// Firebase reports the user before the sign-in call returns its result,
+/// which each test releases in turn (PM-S3-5-06).
+class EarlyUidAuth extends FakeAuthService {
+  final results = <Completer<AuthSignInResult>>[];
+
+  @override
+  Future<AuthSignInResult> signInWithGoogle() {
+    signInCalls++;
+    emitUid((nextSignIn as AuthSignInSucceeded).uid);
+    final result = Completer<AuthSignInResult>();
+    results.add(result);
+    return result.future;
+  }
+}
+
 /// A telemetry call that finishes only when the test releases it.
 class Held {
   final started = Completer<void>();
@@ -520,6 +535,95 @@ void main() {
       expect(vm.state, isA<AuthSignedOut>());
       expect(auth.currentUid, isNull);
       expect(crashlytics.errors.single, isA<StateError>());
+    });
+  });
+
+  // PM-S3-5-06: the result of a sign-in that the user already left by signing
+  // out was applied after the SDK call returned and started a profile load
+  // with no Firebase user, which then stayed in loading.
+  group('a sign-in result belongs to its attempt', () {
+    late EarlyUidAuth early;
+
+    Future<AuthViewModel> signedInByStream() async {
+      early = EarlyUidAuth();
+      auth = early;
+      final vm = build();
+      await settle();
+      early.nextSignIn = const AuthSignInSucceeded('uid-a');
+      unawaited(vm.signInWithGoogle());
+      await settle();
+      expect(vm.currentUser?.uid, 'uid-a', reason: 'in through the stream');
+      return vm;
+    }
+
+    test('a result arriving after sign-out changes nothing', () async {
+      final vm = await signedInByStream();
+      await vm.signOut();
+      await settle();
+      final loads = early.loadProfileCalls;
+
+      early.results.single.complete(const AuthSignInSucceeded('uid-a'));
+      await settle();
+
+      expect(vm.state, isA<AuthSignedOut>());
+      expect(early.loadProfileCalls, loads);
+      expect(analytics.events, isNot(contains('login:google')));
+    });
+
+    for (final next in ['uid-b', 'uid-a']) {
+      test('an old result does not touch the next attempt ($next)', () async {
+        final vm = await signedInByStream();
+        await vm.signOut();
+        await settle();
+
+        early.nextSignIn = AuthSignInSucceeded(next);
+        unawaited(vm.signInWithGoogle());
+        await settle();
+        expect(early.signInCalls, 2, reason: 'not blocked by the old attempt');
+
+        early.results.first.complete(const AuthSignInSucceeded('uid-a'));
+        await settle();
+        // The new attempt is still in flight: a repeated tap stays ignored.
+        unawaited(vm.signInWithGoogle());
+        await settle();
+        expect(early.signInCalls, 2);
+
+        early.results.last.complete(AuthSignInSucceeded(next));
+        await settle();
+        expect(vm.currentUser?.uid, next);
+        expect(session.calls.last, 'start:$next');
+      });
+    }
+
+    test('a result after the stream signed in, same session, does not load '
+        'again', () async {
+      final vm = await signedInByStream();
+
+      early.results.single.complete(const AuthSignInSucceeded('uid-a'));
+      await settle();
+
+      expect(vm.currentUser?.uid, 'uid-a');
+      expect(early.loadProfileCalls, 1);
+      expect(session.calls, ['start:uid-a']);
+      expect(analytics.events, contains('login:google'));
+    });
+
+    test('a result while the stream load still runs shares it', () async {
+      final heldAuth = HeldProfileAuth();
+      auth = heldAuth;
+      final vm = build();
+      await settle();
+      heldAuth.nextSignIn = const AuthSignInSucceeded('uid-a');
+
+      final signIn = vm.signInWithGoogle();
+      await settle();
+      expect(heldAuth.requests, hasLength(1));
+      heldAuth.requests.single.complete(named('uid-a', 'A'));
+      await signIn;
+      await settle();
+
+      expect(vm.currentUser?.displayName, 'A');
+      expect(heldAuth.loadProfileCalls, 1);
     });
   });
 }
