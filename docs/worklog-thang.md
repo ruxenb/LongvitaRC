@@ -11,6 +11,7 @@
 - Đã hoàn thành và có bằng chứng: **7/28 (25%)**.
 - Hoàn thành mới ngày 04/11: **S0-3-VLQ** và **S3-6**.
 - Không còn blocker Android SDK/ADB/emulator trên máy Thắng.
+- Tooling hỗ trợ Firebase, ARTEMIS, review, security scan và video được ghi tại [`docs/thang-tooling-setup-20261104.md`](thang-tooling-setup-20261104.md).
 - Các task test/review/report/nộp bài chưa hoàn thành vì còn phụ thuộc tính năng, Firebase runtime, bằng chứng ARTEMIS hoặc sản phẩm của thành viên khác.
 
 ## 2. Task đã hoàn thành
