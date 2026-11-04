@@ -137,7 +137,11 @@ void main() {
     // The new export asks to save while the old removal is still held, and
     // the save runs only after it.
     final requested = saveRequested = Completer<void>();
-    final export = profile.exportAndUploadPdf(planFor('uid-a'));
+    // Same user, another plan: an export id is the plan id plus the current
+    // millisecond, so the same plan could repeat the first export's id.
+    final export = profile.exportAndUploadPdf(
+      planFor('uid-a').copyWith(id: 'second-plan'),
+    );
     await requested.future;
     release.complete();
     await export;
