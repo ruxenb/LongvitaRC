@@ -22,7 +22,8 @@ class RecipeModel {
     required this.ingredients,
     required this.instructions,
     this.imageUrl,
-    this.sourceNote = 'La dieta della longevità — TS. Valter Longo',
+    this.sourceNote =
+        '', // Must come from verified Firestore data; never invent a citation.
   });
 
   factory RecipeModel.fromMap(Map<String, dynamic> map, String id) {
@@ -33,18 +34,20 @@ class RecipeModel {
       category: map['category'] as String? ?? 'rau_cu',
       proteinGrams: (map['proteinGrams'] as num?)?.toDouble() ?? 0.0,
       calories: (map['calories'] as num?)?.toDouble() ?? 0.0,
-      ingredients: (map['ingredients'] as List<dynamic>?)
-              ?.map((item) =>
-                  IngredientModel.fromMap(item as Map<String, dynamic>))
+      ingredients:
+          (map['ingredients'] as List<dynamic>?)
+              ?.map(
+                (item) => IngredientModel.fromMap(item as Map<String, dynamic>),
+              )
               .toList() ??
           const [],
-      instructions: (map['instructions'] as List<dynamic>?)
+      instructions:
+          (map['instructions'] as List<dynamic>?)
               ?.map((e) => e.toString())
               .toList() ??
           const [],
       imageUrl: map['imageUrl'] as String?,
-      sourceNote: map['sourceNote'] as String? ??
-          'La dieta della longevità — TS. Valter Longo',
+      sourceNote: map['sourceNote'] as String? ?? '',
     );
   }
 

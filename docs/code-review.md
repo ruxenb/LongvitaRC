@@ -94,3 +94,38 @@ Các dòng dưới đây được giữ làm mẫu kế hoạch; không xác nh�
 ## 4. Disclosure xác nhận cho gói Charlie
 
 CodeRabbit GitHub App sinh 11 góp ý trên PR #7; Claude Code đánh giá ban đầu và viết các commit sửa; Codex audit lại quyết định/source, sửa tiếp CR-08, viết 23 kiểm tra assertions độc lập và bàn giao PR theo yêu cầu Charlie. ARTEMIS/Gemini đã được Charlie chạy trước đó như evidence riêng; Codex không chạy lại ARTEMIS/không dùng key trong gói bàn giao này. Bảng công cụ ở mục 3 là nguồn kế hoạch, không tự xác nhận mọi thành viên đã dùng mọi tool.
+
+
+---
+
+## 5. Hoàng — Phát hiện kiểm tra thủ công (04/11/2026)
+
+Phần này do ChatGPT GPT-6 hỗ trợ rà soát và viết code, dùng Flutter analyze/widget tests để kiểm chứng. **Chưa phải kết quả CodeRabbit/Copilot/SonarCloud trên PR**, do đó KHÔNG dùng thay bằng chứng S7-1-HD. Không chỉnh sửa findings hoặc trạng thái review của Charlie ở trên.
+
+| ID | Loại/mức | Phạm vi | Phát hiện thực tế | Quyết định/lý do | Commit sửa |
+|---|---|---|---|---|---|
+| HOANG-F01 | Correctness / Major | lib/screens/home_screen.dart, StreamBuilder announcements | Nếu stream kết thúc không có dữ liệu, nhánh !hasData vẫn hiện Loading vô hạn; widget test Home/Profile trước sửa timeout | Accepted. Chỉ Loading khi waiting; stream kết thúc rỗng hiện Empty. Hồi quy Home->Profile->Back pass | 0dc6253 |
+| HOANG-F02 | Correctness / Major | lib/viewmodels/ingredient_viewmodel.dart, clearSession + persistChanges | Future lưu checklist của user A bị treo sẽ giữ write queue và chặn user B khi đăng nhập, dù ViewModel đã clear state | Accepted. Reset hàng đợi khi thay phiên nhưng mỗi write cũ vẫn giữ UID đã capture; epoch chặn UI callback cũ. Regression test HOANG-F02 pass | d078f89 |
+| HOANG-F03 | Data integrity / Major | lib/models/recipe_model.dart, sourceNote default | Model gốc tự gán tên sách TS. Longo cho recipe thiếu trích dẫn nguồn, khiến S05/S09 có thể hiển thị nguồn chưa được xác minh | Accepted. Khi thiếu sourceNote, giữ giá trị rỗng và hiển thị thông báo chưa xác minh; fake unit regression HOANG-F03 pass | 3c80cb2 |
+
+Reviewer phải chạy công cụ AI trên Pull Request sau khi push; đính kèm output nguyên bản, URL comment và quyết định Accept/Modify/Reject nếu có. Không chế tạo thêm finding hoặc nói bot đã review khi chưa xảy ra.
+
+Disclosure thực tế: ChatGPT GPT-6 hỗ trợ viết/kiểm tra code, tạo unit/widget tests, tài liệu và slides; Flutter analyze và Flutter test chạy trên laptop ASUS. Không dùng Claude/Codex/CodeRabbit/SonarCloud cho phần việc Hoàng trong phiên làm việc này.
+
+
+---
+
+## 6. Hoàng — CodeRabbit PR #10 thực tế, ngày 04/11/2026
+
+Nguồn GitHub chính thức: https://github.com/ruxenb/LongvitaRC/pull/10. Review đầu có **4 actionable findings** (1 Major, 3 Minor). Bảng dưới đây chỉ ghi nhận góp ý đã xuất hiện trên PR; phân biệt rõ automated Flutter tests với Firebase/ARTEMIS E2E chưa chạy.
+
+| ID | Severity | Review URL | Decision & reasoning | Code/test evidence |
+|---|---|---|---|---|
+| PR10-CR-01 | Minor / Accessibility | https://github.com/ruxenb/LongvitaRC/pull/10#discussion_r4459253639 | **Accepted**. Semantics label bao gồm title+subtitle nhưng ListTile lại công bố thêm children, TalkBack có nguy cơ lặp. Dùng excludeSemantics và onTap trên Semantics; giữ ListTile onTap cho người dùng chạm thông thường | lib/screens/flow_ui.dart; test/flows/hoang_review_regression_test.dart (Semantics single accessible tap) |
+| PR10-CR-02 | Major / Offline stability | https://github.com/ruxenb/LongvitaRC/pull/10#discussion_r4459253664 | **Accepted with modification**. Giới hạn Future ghi Firestore 15 giây để UI thoát Loading. Timeout **không hủy write đã được queue**; trạng thái sau timeout là "chưa xác nhận" chứ không được gọi là save thất bại. Khi tạo plan mới, dùng deterministic document id từ UID + createdAt để retry không sinh duplicate docs. S04/S06/S07/S08 báo tình trạng chưa xác nhận, nhắc tải lại để xác minh. | lib/services/data_service.dart, lib/screens/meal_flow_screens.dart, lib/screens/recipe_flow_screens.dart, lib/screens/shopping_flow_screens.dart; deterministic ID unit test. Native offline replay chưa có |
+| PR10-CR-03 | Minor / Concurrency | https://github.com/ruxenb/LongvitaRC/pull/10#discussion_r4459253675 | **Accepted**. Hai request tìm kiếm hoặc gợi ý thay món có thể trả về sai thứ tự, làm kết quả cũ ghi đè mới. Dùng sequence riêng cho searchRecipes/loadAlternatives, kiểm cả response success/error và session epoch. | lib/viewmodels/meal_plan_viewmodel.dart; 4 unit tests kiểm out-of-order success/error |
+| PR10-CR-04 | Minor / Documentation | https://github.com/ruxenb/LongvitaRC/pull/10#discussion_r4459253682 | **Accepted**. Lệnh Node.js trong chú thích cũ dùng đường dẫn node.exe không chuẩn và không portable. Chuyển thành "node slides/hoang_slides.js" (Node on PATH), giữ fallback require của môi trường đang cài và tái sinh deck | slides/hoang_slides.js; slides/Longvita_Hoang_4_Slides_20261104.pptx |
+
+Căn cứ xác minh offline: https://firebase.google.com/docs/firestore/manage-data/enable-offline cho biết queued writes có thể đồng bộ sau khi kết nối lại. Không kết luận một timeout sẽ xóa pending write. Phạm vi regression test của CR02 là document ID không đổi khi retry; cần kiểm trực tiếp Firestore offline và sau reconnect trên Android để xác nhận toàn bộ.
+
+**Không thay đổi main, chưa deploy rules, không công nhận task đã Accepted thay leader.** Sau mỗi lần push vào PR, chỉ ghi nhận bot review mới nếu thực sự xuất hiện. Đã xác minh: `flutter analyze --no-pub` sạch; **305/305 Flutter tests passed** trong log `D:\PRM393\longvita_pr10_review_tests_20261104.log`. Commit sửa mã nguồn và unit/widget tests: **`81f8d7e`** (đã push lên PR #10). Đang chờ kết quả re-review sau push; không khẳng định native Firebase E2E đã chạy.

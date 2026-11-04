@@ -73,3 +73,6 @@ app.*.map.json
 /docs/coordination/
 /AGENTS.md
 /CLAUDE.md
+
+# Isolated Firebase emulator test dependencies
+/test/firestore/node_modules/

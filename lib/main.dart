@@ -71,6 +71,7 @@ Future<Widget> buildAppScope() async {
     remoteConfig: remoteConfig,
   );
   final ingredientViewModel = IngredientViewModel(
+    dataService: dataService,
     analytics: analytics,
     crashlytics: crashlytics,
   );
