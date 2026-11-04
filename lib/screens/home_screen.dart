@@ -1,279 +1,276 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
 import '../models/announcement_model.dart';
-import '../models/view_state.dart';
 import '../services/i_data_service.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_spacing.dart';
 import '../viewmodels/auth_viewmodel.dart';
-import '../viewmodels/meal_plan_viewmodel.dart';
 import '../viewmodels/profile_viewmodel.dart';
 import '../widgets/app_button.dart';
 import '../widgets/app_card.dart';
+import '../widgets/app_navigation_bar.dart';
+import '../widgets/state_views.dart';
+import 'meal_flow_screens.dart';
 import 'profile_screen.dart';
+import 'recipe_flow_screens.dart';
 
-class HomeScreen extends StatelessWidget {
+/// S01: Firebase-backed entry point for all three business flows.
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  late Stream<List<AnnouncementModel>> _announcements;
 
   @override
-  Widget build(BuildContext context) {
-    final authViewModel = context.watch<AuthViewModel>();
-    final user = authViewModel.currentUser;
-    final profileViewModel = context.watch<ProfileViewModel>();
-    final mealPlanViewModel = context.watch<MealPlanViewModel>();
-    final dataService = context.read<IDataService>();
+  void initState() {
+    super.initState();
+    _announcements = context.read<IDataService>().streamAnnouncements();
+  }
 
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Longvita Dashboard'),
-        backgroundColor: AppColors.surface,
-        elevation: 0,
+  void _refreshAnnouncements() => setState(
+    () => _announcements = context.read<IDataService>().streamAnnouncements(),
+  );
+
+  void _navigateTo(int index) {
+    final widget = switch (index) {
+      1 => const SavedPlansScreen(),
+      2 => const RecipeCatalogScreen(),
+      _ => null,
+    };
+    if (index == 3) {
+      Navigator.of(context).pushNamed(ProfileScreen.routeName);
+    } else if (widget != null) {
+      Navigator.of(context).push(MaterialPageRoute(builder: (_) => widget));
+    }
+  }
+
+  Future<void> _signOut() async {
+    final accepted = await showDialog<bool>(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        title: const Text('Đăng xuất Longvita?'),
+        content: const Text('Bạn sẽ rời khỏi phiên làm việc hiện tại.'),
         actions: [
-          IconButton(
-            icon: const Icon(Icons.account_circle_rounded),
-            tooltip: 'Hồ sơ',
-            onPressed: () =>
-                Navigator.of(context).pushNamed(ProfileScreen.routeName),
+          TextButton(
+            onPressed: () => Navigator.pop(dialogContext, false),
+            child: const Text('Hủy'),
           ),
-          IconButton(
-            icon: const Icon(Icons.logout_rounded),
-            tooltip: 'Đăng xuất',
-            onPressed: () => authViewModel.signOut(),
+          FilledButton(
+            onPressed: () => Navigator.pop(dialogContext, true),
+            child: const Text('Đồng ý'),
           ),
         ],
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(AppSpacing.md),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            // User Header & Role Badge
-            AppCard(
-              child: Row(
-                children: [
-                  CircleAvatar(
-                    radius: 28,
-                    backgroundColor: AppColors.primaryContainer,
-                    backgroundImage: user?.photoUrl != null
-                        ? NetworkImage(user!.photoUrl!)
-                        : null,
-                    child: user?.photoUrl == null
-                        ? const Icon(Icons.person, color: AppColors.primary)
-                        : null,
-                  ),
-                  const SizedBox(width: AppSpacing.md),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          user?.displayName ?? 'Người dùng Longvita',
-                          style: Theme.of(context).textTheme.titleLarge,
-                        ),
-                        const SizedBox(height: AppSpacing.xs),
-                        Text(
-                          user?.email ?? '',
-                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                color: AppColors.outline,
-                              ),
-                        ),
-                        const SizedBox(height: AppSpacing.xs),
-                        // Role Badge (user | staff | admin)
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 8, vertical: 2),
-                          decoration: BoxDecoration(
-                            color: user?.isAdmin == true
-                                ? AppColors.error.withAlpha(30)
-                                : AppColors.primaryContainer,
-                            borderRadius: AppRadius.roundedFull,
-                          ),
-                          child: Text(
-                            'ROLE: ${user?.role.toUpperCase() ?? 'USER'}',
-                            style: TextStyle(
-                              fontSize: 11,
-                              fontWeight: FontWeight.bold,
-                              color: user?.isAdmin == true
-                                  ? AppColors.error
-                                  : AppColors.primary,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: AppSpacing.md),
+    );
+    if (!mounted || accepted != true) return;
+    await context.read<AuthViewModel>().signOut();
+  }
 
-            // Remote Config Announcement Banner
-            if (profileViewModel.bannerText.isNotEmpty) ...[
-              Container(
-                padding: const EdgeInsets.all(AppSpacing.md),
-                decoration: BoxDecoration(
-                  color: AppColors.secondaryContainer.withAlpha(120),
-                  borderRadius: AppRadius.rounded12,
-                  border: Border.all(color: AppColors.outlineVariant),
-                ),
-                child: Row(
-                  children: [
-                    const Icon(Icons.campaign_rounded,
-                        color: AppColors.secondary),
-                    const SizedBox(width: AppSpacing.sm),
-                    Expanded(
-                      child: Text(
-                        profileViewModel.bannerText,
-                        style: const TextStyle(
-                            fontSize: 13, fontWeight: FontWeight.w500),
+  @override
+  Widget build(BuildContext context) {
+    final user = context.watch<AuthViewModel>().currentUser;
+    final profile = context.watch<ProfileViewModel>();
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Longvita Dashboard'),
+        actions: [
+          IconButton(
+            tooltip: 'Hồ sơ',
+            icon: const Icon(Icons.account_circle_outlined),
+            onPressed: () => _navigateTo(3),
+          ),
+          IconButton(
+            tooltip: 'Đăng xuất',
+            icon: const Icon(Icons.logout_outlined),
+            onPressed: _signOut,
+          ),
+        ],
+      ),
+      bottomNavigationBar: AppNavigationBar(
+        selectedIndex: 0,
+        onDestinationSelected: _navigateTo,
+      ),
+      body: SafeArea(
+        child: Center(
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 680),
+            child: ListView(
+              padding: const EdgeInsets.all(AppSpacing.pageMargin),
+              children: [
+                AppCard(
+                  child: Row(
+                    children: [
+                      CircleAvatar(
+                        radius: 28,
+                        backgroundColor: AppColors.bgSelected,
+                        backgroundImage: user?.photoUrl == null
+                            ? null
+                            : NetworkImage(user!.photoUrl!),
+                        child: user?.photoUrl == null
+                            ? const Icon(Icons.person, size: 28)
+                            : null,
                       ),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: AppSpacing.md),
-            ],
-
-            // Quick Actions: Tạo thực đơn 7 ngày
-            Text(
-              'Hành Động Nhanh',
-              style: Theme.of(context).textTheme.titleLarge,
-            ),
-            const SizedBox(height: AppSpacing.sm),
-            AppCard(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    'Sinh thực đơn 7 ngày khoa học',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                  ),
-                  const SizedBox(height: 4),
-                  const Text(
-                    'Dựa theo trọng lượng và tuổi theo khuyến nghị của TS. Valter Longo.',
-                    style: TextStyle(fontSize: 13, color: AppColors.outline),
-                  ),
-                  const SizedBox(height: AppSpacing.md),
-                  AppButton(
-                    text: 'Tạo thực đơn mẫu ngay',
-                    icon: Icons.auto_awesome_rounded,
-                    isLoading:
-                        mealPlanViewModel.currentPlanState is ViewStateLoading,
-                    onPressed: () async {
-                      if (user != null) {
-                        await mealPlanViewModel.generatePlan(
-                          uid: user.uid,
-                          weightKg: 62.0,
-                          age: 24,
-                        );
-                        if (context.mounted) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text('Đã tạo thực đơn 7 ngày thành công!'),
-                              backgroundColor: AppColors.success,
-                            ),
-                          );
-                        }
-                      }
-                    },
-                  ),
-                  if (mealPlanViewModel.activePlan != null) ...[
-                    const SizedBox(height: AppSpacing.md),
-                    OutlinedButton.icon(
-                      onPressed: () async {
-                        final saved = await mealPlanViewModel.saveActivePlan();
-                        if (context.mounted) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text(saved
-                                  ? 'Đã lưu thực đơn vào Firestore!'
-                                  : 'Lỗi lưu thực đơn.'),
-                            ),
-                          );
-                        }
-                      },
-                      icon: const Icon(Icons.cloud_upload_outlined),
-                      label: const Text('Lưu vào Firestore (meal_plans)'),
-                    ),
-                    const SizedBox(height: AppSpacing.xs),
-                    OutlinedButton.icon(
-                      onPressed: () => Navigator.of(context)
-                          .pushNamed(ProfileScreen.routeName),
-                      icon: const Icon(Icons.picture_as_pdf_outlined),
-                      label: const Text('Xuất báo cáo PDF ở Hồ sơ'),
-                    ),
-                  ],
-                ],
-              ),
-            ),
-            const SizedBox(height: AppSpacing.lg),
-
-            // Real-time Announcements Inbox (Sẵn sàng cho Web Admin post lên)
-            Text(
-              'Hộp Thư Thông Báo (Real-time Inbox)',
-              style: Theme.of(context).textTheme.titleLarge,
-            ),
-            const SizedBox(height: AppSpacing.sm),
-            StreamBuilder<List<AnnouncementModel>>(
-              stream: dataService.streamAnnouncements(),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(child: CircularProgressIndicator());
-                }
-                final list = snapshot.data ?? [];
-                if (list.isEmpty) {
-                  return const AppCard(
-                    child: Padding(
-                      padding: EdgeInsets.all(AppSpacing.sm),
-                      child: Text(
-                        'Chưa có thông báo mới từ ban quản trị.',
-                        style: TextStyle(color: AppColors.outline),
-                      ),
-                    ),
-                  );
-                }
-                return Column(
-                  children: list.map((a) {
-                    return Padding(
-                      padding: const EdgeInsets.only(bottom: AppSpacing.sm),
-                      child: AppCard(
+                      const SizedBox(width: 16),
+                      Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  a.title,
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 15,
-                                  ),
-                                ),
-                                Text(
-                                  '[${a.authorRole.toUpperCase()}]',
-                                  style: const TextStyle(
-                                    fontSize: 11,
-                                    color: AppColors.primary,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            const SizedBox(height: 4),
                             Text(
-                              a.content,
-                              style: const TextStyle(fontSize: 13),
+                              user?.displayName ?? 'Người dùng Longvita',
+                              style: Theme.of(context).textTheme.titleLarge,
+                            ),
+                            Text(
+                              user?.email ?? '',
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                            Text(
+                              'ROLE: ${user?.role.toUpperCase() ?? 'USER'}',
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                           ],
                         ),
                       ),
+                    ],
+                  ),
+                ),
+                if (profile.bannerText.isNotEmpty) ...[
+                  const SizedBox(height: 12),
+                  AppCard(
+                    child: Row(
+                      children: [
+                        const Icon(
+                          Icons.campaign_outlined,
+                          color: AppColors.primary,
+                        ),
+                        const SizedBox(width: 12),
+                        Expanded(child: Text(profile.bannerText)),
+                      ],
+                    ),
+                  ),
+                ],
+                const SizedBox(height: 24),
+                Semantics(
+                  header: true,
+                  child: Text(
+                    'Hành Động Nhanh',
+                    style: Theme.of(context).textTheme.titleLarge,
+                  ),
+                ),
+                const SizedBox(height: 12),
+                AppCard(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Text(
+                        'Lập thực đơn 7 ngày từ dữ liệu thật',
+                        style: Theme.of(context).textTheme.titleMedium,
+                      ),
+                      const SizedBox(height: 8),
+                      const Text(
+                        'Nhập sở thích và xem gợi ý từ Firestore. '
+                        'Không tạo món mẫu hoặc tự điền tuổi/cân nặng.',
+                      ),
+                      const SizedBox(height: 16),
+                      AppButton(
+                        text: 'Tạo thực đơn',
+                        icon: Icons.restaurant_outlined,
+                        onPressed: () => Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (_) => const PreferencesScreen(),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+                      AppButton(
+                        text: 'Kế hoạch đã lưu',
+                        variant: AppButtonVariant.secondary,
+                        onPressed: () => _navigateTo(1),
+                      ),
+                      const SizedBox(height: 12),
+                      AppButton(
+                        text: 'Tra cứu công thức',
+                        variant: AppButtonVariant.secondary,
+                        onPressed: () => _navigateTo(2),
+                      ),
+                      const SizedBox(height: 12),
+                      AppButton(
+                        text: 'Xuất báo cáo PDF ở Hồ sơ',
+                        variant: AppButtonVariant.secondary,
+                        onPressed: () => _navigateTo(3),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 24),
+                Semantics(
+                  header: true,
+                  child: Text(
+                    'Hộp thư thông báo',
+                    style: Theme.of(context).textTheme.titleLarge,
+                  ),
+                ),
+                const SizedBox(height: 12),
+                StreamBuilder<List<AnnouncementModel>>(
+                  stream: _announcements,
+                  builder: (context, snapshot) {
+                    if (snapshot.hasError) {
+                      return ErrorView(
+                        title: 'Không tải được thông báo',
+                        message: 'Kiểm tra kết nối và thử lại.',
+                        onRetry: _refreshAnnouncements,
+                        retryLabel: 'Thử lại',
+                      );
+                    }
+                    if (!snapshot.hasData &&
+                        snapshot.connectionState == ConnectionState.waiting) {
+                      return const LoadingView(
+                        title: 'Đang tải thông báo',
+                        message: 'Đang đồng bộ hộp thư...',
+                      );
+                    }
+                    final list = snapshot.data ?? const <AnnouncementModel>[];
+                    if (list.isEmpty) {
+                      return const EmptyView(
+                        title: 'Chưa có thông báo',
+                        message: 'Hiện chưa có tin mới từ ban quản trị.',
+                      );
+                    }
+                    return Column(
+                      children: [
+                        for (final announcement in list)
+                          Padding(
+                            padding: const EdgeInsets.only(bottom: 8),
+                            child: AppCard(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                                children: [
+                                  Text(
+                                    announcement.title,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .titleMedium,
+                                  ),
+                                  const SizedBox(height: 4),
+                                  Text(announcement.content),
+                                  const SizedBox(height: 4),
+                                  Text('Vai trò: ${announcement.authorRole}'),
+                                ],
+                              ),
+                            ),
+                          ),
+                      ],
                     );
-                  }).toList(),
-                );
-              },
+                  },
+                ),
+              ],
             ),
-          ],
+          ),
         ),
       ),
     );

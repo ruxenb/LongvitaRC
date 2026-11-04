@@ -155,6 +155,21 @@ service cloud.firestore {
       allow delete: if isAuthenticated() && resource.data.uid == request.auth.uid && resource.data.status == 'draft';
     }
 
+    // Collection group: shopping_lists/{uid}/plans/{planId}
+    // S4-5: Shopping items are owner-only, never shared with other accounts.
+    match /shopping_lists/{uid}/plans/{planId} {
+      allow read: if isOwner(uid);
+      allow create, update: if isOwner(uid)
+          && request.resource.data.keys().hasOnly(['uid', 'planId', 'updatedAt', 'items'])
+          && request.resource.data.keys().hasAll(['uid', 'planId', 'updatedAt', 'items'])
+          && request.resource.data.uid == uid
+          && request.resource.data.planId == planId
+          && request.resource.data.updatedAt is string
+          && request.resource.data.items is list
+          && request.resource.data.items.size() <= 500;
+      allow delete: if isOwner(uid);
+    }
+
     // Collection: announcements/{id}
     match /announcements/{id} {
       // All authenticated users can read announcements
