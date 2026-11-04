@@ -1,16 +1,16 @@
 # Worklog — Thắng VLQ
 
 > **Vai trò:** Technical Architect & Co-Lead  
-> **Ngày cập nhật:** 02/11/2026  
+> **Ngày cập nhật:** 04/11/2026
 > **Nhánh kiểm tra:** `main`  
 > **Mục đích:** Ghi bằng chứng hoàn thành, phần còn thiếu, lỗi đã phát hiện và điều kiện tiếp tục cho các task do Thắng phụ trách.
 
 ## 1. Tóm tắt trạng thái
 
 - Tổng số task của Thắng: **28**.
-- Đã hoàn thành và có bằng chứng: **5/28 (18%)**.
-- Đang làm: **S3-6**.
-- Bị chặn bởi môi trường máy: **S0-3-VLQ**.
+- Đã hoàn thành và có bằng chứng: **7/28 (25%)**.
+- Hoàn thành mới ngày 04/11: **S0-3-VLQ** và **S3-6**.
+- Không còn blocker Android SDK/ADB/emulator trên máy Thắng.
 - Các task test/review/report/nộp bài chưa hoàn thành vì còn phụ thuộc tính năng, Firebase runtime, bằng chứng ARTEMIS hoặc sản phẩm của thành viên khác.
 
 ## 2. Task đã hoàn thành
@@ -47,39 +47,54 @@ Kiểm chứng ngày 02/11/2026:
 
 `docs/architecture.md` đã có cấu trúc thư mục, Mermaid layer diagram, sequence diagram, bảng ViewModel–Service, dependency một chiều và định hướng tách shared core. Nội dung đã được đối chiếu với code tại commit `ae35f07` và service baseline hiện tại.
 
-## 3. Task đang làm hoặc bị chặn
+## 3. Task hoàn thành bổ sung ngày 04/11/2026
 
-### S0-3-VLQ — Bị chặn bởi Android toolchain
+### S0-3-VLQ — Android toolchain và emulator
 
-Kết quả `flutter doctor -v` ngày 02/11/2026:
+Kết quả kiểm tra lại ngày 04/11/2026:
 
-- Flutter stable `3.47.9`, Dart `3.13.7`, Windows, Chrome và Visual Studio: đạt.
-- Android SDK: **không được tìm thấy**.
-- ADB/Android emulator hoặc Android device: **chưa có**.
+- Flutter stable `3.47.9`, Dart `3.13.7`: đạt.
+- `flutter doctor -v`: **No issues found**.
+- Android SDK tại `T:\Android\Sdk`, API 36, Build Tools 36.0.0: đạt.
+- Android licenses: đã chấp nhận đầy đủ; ADB hoạt động.
+- Emulator `Longvita_API_36` khởi động thành công và xuất hiện trong `flutter devices` dưới tên `emulator-5554`, Android 16/API 36.
+- Debug APK build, cài đặt và chạy thành công trên emulator.
 
-Cần cài Android SDK Platform 34, Platform Tools, Build Tools và emulator/device; cấu hình bằng `flutter config --android-sdk <đường-dẫn-sdk>` nếu SDK ở vị trí riêng; sau đó chạy lại `flutter doctor -v` và `flutter devices`.
+Task không còn bị chặn và được chuyển sang **Đã hoàn thành**.
 
-### S3-6 — Đang làm
+### S3-6 — Auth routing và Back navigation
 
-AuthGate đã xử lý loading, signed-in và signed-out. Chưa thể hoàn thành vì chưa đủ routes/screens `S01–S10`, chưa kiểm tra Back từ S04/S08/S09, chưa có Android runtime và Firebase Android chưa được cấu hình hoàn chỉnh.
+Kiểm chứng source và tự động:
 
-Cần hoàn thành các screen/routes, route contract, Android SDK/emulator/device và chạy smoke test auth + toàn bộ Back path.
+- `AuthGate` xử lý loading, signed-in và signed-out; khi đổi phiên sẽ `popUntil(route.isFirst)` để không quay lại route protected.
+- Test xác nhận đăng xuất xóa route protected và Back không quay lại; Home → Profile → Back trở về Home.
+- `flutter analyze`: **No issues found**.
+- `flutter test`: **305/305 tests passed**.
+
+Smoke test native trên `emulator-5554` ngày 04/11:
+
+- Signed-out mở đúng Sign-in; Back ở route gốc đưa về Android launcher.
+- Mở lại app khôi phục phiên Firebase và vào `Longvita Dashboard`.
+- Từ Dashboard mở S02 Tạo thực đơn, S10 Kế hoạch đã lưu, Tra cứu công thức và Hồ sơ; phím Back của cả bốn route đều trở về Dashboard.
+- Ảnh và mô tả bằng chứng: [`evidence/routing/S0-3-S3-6-20261104/`](../evidence/routing/S0-3-S3-6-20261104/).
+
+Task được chuyển sang **Đã hoàn thành**. Smoke test này xác nhận routing/back; không thay thế ARTEMIS 3-run hoặc kiểm thử failure cases Firebase của các task khác.
 
 ## 4. Firebase: trạng thái và phần còn thiếu
 
 Người dùng đã được mời vào Firebase project, nhưng quyền Console không tự động hoàn tất cấu hình ứng dụng trong repo.
 
-Hiện có Firebase packages, Firestore/Storage rules, Remote Config defaults, service wrappers và ViewModel consumers.
+Hiện có Firebase packages, Firestore/Storage rules, Remote Config defaults, service wrappers và ViewModel consumers. Bản debug Android đã khởi tạo Firebase, khôi phục phiên Google của Thắng và vào Dashboard trên emulator.
 
 Chưa có hoặc chưa được xác minh:
 
-- `android/app/google-services.json` chưa xuất hiện trong checkout.
-- Chưa ghi Firebase project ID trong README.
-- Chưa xác minh SHA-1 debug của máy Thắng trên Firebase Console.
-- Chưa chạy app Android kết nối project thật.
+- `android/app/google-services.json` đã có trong checkout, được Git theo dõi và trỏ tới project `longvita-8da7e`.
+- Chưa đối chiếu project ID này với toàn bộ ảnh Firebase Console và README cuối.
+- Chưa xác minh lại SHA-1 debug của máy Thắng trên Firebase Console trong lượt kiểm tra này.
+- App Android đã kết nối đủ để khôi phục phiên Firebase Auth thật; chưa dùng kết quả này để khẳng định toàn bộ sáu dịch vụ Firebase đã chạy end-to-end.
 - Chưa có evidence Auth/Storage/FCM/Analytics/Crashlytics/Remote Config.
 
-Cần phối hợp Charlie/Thái An để chạy `flutterfire configure`, lấy đúng `google-services.json`, đăng ký SHA-1 và đối chiếu project ID.
+Cần phối hợp Charlie/Thái An để đối chiếu project ID/SHA-1 và thu thập evidence riêng cho Storage, FCM, Analytics, Crashlytics và Remote Config.
 
 ## 5. Lỗi đã phát hiện và cách xử lý
 
@@ -120,4 +135,4 @@ Nguyên nhân là chạy Dart analyzer trước khi có `.dart_tool/package_conf
 - Base trước thay đổi: `main` tại commit `614e731`.
 - Thay đổi gồm tài liệu nguồn Lab 2, service contracts, task tracker, worklog và hai sửa lỗi Analytics contract.
 - Không thêm API key, service account, keystore hoặc secret.
-- `google-services.json` chưa có trong commit này.
+- Tại mốc lịch sử 02/11, `google-services.json` chưa có trong commit của Thắng; checkout hiện tại sau khi merge các PR đã có file được Git theo dõi.

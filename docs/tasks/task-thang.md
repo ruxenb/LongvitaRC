@@ -2,7 +2,7 @@
 
 > **Thành viên:** Thắng (Thắng VLQ)  
 > **Vai trò:** **Technical Architect & Co-Lead** (MVVM Skeleton, DI & Router, Hồ Sơ Tài Liệu docs/, Feature Freeze, Tổng Hợp Report, Slides, Video, Hỗ Trợ Leader Nộp Bài)  
-> **Tổng task:** 28 tasks | **Đã hoàn thành:** 5/28 (18%)
+> **Tổng task:** 28 tasks | **Đã hoàn thành:** 7/28 (25%)
 
 ---
 
@@ -28,13 +28,13 @@
 
 | ID | Giai đoạn | Tên Task | Hỗ trợ | Phụ thuộc | Đầu ra / Bằng chứng | Tiêu chí (Điểm) | Ưu tiên | Tuần | Hạn | Trạng thái | Ghi chú |
 |:---|:---|:---|:---:|:---:|:---|:---|:---:|:---:|:---:|:---:|:---|
-| **S0-3-VLQ** | 0. Chuẩn bị | Cài trên máy: Flutter stable, FlutterFire CLI, Android device/emulator, ADB | — | — | `flutter doctor` không lỗi | — | Cao | 1 | | Bị chặn | Flutter 3.47.9 OK; thiếu Android SDK/ADB và Android device |
+| **S0-3-VLQ** | 0. Chuẩn bị | Cài trên máy: Flutter stable, FlutterFire CLI, Android device/emulator, ADB | — | — | `flutter doctor` không lỗi | — | Cao | 1 | | Đã hoàn thành | 04/11: Flutter 3.47.9; Android SDK/API 36, ADB và licenses đạt; emulator `Longvita_API_36` kết nối Android 16 |
 | **S0-6** | 0. Chuẩn bị | Đưa đầu vào Lab 2 vào kết nối: link Figma, `persona.md`, `user-flow.md`, `DESIGN.md`, `screen-spec.md`, `flutter-handoff.md` | Hoàng | — | Tài liệu Lab 2 truy cập được | Fidelity 0.5 | Cao | 1 | | Đã hoàn thành | README ghi repo Lab 2, checkout và Figma export |
 | **S1-1** | 1. Plan | Viết `docs/design-traceability.md` từ `screen-spec.md` & `flutter-handoff.md`: screen ($\ge 8$), flows (3 flows), components $\to$ routes, widgets | Hoàng | S0-6 | `docs/design-traceability.md` | Flows 1.0; Fidelity 0.5 | Cao | 1 | | Đã hoàn thành | 12 màn, 3 flows, component mapping và deviation log |
 | **S2-1** | 2. Architect | Chủ trì họp chốt interface các service (Auth, Storage, Messaging, Analytics, Crash, RemoteConfig, Data) & tên ViewModel | Hoàng, Charlie, Thái An | S1-1, S1-2 | Danh sách interface thống nhất | Layer 0.5 | Cao | 1 | | Đã hoàn thành | `docs/service-contracts.md`; baseline đã merge vào main |
 | **S2-2** | 2. Architect | Dựng khung `lib/` theo nguyên tắc Core-Package-Ready (models, services, theme, widgets tách biệt viewmodels/screens) + DI Provider | — | S2-1 | Skeleton chạy được | Layer 0.5; State 0.25 | Cao | 1 | | Đã hoàn thành | Models/services/firebase/viewmodels/screens + MultiProvider |
 | **S2-5** | 2. Architect | Viết `docs/architecture.md`: thư mục (1 dòng/folder), Mermaid layer diagram, sequence diagram 1 flow, bảng VM–service | — | S2-2 | `docs/architecture.md` | Layer 0.5 | Trung bình | 2 | | Đã hoàn thành | Tài liệu đồng bộ code tại commit ae35f07 |
-| **S3-6** | 3. Integrate | Routing theo auth state (signed out $\to$ Sign-in, signed in $\to$ Home); nút Back hoạt động chính xác ở mọi nơi | Charlie | S3-3, S2-4 | Router + AuthGate | Flows 1.0 | Cao | 2 | | Đang làm | AuthGate có sẵn; chờ đủ routes/screens để kiểm tra Back/dead-end |
+| **S3-6** | 3. Integrate | Routing theo auth state (signed out $\to$ Sign-in, signed in $\to$ Home); nút Back hoạt động chính xác ở mọi nơi | Charlie | S3-3, S2-4 | Router + AuthGate | Flows 1.0 | Cao | 2 | | Đã hoàn thành | 04/11: native smoke test AuthGate + S02/S10/Recipe/Profile; Back đều về Dashboard, Back ở Sign-in về launcher; 305/305 Flutter tests pass |
 | **S5-10** | 5. Instrument | Thử nghiệm thủ công mọi failure case của 6 dịch vụ (ngắt mạng, từ chối quyền, hủy thao tác) và ghi kết quả | Hoàng, Charlie, Thái An | S5-9 | Bảng kiểm tra failure cases | States 0.75; Firebase 2.0 | Cao | 3 | | Chưa bắt đầu | Kiểm thử độ bền |
 | **S6-1** | 6. Test | **Feature freeze:** Chốt bản build ổn định, gắn git tag (`v1.0-rc`), thông báo toàn nhóm (chỉ sửa bug sau mốc này) | — | S4-17, S5-10 | Git tag release candidate | Test quality 0.5 | Cao | 3 | | Chưa bắt đầu | Mốc Milestone M5 |
 | **S6-12** | 6. Test | Sửa lỗi ứng dụng / bổ sung thuộc tính Semantics khi kiểm thử ARTEMIS phát hiện lỗi (thuộc phạm vi của mình) | — | S6-9 | Fix commit | Test quality 0.5 | Trung bình | 4 | | Chưa bắt đầu | Fix theo log ARTEMIS |
