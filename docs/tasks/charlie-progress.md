@@ -12,7 +12,7 @@ Thắng, Hoàng và Thái An đã đồng ý các phần của PR #4 chạm vào
 
 ## Mức hoàn thành công việc
 
-**29 task: 10 chờ nghiệm thu / 19 đang thực hiện / 0 chưa bắt đầu; 0/29 Accepted chính thức.** S4-14 đạt PM review, chờ PR/user-team nghiệm thu; ba task S7 đã được đóng gói và merge, chờ nghiệm thu chính thức.
+**29 task: 11 chờ nghiệm thu / 18 đang thực hiện / 0 chưa bắt đầu; 0/29 Accepted chính thức.** S4-14 đạt PM review, chờ PR/user-team nghiệm thu; ba task S7 đã được đóng gói và merge, chờ nghiệm thu chính thức.
 
 Các điểm % cũ trong bảng dưới là ước lượng Dev của các phần ngoài S7, giữ để tham khảo; không tính lại thành % toàn dự án khi các owner dùng cách đo khác nhau. S7 dùng trạng thái chờ nghiệm thu. Các bản nháp report/slide/clip/viva được giữ trên GitHub theo lựa chọn Charlie, dù working copies ở máy chính đã được xóa.
 
@@ -26,10 +26,10 @@ Các điểm % cũ trong bảng dưới là ước lượng Dev của các phầ
 | S2-3 | 100% | Đủ theo tiêu chí, chờ nghiệm thu |
 | S2-4 | 100% | Đủ theo tiêu chí, chờ nghiệm thu |
 | S3-1 | 90% | Build, init, Crashlytics đều chạy; còn chốt ghim phiên bản |
-| S3-2 | 55% | SHA của Charlie, An, Thắng đã đăng ký (03/11); còn An, Thắng đăng nhập thử và SHA của Hoàng |
+| S3-2 | Chờ nghiệm thu | SHA-1/SHA-256 của 4 máy đã được ghi nhận. Ngày 04/11 Charlie xác nhận An, Thắng, Hoàng đều phản hồi Google Sign-in thành công, hiện không báo lỗi; Charlie có evidence native e12719c. Kết quả 3 bạn là owner report qua Charlie, chưa có ảnh/device/Android/build SHA riêng trong lượt xác nhận này. Chuyển Chờ nghiệm thu; không suy thành PM tự chạy 4 máy. [PR #12](https://github.com/ruxenb/LongvitaRC/pull/12). |
 | S3-3 | 90% | Chạy thật; lỗi mạng và lỗi hồ sơ mới test bằng fake |
 | S3-4 | 95% | Đủ trạng thái; còn chốt layout và ngôn ngữ |
-| S3-5 | Đang thực hiện | [PR #11](https://github.com/ruxenb/LongvitaRC/pull/11) đang mở vào main, chưa merge/auto-merge. Code eee1547 đã qua PM review; tích hợp main b657ca9 tại 911a65d không xung đột, analyzer sạch/334 tests pass. 01–06 Closed trong phạm vi kiểm. S3-5 vẫn chờ Hoàng A3, PDF/history policy và Thắng chốt SDK sign-out failure; recipient-less FCM chờ An/Thắng. Giữ PR mở cho CodeRabbit/owner review. |
+| S3-5 | Đang thực hiện | [PR #11](https://github.com/ruxenb/LongvitaRC/pull/11) đã merge main `e12719c` ngày 04/11; PM đóng các findings kỹ thuật và CR-01/02/03, analyzer sạch/334 tests. Lượt CodeRabbit bổ sung cuối còn IN_PROGRESS lúc merge, sau đó CANCELLED; không phải approval hoàn tất trên head cuối. S3-5 vẫn chờ Hoàng A3, PDF/history policy, Thắng chốt SDK sign-out failure và An/Thắng chốt recipient-less FCM; chưa hoàn tất task. |
 | S3-7 | 70% | Rules và 14 test trên emulator; còn deploy lên project thật |
 | S3-9 | 100% | Đủ theo tiêu chí, chờ nghiệm thu |
 | S4-10 | 80% | PDF, lưu, mở, chia sẻ xong; còn thực đơn thật từ S4-3 |
@@ -57,8 +57,8 @@ Các điểm % cũ trong bảng dưới là ước lượng Dev của các phầ
 
 | Trạng thái | Số lượng | IDs |
 |---|---:|---|
-| Có kiểm chứng/evidence, chờ nghiệm thu | 10 | S0-3-CM, S2-3, S2-4, S3-3, S3-4, S3-9, S4-14, S7-1-CM, S7-2-CM, S7-3-CM |
-| Đang thực hiện / PR | 19 | S0-4, S3-1, S3-2, S3-5, S3-7, S4-10, S4-11, S4-12, S4-13, S4-15, S5-4, S6-4, S6-7, S6-14, S8-3, S8-7, S8-12, S8-17-CM, S9-5-CM |
+| Có kiểm chứng/xác nhận, chờ nghiệm thu | 11 | S0-3-CM, S2-3, S2-4, S3-2, S3-3, S3-4, S3-9, S4-14, S7-1-CM, S7-2-CM, S7-3-CM |
+| Đang thực hiện / PR | 18 | S0-4, S3-1, S3-5, S3-7, S4-10, S4-11, S4-12, S4-13, S4-15, S5-4, S6-4, S6-7, S6-14, S8-3, S8-7, S8-12, S8-17-CM, S9-5-CM |
 | Chưa bắt đầu | 0 | — |
 | **Tổng** | **29** | |
 

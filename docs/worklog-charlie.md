@@ -205,3 +205,30 @@ PM độc lập kiểm code eee1547: analyzer sạch (80.2s), 308/308 tests pass
 Charlie yêu cầu đưa gói đã qua PM review lên GitHub để review; mở PR không đồng nghĩa Done hoặc cho phép merge. Đã tích hợp origin/main b657ca9 (PR #10 và cập nhật routing của Thắng) bằng merge 911a65d, không xung đột. PM chạy analyzer sạch (39.5s), full Flutter suite **334/334 pass** (17s) trên bản tích hợp; git diff --check sạch. Đây là kết quả local, không phải CI. Không chạy lại native, APK hay rules trong lượt tích hợp; evidence native là các đợt đã ghi trong README. Rules trong PR giống main. Không tự xem Hoàng đã merge code là duyệt A3.
 
 Đã push feature/charlie-session-02 và mở [PR #11](https://github.com/ruxenb/LongvitaRC/pull/11) vào main, PR thường để CodeRabbit auto-review theo cấu hình, giữ mở cho bot/owner review. Không bật auto-merge, không merge main. Các câu hỏi SDK sign-out failure, A3, PDF/history retention và recipient-less FCM ghi rõ trong mô tả PR. S3-5 vẫn Đang thực hiện / Waiting input; tổng Charlie 10 chờ nghiệm thu/19 đang thực hiện. Chỉ đưa file kỹ thuật/evidence được theo dõi lên Git; các tài liệu điều phối private, 8 thư mục QA PM và 6 file report-drafts xóa local ở workspace chính không bị đưa vào thay đổi.
+
+### S3-2 — SHA debug và Google Sign-in, 04/11/2026
+
+PR #11 (S3-5) đã merge vào main tại `e12719c`; S3-5 vẫn chờ A3, chính sách giữ dữ liệu và quyết định cho lỗi SDK sign-out. S3-2 bắt đầu từ `e12719c`, nhánh `feature/charlie-signin-02`.
+
+**Đã kiểm, chỉ đọc:**
+- Firebase Console: app Android duy nhất có đủ 8 vân tay, SHA-1 và SHA-256 của cả bốn người.
+- Google Cloud Credentials: có 4 OAuth client Android, mỗi client đúng package và mang một SHA-1 của một người.
+- `google-services.json`: khớp project, App ID và package. Không thay file, vì app dùng web client và các client Android đã có phía server.
+
+**Máy Charlie:** APK build từ `e12719c` ký đúng SHA đã đăng ký. Charlie tự chọn tài khoản; đăng nhập Google → Home đúng tài khoản → đăng xuất đều đạt.
+
+**Còn chờ:** An, Thắng, Hoàng tự thử đăng nhập trên máy mình theo hướng dẫn trong `evidence/auth/S3-2-20261104/README.md`. Không đổi app ID, billing hay chính sách Auth.
+
+### S3-2 — PM review phần Charlie và chỉnh tài liệu
+
+PM đọc diff a0e65ef, ảnh Console/Home/Sign-in, trực tiếp kiểm certificate APK và resource generated cùng plugin Android 6.2.1: khớp cấu hình/Charlie; không đổi google-services.json. Bốn SHA-1 đối chiếu được trong ảnh, đuôi SHA-256 của Hoàng bị cắt nên giữ giới hạn evidence; OAuth clients là quan sát live của Dev, PM không tự mở lại Credentials. Không chạy lại Google sign-in hoặc suite/analyzer cho docs-only. S3-2 vẫn chờ native từ ba máy An/Thắng/Hoàng, tổng Charlie 10 chờ nghiệm thu/19 đang thực hiện không đổi.
+
+Dọn trailing whitespace trong README và hướng dẫn pull main bằng switch/pull --ff-only sau status sạch; sửa notes S3-5 trên hai bảng task và charlie-progress để phản ánh PR11 đã merge, bỏ câu giữ PR mở cũ. Không thay task IDs/owner/status hoặc phần code của thành viên nào.
+
+Đã push feature/charlie-signin-02 và mở [PR #12](https://github.com/ruxenb/LongvitaRC/pull/12) (S3-2 docs/evidence) sau PM review phần Charlie. Chưa merge hoặc auto-merge; chờ team native results và review. Không tự chuyển S3-1.
+
+### S3-2 — xác nhận owner feedback bốn máy, 04/11/2026
+
+Charlie cập nhật An, Thắng, Hoàng đều đã phản hồi đăng nhập Google thành công và hiện không lỗi. PM ghi đúng nguồn owner report qua Charlie; chưa có ảnh/Android/device/build SHA riêng trong lượt xác nhận, không tự điền dữ liệu đó hoặc ghi thành PM native runs. Cùng evidence Charlie trước đó, S3-2 chuyển Chờ nghiệm thu; Charlie tổng 11 chờ nghiệm thu/18 đang thực hiện, chưa thay leader nghiệm thu chính thức.
+
+PR12 CodeRabbit review 5764061581 có 1 Minor về school email trong evidence. PM xác minh cùng tài khoản trường của chính Charlie và quyết định cho phép giữ email/UID đã ghi ở docs/code-review.md mục PR7-CR-05: Rejected yêu cầu redact cho evidence này theo lựa chọn data owner; không phủ nhận identifier đang public. Quyết định không áp dụng cho tài khoản cá nhân/người khác; không sửa ảnh hay lịch sử. Không đổi app/config hay chạy tests cho docs-only.
