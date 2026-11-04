@@ -25,3 +25,20 @@ The first full-suite run after the change failed once in the same file: `Null ch
 - **The test file run 5 times on its own:** 2/2 each time.
 - **Full suite:** `flutter test --no-pub` 334/334, three runs in a row. `flutter analyze --no-pub`: no issues. `git diff --check`: clean.
 - **No native rerun:** only a test changed, and the production code is the same as the APK PM built from `d3487ea`.
+
+## Round 2 — CodeRabbit review on dab065d
+
+- **Review:** https://github.com/ruxenb/LongvitaRC/pull/11#pullrequestreview-5763557305 (state `COMMENTED`, commit `dab065d`), with 1 actionable inline comment (Minor). Raw: [`review-5763557305.json`](review-5763557305.json), [`inline-comment-4463858229.json`](inline-comment-4463858229.json).
+- **Separately:** CodeRabbit replied on the resolved CR-01 thread that it verified the CR-01/02 fix in code. This is not a new finding. Raw: [`reply-4463891441.json`](reply-4463891441.json). PM closed CR-01 and CR-02.
+
+| ID | Source | Finding | Decision | Fix |
+|---|---|---|---|---|
+| PR11-CR-03 | Minor, inline, [discussion_r4463858229](https://github.com/ruxenb/LongvitaRC/pull/11#discussion_r4463858229), `test/report/session_cleanup_test.dart:135` | `ProfileViewModel._newExportId` is the plan id plus the current millisecond. With the fixed delay removed in `f76289c`, the two exports of the late-removal test use the same plan and could share an id. The test would then fail although cleanup ordering works | **Accepted**. The risk was introduced by removing the delay in round 1; it was not reproduced on this machine | `3b9d36d`: the second export uses `planFor('uid-a').copyWith(id: 'second-plan')`. Same uid, same gates, same assertions |
+
+### Checks on 3b9d36d
+
+- Production code unchanged; the diff is only `test/report/session_cleanup_test.dart`.
+- The test file run 5 times on its own: 2/2 each time.
+- With a 300 ms slow removal: passes.
+- Without the per-uid queue (`local_report_store.dart` from `96c9f57`, put back afterwards): the late-removal test still fails, so it still guards PM-S3-5-04.
+- Full suite `flutter test --no-pub` 334/334 in two runs; `flutter analyze --no-pub` no issues; `git diff --check` clean.
