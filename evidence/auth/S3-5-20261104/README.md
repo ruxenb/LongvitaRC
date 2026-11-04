@@ -1,6 +1,6 @@
 # S3-5 — Đăng xuất và cách ly phiên, 04/11/2026
 
-> **PM re-review f5ece29:** PM chạy analyzer sạch/303 tests và 4 completion probes pass; 03/04/05 Closed. Có finding mới 06: giữ Future credential result trong lúc auth stream đã đưa A vào app, logout A rồi thả result cũ làm VM kẹt AuthLoadingProfile dù SDK UID=null. Một probe điều khiển fail, chưa native; S3-5 còn Changes requested và input A3/policy/SDK-error. Các kết quả 0e3ef5a/9710d81 bên dưới là lịch sử baseline.
+> **PM re-review eee1547, 04/11/2026:** analyzer sạch/308 tests, probe 06 + 4 completion probes pass; original profile/SDK observation mỗi ca pass. 01–06 Closed trong phạm vi kiểm. Phần sửa kỹ thuật đạt, S3-5 vẫn Waiting input A3/retention/SDK-error decision. Các lượt bên dưới là lịch sử; native smoke Dev t01–t06, race chỉ fake có điều khiển.
 
 - **Code:** `main` `96c9f57` (sau khi merge PR #9). Đợt này không đổi code: không tái hiện được lỗi nào.
 - **Thiết bị:** AVD `LocalMate_API_35`, Android 15.
@@ -253,3 +253,9 @@ Emulator khởi động lại; cài bản build từ code này. Storage Emulator
 | Đăng xuất lại | t06 | Sign-in |
 
 Race của 06 chỉ kiểm bằng test có điều khiển; không gây được trên Android. Đề xuất xử lý khi SDK sign-out lỗi, A3, chính sách giữ dữ liệu và tin không có `recipient_uid` vẫn chờ phối hợp.
+
+## PM re-review eee1547 — đóng PM-S3-5-06
+
+PM độc lập kiểm code eee1547: analyzer sạch (80.2s), 308/308 tests pass (24s), probe SDK result 06 và bốn completion probes cũ 5/5 pass; probe profile gốc và SDK-error observation mỗi ca 1/1 pass. Expected các probe giữ nguyên. 06 Closed; 01–05 vẫn Closed. Không chạy probe 04 baseline vì nó deadlock với serialization đã được chấp nhận; regression file chính thức pass trong suite. Race chỉ kiểm bằng fake có điều khiển. Đã đọc diff/5 regression và xem ảnh t03/t05 của native smoke Dev; PM không tự thao tác emulator hay kiểm lại PDF. Giữ các baseline và giới hạn môi trường. Phần sửa kỹ thuật qua PM review; toàn S3-5 vẫn Waiting input A3, retention PDF/history và SDK-error behavior. Recipient-less FCM policy vẫn mở theo owner. Chưa push/PR/merge hoặc chuyển S3-2; tổng 10 chờ nghiệm thu/19 đang thực hiện không đổi.
+
+Bản sửa gắn identity trước await SDK, hủy attempt khi sign-out/session null, bỏ result cũ trước state/telemetry; attempt cũ không giải phóng attempt mới. Stream đã signed-in cùng UID không tải profile/start session lần hai; đang tải thì dùng chung Future. API/AuthGate/policy không đổi. PM không chạy mutation tests của Dev; kết quả 4/5 fail trên f5ece29 là do Dev báo cáo. SDK-failure observation pass chỉ xác nhận giới hạn còn tồn tại: UI signed-out nhưng SDK giữ user có thể restore khi tạo VM lại; không phải tiêu chí SDK failure đã đạt.

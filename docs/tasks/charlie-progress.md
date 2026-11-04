@@ -29,7 +29,7 @@ Các điểm % cũ trong bảng dưới là ước lượng Dev của các phầ
 | S3-2 | 55% | SHA của Charlie, An, Thắng đã đăng ký (03/11); còn An, Thắng đăng nhập thử và SHA của Hoàng |
 | S3-3 | 90% | Chạy thật; lỗi mạng và lỗi hồ sơ mới test bằng fake |
 | S3-4 | 95% | Đủ trạng thái; còn chốt layout và ngôn ngữ |
-| S3-5 | Đang thực hiện | PM re-review f5ece29: 303 tests/4 completion probes pass, 01–05 Closed; 06 mới là SDK result cũ sau logout khởi động lại profile loading (1 probe fail, không native). Native A/B/same-UID mới có evidence. Chờ A3/PDF-history policy/SDK-error decision. |
+| S3-5 | Đang thực hiện | PM re-review eee1547: analyzer sạch/308 tests; probe 06 và 4 completion probes pass, original profile/SDK observation mỗi ca pass. 01–06 Closed trong phạm vi kiểm. Phần sửa kỹ thuật đạt; task vẫn chờ Hoàng A3, PDF/history policy và Thắng chốt SDK sign-out failure. Native restore/logout/restart/Google sign-in có evidence; race chỉ test có điều khiển. Chưa push/PR/merge. |
 | S3-7 | 70% | Rules và 14 test trên emulator; còn deploy lên project thật |
 | S3-9 | 100% | Đủ theo tiêu chí, chờ nghiệm thu |
 | S4-10 | 80% | PDF, lưu, mở, chia sẻ xong; còn thực đơn thật từ S4-3 |
