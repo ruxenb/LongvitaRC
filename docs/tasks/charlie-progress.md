@@ -26,7 +26,7 @@ Các điểm % cũ trong bảng dưới là ước lượng Dev của các phầ
 | S2-3 | 100% | Đủ theo tiêu chí, chờ nghiệm thu |
 | S2-4 | 100% | Đủ theo tiêu chí, chờ nghiệm thu |
 | S3-1 | 90% | Build, init, Crashlytics đều chạy; còn chốt ghim phiên bản |
-| S3-2 | 70% | SHA debug của cả 4 máy đã đăng ký, đủ 4 OAuth client Android (04/11); đăng nhập đạt trên máy Charlie, còn An, Thắng, Hoàng tự thử |
+| S3-2 | 70% | [PR #12](https://github.com/ruxenb/LongvitaRC/pull/12) đang review; SHA debug của cả 4 máy đã đăng ký, đủ 4 OAuth client Android (04/11); đăng nhập đạt trên máy Charlie, còn An, Thắng, Hoàng tự thử |
 | S3-3 | 90% | Chạy thật; lỗi mạng và lỗi hồ sơ mới test bằng fake |
 | S3-4 | 95% | Đủ trạng thái; còn chốt layout và ngôn ngữ |
 | S3-5 | Đang thực hiện | [PR #11](https://github.com/ruxenb/LongvitaRC/pull/11) đã merge main `e12719c` ngày 04/11; PM đóng các findings kỹ thuật và CR-01/02/03, analyzer sạch/334 tests. Lượt CodeRabbit bổ sung cuối còn IN_PROGRESS lúc merge, sau đó CANCELLED; không phải approval hoàn tất trên head cuối. S3-5 vẫn chờ Hoàng A3, PDF/history policy, Thắng chốt SDK sign-out failure và An/Thắng chốt recipient-less FCM; chưa hoàn tất task. |

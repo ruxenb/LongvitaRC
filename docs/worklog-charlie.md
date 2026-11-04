@@ -224,3 +224,5 @@ PR #11 (S3-5) đã merge vào main tại `e12719c`; S3-5 vẫn chờ A3, chính 
 PM đọc diff a0e65ef, ảnh Console/Home/Sign-in, trực tiếp kiểm certificate APK và resource generated cùng plugin Android 6.2.1: khớp cấu hình/Charlie; không đổi google-services.json. Bốn SHA-1 đối chiếu được trong ảnh, đuôi SHA-256 của Hoàng bị cắt nên giữ giới hạn evidence; OAuth clients là quan sát live của Dev, PM không tự mở lại Credentials. Không chạy lại Google sign-in hoặc suite/analyzer cho docs-only. S3-2 vẫn chờ native từ ba máy An/Thắng/Hoàng, tổng Charlie 10 chờ nghiệm thu/19 đang thực hiện không đổi.
 
 Dọn trailing whitespace trong README và hướng dẫn pull main bằng switch/pull --ff-only sau status sạch; sửa notes S3-5 trên hai bảng task và charlie-progress để phản ánh PR11 đã merge, bỏ câu giữ PR mở cũ. Không thay task IDs/owner/status hoặc phần code của thành viên nào.
+
+Đã push feature/charlie-signin-02 và mở [PR #12](https://github.com/ruxenb/LongvitaRC/pull/12) (S3-2 docs/evidence) sau PM review phần Charlie. Chưa merge hoặc auto-merge; chờ team native results và review. Không tự chuyển S3-1.
