@@ -147,144 +147,144 @@ false for 'delete' @ L7, evaluation error at L80:40 for 'delete' @ L80, false fo
 test at tests\firestore.rules.test.js:123:5
 ✖ denied: creating a profile with a bad shape (160.9669ms)
   Error: Expected request to fail, but it succeeded.
-      at C:\Users\phamv\OneDrive\Desktop\PRM\Assignment\LongvitaRC\firebase\node_modules\@firebase\rules-unit-testing\dist\index.cjs.js:576:31
+      at <user-home>\OneDrive\Desktop\PRM\Assignment\LongvitaRC\firebase\node_modules\@firebase\rules-unit-testing\dist\index.cjs.js:576:31
       at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
-      at async TestContext.<anonymous> (C:\Users\phamv\OneDrive\Desktop\PRM\Assignment\LongvitaRC\firebase\tests\firestore.rules.test.js:124:7)
+      at async TestContext.<anonymous> (<user-home>\OneDrive\Desktop\PRM\Assignment\LongvitaRC\firebase\tests\firestore.rules.test.js:124:7)
       at async Test.run (node:internal/test_runner/test:1404:7)
       at async Suite.processPendingSubtests (node:internal/test_runner/test:969:7)
 
 test at tests\firestore.rules.test.js:135:5
 ✖ denied: changing own role, email or createdAt (196.5323ms)
   Error: Expected request to fail, but it succeeded.
-      at C:\Users\phamv\OneDrive\Desktop\PRM\Assignment\LongvitaRC\firebase\node_modules\@firebase\rules-unit-testing\dist\index.cjs.js:576:31
+      at <user-home>\OneDrive\Desktop\PRM\Assignment\LongvitaRC\firebase\node_modules\@firebase\rules-unit-testing\dist\index.cjs.js:576:31
       at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
-      at async TestContext.<anonymous> (C:\Users\phamv\OneDrive\Desktop\PRM\Assignment\LongvitaRC\firebase\tests\firestore.rules.test.js:137:7)
+      at async TestContext.<anonymous> (<user-home>\OneDrive\Desktop\PRM\Assignment\LongvitaRC\firebase\tests\firestore.rules.test.js:137:7)
       at async Test.run (node:internal/test_runner/test:1404:7)
       at async Suite.processPendingSubtests (node:internal/test_runner/test:969:7)
 
 test at tests\firestore.rules.test.js:168:5
 ✖ denied: changing own role (AUD-11) (171.6478ms)
   Error: Expected request to fail, but it succeeded.
-      at C:\Users\phamv\OneDrive\Desktop\PRM\Assignment\LongvitaRC\firebase\node_modules\@firebase\rules-unit-testing\dist\index.cjs.js:576:31
+      at <user-home>\OneDrive\Desktop\PRM\Assignment\LongvitaRC\firebase\node_modules\@firebase\rules-unit-testing\dist\index.cjs.js:576:31
       at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
-      at async TestContext.<anonymous> (C:\Users\phamv\OneDrive\Desktop\PRM\Assignment\LongvitaRC\firebase\tests\firestore.rules.test.js:169:7)
+      at async TestContext.<anonymous> (<user-home>\OneDrive\Desktop\PRM\Assignment\LongvitaRC\firebase\tests\firestore.rules.test.js:169:7)
       at async Test.run (node:internal/test_runner/test:1404:7)
       at async Suite.processPendingSubtests (node:internal/test_runner/test:969:7)
 
 test at tests\firestore.rules.test.js:172:5
 ✖ denied: invalid role or editing other fields of another user (176.9629ms)
   Error: Expected request to fail, but it succeeded.
-      at C:\Users\phamv\OneDrive\Desktop\PRM\Assignment\LongvitaRC\firebase\node_modules\@firebase\rules-unit-testing\dist\index.cjs.js:576:31
+      at <user-home>\OneDrive\Desktop\PRM\Assignment\LongvitaRC\firebase\node_modules\@firebase\rules-unit-testing\dist\index.cjs.js:576:31
       at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
-      at async TestContext.<anonymous> (C:\Users\phamv\OneDrive\Desktop\PRM\Assignment\LongvitaRC\firebase\tests\firestore.rules.test.js:173:7)
+      at async TestContext.<anonymous> (<user-home>\OneDrive\Desktop\PRM\Assignment\LongvitaRC\firebase\tests\firestore.rules.test.js:173:7)
       at async Test.run (node:internal/test_runner/test:1404:7)
       at async Suite.processPendingSubtests (node:internal/test_runner/test:969:7)
 
 test at tests\firestore.rules.test.js:207:3
 ✖ staff denied: bad shape (166.5857ms)
   Error: Expected request to fail, but it succeeded.
-      at C:\Users\phamv\OneDrive\Desktop\PRM\Assignment\LongvitaRC\firebase\node_modules\@firebase\rules-unit-testing\dist\index.cjs.js:576:31
+      at <user-home>\OneDrive\Desktop\PRM\Assignment\LongvitaRC\firebase\node_modules\@firebase\rules-unit-testing\dist\index.cjs.js:576:31
       at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
-      at async TestContext.<anonymous> (C:\Users\phamv\OneDrive\Desktop\PRM\Assignment\LongvitaRC\firebase\tests\firestore.rules.test.js:208:5)
+      at async TestContext.<anonymous> (<user-home>\OneDrive\Desktop\PRM\Assignment\LongvitaRC\firebase\tests\firestore.rules.test.js:208:5)
       at async Test.run (node:internal/test_runner/test:1404:7)
       at async Suite.processPendingSubtests (node:internal/test_runner/test:969:7)
 
 test at tests\firestore.rules.test.js:213:3
 ✖ admin allowed: create and delete; denied: bad shape (233.5243ms)
   Error: Expected request to fail, but it succeeded.
-      at C:\Users\phamv\OneDrive\Desktop\PRM\Assignment\LongvitaRC\firebase\node_modules\@firebase\rules-unit-testing\dist\index.cjs.js:576:31
+      at <user-home>\OneDrive\Desktop\PRM\Assignment\LongvitaRC\firebase\node_modules\@firebase\rules-unit-testing\dist\index.cjs.js:576:31
       at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
-      at async TestContext.<anonymous> (C:\Users\phamv\OneDrive\Desktop\PRM\Assignment\LongvitaRC\firebase\tests\firestore.rules.test.js:216:5)
+      at async TestContext.<anonymous> (<user-home>\OneDrive\Desktop\PRM\Assignment\LongvitaRC\firebase\tests\firestore.rules.test.js:216:5)
       at async Test.run (node:internal/test_runner/test:1404:7)
       at async Suite.processPendingSubtests (node:internal/test_runner/test:969:7)
 
 test at tests\firestore.rules.test.js:253:5
 ✖ denied: create for someone else, as non-draft, or with a review (271.8461ms)
   Error: Expected request to fail, but it succeeded.
-      at C:\Users\phamv\OneDrive\Desktop\PRM\Assignment\LongvitaRC\firebase\node_modules\@firebase\rules-unit-testing\dist\index.cjs.js:576:31
+      at <user-home>\OneDrive\Desktop\PRM\Assignment\LongvitaRC\firebase\node_modules\@firebase\rules-unit-testing\dist\index.cjs.js:576:31
       at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
-      at async TestContext.<anonymous> (C:\Users\phamv\OneDrive\Desktop\PRM\Assignment\LongvitaRC\firebase\tests\firestore.rules.test.js:255:7)
+      at async TestContext.<anonymous> (<user-home>\OneDrive\Desktop\PRM\Assignment\LongvitaRC\firebase\tests\firestore.rules.test.js:255:7)
       at async Test.run (node:internal/test_runner/test:1404:7)
       at async Suite.processPendingSubtests (node:internal/test_runner/test:969:7)
 
 test at tests\firestore.rules.test.js:260:5
 ✖ denied: changing uid, createdAt or review on a draft (AUD-11) (215.7361ms)
   Error: Expected request to fail, but it succeeded.
-      at C:\Users\phamv\OneDrive\Desktop\PRM\Assignment\LongvitaRC\firebase\node_modules\@firebase\rules-unit-testing\dist\index.cjs.js:576:31
+      at <user-home>\OneDrive\Desktop\PRM\Assignment\LongvitaRC\firebase\node_modules\@firebase\rules-unit-testing\dist\index.cjs.js:576:31
       at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
-      at async TestContext.<anonymous> (C:\Users\phamv\OneDrive\Desktop\PRM\Assignment\LongvitaRC\firebase\tests\firestore.rules.test.js:261:7)
+      at async TestContext.<anonymous> (<user-home>\OneDrive\Desktop\PRM\Assignment\LongvitaRC\firebase\tests\firestore.rules.test.js:261:7)
       at async Test.run (node:internal/test_runner/test:1404:7)
       at async Suite.processPendingSubtests (node:internal/test_runner/test:969:7)
 
 test at tests\firestore.rules.test.js:266:5
 ✖ denied: self-approving or skipping a status (AUD-11) (238.6527ms)
   Error: Expected request to fail, but it succeeded.
-      at C:\Users\phamv\OneDrive\Desktop\PRM\Assignment\LongvitaRC\firebase\node_modules\@firebase\rules-unit-testing\dist\index.cjs.js:576:31
+      at <user-home>\OneDrive\Desktop\PRM\Assignment\LongvitaRC\firebase\node_modules\@firebase\rules-unit-testing\dist\index.cjs.js:576:31
       at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
-      at async TestContext.<anonymous> (C:\Users\phamv\OneDrive\Desktop\PRM\Assignment\LongvitaRC\firebase\tests\firestore.rules.test.js:267:7)
+      at async TestContext.<anonymous> (<user-home>\OneDrive\Desktop\PRM\Assignment\LongvitaRC\firebase\tests\firestore.rules.test.js:267:7)
       at async Test.run (node:internal/test_runner/test:1404:7)
       at async Suite.processPendingSubtests (node:internal/test_runner/test:969:7)
 
 test at tests\firestore.rules.test.js:272:5
 ✖ denied: bad shape on update (AUD-11) (227.3334ms)
   Error: Expected request to fail, but it succeeded.
-      at C:\Users\phamv\OneDrive\Desktop\PRM\Assignment\LongvitaRC\firebase\node_modules\@firebase\rules-unit-testing\dist\index.cjs.js:576:31
+      at <user-home>\OneDrive\Desktop\PRM\Assignment\LongvitaRC\firebase\node_modules\@firebase\rules-unit-testing\dist\index.cjs.js:576:31
       at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
-      at async TestContext.<anonymous> (C:\Users\phamv\OneDrive\Desktop\PRM\Assignment\LongvitaRC\firebase\tests\firestore.rules.test.js:273:7)
+      at async TestContext.<anonymous> (<user-home>\OneDrive\Desktop\PRM\Assignment\LongvitaRC\firebase\tests\firestore.rules.test.js:273:7)
       at async Test.run (node:internal/test_runner/test:1404:7)
       at async Suite.processPendingSubtests (node:internal/test_runner/test:969:7)
 
 test at tests\firestore.rules.test.js:310:7
 ✖ denied: rejecting without a reason (191.0585ms)
   Error: Expected request to fail, but it succeeded.
-      at C:\Users\phamv\OneDrive\Desktop\PRM\Assignment\LongvitaRC\firebase\node_modules\@firebase\rules-unit-testing\dist\index.cjs.js:576:31
+      at <user-home>\OneDrive\Desktop\PRM\Assignment\LongvitaRC\firebase\node_modules\@firebase\rules-unit-testing\dist\index.cjs.js:576:31
       at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
-      at async TestContext.<anonymous> (C:\Users\phamv\OneDrive\Desktop\PRM\Assignment\LongvitaRC\firebase\tests\firestore.rules.test.js:311:9)
+      at async TestContext.<anonymous> (<user-home>\OneDrive\Desktop\PRM\Assignment\LongvitaRC\firebase\tests\firestore.rules.test.js:311:9)
       at async Test.run (node:internal/test_runner/test:1404:7)
       at async Suite.processPendingSubtests (node:internal/test_runner/test:969:7)
 
 test at tests\firestore.rules.test.js:317:7
 ✖ denied: reviewing a plan not in submitted, or changing the plan content (165.338ms)
   Error: Expected request to fail, but it succeeded.
-      at C:\Users\phamv\OneDrive\Desktop\PRM\Assignment\LongvitaRC\firebase\node_modules\@firebase\rules-unit-testing\dist\index.cjs.js:576:31
+      at <user-home>\OneDrive\Desktop\PRM\Assignment\LongvitaRC\firebase\node_modules\@firebase\rules-unit-testing\dist\index.cjs.js:576:31
       at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
-      at async TestContext.<anonymous> (C:\Users\phamv\OneDrive\Desktop\PRM\Assignment\LongvitaRC\firebase\tests\firestore.rules.test.js:318:9)
+      at async TestContext.<anonymous> (<user-home>\OneDrive\Desktop\PRM\Assignment\LongvitaRC\firebase\tests\firestore.rules.test.js:318:9)
       at async Test.run (node:internal/test_runner/test:1404:7)
       at async Suite.processPendingSubtests (node:internal/test_runner/test:969:7)
 
 test at tests\firestore.rules.test.js:310:7
 ✖ denied: rejecting without a reason (210.9008ms)
   Error: Expected request to fail, but it succeeded.
-      at C:\Users\phamv\OneDrive\Desktop\PRM\Assignment\LongvitaRC\firebase\node_modules\@firebase\rules-unit-testing\dist\index.cjs.js:576:31
+      at <user-home>\OneDrive\Desktop\PRM\Assignment\LongvitaRC\firebase\node_modules\@firebase\rules-unit-testing\dist\index.cjs.js:576:31
       at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
-      at async TestContext.<anonymous> (C:\Users\phamv\OneDrive\Desktop\PRM\Assignment\LongvitaRC\firebase\tests\firestore.rules.test.js:311:9)
+      at async TestContext.<anonymous> (<user-home>\OneDrive\Desktop\PRM\Assignment\LongvitaRC\firebase\tests\firestore.rules.test.js:311:9)
       at async Test.run (node:internal/test_runner/test:1404:7)
       at async Suite.processPendingSubtests (node:internal/test_runner/test:969:7)
 
 test at tests\firestore.rules.test.js:317:7
 ✖ denied: reviewing a plan not in submitted, or changing the plan content (177.2083ms)
   Error: Expected request to fail, but it succeeded.
-      at C:\Users\phamv\OneDrive\Desktop\PRM\Assignment\LongvitaRC\firebase\node_modules\@firebase\rules-unit-testing\dist\index.cjs.js:576:31
+      at <user-home>\OneDrive\Desktop\PRM\Assignment\LongvitaRC\firebase\node_modules\@firebase\rules-unit-testing\dist\index.cjs.js:576:31
       at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
-      at async TestContext.<anonymous> (C:\Users\phamv\OneDrive\Desktop\PRM\Assignment\LongvitaRC\firebase\tests\firestore.rules.test.js:318:9)
+      at async TestContext.<anonymous> (<user-home>\OneDrive\Desktop\PRM\Assignment\LongvitaRC\firebase\tests\firestore.rules.test.js:318:9)
       at async Test.run (node:internal/test_runner/test:1404:7)
       at async Suite.processPendingSubtests (node:internal/test_runner/test:969:7)
 
 test at tests\firestore.rules.test.js:355:3
 ✖ staff denied: posing as admin, bad shape, changing author or date (195.4555ms)
   Error: Expected request to fail, but it succeeded.
-      at C:\Users\phamv\OneDrive\Desktop\PRM\Assignment\LongvitaRC\firebase\node_modules\@firebase\rules-unit-testing\dist\index.cjs.js:576:31
+      at <user-home>\OneDrive\Desktop\PRM\Assignment\LongvitaRC\firebase\node_modules\@firebase\rules-unit-testing\dist\index.cjs.js:576:31
       at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
-      at async TestContext.<anonymous> (C:\Users\phamv\OneDrive\Desktop\PRM\Assignment\LongvitaRC\firebase\tests\firestore.rules.test.js:356:5)
+      at async TestContext.<anonymous> (<user-home>\OneDrive\Desktop\PRM\Assignment\LongvitaRC\firebase\tests\firestore.rules.test.js:356:5)
       at async Test.run (node:internal/test_runner/test:1404:7)
       at async Suite.processPendingSubtests (node:internal/test_runner/test:969:7)
 
 test at tests\firestore.rules.test.js:362:3
 ✖ admin allowed: create; denied: posing as staff (195.9339ms)
   Error: Expected request to fail, but it succeeded.
-      at C:\Users\phamv\OneDrive\Desktop\PRM\Assignment\LongvitaRC\firebase\node_modules\@firebase\rules-unit-testing\dist\index.cjs.js:576:31
+      at <user-home>\OneDrive\Desktop\PRM\Assignment\LongvitaRC\firebase\node_modules\@firebase\rules-unit-testing\dist\index.cjs.js:576:31
       at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
-      at async TestContext.<anonymous> (C:\Users\phamv\OneDrive\Desktop\PRM\Assignment\LongvitaRC\firebase\tests\firestore.rules.test.js:364:5)
+      at async TestContext.<anonymous> (<user-home>\OneDrive\Desktop\PRM\Assignment\LongvitaRC\firebase\tests\firestore.rules.test.js:364:5)
       at async Test.run (node:internal/test_runner/test:1404:7)
       at async Suite.processPendingSubtests (node:internal/test_runner/test:969:7)
 !  Script exited unsuccessfully (code 1)

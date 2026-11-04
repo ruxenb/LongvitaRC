@@ -11,7 +11,7 @@ Tin gửi từ **Firebase Console thật** (project `longvita-8da7e`, chiến d�
 | `04-inbox-has-both.png` | Hộp thư trên Profile có cả hai tin, trên các tin của ngày 02/11 |
 | `05-pm-fcm-02-before-sign-out.png` | Sau bản sửa PM-FCM-02 (`c40d884`): tin thứ ba "Longvita thử đăng xuất" hiện trên Home |
 | `06-pm-fcm-02-sign-in-is-clean.png` | Bấm đăng xuất trên Home khi thanh thông báo còn hiện; 0,6 giây sau, Sign-in không còn nội dung tin hay nút "Xem" (`uiautomator dump` cũng không thấy) |
-| `07-queue-attempt-snackbar.png` | Thử hàng đợi trên `main` `30ca6e3`: tắt mạng, phát hành hai chiến dịch, bật mạng lại; "Longvita hàng đợi 2" hiện trên Home |
+| *(ảnh 07 không lưu trong repo)* | Thử hàng đợi trên `main` `30ca6e3`: tắt mạng, phát hành hai chiến dịch, bật mạng lại; "Longvita hàng đợi 2" hiện trên Home. Ảnh gốc bị loại vì chứa tên và email thật; kết quả được đối chiếu cùng ảnh 08 và log thiết bị. |
 | `08-queue-attempt-sign-in-72s.png` | Đăng xuất ngay khi tin hiện; kiểm `uiautomator dump` khoảng 3 giây một lần trong 72 giây: không lần nào có nội dung thông báo cũ |
 
 ## Kết quả

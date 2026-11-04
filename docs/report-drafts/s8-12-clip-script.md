@@ -6,8 +6,7 @@
 
 - **Màn hình thiết bị:** `adb shell screenrecord --time-limit 180 /sdcard/<cảnh>.mp4`, mỗi cảnh một file (giới hạn 3 phút một file), rồi `adb pull`. Claude chạy phần này.
 - **Màn hình Console:** quay bằng công cụ quay màn hình trên máy của Charlie, hoặc dùng ảnh chụp Console đã có trong `evidence/` nếu không quay được.
-- **Lời nói:** Charlie đọc khi dựng, theo phần "Nói" của từng cảnh. Không đọc email hay UID thành tiếng.
-- **Che thông tin cá nhân (bắt buộc):** làm mờ mọi email và UID trong mọi khung hình Console và mọi ảnh đưa vào clip trước khi chia sẻ, kể cả tab Authentication → Users ở cảnh 1.
+- **Lời nói và dữ liệu cá nhân:** Charlie đọc khi dựng, theo phần "Nói" của từng cảnh. Không đọc hoặc để lộ email, UID, tên đầy đủ hay định danh tài khoản. Bắt buộc che/cắt các dữ liệu này trước khi đưa ảnh, slide hoặc video vào repo và bản nộp; với cảnh Authentication → Users, ưu tiên quay vùng giao diện không chứa định danh.
 
 ## Cảnh
 

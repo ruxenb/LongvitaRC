@@ -111,6 +111,31 @@ PRM393_Lab03_<StudentID>/
 
 ## 4. Hướng Dẫn Cài Đặt & Khởi Chạy Ứng Dụng (Barebone)
 
+### Thiết lập nhanh trên máy nhóm đã chuẩn bị ổ T
+
+Mở PowerShell tại thư mục repository và nạp môi trường cho terminal hiện tại:
+
+```powershell
+. .\scripts\project-env.ps1
+.\scripts\verify-setup.ps1 -RestoreDependencies
+```
+
+Script đặt Android SDK, AVD data, Gradle, Pub, npm, uv và pip cache trên ổ
+`T:`; đồng thời sửa `JAVA_HOME` của phiên hiện tại sang Temurin 21. Script không
+thay đổi biến môi trường toàn hệ thống và không ghi credential vào repository.
+
+Khởi động AVD đã chuẩn bị:
+
+```powershell
+.\scripts\start-emulator.ps1
+# Dùng -ColdBoot nếu snapshot cũ gây lỗi:
+.\scripts\start-emulator.ps1 -ColdBoot
+```
+
+Máy khác không có đúng cấu trúc `T:\Android`, `T:\Flutter` và `T:\Tools` vẫn
+cần cài toolchain tương ứng hoặc điều chỉnh các path ở đầu
+`scripts/project-env.ps1`.
+
 ### Bước 1: Khởi tạo môi trường & lấy dependencies
 ```bash
 # Kiểm tra môi trường Flutter
@@ -140,6 +165,10 @@ flutter run
    source .venv/bin/activate  # Trên Windows: .venv\Scripts\activate
    uv pip install -e .
    ```
+   Trên máy Windows đã chuẩn bị, có thể dùng
+   `scripts/verify-setup.ps1 -RestoreDependencies` thay cho các lệnh thủ công.
+   Sao chép `e2e_test/.env.example` thành `e2e_test/.env` rồi điền cấu hình
+   runtime; file `.env` thật đã bị `.gitignore` loại khỏi Git.
 2. Thiết lập biến môi trường API Key (không commit file chứa key):
    ```bash
    export ARTEMIS_BASE_URL="http://127.0.0.1:8000"  # Daemon ARTEMIS, chạy từ checkout của google/artemis tại commit đã pin, với GEMINI_API_KEY

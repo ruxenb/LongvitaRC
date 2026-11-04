@@ -59,4 +59,4 @@
 
 - Template và định dạng của bản slide chung (Thắng).
 - Ảnh Console cho Storage, nếu DEC-01 chọn dùng Storage.
-- Một số ảnh có email và UID thật của Charlie; che lại nếu nhóm muốn.
+- Một số ảnh nguồn có email, UID hoặc tên thật của Charlie; bắt buộc che/cắt toàn bộ định danh trước khi đưa vào slide, repo hoặc bản nộp.

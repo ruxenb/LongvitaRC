@@ -55,11 +55,11 @@ If no such version exists, report the issue to the plugin. If necessary, here is
 an issue against a plugin: https://docs.flutter.dev/release/breaking-changes/migrate-to-built-in-kotlin/for-app-developers#report-incompatible-kotlin-gradle-plugin-usage-to-plugin-authors
 
 If you are a plugin author, please migrate your plugin to Built-in Kotlin using this guide: https://docs.flutter.dev/release/breaking-changes/migrate-to-built-in-kotlin/for-plugin-authors
-Checking the license for package Android SDK Platform 34 in C:\Users\phamv\development\android-sdk\licenses
+Checking the license for package Android SDK Platform 34 in <user-home>\development\android-sdk\licenses
 License for package Android SDK Platform 34 accepted.
 Preparing "Install Android SDK Platform 34 (revision 3)".
 "Install Android SDK Platform 34 (revision 3)" ready.
-Installing Android SDK Platform 34 in C:\Users\phamv\development\android-sdk\platforms\android-34
+Installing Android SDK Platform 34 in <user-home>\development\android-sdk\platforms\android-34
 "Install Android SDK Platform 34 (revision 3)" complete.
 "Install Android SDK Platform 34 (revision 3)" finished.
 Running Gradle task 'assembleDebug'...                             47,1s

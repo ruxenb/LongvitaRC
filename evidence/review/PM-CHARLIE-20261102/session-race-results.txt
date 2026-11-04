@@ -1,4 +1,4 @@
-00:00 +0: loading C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/pm_review_session_race_test.dart
+00:00 +0: loading <user-home>/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/pm_review_session_race_test.dart
 00:00 +0: PM-S3-5-01: late upload from A must not repopulate B profile
 00:00 +0 -1: PM-S3-5-01: late upload from A must not repopulate B profile [E]
   Expected: null
@@ -23,5 +23,5 @@
 00:00 +0 -2: Some tests failed.
 
 Failing tests:
-  C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/pm_review_session_race_test.dart: PM-S3-5-01: late upload from A must not repopulate B profile
-  C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/pm_review_session_race_test.dart: PM-S3-5-02: late fetch from A must not repopulate B saved plans
+  <user-home>/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/pm_review_session_race_test.dart: PM-S3-5-01: late upload from A must not repopulate B profile
+  <user-home>/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/pm_review_session_race_test.dart: PM-S3-5-02: late fetch from A must not repopulate B saved plans

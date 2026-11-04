@@ -1,4 +1,4 @@
-00:00 +0: loading C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/report/storage_service_test.dart
+00:00 +0: loading <user-home>/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/report/storage_service_test.dart
 00:00 +0: a failed upload returns null, with no unhandled stream error
 00:00 +0 -1: a failed upload returns null, with no unhandled stream error [E]
   [firebase_storage/object-not-found] null
@@ -38,6 +38,6 @@
 00:00 +0 -3: Some tests failed.
 
 Failing tests:
-  C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/report/storage_service_test.dart: a failed upload returns null, with no unhandled stream error
-  C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/report/storage_service_test.dart: reports progress and returns the URL, then stops listening
-  C:/Users/phamv/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/report/storage_service_test.dart: stops listening to progress after a failure
+  <user-home>/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/report/storage_service_test.dart: a failed upload returns null, with no unhandled stream error
+  <user-home>/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/report/storage_service_test.dart: reports progress and returns the URL, then stops listening
+  <user-home>/OneDrive/Desktop/PRM/Assignment/LongvitaRC/test/report/storage_service_test.dart: stops listening to progress after a failure
