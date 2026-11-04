@@ -28,12 +28,23 @@ class AuthViewModel extends BaseViewModel {
   /// Uid whose session data is currently held by participants.
   String? _sessionUid;
 
-  /// Guards against overlapping profile loads for the same uid.
+  /// Changes whenever a session ends: Firebase reports no user or another
+  /// user, or sign-out starts. A profile load belongs to the value it started
+  /// under, so the same uid signing back in neither reuses nor accepts the
+  /// load of the ended session (PM-S3-5-03).
+  int _authGeneration = 0;
+  String? _lastStreamUid;
+
+  /// One profile load per uid and session: the sign-in result and the auth
+  /// stream both ask for it.
   Future<void>? _profileLoad;
   String? _profileLoadUid;
+  int? _profileLoadGeneration;
 
-  /// Set while the Google picker is open so repeated taps are ignored.
-  bool _signInInFlight = false;
+  /// The sign-in attempt in progress; repeated taps are ignored while set.
+  /// A session that ends abandons it, so its SDK result, arriving later,
+  /// changes nothing (PM-S3-5-06).
+  Object? _signInAttempt;
   bool _signOutInFlight = false;
 
   AuthViewModel({
@@ -73,27 +84,47 @@ class AuthViewModel extends BaseViewModel {
   }
 
   Future<void> signInWithGoogle() async {
-    if (_signInInFlight || _state is! AuthSignedOut) return;
-    _signInInFlight = true;
+    if (_signInAttempt != null || _state is! AuthSignedOut) return;
+    final attempt = _signInAttempt = Object();
     _setState(const AuthSigningIn());
 
+    final AuthSignInResult result;
     try {
-      final result = await authService.signInWithGoogle();
-      switch (result) {
-        case AuthSignInSucceeded(:final uid):
-          await analytics.logLogin(method: 'google');
-          // The auth stream also reports this uid; both paths share one load.
-          await _loadProfile(uid);
-        case AuthSignInCancelled():
-          _setState(const AuthSignedOut(
-              notice: AuthFailure(AuthFailureKind.cancelled)));
-        case AuthSignInFailed(:final failure):
-          await crashlytics.recordError(failure, StackTrace.current,
-              reason: 'Google sign-in failed (${failure.kind.name})');
-          _setState(AuthSignedOut(notice: failure));
-      }
-    } finally {
-      _signInInFlight = false;
+      result = await authService.signInWithGoogle();
+    } catch (_) {
+      if (identical(_signInAttempt, attempt)) _signInAttempt = null;
+      rethrow;
+    }
+    // Abandoned by a sign-out, or replaced by a newer attempt: the result
+    // belongs to a session that has ended.
+    if (!identical(_signInAttempt, attempt)) return;
+    // The picker is closed; a later attempt must not wait for telemetry.
+    _signInAttempt = null;
+    // State changes first, while this attempt is still current; reporting
+    // comes after and never decides the session (PM-S3-5-05).
+    switch (result) {
+      case AuthSignInSucceeded(:final uid):
+        if (authService.currentUid != uid) {
+          // Firebase no longer has this user: nothing to load.
+          if (_state is AuthSigningIn) _setState(const AuthSignedOut());
+          return;
+        }
+        // The auth stream also reports this uid. If it already signed the
+        // user in there is nothing to load; otherwise both share one load.
+        final current = _state;
+        final load = current is AuthSignedIn && current.user.uid == uid
+            ? null
+            : _loadProfile(uid);
+        await _sendTelemetry(() => analytics.logLogin(method: 'google'),
+            reason: 'Login event failed');
+        await load;
+      case AuthSignInCancelled():
+        _setState(const AuthSignedOut(
+            notice: AuthFailure(AuthFailureKind.cancelled)));
+      case AuthSignInFailed(:final failure):
+        _setState(AuthSignedOut(notice: failure));
+        await crashlytics.recordError(failure, StackTrace.current,
+            reason: 'Google sign-in failed (${failure.kind.name})');
     }
   }
 
@@ -106,17 +137,31 @@ class AuthViewModel extends BaseViewModel {
   Future<void> signOut() async {
     if (_signOutInFlight || _state is AuthInitializing) return;
     _signOutInFlight = true;
+    _signInAttempt = null;
+    final generation = ++_authGeneration;
+    Object? error;
+    StackTrace? errorStack;
     try {
       await authService.signOut();
-      await analytics.logLogout();
     } catch (e, s) {
-      await crashlytics.recordError(e, s, reason: 'Sign-out failed');
+      error = e;
+      errorStack = s;
     } finally {
       _signOutInFlight = false;
     }
-    // Clear locally even if the SDK call failed: the user asked to leave.
-    _endSession();
-    _setState(const AuthSignedOut());
+    // Clear locally even if the SDK call failed: the user asked to leave. Not
+    // when a newer session began meanwhile, which the auth stream reports
+    // after ending this one (PM-S3-5-05).
+    if (generation == _authGeneration) {
+      _endSession();
+      _setState(const AuthSignedOut());
+    }
+    if (error != null) {
+      await crashlytics.recordError(error, errorStack,
+          reason: 'Sign-out failed');
+    } else {
+      await _sendTelemetry(analytics.logLogout, reason: 'Logout event failed');
+    }
   }
 
   /// Dismisses the cancel/failure notice on the sign-in screen.
@@ -127,7 +172,15 @@ class AuthViewModel extends BaseViewModel {
   }
 
   void _onAuthUid(String? uid) {
+    final previous = _lastStreamUid;
+    _lastStreamUid = uid;
+    if (uid == null || (previous != null && previous != uid)) {
+      _authGeneration++;
+    }
     if (uid == null) {
+      // An attempt still in the picker reports its own outcome; one whose
+      // user already got in ends with that session.
+      if (_state is! AuthSigningIn) _signInAttempt = null;
       _endSession();
       // A signed-out state keeps its cancel/failure notice; an attempt in
       // progress reports its own outcome.
@@ -143,33 +196,62 @@ class AuthViewModel extends BaseViewModel {
   }
 
   Future<void> _loadProfile(String uid) {
-    if (_profileLoad != null && _profileLoadUid == uid) return _profileLoad!;
-    _profileLoadUid = uid;
-    return _profileLoad = _doLoadProfile(uid).whenComplete(() {
-      if (_profileLoadUid == uid) {
+    final generation = _authGeneration;
+    final pending = _profileLoad;
+    if (pending != null &&
+        _profileLoadUid == uid &&
+        _profileLoadGeneration == generation) {
+      return pending;
+    }
+    late final Future<void> load;
+    load = _doLoadProfile(uid, generation).whenComplete(() {
+      // A newer load may have replaced this one; leave its handle alone.
+      if (identical(_profileLoad, load)) {
         _profileLoad = null;
         _profileLoadUid = null;
+        _profileLoadGeneration = null;
       }
     });
+    _profileLoad = load;
+    _profileLoadUid = uid;
+    _profileLoadGeneration = generation;
+    return load;
   }
 
-  Future<void> _doLoadProfile(String uid) async {
+  /// False once the session the load started in has ended, or the user changed.
+  bool _isCurrentLoad(String uid, int generation) =>
+      generation == _authGeneration && authService.currentUid == uid;
+
+  Future<void> _doLoadProfile(String uid, int generation) async {
     _setState(AuthLoadingProfile(uid));
     try {
       final user = await authService.loadProfile(uid);
-      if (authService.currentUid != uid) return; // signed out meanwhile
+      if (!_isCurrentLoad(uid, generation)) return;
       _startSession(user);
       _setState(AuthSignedIn(user));
     } on AuthFailure catch (failure, s) {
-      if (authService.currentUid != uid) return;
+      if (!_isCurrentLoad(uid, generation)) return;
+      // Show the error before reporting it: once reported, another session
+      // may have started (PM-S3-5-03).
+      _setState(AuthProfileError(uid, failure));
       await crashlytics.recordError(failure, s,
           reason: 'Profile load failed (${failure.kind.name})');
-      _setState(AuthProfileError(uid, failure));
     } catch (e, s) {
-      if (authService.currentUid != uid) return;
-      await crashlytics.recordError(e, s, reason: 'Profile load failed');
+      if (!_isCurrentLoad(uid, generation)) return;
       _setState(AuthProfileError(
           uid, AuthFailure(AuthFailureKind.unknown, cause: e)));
+      await crashlytics.recordError(e, s, reason: 'Profile load failed');
+    }
+  }
+
+  /// Sends an Analytics event. A failure is recorded, never thrown: the
+  /// session state has already changed and must not depend on telemetry.
+  Future<void> _sendTelemetry(Future<void> Function() send,
+      {required String reason}) async {
+    try {
+      await send();
+    } catch (e, s) {
+      await crashlytics.recordError(e, s, reason: reason);
     }
   }
 

@@ -15,6 +15,11 @@ class AuthService implements IAuthService {
 
   UserModel? _cachedUser;
 
+  /// Numbers profile loads. Only the latest may fill [_cachedUser], and a
+  /// sign-out invalidates loads in flight, so a late response of an ended
+  /// session never replaces the profile of the next one (PM-S3-5-03).
+  int _profileRequest = 0;
+
   AuthService({
     FirebaseAuth? auth,
     FirebaseFirestore? firestore,
@@ -27,6 +32,7 @@ class AuthService implements IAuthService {
   Stream<String?> get authUidChanges =>
       _auth.authStateChanges().map((user) {
         if (user == null || user.uid != _cachedUser?.uid) _cachedUser = null;
+        if (user == null) _profileRequest++;
         return user?.uid;
       });
 
@@ -80,6 +86,12 @@ class AuthService implements IAuthService {
 
   @override
   Future<UserModel> loadProfile(String uid) async {
+    final request = ++_profileRequest;
+    UserModel remember(UserModel user) {
+      if (request == _profileRequest) _cachedUser = user;
+      return user;
+    }
+
     final doc = _firestore.collection('users').doc(uid);
 
     final DocumentSnapshot<Map<String, dynamic>> snapshot;
@@ -92,7 +104,7 @@ class AuthService implements IAuthService {
     final data = snapshot.data();
     if (snapshot.exists && data != null) {
       try {
-        return _cachedUser = UserModel.fromMap(data, snapshot.id);
+        return remember(UserModel.fromMap(data, snapshot.id));
       } catch (e) {
         throw AuthFailure(AuthFailureKind.profileRead,
             code: 'invalid-profile', cause: e);
@@ -119,12 +131,13 @@ class AuthService implements IAuthService {
     } on FirebaseException catch (e) {
       throw AuthErrorMapper.fromFirestore(e, writing: true);
     }
-    return _cachedUser = newUser;
+    return remember(newUser);
   }
 
   @override
   Future<void> signOut() async {
     _cachedUser = null;
+    _profileRequest++;
     await _signOutGoogleQuietly();
     await _auth.signOut();
   }

@@ -177,3 +177,31 @@ Sửa Semantics của các thẻ Profile, URL, tiến trình, danh tính, headin
 ### S4-14 — re-review f83206a đạt, 03/11/2026
 
 Giữ 14ec763 và PM docs 17a8ff9. f83206a hoàn thiện test RC pending bằng Completer và Semantics; Sign-in được đi TalkBack qua QA host dùng màn/VM thật với Auth giả; Share trên app thật mở ChooserActivity rồi Back. Trong lúc kiểm Sign-in phát hiện heading không được Android nhận; thêm headingLevel ở 8 vị trí, có test và ảnh điều hướng heading trên Sign-in/Profile. PM xác nhận lỗi này thuộc S4-14, chạy độc lập analyzer sạch/279 tests pass, xem ảnh 16–20 và diff; PM không tự thao tác TalkBack. Ba mục PM bổ sung đã đạt, S4-14 chuyển Chờ nghiệm thu, tổng Charlie 10 chờ/19 đang làm. Chưa push/PR tại thời điểm này; bước kế là giao gói lên PR để review, chưa tự merge hoặc chuyển S3-5. Các giới hạn QA/Auth giả, states fake, máy thật/TTS được giữ rõ trong README.
+
+## 04/11/2026
+
+### S3-5 — đăng xuất và cách ly phiên, kiểm native
+
+PR #9 (S4-14) đã merge vào main tại `96c9f57`; S3-5 bắt đầu từ commit này, nhánh `feature/charlie-session-02`. Rà AuthViewModel, ba participant SessionScoped, PDF, upload và FCM so với test: không tái hiện được lỗi nào, nên không đổi code. Native trên emulator với hai tài khoản Google thật do Charlie đăng nhập: Hủy, Đồng ý, Back, mở lại app, A→B, đăng xuất từ Home, A→đăng xuất→A đều đạt. PDF trên máy của UID bị xóa, bản trên Storage Emulator vẫn còn, lịch sử thông báo giữ theo UID. Email của tài khoản B được làm mờ trong ảnh. Analyzer sạch, 279/279 tests pass. Còn chờ: Hoàng duyệt A3, nhóm chốt giữ PDF và lịch sử thông báo. Evidence: `evidence/auth/S3-5-20261104/`.
+
+### S3-5 — PM review evidence 0e3ef5a: Changes requested
+
+Giữ các ca native normal-path và redaction email B. PM đọc source/tests/evidence, chạy ba probe độc lập: hai regression fail (PM-S3-5-03: profile Auth phiên cũ cùng UID bị reuse; PM-S3-5-04: cleanup logout cũ xóa PDF phiên mới), một observation pass (SDK sign-out ném lỗi giả → UI signed-out nhưng UID còn, recreate VM restore). Probe riêng không thuộc 279 tests và không phải native runs. Chưa sửa production; chuyển việc tiếp theo thành fix/regression 03/04, vẫn chờ A3/retention và làm rõ SDK failure behavior. Các findings 01/02 cũ giữ Closed; không tăng task hoàn thành hoặc chuyển task khác.
+
+### S3-5 — fix 9710d81 và PM re-review
+
+Thêm generation/operation identity cho Auth profile loads và request ordering cho AuthService cache; LocalReportStore serialize file operations theo UID. Dev thêm 15 tests và native same-UID smoke sau sửa; không chạy lại native A→B. PM đọc diff/tests/ảnh after-fix và tự chạy analyzer sạch/294 tests pass. Original probe 03 pass, 04 Closed theo cơ chế queue và regression file cũ xóa/file mới mở-share được. PM tái hiện thêm hai subcases 03 sau await Crashlytics và finding mới 05: completions login/logout cũ sau telemetry làm sai state phiên sau, tổng 4 probe mới fail; không phải native runs hoặc phần của suite 294. Changes requested phần Auth còn lại. SDK-error: PM đề xuất phương án báo lỗi/thử lại để Thắng chốt, ghi rõ chưa ngăn restore qua restart; A3 và retention vẫn pending. Chưa push/PR/merge hoặc chuyển S3-2.
+
+### S3-5 — f5ece29 và PM re-review
+
+Đổi state trước telemetry, gắn logout completion với generation, tách lỗi Analytics khỏi Firebase sign-out failure; giữ logging và API. PM tự chạy analyzer sạch/303 tests pass, 4/4 probes telemetry pass, original profile probe và SDK observation mỗi ca pass; đóng 03 và 05, giữ 04 Closed. Native smoke sau sửa có evidence A/B/same-UID; PM xem ảnh s03/s05/s07–s09, không tự đổi phiên emulator. Mở 06 bằng probe SDK-result riêng: UID stream đưa A vào app trước Future credential result, A logout, result cũ hoàn tất làm VM kẹt loading dù SDK không có user. Một probe fail, chưa native, không nằm trong suite 303. Cần guard attempt/result trước mutate state; A3/retention/SDK-error decision vẫn pending. Không push/PR/merge hoặc chuyển task mới trong vòng sửa này.
+
+### S3-5 — eee1547, PM đóng finding 06
+
+PM độc lập kiểm code eee1547: analyzer sạch (80.2s), 308/308 tests pass (24s), probe SDK result 06 và bốn completion probes cũ 5/5 pass; probe profile gốc và SDK-error observation mỗi ca 1/1 pass. Expected các probe giữ nguyên. 06 Closed; 01–05 vẫn Closed. Không chạy probe 04 baseline vì nó deadlock với serialization đã được chấp nhận; regression file chính thức pass trong suite. Race chỉ kiểm bằng fake có điều khiển. Đã đọc diff/5 regression và xem ảnh t03/t05 của native smoke Dev; PM không tự thao tác emulator hay kiểm lại PDF. Giữ các baseline và giới hạn môi trường. Phần sửa kỹ thuật qua PM review; toàn S3-5 vẫn Waiting input A3, retention PDF/history và SDK-error behavior. Recipient-less FCM policy vẫn mở theo owner. Chưa push/PR/merge hoặc chuyển S3-2; tổng 10 chờ nghiệm thu/19 đang thực hiện không đổi.
+
+### S3-5 — mở PR #11 sau tích hợp main mới, 04/11/2026
+
+Charlie yêu cầu đưa gói đã qua PM review lên GitHub để review; mở PR không đồng nghĩa Done hoặc cho phép merge. Đã tích hợp origin/main b657ca9 (PR #10 và cập nhật routing của Thắng) bằng merge 911a65d, không xung đột. PM chạy analyzer sạch (39.5s), full Flutter suite **334/334 pass** (17s) trên bản tích hợp; git diff --check sạch. Đây là kết quả local, không phải CI. Không chạy lại native, APK hay rules trong lượt tích hợp; evidence native là các đợt đã ghi trong README. Rules trong PR giống main. Không tự xem Hoàng đã merge code là duyệt A3.
+
+Đã push feature/charlie-session-02 và mở [PR #11](https://github.com/ruxenb/LongvitaRC/pull/11) vào main, PR thường để CodeRabbit auto-review theo cấu hình, giữ mở cho bot/owner review. Không bật auto-merge, không merge main. Các câu hỏi SDK sign-out failure, A3, PDF/history retention và recipient-less FCM ghi rõ trong mô tả PR. S3-5 vẫn Đang thực hiện / Waiting input; tổng Charlie 10 chờ nghiệm thu/19 đang thực hiện. Chỉ đưa file kỹ thuật/evidence được theo dõi lên Git; các tài liệu điều phối private, 8 thư mục QA PM và 6 file report-drafts xóa local ở workspace chính không bị đưa vào thay đổi.
