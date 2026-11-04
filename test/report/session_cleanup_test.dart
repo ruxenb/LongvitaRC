@@ -4,6 +4,7 @@
 // a temporary folder; auth, upload and viewer are fakes.
 import 'dart:async';
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:longvita/models/auth_state.dart';
@@ -14,7 +15,24 @@ import 'package:longvita/viewmodels/profile_viewmodel.dart';
 import '../auth/auth_fakes.dart';
 import '../auth/session_isolation_test.dart' show planFor;
 
-Future<void> settle() => Future<void>.delayed(const Duration(milliseconds: 10));
+/// Reports each save as it is requested, before it joins the queue of its
+/// uid. Waiting inside the save itself would hang, because a held removal
+/// runs first.
+class _SignalingReportStore extends LocalReportStore {
+  _SignalingReportStore({required this.onSave, required super.baseDirectory});
+
+  final void Function() onSave;
+
+  @override
+  Future<File> save({
+    required String uid,
+    required String exportId,
+    required Uint8List bytes,
+  }) {
+    onSave();
+    return super.save(uid: uid, exportId: exportId, bytes: bytes);
+  }
+}
 
 void main() {
   late Directory dir;
@@ -22,26 +40,46 @@ void main() {
   late FakeReportViewer viewer;
   late ProfileViewModel profile;
   late AuthViewModel session;
+  late LocalReportStore store;
 
   /// While set, the next folder lookup (the removal's) waits for it.
   Completer<void>? holdNextLookup;
   Completer<void>? removalStarted;
 
+  /// Completed when the next save is requested; set only around the export
+  /// under test.
+  Completer<void>? saveRequested;
+
+  /// The gate a test holds, released in tearDown if an assertion failed first.
+  Completer<void>? gate;
+
   setUp(() async {
+    holdNextLookup = null;
+    removalStarted = null;
+    saveRequested = null;
+    gate = null;
     dir = await Directory.systemTemp.createTemp('longvita_session_cleanup');
     auth = FakeAuthService(initialUid: 'uid-a');
     viewer = FakeReportViewer();
     final analytics = FakeAnalytics();
     final crashlytics = FakeCrashlytics();
-    final store = LocalReportStore(baseDirectory: () async {
-      final hold = holdNextLookup;
-      if (hold != null) {
-        holdNextLookup = null;
-        removalStarted?.complete();
-        await hold.future;
-      }
-      return dir;
-    });
+    store = _SignalingReportStore(
+      onSave: () {
+        final requested = saveRequested;
+        if (requested != null && !requested.isCompleted) {
+          requested.complete();
+        }
+      },
+      baseDirectory: () async {
+        final hold = holdNextLookup;
+        if (hold != null) {
+          holdNextLookup = null;
+          removalStarted?.complete();
+          await hold.future;
+        }
+        return dir;
+      },
+    );
     profile = ProfileViewModel(
       authService: auth,
       storageService: FakeStorageService(),
@@ -59,10 +97,22 @@ void main() {
       crashlytics: crashlytics,
       sessionScoped: [profile],
     );
-    await settle();
+    // The restored session of A is ready once its profile has loaded.
+    if (session.currentUser == null) {
+      final ready = Completer<void>();
+      void onChange() {
+        if (session.currentUser != null && !ready.isCompleted) ready.complete();
+      }
+
+      session.addListener(onChange);
+      await ready.future;
+      session.removeListener(onChange);
+    }
   });
 
   tearDown(() async {
+    final held = gate;
+    if (held != null && !held.isCompleted) held.complete();
     session.dispose();
     profile.dispose();
     await dir.delete(recursive: true);
@@ -76,21 +126,21 @@ void main() {
     final oldId = profile.lastExport!.exportId;
     expect(fileOf(oldId).existsSync(), isTrue);
 
-    final release = holdNextLookup = Completer<void>();
+    final release = gate = holdNextLookup = Completer<void>();
     removalStarted = Completer<void>();
     await session.signOut();
     await removalStarted!.future;
     auth.nextSignIn = const AuthSignInSucceeded('uid-a');
     await session.signInWithGoogle();
-    await settle();
+    expect(session.currentUser?.uid, 'uid-a', reason: 'profile loaded');
 
-    // The new export starts while the old removal is still held, and saves
-    // only after it.
+    // The new export asks to save while the old removal is still held, and
+    // the save runs only after it.
+    final requested = saveRequested = Completer<void>();
     final export = profile.exportAndUploadPdf(planFor('uid-a'));
-    await settle();
+    await requested.future;
     release.complete();
     await export;
-    await settle();
 
     final newId = profile.lastExport!.exportId;
     expect(newId, isNot(oldId));
@@ -106,12 +156,13 @@ void main() {
     await profile.exportAndUploadPdf(planFor('uid-a'));
     final oldId = profile.lastExport!.exportId;
 
-    final release = holdNextLookup = Completer<void>();
+    final release = gate = holdNextLookup = Completer<void>();
     removalStarted = Completer<void>();
     await session.signOut();
     await removalStarted!.future;
     release.complete();
-    await settle();
+    // Queued after the removal for the same uid, so it ends after it.
+    expect(await store.find(uid: 'uid-a', exportId: oldId), isNull);
 
     expect(fileOf(oldId).existsSync(), isFalse);
     expect(Directory('${dir.path}/reports/uid-a').existsSync(), isFalse);
