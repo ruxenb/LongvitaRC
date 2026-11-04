@@ -205,3 +205,16 @@ PM độc lập kiểm code eee1547: analyzer sạch (80.2s), 308/308 tests pass
 Charlie yêu cầu đưa gói đã qua PM review lên GitHub để review; mở PR không đồng nghĩa Done hoặc cho phép merge. Đã tích hợp origin/main b657ca9 (PR #10 và cập nhật routing của Thắng) bằng merge 911a65d, không xung đột. PM chạy analyzer sạch (39.5s), full Flutter suite **334/334 pass** (17s) trên bản tích hợp; git diff --check sạch. Đây là kết quả local, không phải CI. Không chạy lại native, APK hay rules trong lượt tích hợp; evidence native là các đợt đã ghi trong README. Rules trong PR giống main. Không tự xem Hoàng đã merge code là duyệt A3.
 
 Đã push feature/charlie-session-02 và mở [PR #11](https://github.com/ruxenb/LongvitaRC/pull/11) vào main, PR thường để CodeRabbit auto-review theo cấu hình, giữ mở cho bot/owner review. Không bật auto-merge, không merge main. Các câu hỏi SDK sign-out failure, A3, PDF/history retention và recipient-less FCM ghi rõ trong mô tả PR. S3-5 vẫn Đang thực hiện / Waiting input; tổng Charlie 10 chờ nghiệm thu/19 đang thực hiện. Chỉ đưa file kỹ thuật/evidence được theo dõi lên Git; các tài liệu điều phối private, 8 thư mục QA PM và 6 file report-drafts xóa local ở workspace chính không bị đưa vào thay đổi.
+
+### S3-2 — SHA debug và Google Sign-in, 04/11/2026
+
+PR #11 (S3-5) đã merge vào main tại `e12719c`; S3-5 vẫn chờ A3, chính sách giữ dữ liệu và quyết định cho lỗi SDK sign-out. S3-2 bắt đầu từ `e12719c`, nhánh `feature/charlie-signin-02`.
+
+**Đã kiểm, chỉ đọc:**
+- Firebase Console: app Android duy nhất có đủ 8 vân tay, SHA-1 và SHA-256 của cả bốn người.
+- Google Cloud Credentials: có 4 OAuth client Android, mỗi client đúng package và mang một SHA-1 của một người.
+- `google-services.json`: khớp project, App ID và package. Không thay file, vì app dùng web client và các client Android đã có phía server.
+
+**Máy Charlie:** APK build từ `e12719c` ký đúng SHA đã đăng ký. Charlie tự chọn tài khoản; đăng nhập Google → Home đúng tài khoản → đăng xuất đều đạt.
+
+**Còn chờ:** An, Thắng, Hoàng tự thử đăng nhập trên máy mình theo hướng dẫn trong `evidence/auth/S3-2-20261104/README.md`. Không đổi app ID, billing hay chính sách Auth.
