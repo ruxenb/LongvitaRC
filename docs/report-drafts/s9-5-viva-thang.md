@@ -3,6 +3,10 @@
 > Đây là kịch bản luyện tập. Task chỉ hoàn thành sau khi chạy được ARTEMIS và
 > đổi Remote Config live trên đúng Firebase project.
 
+> **Cập nhật 04/11/2026:** phần kiến trúc, ViewModel và quyết định review đã có
+> source/evidence để luyện. Remote Config offline đã chạy thật, nhưng không thay
+> thế thao tác đổi giá trị live trên Console; ARTEMIS daemon vẫn chưa được xác minh.
+
 ## 0:00–1:00 — Kiến trúc
 
 Mở `docs/architecture.md`, giải thích dependency một chiều View → ViewModel →
@@ -42,3 +46,13 @@ uv run --python 3.12 pytest -v test_auth.py::test_tc11_sign_out_cannot_return_wi
 Trước khi chạy cần ARTEMIS daemon health OK, AVD/device serial đúng và app đã
 cài. Nếu daemon không hoạt động thì test phải fail ở fixture; không được trình
 bày `pytest --collect-only` như một lần chạy E2E thành công.
+
+## Checklist tự đánh giá trước vấn đáp
+
+- Có thể chỉ đúng dependency `View → ViewModel → Service` trong source.
+- Có thể giải thích session epoch và vì sao callback của user A không được cập
+  nhật UI của user B.
+- Có thể nêu PR6-01, lý do Accepted và commit `55bdf3e` mà không mở dữ liệu PII.
+- Có thể phân biệt Remote Config offline pass ngày 04/11 với Remote Config live
+  trước/sau Console còn thiếu.
+- Chỉ demo ARTEMIS khi daemon health, thiết bị và model key đều hoạt động thật.

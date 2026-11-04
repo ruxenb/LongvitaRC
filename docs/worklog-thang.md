@@ -12,6 +12,8 @@
 - Hoàn thành mới ngày 04/11: **S0-3-VLQ** và **S3-6**.
 - Không còn blocker Android SDK/ADB/emulator trên máy Thắng.
 - Tooling hỗ trợ Firebase, ARTEMIS, review, security scan và video được ghi tại [`docs/thang-tooling-setup-20261104.md`](thang-tooling-setup-20261104.md).
+- Nhánh `Thang` đã merge vào `main` tại `90d9fd0`; `origin/Thang` không còn commit riêng chưa có trên `main` tại thời điểm kiểm tra.
+- Sau merge: `flutter analyze lib --no-pub` sạch và **334/334 Flutter tests pass**. Analyzer toàn cây bị ảnh hưởng bởi Dart template bên trong `test/firestore/node_modules/firebase-tools`, không phải source `lib/`.
 - Các task test/review/report/nộp bài chưa hoàn thành vì còn phụ thuộc tính năng, Firebase runtime, bằng chứng ARTEMIS hoặc sản phẩm của thành viên khác.
 
 ## 2. Task đã hoàn thành
@@ -97,6 +99,32 @@ Smoke test native trên `emulator-5554` ngày 04/11:
 Task được chuyển sang **Đã hoàn thành**. Smoke test này xác nhận routing/back; không thay thế ARTEMIS 3-run hoặc kiểm thử failure cases Firebase của các task khác.
 
 Các chuẩn bị và audit từ nhánh Thắng vẫn được lưu trong `docs/failure-case-matrix.md`, `evidence/audit/S9-1-S9-4-20261103/`, `scripts/` và `docs/report-drafts/`; chúng chưa được tính là hoàn tất các task phụ thuộc cloud hoặc nghiệm thu cuối kỳ.
+
+### S5-10 — Failure cases tiếp tục ngày 04/11/2026
+
+Trên `Longvita_API_36`, commit `90d9fd0`:
+
+- **PASS — Remote Config offline:** tắt Wi-Fi và mobile data, xác minh mạng
+  unreachable; refresh không báo thành công giả, giữ giá trị hiện tại.
+- **PASS — Crashlytics cancel:** mở dialog test crash rồi hủy; ứng dụng trở về
+  Profile và tiến trình vẫn chạy.
+- **Chưa tính pass — FCM permission denied:** đã tới permission gate nhưng phiên
+  tự động không chọn thay người dùng trên hộp thoại quyền riêng tư. Quyền và mạng
+  đã được khôi phục sau kiểm tra.
+
+Evidence: [`evidence/failure-cases/S5-10-THANG-20261104/`](../evidence/failure-cases/S5-10-THANG-20261104/).
+S5-10 vẫn **Đang làm** vì còn Auth/Storage/Analytics, cloud dashboard và manual
+cases khác.
+
+### S7-2-VLQ, S7-3-VLQ và S8-14 — Phần chuẩn bị có thể hoàn thành sớm
+
+- Hồ sơ PR #6 đã có 5 findings thật, quyết định, lý do và link commit `55bdf3e`.
+- Tracker chuyển S7-2-VLQ/S7-3-VLQ sang **Đang làm**, không đánh hoàn tất vì
+  S7-1-VLQ còn phụ thuộc feature freeze.
+- Đã soạn kịch bản clip S8-14 tại
+  [`docs/report-drafts/s8-14-thang-clip-script.md`](report-drafts/s8-14-thang-clip-script.md);
+  chưa quay hoặc ghép video cuối.
+- Bản nháp S8-1 và kịch bản S9-5-VLQ đã cập nhật theo evidence ngày 04/11.
 
 ## 4. Firebase: trạng thái và phần còn thiếu
 

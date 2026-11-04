@@ -1,7 +1,7 @@
 # S8-1 — Bản nháp phần báo cáo của Thắng
 
-> Trạng thái: bản nháp dựa trên code và evidence có thật ngày 03/11/2026. Không
-> dùng nội dung này để khẳng định các flow S02–S10 hoặc cloud checks chưa chạy.
+> Trạng thái: bản nháp dựa trên code và evidence có thật đến ngày 04/11/2026.
+> Không dùng nội dung này để khẳng định cloud checks hoặc ARTEMIS chưa chạy.
 
 ## 1. Tổng quan và kế thừa Lab 2
 
@@ -13,8 +13,10 @@ hai màn bổ sung cho Lab 3 là Sign-in và Profile.
 
 Tiêu chí thành công của sản phẩm là giúp người dùng tạo thực đơn bảy ngày, xem
 công thức/thay thế món, tổng hợp danh sách mua sắm và quay lại kế hoạch đã lưu.
-Tại thời điểm viết, repository mới chứng minh đầy đủ cụm Auth, Home và Profile;
-không suy diễn rằng toàn bộ ba flow Lab 2 đã chạy.
+Tại thời điểm viết, repository đã có các route S02, S10, Recipe và Profile; smoke
+test native xác nhận từ Dashboard mở các route này và Back quay về đúng nơi.
+Kết quả đó là bằng chứng routing, không thay thế việc nghiệm thu đầy đủ ba flow
+Lab 2 và các error path.
 
 ## 2. Kiến trúc MVVM
 
@@ -26,8 +28,8 @@ cho phép sinh PDF cục bộ ngay cả khi upload cloud thất bại.
 
 `AuthGate` chọn Sign-in hoặc Home từ auth state. Việc sign-out loại protected
 route khỏi navigation stack; session epoch ngăn callback hoặc snackbar của user
-cũ xuất hiện ở phiên mới. Các hành vi này đã được bao phủ trong bộ 270 Flutter
-tests trên nhánh `Thang`.
+cũ xuất hiện ở phiên mới. Sau merge nhánh `Thang` vào `main` tại `90d9fd0`, mã
+ứng dụng `lib/` analyzer sạch và toàn bộ **334/334 Flutter tests pass**.
 
 ## 3. Design system và accessibility
 
@@ -49,9 +51,21 @@ số chiến dịch FCM và đồng bộ ngày tracker. Bài học chính là ev
 được review như source code: log hoặc ảnh chạy đúng vẫn có thể không phù hợp để
 đưa vào repository công khai.
 
+Ngày 04/11, hai failure case được chạy thủ công trên AVD API 36: Remote Config
+khi offline giữ giá trị hiện tại và không báo thành công giả; hủy test
+Crashlytics đóng dialog và ứng dụng tiếp tục chạy. Đây là hai kết quả riêng,
+không được suy rộng thành sáu dịch vụ Firebase đều hoàn tất failure testing.
+
 ## 5. Phần cần bổ sung trước khi nghiệm thu
 
-- Kết quả hoàn chỉnh S02–S10 và ba user flow.
+- Nghiệm thu hoàn chỉnh ba user flow và các error path.
 - Google Sign-In sau khi đăng ký SHA-1/SHA-256 của máy Thắng.
 - Failure test cloud còn thiếu, ARTEMIS raw runs và Remote Config live.
 - Liên kết report/slide/video cuối và tối thiểu ba fix commits Stage 7.
+
+## 6. Nguồn bằng chứng chính
+
+- Routing native: `evidence/routing/S0-3-S3-6-20261104/`.
+- Failure cases của Thắng: `evidence/failure-cases/S5-10-THANG-20261104/`.
+- Review PR #6: `evidence/review/PR-6-THANG-20261103/`.
+- Audit privacy/secret giữa kỳ: `evidence/audit/S9-1-S9-4-20261103/`.

@@ -46,3 +46,11 @@ collection cases khớp implementation/evidence.
   biến đổi, để không làm sai lệch bằng chứng chạy thật.
 - Stage 7 chưa hoàn tất toàn nhóm: hồ sơ này ghi review PR #6, không thay review
   cho các PR/thành viên còn lại và chưa đáp ứng yêu cầu tối thiểu ba fix commits.
+
+## Trạng thái tích hợp 04/11/2026
+
+- Commit sửa `55bdf3e` và toàn bộ hồ sơ này đã được merge vào `main` qua merge
+  commit `90d9fd0`.
+- Nội dung hiện đủ để tiếp tục S7-2-VLQ/S7-3-VLQ ở trạng thái **Đang làm**,
+  nhưng chưa tự đóng hai task vì S7-1-VLQ vẫn phụ thuộc feature freeze S6-1 và
+  quy trình PR riêng của giai đoạn review.
