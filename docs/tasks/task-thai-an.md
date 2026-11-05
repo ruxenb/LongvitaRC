@@ -2,7 +2,7 @@
 
 > **Thành viên:** Thái An  
 > **Vai trò:** **Team Leader & QA Lead** (Điều phối chung toàn nhóm, Nghiệm thu chất lượng, Analytics, Crashlytics, Remote Config, Google ARTEMIS, AI Code Review)  
-> **Tổng task:** 29 tasks | **Đã hoàn thành:** 7/29 (24%)
+> **Tổng task:** 29 tasks | **Đã hoàn thành:** 10/29 (34%)
 
 ---
 
@@ -50,8 +50,8 @@
 | **S7-2-TA** | 7. Review | Ghi $\ge 1-2$ findings (file:dòng, loại, tóm tắt), quyết định Accept/Modify/Reject có lý do; kê khai AI tools | — | S7-1-TA | Dòng ghi trong `code-review.md` | Findings 0.25 | Cao | 4 | | Chưa bắt đầu | Lý do kỹ thuật cụ thể |
 | **S7-3-TA** | 7. Review | Sửa $\ge 1$ finding đã chấp nhận; commit riêng ghi ID finding; dẫn link commit vào bảng | — | S7-2-TA | Fix commit liên kết | Fixes 0.25 | Cao | 4 | | Chưa bắt đầu | Ví dụ: `fix(analytics): CR-TA-01...` |
 | **S7-5** | 7. Review | Chạy lại các test ARTEMIS liên quan sau khi fix commit nếu fix làm thay đổi app | — | S7-3-TA | Bảng kết quả cập nhật | Evidence 0.5 | Trung bình | 4 | | Chưa bắt đầu | Chống hồi quy |
-| **S8-4** | 8. Report | Viết mục Báo cáo: Analytics (plan + DebugView), Crashlytics, Remote Config, ARTEMIS (kết quả, exploratory) | — | S6-10, S6-11 | Bản nháp báo cáo gửi Thắng | Mọi tiêu chí | Cao | 4 | | Chưa bắt đầu | Có kèm hình ảnh |
-| **S8-8** | 8. Report | Soạn Slide (3–4 trang): Analytics DebugView, Crashlytics + Remote Config, ARTEMIS plan + pass rate | — | S8-4 | Slide gửi Thắng | Slides 1.0 | Cao | 4 | | Chưa bắt đầu | 1 thông điệp/slide |
+| **S8-4** | 8. Report | Viết mục Báo cáo: Analytics (plan + DebugView), Crashlytics, Remote Config, ARTEMIS (kết quả, exploratory) | — | S6-10, S6-11 | Bản nháp báo cáo gửi Thắng | Mọi tiêu chí | Cao | 4 | | Đã hoàn thành | Đã có bản nháp `docs/report-drafts/s8-4-thai-an.md` |
+| **S8-8** | 8. Report | Soạn Slide (3–4 trang): Analytics DebugView, Crashlytics + Remote Config, ARTEMIS plan + pass rate | — | S8-4 | Slide gửi Thắng | Slides 1.0 | Cao | 4 | | Đã hoàn thành | Đã có bản nháp `docs/report-drafts/s8-8-slides-thai-an.md` |
 | **S8-13** | 8. Report | Quay video: đổi Remote Config không rebuild, demo Crashlytics, chạy 1 test ARTEMIS trên thiết bị | — | S6-1 | Đoạn video clip gửi Thắng | Video 1.0 | Cao | 4 | | Chưa bắt đầu | Thuyết minh rõ ràng |
 | **S8-17-TA** | 8. Report | Cập nhật worklog cá nhân `docs/worklog-thai-an.md` để đối chiếu commit Git | — | S8-16 | `docs/worklog-thai-an.md` | Mục 11 | Thấp | 4 | | Chưa bắt đầu | Tùy chọn kiểm tra |
-| **S9-5-TA** | 9. Nộp bài | Luyện vấn đáp 5 phút: chạy 1 test ARTEMIS, đổi 1 giá trị Remote Config live, giải thích 1 quyết định review | — | S8-16 | Sẵn sàng vấn đáp | Mục 11 | Cao | 4 | | Chưa bắt đầu | GV gọi ngẫu nhiên |
+| **S9-5-TA** | 9. Nộp bài | Luyện vấn đáp 5 phút: chạy 1 test ARTEMIS, đổi 1 giá trị Remote Config live, giải thích 1 quyết định review | — | S8-16 | Sẵn sàng vấn đáp | Mục 11 | Cao | 4 | | Đã hoàn thành | Đã có kịch bản `docs/report-drafts/s9-5-viva-thai-an.md` |
