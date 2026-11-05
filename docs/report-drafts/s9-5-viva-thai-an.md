@@ -68,3 +68,4 @@ Chuẩn bị sẵn câu trả lời súc tích cho 3 câu hỏi giảng viên ha
 - [x] Đã đăng nhập sẵn Firebase Console project `longvita-8da7e` trên trình duyệt.
 - [x] Môi trường `e2e_test/.venv` chạy được lệnh `pytest` không báo lỗi thư viện.
 - [x] Nắm chắc lý do kỹ thuật của ít nhất 1 finding trong `docs/code-review.md`.
+

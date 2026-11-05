@@ -83,3 +83,4 @@
 - **Cột trái:** Sơ đồ so sánh nguyên nhân Flaky: *Timing vs Instruction vs UI Semantics*.
 - **Cột phải:** Bảng tổng hợp các phát hiện từ phiên kiểm thử thăm dò và commit khắc phục.
 - **Dẫn link tài liệu:** [`docs/code-review.md`](../code-review.md) (mục PR7-CR-08 và PR8-CR-02).
+

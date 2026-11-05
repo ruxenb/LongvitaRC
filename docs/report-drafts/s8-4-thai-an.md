@@ -120,3 +120,4 @@ Trong các đợt chạy thử nghiệm ban đầu, nhóm ghi nhận 2 hiện t�
 - Hệ thống đo lường (Analytics), giám sát sự cố (Crashlytics) và điều phối tính năng từ xa (Remote Config) vận hành mượt mà, độc lập sau tầng interface, tuân thủ 100% chuẩn MVVM.
 - Bộ kiểm thử tự động Google ARTEMIS chứng minh ứng dụng đạt độ tin cậy E2E cao trên thiết bị Android thật, không có lỗi chặn luồng người dùng.
 - Toàn bộ kết quả đều có bằng chứng số liệu và ảnh chụp đối chiếu, sẵn sàng cho khâu bảo vệ và vấn đáp.
+

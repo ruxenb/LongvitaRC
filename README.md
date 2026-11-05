@@ -174,6 +174,8 @@ flutter run
    export ARTEMIS_BASE_URL="http://127.0.0.1:8000"  # Daemon ARTEMIS, chạy từ checkout của google/artemis tại commit đã pin, với GEMINI_API_KEY
    export ANDROID_SERIAL="emulator-5554"  # Hoặc serial của thiết bị adb
    export ARTEMIS_PROFILE="flash"         # "flash" cho regression; "pro" cho exploratory
+   export ARTEMIS_FLASH_MODEL="gemini-3.5-flash-lite" # Multimodal model toc do cao cho regression
+   export ARTEMIS_PRO_MODEL="gemini-3.8-flash"        # Multimodal model suy luan sau cho exploratory
    export FCM_TEST_TITLE="tiêu đề tin"    # Tin gửi từ Console trước khi chạy TC-10
    ```
 3. Chạy toàn bộ test suite bằng pytest:

@@ -28,6 +28,8 @@ load_dotenv()
 BASE_URL = os.getenv("ARTEMIS_BASE_URL", "http://127.0.0.1:8000")
 DEVICE_SERIAL = os.getenv("ANDROID_SERIAL") or None
 PROFILE = os.getenv("ARTEMIS_PROFILE", "flash")  # flash (regression) or pro (exploratory)
+FLASH_MODEL = os.getenv("ARTEMIS_FLASH_MODEL", "gemini-3.5-flash-lite")
+PRO_MODEL = os.getenv("ARTEMIS_PRO_MODEL", "gemini-3.8-flash")
 APP_PACKAGE = os.getenv("APP_PACKAGE", "vn.edu.fpt.longvita")
 ADB = os.getenv("ADB", "adb")
 EVIDENCE_DIR = Path(__file__).parent.parent / "evidence" / "artemis" / "raw"
@@ -147,10 +149,12 @@ def run_case(artemis, request):
         if request.node.get_closest_marker("keep_app") is None:
             _stop_app()
         started = time.time()
+        selected_model = PRO_MODEL if PROFILE == "pro" else FLASH_MODEL
         result = await artemis.run(
             goal,
             expected_output=expected_output,
             enable_outputter=True,
+            options={"model": selected_model},
         )
         # A final Outputter summary can mention earlier screens too. Never use
         # it as one synthetic step: after(action) would then accept stale text
@@ -167,6 +171,7 @@ def run_case(artemis, request):
         record = {
             "test": request.node.nodeid,
             "profile": PROFILE,
+            "model": selected_model,
             "task_id": result.task_id,
             "status": result.status,
             "device": result.device_serial,
