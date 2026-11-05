@@ -1,7 +1,7 @@
 # Worklog — Thắng VLQ
 
 > **Vai trò:** Technical Architect & Co-Lead  
-> **Ngày cập nhật:** 04/11/2026
+> **Ngày cập nhật:** 05/11/2026
 > **Nhánh kiểm tra:** `main`  
 > **Mục đích:** Ghi bằng chứng hoàn thành, phần còn thiếu, lỗi đã phát hiện và điều kiện tiếp tục cho các task do Thắng phụ trách.
 
@@ -30,8 +30,9 @@ Kiểm chứng ngày 03/11/2026:
 - `flutter build apk --debug`: thành công; APK được cài và app chạy trên AVD.
 - Firebase CLI `15.34.2`, FlutterFire CLI `1.4.1`, Python `3.12.16`, uv và
   ARTEMIS client đều hoạt động; `pytest --collect-only` nhận 7 test.
-- Debug certificate của máy Thắng đã lấy SHA-1/SHA-256; đang chờ owner thêm
-  fingerprint vào Firebase để kiểm Google Sign-In runtime bằng certificate này.
+- Debug certificate của máy Thắng đã lấy SHA-1/SHA-256. Owner đã thêm fingerprint;
+  ngày 05/11/2026 fresh Google Sign-In trên AVD API 36 thành công bằng certificate
+  này, không có lỗi `ApiException: 10` hoặc lỗi cấu hình OAuth.
 
 ### S0-6 — Kết nối đầu vào Lab 2
 
@@ -113,8 +114,26 @@ Trên `Longvita_API_36`, commit `90d9fd0`:
   đã được khôi phục sau kiểm tra.
 
 Evidence: [`evidence/failure-cases/S5-10-THANG-20261104/`](../evidence/failure-cases/S5-10-THANG-20261104/).
-S5-10 vẫn **Đang làm** vì còn Auth/Storage/Analytics, cloud dashboard và manual
-cases khác.
+S5-10 vẫn **Đang làm** vì còn Storage/Analytics, FCM cloud, cloud dashboard và
+manual cases khác.
+
+### S3-2 / S3-3 và S5-10 — Auth/FCM bổ sung ngày 05/11/2026
+
+Trên commit `dcbdedf`, AVD `Longvita_API_36`:
+
+- **PASS — Fresh Google Sign-In:** đăng xuất phiên cũ, người dùng tự chọn tài
+  khoản trong account picker, app vào Dashboard đúng phiên; không có lỗi cấu
+  hình SHA/OAuth.
+- **PASS — Auth cancel:** nhấn Back từ account picker, app về Sign-in và hiện
+  thông báo hủy rõ ràng, không crash.
+- **PASS — Auth offline:** tắt Wi-Fi/mobile data, chọn tài khoản; app về Sign-in,
+  hiện lỗi mạng và cho thử lại; log ánh xạ `ApiException: 7` thành network failure.
+- **PASS — FCM permission denied:** người dùng chọn Don't allow; Android xác nhận
+  `granted=false`, app vẫn chạy và Profile giải thích cách bật notification.
+- Sau kiểm thử, Wi-Fi/mobile data và quyền notification đã được khôi phục.
+
+Evidence khử PII:
+[`evidence/auth/S3-2-S5-10-THANG-20261105/`](../evidence/auth/S3-2-S5-10-THANG-20261105/).
 
 ### S7-2-VLQ, S7-3-VLQ và S8-14 — Phần chuẩn bị có thể hoàn thành sớm
 
@@ -136,11 +155,15 @@ Chưa có hoặc chưa được xác minh:
 
 - `android/app/google-services.json` đã có trong checkout, được Git theo dõi và trỏ tới project `longvita-8da7e`.
 - Chưa đối chiếu project ID này với toàn bộ ảnh Firebase Console và README cuối.
-- Chưa xác minh lại SHA-1 debug của máy Thắng trên Firebase Console trong lượt kiểm tra này.
-- App Android đã kết nối đủ để khôi phục phiên Firebase Auth thật; chưa dùng kết quả này để khẳng định toàn bộ sáu dịch vụ Firebase đã chạy end-to-end.
-- Chưa có evidence Auth/Storage/FCM/Analytics/Crashlytics/Remote Config.
+- SHA-1/SHA-256 của máy Thắng đã có trong hồ sơ Console/OAuth và fresh Google
+  Sign-In đã pass ngày 05/11.
+- Auth cancel/offline và FCM permission-denied đã có evidence manual; chưa dùng
+  các kết quả này để khẳng định toàn bộ sáu dịch vụ Firebase đã chạy end-to-end.
+- Còn thiếu evidence project thật cho Storage, Analytics offline delivery,
+  Crashlytics non-fatal và Remote Config live.
 
-Cần phối hợp Charlie/Thái An để đối chiếu project ID/SHA-1 và thu thập evidence riêng cho Storage, FCM, Analytics, Crashlytics và Remote Config.
+Cần phối hợp Charlie/Thái An để thu thập evidence còn lại cho Storage, FCM cloud,
+Analytics, Crashlytics và Remote Config live.
 
 ## 5. Lỗi đã phát hiện và cách xử lý
 

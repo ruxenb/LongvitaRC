@@ -59,7 +59,8 @@ không được suy rộng thành sáu dịch vụ Firebase đều hoàn tất f
 ## 5. Phần cần bổ sung trước khi nghiệm thu
 
 - Nghiệm thu hoàn chỉnh ba user flow và các error path.
-- Google Sign-In sau khi đăng ký SHA-1/SHA-256 của máy Thắng.
+- Fresh Google Sign-In bằng SHA-1/SHA-256 của máy Thắng đã pass ngày 05/11; còn
+  nghiệm thu team/leader và evidence của các máy khác theo nguồn riêng.
 - Failure test cloud còn thiếu, ARTEMIS raw runs và Remote Config live.
 - Liên kết report/slide/video cuối và tối thiểu ba fix commits Stage 7.
 
@@ -67,5 +68,7 @@ không được suy rộng thành sáu dịch vụ Firebase đều hoàn tất f
 
 - Routing native: `evidence/routing/S0-3-S3-6-20261104/`.
 - Failure cases của Thắng: `evidence/failure-cases/S5-10-THANG-20261104/`.
+- Auth/FCM manual cases ngày 05/11:
+  `evidence/auth/S3-2-S5-10-THANG-20261105/`.
 - Review PR #6: `evidence/review/PR-6-THANG-20261103/`.
 - Audit privacy/secret giữa kỳ: `evidence/audit/S9-1-S9-4-20261103/`.
