@@ -62,3 +62,12 @@
 - Hardened offline review validator in response to verified CodeRabbit findings: reject template placeholders; require conversion rationale + manual-review link when edible weight differs from grams; fail shared-publication verify while `reviewBlockers` remain. Extended test matrix.
 - Updated source/field crosswalk and calculated evidence in `docs/hoang-usda-direct-validation-20261106.md`. Updated test instructions in `docs/hoang-recipe-approval-20261106.md`.
 - `--review` is a **structural/math pass only**, while `--verify` **deliberately fails** absent external approval. Issue #16 has no independent team authorization as of check. **No production Firebase changes.**
+
+## 2026-11-06 — Requestor approval, main integration, and guarded Firestore publisher
+- The requestor stated they are the project approver and explicitly authorized completion/publication to the shared Firebase project. This removes the requestor-permission dependency, **not** the factual/source quality or credential/device checks.
+- Merged PR #15 into main at `9997f1c` after CodeRabbit success. Reintegrated that main update into the Hoàng recipe branch via conflict-resolved merge `48f1a53`, preserving both worklog additions and Charlie untracked evidence.
+- Verified main-integrated branch locally: Flutter analyze 0 issues; Flutter test 341 passed; Node review/validator tests 25 passed.
+- Cached local Firebase CLI login exists but `firebase projects:list --json` fails `Failed to authenticate`, so no production project access is available to the session. ADB shows zero devices, Android SDK platform packages absent.
+- Built `scripts/publish-approved-recipes.cjs` as an explicit-acknowledgment, SHA-verified, create-only Firestore REST publisher. Default is local dry-run; publication is blocked if reviewBlockers, owner approval evidence or credential/target arguments are missing. It preflights document IDs and reads back newly created values. No overwrite/delete/deploy function exists.
+- Added `test/firestore/recipe_publisher.test.cjs` with mock network safety/integrity tests; **31/31 Node tests pass** after fixing CLI flag mapping. Real production write **not attempted** due expired CLI credentials and source assumptions.
+- Created `docs/hoang-acceptance-audit-20261106.md` to distinguish 5 technically evidenced items, 18 partially implemented/unaccepted and 3 blocked deliverables; did not falsely mark 26/26 complete.
