@@ -1,6 +1,8 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/services.dart';
 
+import '../firebase_options.dart';
+
 /// Result of starting Firebase before any SDK service is created.
 sealed class BootstrapResult {
   const BootstrapResult();
@@ -30,12 +32,14 @@ class BootstrapFailed extends BootstrapResult {
 class FirebaseBootstrap {
   final Future<FirebaseApp> Function() _initializeApp;
 
-  /// [initializeApp] defaults to `Firebase.initializeApp()`, which reads the
-  /// native Android config generated from `android/app/google-services.json`.
-  /// Pass `() => Firebase.initializeApp(options: DefaultFirebaseOptions...)`
-  /// once `flutterfire configure` has generated `firebase_options.dart`.
+  /// [initializeApp] defaults to `Firebase.initializeApp` with the options
+  /// `flutterfire configure` generated in `firebase_options.dart` (Android
+  /// only). They match `android/app/google-services.json`, which stays for
+  /// the native resources Crashlytics and Google Sign-in read.
   FirebaseBootstrap({Future<FirebaseApp> Function()? initializeApp})
-      : _initializeApp = initializeApp ?? (() => Firebase.initializeApp());
+      : _initializeApp = initializeApp ??
+            (() => Firebase.initializeApp(
+                options: DefaultFirebaseOptions.currentPlatform));
 
   Future<BootstrapResult> initialize() async {
     try {
