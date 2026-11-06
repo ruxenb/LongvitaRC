@@ -38,4 +38,4 @@ Code: lib/services/data_service.dart, i_data_service.dart, data_failure.dart, li
 Automated fakes: test/flows/hoang_viewmodels_test.dart. Needs additional live Firestore/Emulator checks and a valid signed-in test account.
 
 ## Android OAuth signing prerequisite
-Local ASUS Android Debug SHA-1 is different from the SHA-1 recorded for Android OAuth in the checked-in google-services.json. Confirm and add the laptop fingerprint through Firebase Console without replacing teammates' existing fingerprints. See docs/hoang-android-sha.md. No production changes have been made.
+The checked-in Android OAuth SHA-1 previously differed from the local ASUS Debug SHA-1. On 2026-11-06, the collaborator supplied a Firebase Console screenshot confirming the ASUS Debug SHA-1 and SHA-256 are already registered for the app. Do not add duplicate fingerprints or replace teammates' entries. Confirm up-to-date google-services.json and test Google Sign-In on Android before declaring authentication verified. Recipe-catalog writes require separate team authorization; see docs/hoang-recipe-approval-20261106.md. No production writes were made here.

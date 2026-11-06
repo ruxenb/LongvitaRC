@@ -1,0 +1,291 @@
+{
+  "projectId": "longvita-8da7e",
+  "collection": "recipes",
+  "manifestType": "STAGED_TECHNICAL_REVIEW_NOT_IMPORT_AUTHORIZATION",
+  "sourceDate": "2026-11-06",
+  "dataBasis": "USDA FoodData Central SR Legacy April 2018; values directly fetched from USDA API 2026-11-06; arithmetic exact for assumed inputs, actual dish only an estimate",
+  "targetApp": "vn.edu.fpt.longvita",
+  "recipes": [
+    {
+      "id": "REVIEW_spelt_lentil_sesame_01",
+      "reviewBlockers": [
+        "Nhóm chưa chốt farro/spelt 70 g được cân khô hay sau nấu trong tài liệu Quỹ.",
+        "Món chỉ bao gồm phần chính; 200 g fennel và salad ăn kèm không có tỷ lệ từng loại, chưa tính vào dinh dưỡng.",
+        "Cần xác nhận quyền dùng tên/mô tả, điều chỉnh theo allergens và phê duyệt nguồn nội dung/recipe.",
+        "Số dinh dưỡng là ước tính theo dữ liệu USDA cho thành phần đầu vào, chưa phản ánh sai số hấp thụ/hao hụt chế biến."
+      ],
+      "firestore": {
+        "name": "Farro (spelt) với đậu lăng và mè — phần chính",
+        "description": "Bản dựng cho kiểm duyệt từ bữa trưa mẫu của Quỹ Valter Longo. Số lượng 70 g farro, 50 g đậu lăng khô, 15 g mè và 9 g dầu ô liu; chưa gồm 200 g rau ăn kèm. Tính theo giả định farro được cân khi khô.",
+        "category": "ngu_coc",
+        "calories": 578.11,
+        "proteinGrams": 25.1735,
+        "ingredients": [
+          {
+            "id": "spelt-uncooked",
+            "name": "Farro/spelt (giả định cân khô)",
+            "amount": 70,
+            "unit": "g",
+            "category": "ngũ cốc",
+            "isPurchased": false
+          },
+          {
+            "id": "lentils-dry",
+            "name": "Đậu lăng khô",
+            "amount": 50,
+            "unit": "g",
+            "category": "các loại đậu",
+            "isPurchased": false
+          },
+          {
+            "id": "sesame-dry",
+            "name": "Hạt mè khô",
+            "amount": 15,
+            "unit": "g",
+            "category": "hạt",
+            "isPurchased": false
+          },
+          {
+            "id": "olive-oil",
+            "name": "Dầu ô liu",
+            "amount": 9,
+            "unit": "g",
+            "category": "dầu hạt",
+            "isPurchased": false
+          }
+        ],
+        "instructions": [
+          "Kiểm tra khối lượng và loại farro/đậu lăng trước khi nấu; ngâm nếu hướng dẫn sản phẩm yêu cầu.",
+          "Luộc farro và đậu lăng riêng đến khi chín; gạn nước và để ráo.",
+          "Trộn phần farro và đậu lăng với mè, rưới phần dầu ô liu đã cân. Đĩa rau ăn kèm được tính riêng."
+        ],
+        "imageUrl": null,
+        "sourceNote": "[web] Phỏng theo thành phần bữa ăn mẫu của Fondazione Valter Longo, 20/04/2020; https://www.fondazionevalterlongo.org/en/sample-longevity-diets/. Số dinh dưỡng là ước tính theo USDA SR Legacy, không phải kết quả đo món nấu hoặc nguyên văn Phụ lục A."
+      },
+      "provenance": {
+        "recipeSource": {
+          "type": "team-original",
+          "title": "Bản diễn giải thao tác nấu độc lập từ định lượng trong mẫu bữa ăn của Fondazione Valter Longo",
+          "locator": "https://www.fondazionevalterlongo.org/en/sample-longevity-diets/",
+          "rightsEvidence": "Only the ingredient quantities/facts and an independently authored generic preparation are used. No images or verbatim cooking text are reproduced. Team legal/content clearance still required.",
+          "url": "https://www.fondazionevalterlongo.org/en/sample-longevity-diets/"
+        },
+        "nutrition": {
+          "servings": 1,
+          "entries": [
+            {
+              "ingredientId": "spelt-uncooked",
+              "foodCode": "FDC:169745",
+              "sourceName": "USDA FoodData Central SR Legacy (April 2018) — Spelt, uncooked",
+              "sourceUrl": "https://api.nal.usda.gov/fdc/v1/food/169745?api_key=DEMO_KEY",
+              "preparationState": "uncooked, presumed dry",
+              "edibleGrams": 70,
+              "kcalPer100g": 338,
+              "proteinPer100g": 14.57
+            },
+            {
+              "ingredientId": "lentils-dry",
+              "foodCode": "FDC:172420",
+              "sourceName": "USDA FoodData Central SR Legacy (April 2018) — Lentils, raw",
+              "sourceUrl": "https://api.nal.usda.gov/fdc/v1/food/172420?api_key=DEMO_KEY",
+              "preparationState": "dry, before cooking",
+              "edibleGrams": 50,
+              "kcalPer100g": 352,
+              "proteinPer100g": 24.63
+            },
+            {
+              "ingredientId": "sesame-dry",
+              "foodCode": "FDC:170150",
+              "sourceName": "USDA FoodData Central SR Legacy (April 2018) — Seeds, sesame seeds, whole, dried",
+              "sourceUrl": "https://api.nal.usda.gov/fdc/v1/food/170150?api_key=DEMO_KEY",
+              "preparationState": "whole, dried",
+              "edibleGrams": 15,
+              "kcalPer100g": 573,
+              "proteinPer100g": 17.73
+            },
+            {
+              "ingredientId": "olive-oil",
+              "foodCode": "FDC:171413",
+              "sourceName": "USDA FoodData Central SR Legacy (April 2018) — Oil, olive, salad or cooking",
+              "sourceUrl": "https://api.nal.usda.gov/fdc/v1/food/171413?api_key=DEMO_KEY",
+              "preparationState": "liquid oil, mass in g",
+              "edibleGrams": 9,
+              "kcalPer100g": 884,
+              "proteinPer100g": 0
+            }
+          ]
+        },
+        "nutrientCalculation": "sum(edibleGrams * per100g / 100) / servings; per-ingredient values fetched from USDA API on 2026-11-06"
+      },
+      "allergens": [
+        "gluten (spelt)",
+        "sesame"
+      ],
+      "clinicalUse": "Informational only; not a validated personalised treatment/diet plan"
+    },
+    {
+      "id": "REVIEW_salmon_cauliflower_bread_01",
+      "reviewBlockers": [
+        "Nguồn nói 'fresh salmon' nhưng không nêu loài/cách nuôi; USDA hiện áp mẫu Atlantic farmed, cần kiểm chứng.",
+        "Súp lơ có thể bị chênh lệch khối lượng sau nấu; mô hình tính theo 200 g trước nấu.",
+        "Chưa bao gồm 150 g hoa quả và 10 g hạt tráng miệng vì không xác định loại; đây không phải toàn bộ bữa tối của nguồn.",
+        "Đánh giá dị ứng cá và gluten, độ an toàn chế biến, cùng quyền sử dụng nội dung; chờ nhóm phê duyệt."
+      ],
+      "firestore": {
+        "name": "Cá hồi, bánh mì nguyên cám và súp lơ — phần chính",
+        "description": "Mẫu bữa tối của Quỹ Valter Longo gồm 150 g cá hồi tươi, 5 g dầu ô liu, 70 g bánh mì nguyên cám và 200 g súp lơ. Chưa tính tráng miệng (trái cây 150 g và hạt 10 g không xác định loại). Mô hình dinh dưỡng giả định cá hồi Atlantic nuôi sống và súp lơ sống trước nấu.",
+        "category": "ca",
+        "calories": 582.6,
+        "proteinGrams": 43.185,
+        "ingredients": [
+          {
+            "id": "salmon-atlantic-raw",
+            "name": "Cá hồi tươi (mẫu USDA: Atlantic nuôi, sống)",
+            "amount": 150,
+            "unit": "g",
+            "category": "cá",
+            "isPurchased": false
+          },
+          {
+            "id": "wholewheat-bread",
+            "name": "Bánh mì nguyên cám",
+            "amount": 70,
+            "unit": "g",
+            "category": "ngũ cốc",
+            "isPurchased": false
+          },
+          {
+            "id": "cauliflower",
+            "name": "Súp lơ trắng",
+            "amount": 200,
+            "unit": "g",
+            "category": "rau củ",
+            "isPurchased": false
+          },
+          {
+            "id": "olive-oil",
+            "name": "Dầu ô liu",
+            "amount": 5,
+            "unit": "g",
+            "category": "dầu hạt",
+            "isPurchased": false
+          }
+        ],
+        "instructions": [
+          "Kiểm tra chủng loại cá, làm sạch và cân 150 g phần thịt ăn được trước khi chế biến.",
+          "Làm chín cá hồi tới mức an toàn theo hướng dẫn về thực phẩm; hấp hoặc luộc súp lơ.",
+          "Dùng cùng 70 g bánh mì nguyên cám, rưới 5 g dầu ô liu đã cân sau khi chế biến."
+        ],
+        "imageUrl": null,
+        "sourceNote": "[web] Phỏng theo thành phần bữa ăn mẫu của Fondazione Valter Longo, 20/04/2020; https://www.fondazionevalterlongo.org/en/sample-longevity-diets/. Số dinh dưỡng là ước tính theo USDA SR Legacy, không phải kết quả đo món nấu hoặc nguyên văn Phụ lục A."
+      },
+      "provenance": {
+        "recipeSource": {
+          "type": "team-original",
+          "title": "Bản diễn giải thao tác nấu độc lập từ định lượng trong mẫu bữa ăn của Fondazione Valter Longo",
+          "locator": "https://www.fondazionevalterlongo.org/en/sample-longevity-diets/",
+          "rightsEvidence": "Only the ingredient quantities/facts and an independently authored generic preparation are used. No images or verbatim cooking text are reproduced. Team legal/content clearance still required.",
+          "url": "https://www.fondazionevalterlongo.org/en/sample-longevity-diets/"
+        },
+        "nutrition": {
+          "servings": 1,
+          "entries": [
+            {
+              "ingredientId": "salmon-atlantic-raw",
+              "foodCode": "FDC:175167",
+              "sourceName": "USDA FoodData Central SR Legacy (April 2018) — Fish, salmon, Atlantic, farmed, raw",
+              "sourceUrl": "https://api.nal.usda.gov/fdc/v1/food/175167?api_key=DEMO_KEY",
+              "preparationState": "raw edible salmon meat; assumed Atlantic farmed",
+              "edibleGrams": 150,
+              "kcalPer100g": 208,
+              "proteinPer100g": 20.42
+            },
+            {
+              "ingredientId": "wholewheat-bread",
+              "foodCode": "FDC:172688",
+              "sourceName": "USDA FoodData Central SR Legacy (April 2018) — Bread, whole-wheat, commercially prepared",
+              "sourceUrl": "https://api.nal.usda.gov/fdc/v1/food/172688?api_key=DEMO_KEY",
+              "preparationState": "ready to eat commercially prepared",
+              "edibleGrams": 70,
+              "kcalPer100g": 252,
+              "proteinPer100g": 12.45
+            },
+            {
+              "ingredientId": "cauliflower",
+              "foodCode": "FDC:169986",
+              "sourceName": "USDA FoodData Central SR Legacy (April 2018) — Cauliflower, raw",
+              "sourceUrl": "https://api.nal.usda.gov/fdc/v1/food/169986?api_key=DEMO_KEY",
+              "preparationState": "raw edible florets before steaming",
+              "edibleGrams": 200,
+              "kcalPer100g": 25,
+              "proteinPer100g": 1.92
+            },
+            {
+              "ingredientId": "olive-oil",
+              "foodCode": "FDC:171413",
+              "sourceName": "USDA FoodData Central SR Legacy (April 2018) — Oil, olive, salad or cooking",
+              "sourceUrl": "https://api.nal.usda.gov/fdc/v1/food/171413?api_key=DEMO_KEY",
+              "preparationState": "liquid oil, mass in g",
+              "edibleGrams": 5,
+              "kcalPer100g": 884,
+              "proteinPer100g": 0
+            }
+          ]
+        },
+        "nutrientCalculation": "sum(edibleGrams * per100g / 100) / servings; per-ingredient values fetched from USDA API on 2026-11-06"
+      },
+      "allergens": [
+        "fish",
+        "gluten (wheat)"
+      ],
+      "clinicalUse": "Informational only; not a validated personalised treatment/diet plan"
+    }
+  ],
+  "unmappedCandidates": [
+    {
+      "id": "REVIEW_chocolate_almonds_01",
+      "name": "Chocolate Almond Delights",
+      "sourceUrl": "https://valterlongo.com/recipes-of-longevity/",
+      "sourceKind": "official-author-website-not-verified-as-book-appendix",
+      "originalQuantities": {
+        "almondsGrams": 500,
+        "darkChocolateGrams": 500,
+        "portions": 20
+      },
+      "assumedChocolate": "USDA SR Legacy FDC 170273 dark chocolate 70–85%; source unspecified cacao percentage",
+      "usdaCrosswalk": [
+        {
+          "fdcId": 170567,
+          "grams": 500,
+          "kcalPer100g": 579,
+          "proteinPer100g": 21.15
+        },
+        {
+          "fdcId": 170273,
+          "grams": 500,
+          "kcalPer100g": 598,
+          "proteinPer100g": 7.79
+        }
+      ],
+      "computedPerServing": {
+        "edibleGrams": 50,
+        "calories": 294.25,
+        "proteinGrams": 7.235
+      },
+      "importBlockers": [
+        "Missing chocolate cocoa percentage, product composition and actual roasting yield",
+        "Existing categories ca/dau/rau_cu/ngu_coc have no correct dessert/nut category",
+        "Team approval and publication rights not provided"
+      ],
+      "firestore": null
+    }
+  ],
+  "approval": null,
+  "publicationAuthorized": false,
+  "notes": [
+    "No Firebase reads/writes were done",
+    "--review validates shape/nutrition arithmetic only; --verify must fail on blockers and missing approval",
+    "Do not treat source website recipes as matching exact Appendix A book recipes",
+    "Clinical suitability, version/edition, rights and allergy review remain pending"
+  ]
+}
