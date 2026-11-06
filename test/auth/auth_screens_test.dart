@@ -259,6 +259,36 @@ void main() {
     expect(attempts, 2);
   });
 
+  testWidgets('an initializer that throws shows error + retry, then the app',
+      (tester) async {
+    var attempts = 0;
+    var builds = 0;
+    await tester.pumpWidget(StartupGate(
+      initialize: () async {
+        if (++attempts == 1) throw StateError('injected initializer failure');
+        return const BootstrapReady();
+      },
+      buildReadyApp: () async {
+        builds++;
+        return const MaterialApp(home: Scaffold(body: Text('App ready')));
+      },
+    ));
+    await tester.pump();
+    await tester.pump();
+    expect(tester.takeException(), isNull);
+    expect(find.text('Không thể khởi động ứng dụng'), findsOneWidget);
+    expect(find.text('Thử lại'), findsOneWidget);
+    expect(find.text('App ready'), findsNothing);
+    expect(builds, 0);
+
+    await tester.tap(find.text('Thử lại'));
+    await tester.pump();
+    await tester.pump();
+    expect(find.text('App ready'), findsOneWidget);
+    expect(attempts, 2);
+    expect(builds, 1);
+  });
+
   testWidgets('a service failing after Firebase starts shows error + retry',
       (tester) async {
     var builds = 0;

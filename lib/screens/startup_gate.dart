@@ -42,7 +42,14 @@ class _StartupGateState extends State<StartupGate> {
       _running = true;
       _failure = null;
     });
-    var result = await widget.initialize();
+    BootstrapResult result;
+    try {
+      result = await widget.initialize();
+    } catch (e, s) {
+      // FirebaseBootstrap returns its failures; any other initializer that
+      // throws still ends in the error view with retry.
+      result = BootstrapFailed('unknown', e, s);
+    }
     if (!mounted) return;
     if (result is BootstrapReady) {
       try {
