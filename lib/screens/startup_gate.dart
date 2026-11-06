@@ -42,23 +42,30 @@ class _StartupGateState extends State<StartupGate> {
       _running = true;
       _failure = null;
     });
-    final result = await widget.initialize();
+    var result = await widget.initialize();
     if (!mounted) return;
-    switch (result) {
-      case BootstrapReady():
+    if (result is BootstrapReady) {
+      try {
         final app = await widget.buildReadyApp();
         if (!mounted) return;
         setState(() {
           _ready = app;
           _running = false;
         });
-      case BootstrapFailed():
-        debugPrint('Firebase start-up failed: ${result.code} ${result.error}');
-        setState(() {
-          _failure = result;
-          _running = false;
-        });
+        return;
+      } catch (e, s) {
+        // A service failing to start must end in the error view with retry,
+        // not an endless loading screen.
+        result = BootstrapFailed('app-start', e, s);
+      }
     }
+    if (!mounted) return;
+    final failure = result as BootstrapFailed;
+    debugPrint('Firebase start-up failed: ${failure.code} ${failure.error}');
+    setState(() {
+      _failure = failure;
+      _running = false;
+    });
   }
 
   @override

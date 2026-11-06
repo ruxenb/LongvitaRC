@@ -259,6 +259,29 @@ void main() {
     expect(attempts, 2);
   });
 
+  testWidgets('a service failing after Firebase starts shows error + retry',
+      (tester) async {
+    var builds = 0;
+    await tester.pumpWidget(StartupGate(
+      initialize: () async => const BootstrapReady(),
+      buildReadyApp: () async {
+        builds++;
+        if (builds == 1) throw StateError('service start failed');
+        return const MaterialApp(home: Scaffold(body: Text('App ready')));
+      },
+    ));
+    await tester.pump();
+    await tester.pump();
+    expect(find.text('Không thể khởi động ứng dụng'), findsOneWidget);
+    expect(find.text('App ready'), findsNothing);
+
+    await tester.tap(find.text('Thử lại'));
+    await tester.pump();
+    await tester.pump();
+    expect(find.text('App ready'), findsOneWidget);
+    expect(builds, 2);
+  });
+
   group('screenshots (actual)', () {
     for (final size in const [Size(360, 800), Size(412, 915)]) {
       final w = size.width.toInt();
