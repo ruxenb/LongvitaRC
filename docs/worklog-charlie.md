@@ -232,3 +232,14 @@ Dọn trailing whitespace trong README và hướng dẫn pull main bằng switc
 Charlie cập nhật An, Thắng, Hoàng đều đã phản hồi đăng nhập Google thành công và hiện không lỗi. PM ghi đúng nguồn owner report qua Charlie; chưa có ảnh/Android/device/build SHA riêng trong lượt xác nhận, không tự điền dữ liệu đó hoặc ghi thành PM native runs. Cùng evidence Charlie trước đó, S3-2 chuyển Chờ nghiệm thu; Charlie tổng 11 chờ nghiệm thu/18 đang thực hiện, chưa thay leader nghiệm thu chính thức.
 
 PR12 CodeRabbit review 5764061581 có 1 Minor về school email trong evidence. PM xác minh cùng tài khoản trường của chính Charlie và quyết định cho phép giữ email/UID đã ghi ở docs/code-review.md mục PR7-CR-05: Rejected yêu cầu redact cho evidence này theo lựa chọn data owner; không phủ nhận identifier đang public. Quyết định không áp dụng cho tài khoản cá nhân/người khác; không sửa ảnh hay lịch sử. Không đổi app/config hay chạy tests cho docs-only.
+
+### S3-1 — FlutterFire configure, bootstrap và ghim phiên bản, 06/11/2026
+
+PR #12 (S3-2) đã merge vào main tại `3b34816`. S3-1 bắt đầu từ `origin/main` `008a1a9` (các commit mới của Thắng/An chỉ đổi docs, evidence, scripts, README), nhánh `feature/charlie-bootstrap-02`.
+
+- **Ghim phiên bản:** 18 package hosted trong `pubspec.yaml` ghi đúng bản trong `pubspec.lock`. `flutter pub get --enforce-lockfile` thoát 0 trước và sau; lockfile không đổi. Không nâng package hay toolchain.
+- **Configure:** Charlie tự đăng nhập Firebase CLI. `flutterfire configure` (CLI 1.4.1) chỉ cho Android, dùng app sẵn có `…33939d…`; sinh `lib/firebase_options.dart` và `firebase.json`. `google-services.json` chỉ thêm 3 OAuth client Android của S3-2. Gradle không đổi. Không tạo app, không thêm iOS/Web.
+- **Bootstrap:** khởi tạo bằng `DefaultFirebaseOptions.currentPlatform`, vẫn một lần. `StartupGate` hiện màn lỗi kèm Thử lại khi một service lỗi lúc tạo, thay vì quay vòng mãi.
+- **Kiểm tra:** analyzer sạch, 336/336 tests, build APK debug. Trên emulator: cold start vào Home của A, logcat sạch; lỗi giả lập qua QA host → Thử lại → app thật.
+
+Evidence tại `evidence/firebase/S3-1-20261106/`. Chờ PM review; chưa push, PR hay merge.

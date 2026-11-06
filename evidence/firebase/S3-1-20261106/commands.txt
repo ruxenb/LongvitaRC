@@ -1,0 +1,62 @@
+# S3-1 commands and filtered output, 06/11/2026
+# Worktree feature/charlie-bootstrap-02, base origin/main 008a1a9. Spinner lines, ANSI codes, account email and FCM token removed.
+
+## flutterfire --version
+1.4.1
+
+## firebase --version (LongvitaRC/firebase/node_modules, firebase-tools)
+15.34.2
+
+## firebase apps:list ANDROID|IOS|WEB --project longvita-8da7e (before and after configure)
+ANDROID: Longvita Android  1:1041459198085:android:33939d119fc3892d8e11ec  (1 app)
+IOS: No apps found.
+WEB: No apps found.
+Note: apps:list without a platform filter printed the same androidApps resource 4 times ("4 app(s) total"); --json shows 4 identical entries with the same name/appId. Per-platform listing shows 1 app; no app was created.
+
+## flutter pub get --enforce-lockfile (before pin) -> exit 0
+Got dependencies!
+44 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
+## sha256 pubspec.lock: f70ebc5105226ababee937de07577cd6ce9ce019d8c8ed4d3408c39944cfed6a
+
+## flutter pub get --enforce-lockfile (after pin) -> exit 0
+Got dependencies!
+44 packages have newer versions incompatible with dependency constraints.
+Try `flutter pub outdated` for more information.
+## sha256 pubspec.lock: f70ebc5105226ababee937de07577cd6ce9ce019d8c8ed4d3408c39944cfed6a (unchanged)
+
+## flutterfire configure --project=longvita-8da7e --platforms=android --android-package-name=vn.edu.fpt.longvita --yes -> exit 0
+⠋ Fetching available Firebase projects...
+i Found 1 Firebase projects. Selecting project longvita-8da7e.
+i Selected platforms: android
+⠋ Fetching registered android Firebase apps for project longvita-8da7e
+i Firebase android app vn.edu.fpt.longvita registered.
+
+Firebase configuration file lib\firebase_options.dart generated successfully with the following Firebase apps:
+Platform  Firebase App Id
+android   1:1041459198085:android:33939d119fc3892d8e11ec
+Learn more about using this file and next steps from the documentation:
+ > https://firebase.google.com/docs/flutter/setup
+
+## flutter analyze --no-pub
+No issues found! (ran in 67.8s)
+
+## flutter test --no-pub
+00:12 +336: All tests passed!
+
+## flutter build apk --debug --no-pub
+Running Gradle task 'assembleDebug'...
+Please check the changelogs of these plugins and upgrade to a version that supports Built-in Kotlin.
+If you are a plugin author, please migrate your plugin to Built-in Kotlin using this guide: https://docs.flutter.dev/release/breaking-changes/migrate-to-built-in-kotlin/for-plugin-authors
+Running Gradle task 'assembleDebug'...                            117,9s
+√ Built build\app\outputs\flutter-apk\app-debug.apk
+
+## aapt2 dump badging app-debug.apk
+package: name='vn.edu.fpt.longvita' versionCode='1' versionName='1.0.0' platformBuildVersionName='16' platformBuildVersionCode='36' compileSdkVersion='36' compileSdkVersionCodename='16'
+targetSdkVersion:'36'
+minSdkVersion:'24'
+
+## apksigner verify --print-certs app-debug.apk
+Signer #1 certificate DN: C=US, O=Android, CN=Android Debug
+Signer #1 certificate SHA-256 digest: 6b9cc4193af86f42713b6ca26a0ef834161ae578fdeb765a1bd70fa46469a6e8
+Signer #1 certificate SHA-1 digest: 2baa67bc4f6bfd1dab3ebfc5e557a9bb1ed035ec
