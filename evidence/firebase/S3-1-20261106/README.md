@@ -104,3 +104,14 @@ PM kiểm độc lập mã và cấu hình tại `0dcdc1a`. `flutter pub get --e
 Lệnh liệt kê app chỉ đọc trên Firebase CLI trả đúng một app Android với App ID dự kiến, iOS 0 và Web 0. Lịch sử configure trước/sau do Dev cung cấp. PM đọc APK đã build bằng `aapt2` và xác nhận package, compile SDK 36, target SDK 36 và min SDK 24.
 
 Analyzer sạch. Suite Flutter **336/336 đạt**, gồm ca lỗi tạo service và thử lại. PM xem ảnh màn lỗi và ảnh Home sau khi thử lại. Lượt chạy thiết bị và lỗi giả lập trong QA host là bằng chứng Dev. Hai thư mục QA phát sinh từ lần PM chạy suite được giữ local.
+
+## PR13-CR-01 — initializer ném lỗi, 06/11/2026
+
+- **Nguồn:** CodeRabbit [review 5795985045](https://github.com/ruxenb/LongvitaRC/pull/13#pullrequestreview-5795985045) trên `7b6e5d0`, Minor, nằm ngoài diff và bị CodeRabbit đánh dấu Unverified. PM tái hiện được nên quyết định **Accepted**.
+- **Lỗi:** `StartupGate._start()` gọi `await widget.initialize()` ngoài `try`. Nếu callback ném lỗi thay vì trả `BootstrapFailed`, lỗi thoát ra, `_running` kẹt ở `true` và không có nút Thử lại. `main.dart` dùng `FirebaseBootstrap.initialize`, vốn trả lỗi SDK dưới dạng `BootstrapFailed`, nên luồng app thật không gặp lỗi này; QA host và các caller khác thì có thể.
+- **Sửa:** bọc lời gọi `initialize` trong `try`; lỗi ném ra thành `BootstrapFailed('unknown')`, cùng mã mà `FirebaseBootstrap` dùng cho lỗi không phân loại được. Phân loại cũ, các bước kiểm `mounted`, cơ chế chặn chạy lặp và cách xử lý lỗi `buildReadyApp` giữ nguyên.
+- **Regression** `an initializer that throws shows error + retry, then the app` trong `test/auth/auth_screens_test.dart`: lần đầu callback ném `StateError`, kiểm không có exception thoát ra, có "Thử lại", app chưa được dựng; bấm Thử lại thì app hiện, đúng 2 lượt khởi tạo và 1 lượt dựng app.
+  - Trên `7b6e5d0`: **fail** (`Bad state: injected initializer failure`; không tìm thấy "Không thể khởi động ứng dụng").
+  - Sau khi sửa: **pass**, cùng hai test start-up cũ.
+- **Kiểm tra:** `flutter analyze --no-pub` không có lỗi; `flutter test --no-pub` **337/337** (336 + 1); `git diff --check` sạch.
+- **Không chạy lại** configure, build hay emulator: chỉ đổi Dart trong `StartupGate` và test. Firebase app, package, lockfile và Gradle không đổi.
