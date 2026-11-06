@@ -4,7 +4,7 @@
 
 - Tác giả: **Valter Longo**. Tên gốc *La dieta della longevità*, bản tiếng Việt *Chế độ ăn trường thọ: Tối ưu cân nặng, đẩy lùi bệnh tật, kéo dài tuổi thọ*, người dịch **Nguyễn Khánh Chi**, NXB Dân Trí. Hồ sơ Thư viện KHTH TP.HCM ghi năm **2021**, ISBN **9786043140545**, **298 trang**: https://phucvu.thuvientphcm.gov.vn/Item/ItemDetail/748047 .
 - Bản tiếng Việt trong thư mục Thư viện Mân Côi (ấn bản 2023) ghi **Chương 4 bắt đầu trang 69, Phụ lục A 'Chế độ ăn trường thọ — Thực đơn hai tuần' bắt đầu trang 238 và Phụ lục B bắt đầu trang 265**: https://thuvienmcbc.org/index.php/thuvien/catalog_product/view/id/5771/ .
-- Bản tiếng Anh *The Longevity Diet* có cùng tên phần **Appendix A: Longevity Diet Two-Week Meal Plan**, ấn bản/cách đánh số trang khác bản Việt. Nhà xuất bản: https://www.penguinrandomhouse.com/books/564866/the-longevity-diet-by-valter-longo-phd/ .
+- Bản tiếng Anh *The Longevity Diet* có cùng tên phần **Appendix A: Longevity Diet Two-Week Meal Plan**, ấn bản/cách đánh số trang khác bản Việt. **CẢNH BÁO CHẤT LƯỢNG (06/11/2026):** Văn bản hai tuần truy cập được trên Scribd là bản dịch AI bên thứ ba, có lỗi rõ ràng như *octopus* bị chuyển thành *powder*, món đậu trắng có chữ *veal*, và *brown rice* bị diễn thành 'gạo hoang' trong chỉ mục trước. Không thể coi đây là bản văn chính thức hoặc nguồn định lượng được phê duyệt. Nên ưu tiên sách được nhà xuất bản/nhóm sở hữu xác minh và trang trực tiếp của Valter Longo Foundation. Nhà xuất bản: https://www.penguinrandomhouse.com/books/564866/the-longevity-diet-by-valter-longo-phd/ .
 - Danh sách bên dưới dựa trên bản văn tiếng Anh có sẵn trực tuyến được dò theo **số trang in của bản tiếng Anh**, CHƯA so đối ảnh từng trang của sách tiếng Việt. Do đó **KHÔNG** gán số trang tiếng Anh là số trang bản Việt. Chỉ dùng để xác định nơi rà soát, KHÔNG dùng làm dữ liệu Firestore đã được duyệt.
 - Không tìm thấy tệp PDF/EPUB của bản Việt trong thư mục dự án/đường dẫn sách đã kiểm tra hoặc tài liệu Library truy cập được.
 
@@ -14,11 +14,11 @@
 |---|---:|---:|---|---|---:|---|
 | BOOK-W1D1-L | 1 | 1 | Trưa | Rau bina với hạt thông và nho khô (spinach with pine nuts and raisins) | 222 | Đối chiếu nguyên liệu/định lượng và nguồn gốc |
 | BOOK-W1D1-D | 1 | 1 | Tối | Mì với bông cải xanh và đậu đen | 223 | Xác minh khối lượng trước/sau nấu |
-| BOOK-W1D2-L | 1 | 2 | Trưa | Gạo hoang và đậu que với tỏi, cà chua | 224 | Xác minh loại gạo/đơn vị |
+| BOOK-W1D2-L | 1 | 2 | Trưa | **Gạo lứt** với đậu que, tỏi và cà chua (không phải gạo hoang) | 224 | Nguồn thứ cấp ghi *brown rice* 40 g; cần đối chiếu bản sách chính thức |
 | BOOK-W1D2-D | 1 | 2 | Tối | Cá hồi với măng tây | 225 | Xác minh dạng cá/loại nguồn |
-| BOOK-W1D3-D | 1 | 3 | Tối | Súp minestrone đậu gà với mì | 227 | Xác minh đậu gà và công thức phiên bản sách |
-| BOOK-W1D4-D | 1 | 4 | Tối | Súp mì và đậu lăng | 229 | Xác minh trạng thái chín/khô |
-| BOOK-W1D5-D | 1 | 5 | Tối | Bạch tuộc với khoai tây | 231 | Xác minh đơn vị thành phần |
+| BOOK-W1D3-D | 1 | 3 | Tối | **Pasta với đậu gà nấu chín** (không mặc định là minestrone) | 227 | Nguồn thứ cấp ghi *cooked chickpeas and pasta*; cần đối chiếu bản sách chính thức |
+| BOOK-W1D4-D | 1 | 4 | Tối | **Pasta với đậu lăng** (không mặc định là súp) | 229 | Nguồn thứ cấp ghi *pasta with lentils*; cần đối chiếu bản sách chính thức |
+| BOOK-W1D5-D | 1 | 5 | Tối | Bạch tuộc với khoai tây | 231 | **Cảnh báo:** nguồn thứ cấp lỗi nghiêm trọng '*80 g of powder*' cho bạch tuộc; tuyệt đối không lấy số liệu này |
 | BOOK-W1D6-L | 1 | 6 | Trưa | Cà tím nướng với feta và cà chua | 232 | Xem phạm vi đối tượng và nguồn sử dụng |
 | BOOK-W1D7-D | 1 | 7 | Tối | Spaghetti với nghêu và vẹm | 235 | Đối chiếu khối lượng phần thịt |
 | BOOK-W2D1-L | 2 | 1 | Trưa | Salad kiểu Hy Lạp với feta và ô liu | 236 | Xác minh nguyên liệu và bản quyền |

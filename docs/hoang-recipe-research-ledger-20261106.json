@@ -1,0 +1,554 @@
+{
+  "project": "LongvitaRC",
+  "firebaseProject": "longvita-8da7e",
+  "collection": "recipes",
+  "generatedOn": "2026-11-06",
+  "status": "RESEARCH_ONLY__PROHIBIT_IMPORT",
+  "exclusions": [
+    "No recipe.firestore object",
+    "No nutrition calories/protein claimed",
+    "No claimed translated Vietnamese-book page",
+    "No approved authorisation to publish",
+    "No copyrighted cooking directions reproduced"
+  ],
+  "primarySources": [
+    "https://www.fondazionevalterlongo.org/en/sample-longevity-diets/",
+    "https://valterlongo.com/recipes-of-longevity/",
+    "https://www.fondazionevalterlongo.org/en/longevity-diet-for-adults/",
+    "https://fdc.nal.usda.gov/",
+    "https://viendinhduong.vn/vi/cong-cu-va-tien-ich/gia-tri-dinh-duong-thuc-pham"
+  ],
+  "bookIdentity": {
+    "titleVi": "Chế độ ăn trường thọ",
+    "author": "Valter Longo",
+    "translator": "Nguyễn Khánh Chi",
+    "isbnVi": "9786043140545",
+    "appendixAStartPageVi": 238,
+    "reference": "https://thuvienmcbc.org/index.php/thuvien/catalog_product/view/id/5771/",
+    "completeBookTextVerified": false
+  },
+  "candidates": [
+    {
+      "id": "BOOK-W1D1-L",
+      "type": "book_appendix_candidate",
+      "week": 1,
+      "day": 1,
+      "meal": "lunch",
+      "titleVi": "Rau bina với hạt thông và nho khô",
+      "originalCandidate": "Spinach with pine nuts and raisins",
+      "source": {
+        "url": "https://www.scribd.com/document/970691885/BOOK-TRANSLATED-Longevity-Diet-Valter-Longo-1-1",
+        "tier": "UNOFFICIAL_AI_TRANSLATED_COPY",
+        "bookEdition": "UNCONFIRMED",
+        "pageVi": null,
+        "pageEn": null
+      },
+      "evidenceStatus": "NAME_AND_PLACEMENT_SECONDARY_ONLY",
+      "completeness": {
+        "verifiedOfficialRecipeText": false,
+        "servings": null,
+        "ingredientAmountsVerified": false,
+        "nutritionPerServingVerified": false,
+        "usageRightsApproved": false,
+        "teamApproved": false
+      },
+      "warnings": []
+    },
+    {
+      "id": "BOOK-W1D1-D",
+      "type": "book_appendix_candidate",
+      "week": 1,
+      "day": 1,
+      "meal": "dinner",
+      "titleVi": "Pasta với bông cải xanh và đậu đen",
+      "originalCandidate": "Pasta with broccoli and black beans",
+      "source": {
+        "url": "https://www.scribd.com/document/970691885/BOOK-TRANSLATED-Longevity-Diet-Valter-Longo-1-1",
+        "tier": "UNOFFICIAL_AI_TRANSLATED_COPY",
+        "bookEdition": "UNCONFIRMED",
+        "pageVi": null,
+        "pageEn": null
+      },
+      "evidenceStatus": "NAME_AND_PLACEMENT_SECONDARY_ONLY",
+      "completeness": {
+        "verifiedOfficialRecipeText": false,
+        "servings": null,
+        "ingredientAmountsVerified": false,
+        "nutritionPerServingVerified": false,
+        "usageRightsApproved": false,
+        "teamApproved": false
+      },
+      "warnings": []
+    },
+    {
+      "id": "BOOK-W1D2-L",
+      "type": "book_appendix_candidate",
+      "week": 1,
+      "day": 2,
+      "meal": "lunch",
+      "titleVi": "Gạo lứt với đậu que và cà chua",
+      "originalCandidate": "Brown rice with green beans, garlic, and fresh tomato",
+      "source": {
+        "url": "https://www.scribd.com/document/970691885/BOOK-TRANSLATED-Longevity-Diet-Valter-Longo-1-1",
+        "tier": "UNOFFICIAL_AI_TRANSLATED_COPY",
+        "bookEdition": "UNCONFIRMED",
+        "pageVi": null,
+        "pageEn": null
+      },
+      "evidenceStatus": "NAME_AND_PLACEMENT_SECONDARY_ONLY",
+      "completeness": {
+        "verifiedOfficialRecipeText": false,
+        "servings": null,
+        "ingredientAmountsVerified": false,
+        "nutritionPerServingVerified": false,
+        "usageRightsApproved": false,
+        "teamApproved": false
+      },
+      "warnings": [
+        "Brown rice is not wild rice"
+      ]
+    },
+    {
+      "id": "BOOK-W1D2-D",
+      "type": "book_appendix_candidate",
+      "week": 1,
+      "day": 2,
+      "meal": "dinner",
+      "titleVi": "Cá hồi với măng tây",
+      "originalCandidate": "Salmon fillet with asparagus",
+      "source": {
+        "url": "https://www.scribd.com/document/970691885/BOOK-TRANSLATED-Longevity-Diet-Valter-Longo-1-1",
+        "tier": "UNOFFICIAL_AI_TRANSLATED_COPY",
+        "bookEdition": "UNCONFIRMED",
+        "pageVi": null,
+        "pageEn": null
+      },
+      "evidenceStatus": "NAME_AND_PLACEMENT_SECONDARY_ONLY",
+      "completeness": {
+        "verifiedOfficialRecipeText": false,
+        "servings": null,
+        "ingredientAmountsVerified": false,
+        "nutritionPerServingVerified": false,
+        "usageRightsApproved": false,
+        "teamApproved": false
+      },
+      "warnings": []
+    },
+    {
+      "id": "BOOK-W1D3-D",
+      "type": "book_appendix_candidate",
+      "week": 1,
+      "day": 3,
+      "meal": "dinner",
+      "titleVi": "Pasta với đậu gà chín",
+      "originalCandidate": "Cooked chickpeas and pasta",
+      "source": {
+        "url": "https://www.scribd.com/document/970691885/BOOK-TRANSLATED-Longevity-Diet-Valter-Longo-1-1",
+        "tier": "UNOFFICIAL_AI_TRANSLATED_COPY",
+        "bookEdition": "UNCONFIRMED",
+        "pageVi": null,
+        "pageEn": null
+      },
+      "evidenceStatus": "NAME_AND_PLACEMENT_SECONDARY_ONLY",
+      "completeness": {
+        "verifiedOfficialRecipeText": false,
+        "servings": null,
+        "ingredientAmountsVerified": false,
+        "nutritionPerServingVerified": false,
+        "usageRightsApproved": false,
+        "teamApproved": false
+      },
+      "warnings": []
+    },
+    {
+      "id": "BOOK-W1D4-D",
+      "type": "book_appendix_candidate",
+      "week": 1,
+      "day": 4,
+      "meal": "dinner",
+      "titleVi": "Pasta với đậu lăng",
+      "originalCandidate": "Pasta with lentils",
+      "source": {
+        "url": "https://www.scribd.com/document/970691885/BOOK-TRANSLATED-Longevity-Diet-Valter-Longo-1-1",
+        "tier": "UNOFFICIAL_AI_TRANSLATED_COPY",
+        "bookEdition": "UNCONFIRMED",
+        "pageVi": null,
+        "pageEn": null
+      },
+      "evidenceStatus": "NAME_AND_PLACEMENT_SECONDARY_ONLY",
+      "completeness": {
+        "verifiedOfficialRecipeText": false,
+        "servings": null,
+        "ingredientAmountsVerified": false,
+        "nutritionPerServingVerified": false,
+        "usageRightsApproved": false,
+        "teamApproved": false
+      },
+      "warnings": []
+    },
+    {
+      "id": "BOOK-W1D5-D",
+      "type": "book_appendix_candidate",
+      "week": 1,
+      "day": 5,
+      "meal": "dinner",
+      "titleVi": "Bạch tuộc với khoai tây",
+      "originalCandidate": "Octopus with potatoes",
+      "source": {
+        "url": "https://www.scribd.com/document/970691885/BOOK-TRANSLATED-Longevity-Diet-Valter-Longo-1-1",
+        "tier": "UNOFFICIAL_AI_TRANSLATED_COPY",
+        "bookEdition": "UNCONFIRMED",
+        "pageVi": null,
+        "pageEn": null
+      },
+      "evidenceStatus": "NAME_AND_PLACEMENT_SECONDARY_ONLY",
+      "completeness": {
+        "verifiedOfficialRecipeText": false,
+        "servings": null,
+        "ingredientAmountsVerified": false,
+        "nutritionPerServingVerified": false,
+        "usageRightsApproved": false,
+        "teamApproved": false
+      },
+      "warnings": [
+        "AI-translated source shows '80 g of powder' for octopus; do not extract this quantity"
+      ]
+    },
+    {
+      "id": "BOOK-W2D1-L",
+      "type": "book_appendix_candidate",
+      "week": 2,
+      "day": 1,
+      "meal": "lunch",
+      "titleVi": "Salad Hy Lạp với feta, ô liu và ớt chuông",
+      "originalCandidate": "Greek salad with feta cheese, olives, onion, and bell pepper",
+      "source": {
+        "url": "https://www.scribd.com/document/970691885/BOOK-TRANSLATED-Longevity-Diet-Valter-Longo-1-1",
+        "tier": "UNOFFICIAL_AI_TRANSLATED_COPY",
+        "bookEdition": "UNCONFIRMED",
+        "pageVi": null,
+        "pageEn": null
+      },
+      "evidenceStatus": "NAME_AND_PLACEMENT_SECONDARY_ONLY",
+      "completeness": {
+        "verifiedOfficialRecipeText": false,
+        "servings": null,
+        "ingredientAmountsVerified": false,
+        "nutritionPerServingVerified": false,
+        "usageRightsApproved": false,
+        "teamApproved": false
+      },
+      "warnings": []
+    },
+    {
+      "id": "BOOK-W2D2-L",
+      "type": "book_appendix_candidate",
+      "week": 2,
+      "day": 2,
+      "meal": "lunch",
+      "titleVi": "Súp kem bí đỏ với bánh mì nướng",
+      "originalCandidate": "Pumpkin (or broccoli) cream with croutons",
+      "source": {
+        "url": "https://www.scribd.com/document/970691885/BOOK-TRANSLATED-Longevity-Diet-Valter-Longo-1-1",
+        "tier": "UNOFFICIAL_AI_TRANSLATED_COPY",
+        "bookEdition": "UNCONFIRMED",
+        "pageVi": null,
+        "pageEn": null
+      },
+      "evidenceStatus": "NAME_AND_PLACEMENT_SECONDARY_ONLY",
+      "completeness": {
+        "verifiedOfficialRecipeText": false,
+        "servings": null,
+        "ingredientAmountsVerified": false,
+        "nutritionPerServingVerified": false,
+        "usageRightsApproved": false,
+        "teamApproved": false
+      },
+      "warnings": []
+    },
+    {
+      "id": "BOOK-W2D2-D",
+      "type": "book_appendix_candidate",
+      "week": 2,
+      "day": 2,
+      "meal": "dinner",
+      "titleVi": "Pasta với cá ngừ, ô liu và nụ bạch hoa",
+      "originalCandidate": "Pasta with tuna, olives, capers, and tomato",
+      "source": {
+        "url": "https://www.scribd.com/document/970691885/BOOK-TRANSLATED-Longevity-Diet-Valter-Longo-1-1",
+        "tier": "UNOFFICIAL_AI_TRANSLATED_COPY",
+        "bookEdition": "UNCONFIRMED",
+        "pageVi": null,
+        "pageEn": null
+      },
+      "evidenceStatus": "NAME_AND_PLACEMENT_SECONDARY_ONLY",
+      "completeness": {
+        "verifiedOfficialRecipeText": false,
+        "servings": null,
+        "ingredientAmountsVerified": false,
+        "nutritionPerServingVerified": false,
+        "usageRightsApproved": false,
+        "teamApproved": false
+      },
+      "warnings": []
+    },
+    {
+      "id": "BOOK-W2D4-D",
+      "type": "book_appendix_candidate",
+      "week": 2,
+      "day": 4,
+      "meal": "dinner",
+      "titleVi": "Gạo đen Venere với bí ngòi và tôm",
+      "originalCandidate": "Venere rice with zucchini and shrimp",
+      "source": {
+        "url": "https://www.scribd.com/document/970691885/BOOK-TRANSLATED-Longevity-Diet-Valter-Longo-1-1",
+        "tier": "UNOFFICIAL_AI_TRANSLATED_COPY",
+        "bookEdition": "UNCONFIRMED",
+        "pageVi": null,
+        "pageEn": null
+      },
+      "evidenceStatus": "NAME_AND_PLACEMENT_SECONDARY_ONLY",
+      "completeness": {
+        "verifiedOfficialRecipeText": false,
+        "servings": null,
+        "ingredientAmountsVerified": false,
+        "nutritionPerServingVerified": false,
+        "usageRightsApproved": false,
+        "teamApproved": false
+      },
+      "warnings": []
+    },
+    {
+      "id": "BOOK-W2D5-D",
+      "type": "book_appendix_candidate",
+      "week": 2,
+      "day": 5,
+      "meal": "dinner",
+      "titleVi": "Súp minestrone kiểu Genoa",
+      "originalCandidate": "Genoese style minestrone",
+      "source": {
+        "url": "https://www.scribd.com/document/970691885/BOOK-TRANSLATED-Longevity-Diet-Valter-Longo-1-1",
+        "tier": "UNOFFICIAL_AI_TRANSLATED_COPY",
+        "bookEdition": "UNCONFIRMED",
+        "pageVi": null,
+        "pageEn": null
+      },
+      "evidenceStatus": "NAME_AND_PLACEMENT_SECONDARY_ONLY",
+      "completeness": {
+        "verifiedOfficialRecipeText": false,
+        "servings": null,
+        "ingredientAmountsVerified": false,
+        "nutritionPerServingVerified": false,
+        "usageRightsApproved": false,
+        "teamApproved": false
+      },
+      "warnings": []
+    },
+    {
+      "id": "BOOK-W2D6-D",
+      "type": "book_appendix_candidate",
+      "week": 2,
+      "day": 6,
+      "meal": "dinner",
+      "titleVi": "Súp kem đậu gà với bông cải xanh",
+      "originalCandidate": "Chickpea cream with broccoli",
+      "source": {
+        "url": "https://www.scribd.com/document/970691885/BOOK-TRANSLATED-Longevity-Diet-Valter-Longo-1-1",
+        "tier": "UNOFFICIAL_AI_TRANSLATED_COPY",
+        "bookEdition": "UNCONFIRMED",
+        "pageVi": null,
+        "pageEn": null
+      },
+      "evidenceStatus": "NAME_AND_PLACEMENT_SECONDARY_ONLY",
+      "completeness": {
+        "verifiedOfficialRecipeText": false,
+        "servings": null,
+        "ingredientAmountsVerified": false,
+        "nutritionPerServingVerified": false,
+        "usageRightsApproved": false,
+        "teamApproved": false
+      },
+      "warnings": []
+    },
+    {
+      "id": "FOUNDATION-LUNCH-01",
+      "titleVi": "Lúa mì spelt với rau diếp xoăn và cà rốt",
+      "type": "official_sample_plan",
+      "source": {
+        "url": "https://www.fondazionevalterlongo.org/en/sample-longevity-diets/",
+        "tier": "FOUNDATION_PRIMARY",
+        "publicationDate": "2020-04-20"
+      },
+      "partialMeasurements": [
+        [
+          "spelt/farro",
+          60,
+          "g"
+        ],
+        [
+          "olive oil",
+          9,
+          "g"
+        ],
+        [
+          "Grana Padano",
+          5,
+          "g"
+        ],
+        [
+          "chicory",
+          150,
+          "g"
+        ],
+        [
+          "carrots",
+          50,
+          "g"
+        ]
+      ],
+      "notes": [
+        "For profile: adult man with high BMI; not universal recommendation",
+        "confirm raw vs cooked farro and chicory preparation"
+      ],
+      "evidenceStatus": "PRIMARY_SOURCE_PARTIAL_QUANTITIES",
+      "completeness": {
+        "verifiedOfficialRecipeText": true,
+        "servings": null,
+        "ingredientAmountsVerified": false,
+        "nutritionPerServingVerified": false,
+        "usageRightsApproved": false,
+        "teamApproved": false
+      }
+    },
+    {
+      "id": "FOUNDATION-LUNCH-02",
+      "titleVi": "Salad spelt, đậu lăng và mè",
+      "type": "official_sample_plan",
+      "source": {
+        "url": "https://www.fondazionevalterlongo.org/en/sample-longevity-diets/",
+        "tier": "FOUNDATION_PRIMARY",
+        "publicationDate": "2020-04-20"
+      },
+      "partialMeasurements": [
+        [
+          "spelt/farro",
+          70,
+          "g"
+        ],
+        [
+          "olive oil",
+          9,
+          "g"
+        ],
+        [
+          "dry lentils",
+          50,
+          "g"
+        ],
+        [
+          "sesame",
+          15,
+          "g"
+        ]
+      ],
+      "notes": [
+        "For older adult with weight/muscle loss; separate group-specific guidance",
+        "side dish fennel and salad has 200 g collectively"
+      ],
+      "evidenceStatus": "PRIMARY_SOURCE_PARTIAL_QUANTITIES",
+      "completeness": {
+        "verifiedOfficialRecipeText": true,
+        "servings": null,
+        "ingredientAmountsVerified": false,
+        "nutritionPerServingVerified": false,
+        "usageRightsApproved": false,
+        "teamApproved": false
+      }
+    },
+    {
+      "id": "FOUNDATION-RECIPE-01",
+      "titleVi": "Mực ống và mực nang om cà chua",
+      "type": "official_web_recipe",
+      "source": {
+        "url": "https://valterlongo.com/recipes-of-longevity/",
+        "tier": "AUTHOR_FOUNDATION_PRIMARY"
+      },
+      "servings": 4,
+      "partialMeasurements": [
+        [
+          "squid",
+          500,
+          "g"
+        ],
+        [
+          "cuttlefish",
+          300,
+          "g"
+        ],
+        [
+          "cherry tomatoes",
+          500,
+          "g"
+        ],
+        [
+          "olive oil",
+          40,
+          "ml"
+        ]
+      ],
+      "notes": [
+        "two garlic cloves and parsley have no audited edible gram conversion",
+        "species, edible portions and cooking losses unknown"
+      ],
+      "evidenceStatus": "PRIMARY_SOURCE_PARTIAL_QUANTITIES",
+      "completeness": {
+        "verifiedOfficialRecipeText": true,
+        "servings": 4,
+        "ingredientAmountsVerified": false,
+        "nutritionPerServingVerified": false,
+        "usageRightsApproved": false,
+        "teamApproved": false
+      }
+    },
+    {
+      "id": "FOUNDATION-RECIPE-02",
+      "titleVi": "Cá cơm nướng với rau escarole",
+      "type": "official_web_recipe",
+      "source": {
+        "url": "https://valterlongo.com/recipes-of-longevity/",
+        "tier": "AUTHOR_FOUNDATION_PRIMARY"
+      },
+      "servings": 4,
+      "partialMeasurements": [
+        [
+          "fresh anchovies",
+          400,
+          "g"
+        ],
+        [
+          "escarole",
+          1000,
+          "g"
+        ],
+        [
+          "olive oil",
+          6,
+          "tablespoons"
+        ]
+      ],
+      "notes": [
+        "oil tablespoons need weighed mass, fish edible portion after cleaning unknown",
+        "allergens: fish"
+      ],
+      "evidenceStatus": "PRIMARY_SOURCE_PARTIAL_QUANTITIES",
+      "completeness": {
+        "verifiedOfficialRecipeText": true,
+        "servings": 4,
+        "ingredientAmountsVerified": false,
+        "nutritionPerServingVerified": false,
+        "usageRightsApproved": false,
+        "teamApproved": false
+      }
+    }
+  ]
+}
