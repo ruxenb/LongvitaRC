@@ -10,7 +10,16 @@ class RecipeModel {
   final List<IngredientModel> ingredients;
   final List<String> instructions;
   final String? imageUrl;
-  final String sourceNote; // Trích dẫn sách La dieta della longevità
+  // Provenance text from Firestore. Use [book] only after the exact edition/page
+  // has been verified; [web] marks a website source. Unmarked sources are unknown.
+  final String sourceNote;
+
+  /// A populated sourceNote alone does not prove a book citation.
+  bool get isBookCitation {
+    final note = sourceNote.trimLeft();
+    return note.toLowerCase().startsWith('[book] ') &&
+        note.substring(7).trim().isNotEmpty;
+  }
 
   const RecipeModel({
     required this.id,

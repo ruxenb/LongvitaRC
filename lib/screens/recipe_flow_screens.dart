@@ -113,7 +113,7 @@ class _RecipeDetailsScreenState extends State<RecipeDetailsScreen> {
       context.read<AnalyticsService>().logViewRecipeDetails(
         recipeId: r.id,
         isFishMeal: r.category == 'ca' ? 1 : 0,
-        isBookCitation: r.sourceNote.trim().isNotEmpty ? 1 : 0,
+        isBookCitation: r.isBookCitation ? 1 : 0,
         calories: r.calories.round(),
       );
     });

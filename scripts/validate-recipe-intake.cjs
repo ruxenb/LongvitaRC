@@ -14,6 +14,9 @@ const CATEGORIES = new Set(['ca', 'dau', 'rau_cu', 'ngu_coc']);
 const has = (o, key) => Object.prototype.hasOwnProperty.call(o, key);
 const object = (v) => v !== null && typeof v === 'object' && !Array.isArray(v);
 const str = (v) => typeof v === 'string' && v.trim().length > 0;
+// Reject values copied from the documented JSON template, not just empty strings.
+const verifiedText = (v) => str(v) && !/^<[^>]+>$/.test(v.trim()) &&
+  !/^(?:TBD|TODO|pending|not[ -]approved|not[ -]verified)$/i.test(v.trim());
 const nonnegative = (v) => typeof v === 'number' && Number.isFinite(v) && v >= 0;
 const positive = (v) => nonnegative(v) && v > 0;
 const https = (v) => str(v) && /^https:\/\/[^\s/]+(?:\/[^\s]*)?$/i.test(v);
@@ -91,7 +94,7 @@ function validate(catalog, requireApproval = true) {
     if (!object(provenance)) { fail(at + '.provenance', 'required'); continue; }
     const source = provenance.recipeSource;
     if (!object(source) || !['book', 'official-recipe', 'team-original', 'licensed'].includes(source.type) ||
-        !str(source.title) || !str(source.locator) || !str(source.rightsEvidence)) {
+        !verifiedText(source.title) || !verifiedText(source.locator) || !verifiedText(source.rightsEvidence)) {
       fail(at + '.provenance.recipeSource', 'verified type, title, locator and rightsEvidence required');
     }
     if (source && has(source, 'url') && source.url !== null && !https(source.url)) {
@@ -123,8 +126,20 @@ function validate(catalog, requireApproval = true) {
       }
       const ingredient = Array.isArray(data.ingredients)
         ? data.ingredients.find((v) => object(v) && v.id === item.ingredientId) : null;
-      if (ingredient && ingredient.unit !== 'g' && !str(item.conversionNote)) {
+      if (ingredient && ingredient.unit !== 'g' && !verifiedText(item.conversionNote)) {
         fail(p + '.conversionNote', 'conversion to edible grams required for non-g units');
+      }
+      if (ingredient && ingredient.unit === 'g' && positive(item.edibleGrams) &&
+          positive(ingredient.amount) &&
+          Math.abs(item.edibleGrams - ingredient.amount) > 0.5 &&
+          !verifiedText(item.conversionNote)) {
+        fail(p + '.conversionNote', 'document trimming/cooking loss when edible grams differ from recorded grams');
+      }
+      if (ingredient && ingredient.unit === 'g' && positive(item.edibleGrams) &&
+          positive(ingredient.amount) &&
+          Math.abs(item.edibleGrams - ingredient.amount) > 0.5 &&
+          !https(item.manualReviewEvidenceUrl)) {
+        fail(p + '.manualReviewEvidenceUrl', 'a differing gram mass requires linked manual review');
       }
       if (positive(item.edibleGrams) && nonnegative(item.kcalPer100g) && nonnegative(item.proteinPer100g)) {
         totalCalories += item.edibleGrams * item.kcalPer100g / 100;
@@ -144,9 +159,14 @@ function validate(catalog, requireApproval = true) {
     }
   }
   if (requireApproval) {
+    for (const [index, entry] of catalog.recipes.entries()) {
+      if (!Array.isArray(entry.reviewBlockers) || entry.reviewBlockers.length !== 0) {
+        fail(`recipes[${index}].reviewBlockers`, 'manual blockers must be explicitly resolved before publication');
+      }
+    }
     const approval = catalog.approval;
     if (!object(approval) || approval.decision !== 'approved' ||
-        !str(approval.approvedBy) || !isoDate(approval.approvedAt) || !https(approval.evidenceUrl)) {
+        !verifiedText(approval.approvedBy) || !isoDate(approval.approvedAt) || !https(approval.evidenceUrl)) {
       fail('approval', 'explicit batch approval, reviewer, timestamp and evidence URL required');
     }
     if (!object(approval) || approval.recipesSha256 !== fingerprint(catalog.recipes)) {

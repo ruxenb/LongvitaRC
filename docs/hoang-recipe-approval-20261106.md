@@ -112,10 +112,10 @@ node scripts/validate-recipe-intake.cjs --review D:\path\to\reviewed-catalog.jso
 # The reviewer approves the EXACT recipes SHA-256 shown by the command.
 # Add the approval evidence + fingerprint to the manifest.
 node scripts/validate-recipe-intake.cjs --verify D:\path\to\approved-catalog.json
-node --test test/firestore/recipe_intake.test.cjs
+node --test test/firestore/recipe_intake.test.cjs test/firestore/recipe_research_ledger.test.cjs test/firestore/recipe_staged_usda.test.cjs
 ```
 
-The validator requires every current Firestore field, ingredient references, source metadata, nutrient quantity reconciliation, an approved batch and matching SHA fingerprint. It **does not** connect to, read or write Firestore, validate the truth of external sources, grant credentials, or confer publishing rights.
+The validator requires every current Firestore field, ingredient references, source metadata, nutrient quantity reconciliation, a rationale AND linked reviewer evidence when 100g edible mass differs from recorded gram quantity, resolved manual review blockers, an approved batch and matching SHA fingerprint. The [book]/[web] prefixes in sourceNote distinguish book evidence from author/organization websites without adding unsupported Firestore fields. It **does not** connect to, read or write Firestore, validate the truth of external sources, grant credentials, or confer publishing rights.
 
 ## Team approval request
 
