@@ -21,6 +21,15 @@ void main() {
     expect((result as BootstrapFailed).isConfigurationMissing, isTrue);
   });
 
+  test('a platform without generated FirebaseOptions is not-configured',
+      () async {
+    // Thrown by DefaultFirebaseOptions.currentPlatform outside Android.
+    final result = await run(UnsupportedError(
+        'DefaultFirebaseOptions have not been configured for ios - '
+        'you can reconfigure this by running the FlutterFire CLI again.'));
+    expect((result as BootstrapFailed).isConfigurationMissing, isTrue);
+  });
+
   test('other Firebase failures keep their code and allow retry', () async {
     final result = await run(
         FirebaseException(plugin: 'core', code: 'unavailable', message: 'x'));

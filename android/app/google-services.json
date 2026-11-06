@@ -14,11 +14,35 @@
       },
       "oauth_client": [
         {
+          "client_id": "1041459198085-e7e9erojgmn617o0plb4s3sfsqacgnt7.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "vn.edu.fpt.longvita",
+            "certificate_hash": "9d9cd303148602c55a3a5e689722354c19f6d571"
+          }
+        },
+        {
+          "client_id": "1041459198085-pklr5b0sns06r3j7arevu9mgdtt4aokm.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "vn.edu.fpt.longvita",
+            "certificate_hash": "d3be85d584a9929d4623d25fad6c107118777e62"
+          }
+        },
+        {
           "client_id": "1041459198085-qhs7ugfn9ae8khu4jb2nq26qrr9e3bpu.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "vn.edu.fpt.longvita",
             "certificate_hash": "2baa67bc4f6bfd1dab3ebfc5e557a9bb1ed035ec"
+          }
+        },
+        {
+          "client_id": "1041459198085-v3meoeptv3t7o24vsr4do1fqc0srnkh3.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "vn.edu.fpt.longvita",
+            "certificate_hash": "ef32d1b360036ffb92df82492fa59542500c7c88"
           }
         },
         {

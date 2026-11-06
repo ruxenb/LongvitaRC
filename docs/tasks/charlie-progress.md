@@ -25,7 +25,7 @@ Các điểm % cũ trong bảng dưới là ước lượng Dev của các phầ
 | S0-4 | 70% | Project, README, 2/3 thành viên; còn Hoàng và DEC-01 |
 | S2-3 | 100% | Đủ theo tiêu chí, chờ nghiệm thu |
 | S2-4 | 100% | Đủ theo tiêu chí, chờ nghiệm thu |
-| S3-1 | 90% | Build, init, Crashlytics đều chạy; còn chốt ghim phiên bản |
+| S3-1 | Qua PM review kỹ thuật | Configure Android, ghim version và phục hồi lỗi startup. PM kiểm analyzer sạch, 336/336 test, lockfile và config. Chờ review PR. |
 | S3-2 | Chờ nghiệm thu | SHA-1/SHA-256 của 4 máy đã được ghi nhận. Ngày 04/11 Charlie xác nhận An, Thắng, Hoàng đều phản hồi Google Sign-in thành công, hiện không báo lỗi; Charlie có evidence native e12719c. Kết quả 3 bạn là owner report qua Charlie, chưa có ảnh/device/Android/build SHA riêng trong lượt xác nhận này. Chuyển Chờ nghiệm thu; không suy thành PM tự chạy 4 máy. [PR #12](https://github.com/ruxenb/LongvitaRC/pull/12). |
 | S3-3 | 90% | Chạy thật; lỗi mạng và lỗi hồ sơ mới test bằng fake |
 | S3-4 | 95% | Đủ trạng thái; còn chốt layout và ngôn ngữ |
