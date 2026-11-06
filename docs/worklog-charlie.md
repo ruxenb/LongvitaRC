@@ -243,3 +243,7 @@ PR #12 (S3-2) đã merge vào main tại `3b34816`. S3-1 bắt đầu từ `orig
 - **Kiểm tra:** analyzer sạch, 336/336 tests, build APK debug. Trên emulator: cold start vào Home của A, logcat sạch; lỗi giả lập qua QA host → Thử lại → app thật.
 
 Evidence tại `evidence/firebase/S3-1-20261106/`. Chờ PM review; chưa push, PR hay merge.
+
+### S3-1 PM review, 06/11/2026
+
+Kiểm độc lập `0dcdc1a`. Pub get với lockfile chạy được, 18 pin khớp, cấu hình Firebase đồng nhất và CLI liệt kê đúng app Android. Analyzer sạch, 336/336 test đạt. PM kiểm metadata APK và đọc bằng chứng cold start, lỗi giả lập và thử lại của Dev. Dọn bảng version cũ bị lặp trong README và mã điều khiển còn sót trong log đã lọc. S3-1 qua kiểm kỹ thuật PM và chờ review PR.

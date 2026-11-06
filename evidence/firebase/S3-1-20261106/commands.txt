@@ -26,12 +26,10 @@ Try `flutter pub outdated` for more information.
 ## sha256 pubspec.lock: f70ebc5105226ababee937de07577cd6ce9ce019d8c8ed4d3408c39944cfed6a (unchanged)
 
 ## flutterfire configure --project=longvita-8da7e --platforms=android --android-package-name=vn.edu.fpt.longvita --yes -> exit 0
-⠋ Fetching available Firebase projects...
 i Found 1 Firebase projects. Selecting project longvita-8da7e.
-i Selected platforms: android
-⠋ Fetching registered android Firebase apps for project longvita-8da7e
+i Selected platforms: android
 i Firebase android app vn.edu.fpt.longvita registered.
-
+
 Firebase configuration file lib\firebase_options.dart generated successfully with the following Firebase apps:
 Platform  Firebase App Id
 android   1:1041459198085:android:33939d119fc3892d8e11ec

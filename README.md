@@ -2,7 +2,7 @@
 
 > **Cập nhật 02/11/2026:** **Lab 3 chính là Assignment** đang triển khai, kế thừa thiết kế Lab 2. Xem [bàn giao kỹ thuật và tiến độ Charlie](docs/tasks/charlie-progress.md) cho phạm vi nhánh, kiểm chứng và các quyết định cần team review. Giữ 112 task IDs/owners; các phần mobile/web/shared-core là cùng sản phẩm. Nhánh hiện chưa chứng minh đủ sáu Firebase services hoặc toàn bộ E2E.
 >
-> **Firebase project:** `longvita-8da7e`, app Android `vn.edu.fpt.longvita` (S0-4). Chưa mời đủ thành viên và SHA.
+> **Firebase project:** `longvita-8da7e`, app Android `vn.edu.fpt.longvita` (S0-4). Bốn máy đã có xác nhận đăng nhập Google ở S3-2.
 >
 > Phiên bản đã ghim (S3-1, 06/11/2026): package hosted trong `pubspec.yaml` là exact version trùng `pubspec.lock`; Flutter/Gradle ở mục 2 là bộ đã build và chạy trên máy Charlie. Storage/Spark, application ID và rubric khác nhau đang được ghi trong DEC-01..04.
 
@@ -37,11 +37,11 @@
 
 ---
 
-## 2. Pinned Tool Versions (Phiên Bản Công Cụ Đã Ghim)
+## 2. Phiên bản công cụ đã kiểm và package đã ghim
 
 Tuân thủ yêu cầu bắt buộc của Handout Mục 3 & 9 về việc ghim phiên bản để tránh xung đột môi trường. Bằng chứng: [`evidence/firebase/S3-1-20261106/`](evidence/firebase/S3-1-20261106/README.md).
 
-| Công cụ / Nền tảng | Phiên bản ghim (Pinned Version) | Ghi chú cấu hình |
+| Công cụ / Nền tảng | Phiên bản | Ghi chú cấu hình |
 |:---|:---|:---|
 | **Flutter SDK** | `3.47.6` (channel stable) | `flutter --version`; bản đã build và chạy S3-1 trên máy Charlie |
 | **Dart SDK** | `3.13.5` | Đi kèm Flutter 3.47.6; `pubspec.yaml` yêu cầu `^3.13.2` |
@@ -50,7 +50,7 @@ Tuân thủ yêu cầu bắt buộc của Handout Mục 3 & 9 về việc ghim p
 | **Android SDK** | compileSdk/targetSdk 36, minSdk 24 | Theo Flutter 3.47.6 (`flutter.*SdkVersion`), đọc từ APK bằng `aapt2` |
 | **FlutterFire / Firebase CLI** | FlutterFire CLI `1.4.1`, firebase-tools `15.34.2` | Dùng để sinh `lib/firebase_options.dart`; firebase-tools khóa ở `firebase/package-lock.json` (`npm ci` trong `firebase/`) |
 | **Python** | `3.12+` | Dành cho Google ARTEMIS Test Suite |
-| **Google ARTEMIS** | `351ca8422f7b5b54e80a9c1ce03a222e02415b6b` (Apache 2.0) | Pin tại `e2e_test/pyproject.toml`; chưa có raw run |
+| **Google ARTEMIS** | `351ca8422f7b5b54e80a9c1ce03a222e02415b6b` (Apache 2.0) | Pin tại `e2e_test/pyproject.toml` |
 | **Firebase Packages** | Core `3.15.2`, Auth `5.7.0`, Storage `12.4.10`, Messaging `15.2.10`, Analytics `11.6.0`, Crashlytics `4.3.10`, RemoteConfig `5.5.0`, Firestore `5.6.12`, google_sign_in `6.3.0` | Exact version trong `pubspec.yaml`, trùng `pubspec.lock` |
 | **State Management** | `provider: 6.1.5+1` | MVVM Architecture Dependency Injection |
 
@@ -58,14 +58,6 @@ Tuân thủ yêu cầu bắt buộc của Handout Mục 3 & 9 về việc ghim p
 
 **Firebase bootstrap:** `lib/firebase_options.dart` do `flutterfire configure --project=longvita-8da7e --platforms=android --android-package-name=vn.edu.fpt.longvita` sinh ra, khớp `android/app/google-services.json` (vẫn giữ cho Crashlytics và Google Sign-in). `FirebaseBootstrap` khởi tạo Firebase trước khi tạo service; nếu khởi động lỗi, `StartupGate` hiện màn lỗi kèm nút Thử lại thay vì chạy tiếp. Chỉ cấu hình Android.
 
----|:---|:---|
-| **Flutter SDK** | `3.47.2` (channel stable) | `flutter --version` |
-| **Dart SDK** | `3.13.2` | Đi kèm với Flutter 3.47.2 |
-| **Android SDK Platform** | API 34 (Android 14) / Min SDK 21 | Cấu hình trong `android/app/build.gradle.kts` |
-| **Python** | `3.12+` | Dành cho Google ARTEMIS Test Suite |
-| **Google ARTEMIS** | `351ca8422f7b5b54e80a9c1ce03a222e02415b6b` (Apache 2.0) | Pin tại `e2e_test/pyproject.toml`; chưa có raw run |
-| **Firebase Packages** | Core `3.15.2`, Auth `5.7.0`, Storage `12.4.10`, Messaging `15.2.10`, Analytics `11.6.0`, Crashlytics `4.3.10`, RemoteConfig `5.5.0`, Firestore `5.6.12` | Quản lý trong `pubspec.yaml` |
-| **State Management** | `provider: ^6.1.2` | MVVM Architecture Dependency Injection |
 
 ---
 

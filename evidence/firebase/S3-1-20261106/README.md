@@ -51,7 +51,7 @@ Charlie tự đăng nhập Firebase CLI (`firebase login`) trên trình duyệt;
 flutterfire configure --project=longvita-8da7e --platforms=android --android-package-name=vn.edu.fpt.longvita --yes
 ```
 
-CLI tìm thấy app sẵn có và dùng đúng App ID `…33939d119fc3892d8e11ec`. Liệt kê theo từng nền tảng trước và sau: Android 1 app, iOS và Web không có. Lệnh liệt kê không lọc in cùng một resource Android bốn lần; `--json` cho thấy bốn bản ghi giống hệt nhau, nên đây là lỗi hiển thị của CLI, không phải app mới.
+CLI tìm thấy app sẵn có và dùng đúng App ID `…33939d119fc3892d8e11ec`. Liệt kê theo từng nền tảng trước và sau: Android 1 app, iOS và Web không có. Lệnh liệt kê không lọc in cùng một resource Android bốn lần; `--json` cho thấy bốn bản ghi giống hệt nhau, Danh sách theo từng nền tảng và App ID trước/sau là căn cứ xác nhận app được dùng lại.
 
 **Soát diff sau configure:**
 
@@ -96,3 +96,11 @@ Sau đó đã cài lại APK bình thường và kiểm app mở vào Home.
 - Trường hợp thiếu `google-services.json` và lỗi tạo service được chứng minh bằng widget/unit test, không chạy native.
 - Configure chỉ chạy cho Android, đúng như app hiện có; không có cấu hình iOS hay Web.
 - Không chạy lại rules, ARTEMIS, TalkBack hay push thật: thay đổi chỉ chạm bootstrap và phiên bản package.
+
+## PM review ngày 06/11/2026
+
+PM kiểm độc lập mã và cấu hình tại `0dcdc1a`. `flutter pub get --enforce-lockfile` thoát 0. Cả 18 version ghim khớp lockfile, blob lockfile giữ nguyên so với `008a1a9`. Năm trường Firebase options khớp `google-services.json`. Ba Android OAuth client thêm vào khớp SHA-1 của S3-2. Các giá trị config còn lại giữ nguyên.
+
+Lệnh liệt kê app chỉ đọc trên Firebase CLI trả đúng một app Android với App ID dự kiến, iOS 0 và Web 0. Lịch sử configure trước/sau do Dev cung cấp. PM đọc APK đã build bằng `aapt2` và xác nhận package, compile SDK 36, target SDK 36 và min SDK 24.
+
+Analyzer sạch. Suite Flutter **336/336 đạt**, gồm ca lỗi tạo service và thử lại. PM xem ảnh màn lỗi và ảnh Home sau khi thử lại. Lượt chạy thiết bị và lỗi giả lập trong QA host là bằng chứng Dev. Hai thư mục QA phát sinh từ lần PM chạy suite được giữ local.
