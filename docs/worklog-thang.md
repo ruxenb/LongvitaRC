@@ -1,20 +1,40 @@
 # Worklog — Thắng VLQ
 
 > **Vai trò:** Technical Architect & Co-Lead  
-> **Ngày cập nhật:** 05/11/2026
+> **Ngày cập nhật:** 06/11/2026
 > **Nhánh kiểm tra:** `main`  
 > **Mục đích:** Ghi bằng chứng hoàn thành, phần còn thiếu, lỗi đã phát hiện và điều kiện tiếp tục cho các task do Thắng phụ trách.
 
 ## 1. Tóm tắt trạng thái
 
 - Tổng số task của Thắng: **28**.
-- Đã hoàn thành và có bằng chứng: **7/28 (25%)**.
+- Đã hoàn thành và có bằng chứng: **8/28 (29%)**.
 - Hoàn thành mới ngày 04/11: **S0-3-VLQ** và **S3-6**.
 - Không còn blocker Android SDK/ADB/emulator trên máy Thắng.
 - Tooling hỗ trợ Firebase, ARTEMIS, review, security scan và video được ghi tại [`docs/thang-tooling-setup-20261104.md`](thang-tooling-setup-20261104.md).
 - Nhánh `Thang` đã merge vào `main` tại `90d9fd0`; `origin/Thang` không còn commit riêng chưa có trên `main` tại thời điểm kiểm tra.
 - Sau merge: `flutter analyze lib --no-pub` sạch và **334/334 Flutter tests pass**. Analyzer toàn cây bị ảnh hưởng bởi Dart template bên trong `test/firestore/node_modules/firebase-tools`, không phải source `lib/`.
 - Các task test/review/report/nộp bài chưa hoàn thành vì còn phụ thuộc tính năng, Firebase runtime, bằng chứng ARTEMIS hoặc sản phẩm của thành viên khác.
+
+### S5-10 — Hoàn thành có giới hạn ngày 06/11/2026
+
+Trên AVD `Longvita_API_36`, project `longvita-8da7e`:
+
+- Remote Config lần đầu được cấu hình trên Console với bốn parameter khớp
+  in-app defaults; hai giá trị nhìn thấy được đã đổi live (5→6, Bật→Tắt), app
+  fetch/activate không rebuild và sau đó hoàn nguyên thành công.
+- Analytics DebugView nhận debug device; `logout` được tạo khi emulator offline,
+  sau khi bật mạng và đăng nhập lại Console nhận cả `logout` và `login`.
+- Crashlytics nhận fatal test issue; app mở lại đúng `ROLE: ADMIN`. Auth offline
+  được app xử lý không crash và Console nhận non-fatal `AuthFailureKind.network`,
+  `network_error`, `ApiException: 7`, reason `Google sign-in failed (network)`.
+- Kết hợp evidence 04–05/11, sáu dịch vụ đều có ít nhất một manual failure case.
+  Storage chỉ đạt trên Firebase Storage Emulator; project Spark chưa được tuyên
+  bố Storage cloud pass. Firestore dùng chung vẫn thiếu `recipes`, nên plan mới
+  và export/upload của tài khoản Thắng còn bị chặn bởi dữ liệu nghiệp vụ.
+
+Evidence: [`evidence/failure-cases/S5-10-THANG-20261106/`](../evidence/failure-cases/S5-10-THANG-20261106/).
+S5-10 được chuyển sang **Đã hoàn thành có giới hạn**.
 
 ## 2. Task đã hoàn thành
 
@@ -197,7 +217,8 @@ text files có prefix đường dẫn máy cũ; đã thay prefix bằng `<user-h
 
 ## 6. Các task chưa thể làm sớm
 
-- **S5-10:** đã bắt đầu matrix; cần chạy thủ công phần cloud/runtime còn thiếu.
+- **S5-10:** đã hoàn thành có giới hạn; Storage là Emulator theo Spark/DEC-01,
+  không phải bằng chứng Storage cloud production.
 - **S6-1:** cần flow, accessibility, instrumentation và failure testing hoàn tất.
 - **S6-12:** cần ARTEMIS chỉ ra lỗi thuộc phạm vi Thắng.
 - **S7-1-VLQ đến S7-4:** PR #6 đã có 5 findings và 1 fix commit trong hồ sơ review,
