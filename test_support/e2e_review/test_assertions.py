@@ -1,8 +1,10 @@
 """Deterministic checks of E2E assertions, not ARTEMIS/device runs.
 
-Negative observations represent the false-pass risks from PR7-CR-08..11.
+Negative observations represent the false-pass risks from PR7-CR-08..11; the
+account-state setup checks cover PM-S64-01..03.
 No daemon, account, emulator, Console edit or network request is used here.
 """
+import os
 import sys
 import json
 import urllib.error
@@ -18,18 +20,136 @@ import test_export as export_cases
 import test_profile as profile_cases
 
 
-def observe(*steps):
+PLACEHOLDER_ACCOUNT = "test.account@example.com"
+
+
+@pytest.fixture(autouse=True)
+def placeholder_account(monkeypatch):
+    """Every check runs with a placeholder account, whatever the local .env says."""
+    monkeypatch.setattr(harness, "TEST_ACCOUNT", PLACEHOLDER_ACCOUNT)
+    # An older test_auth bound the value at import time.
+    monkeypatch.setattr(auth_cases, "TEST_ACCOUNT", PLACEHOLDER_ACCOUNT, raising=False)
+
+
+def observe(*steps, calls=None):
     async def run(*_args, **_kwargs):
+        if calls is not None:
+            calls.append(True)
         return harness.Observation(list(steps))
     return run
 
 
+class FakeDevice:
+    """Scripted screens for the account-state setup, with a fake clock.
+
+    Each read of the screen returns the next set of labels; the last set
+    repeats. Taps and adb commands are only recorded.
+    """
+
+    def __init__(self, monkeypatch, *screens):
+        self.screens = [list(s) for s in screens]
+        self.reads = 0
+        self.now = 0.0
+        self.commands = []
+        monkeypatch.setattr(harness, "_nodes", self.nodes)
+        monkeypatch.setattr(harness, "_adb", self.adb)
+        monkeypatch.setattr(harness, "time", SimpleNamespace(time=self.time, sleep=self.sleep))
+
+    def nodes(self):
+        screen = self.screens[min(self.reads, len(self.screens) - 1)]
+        self.reads += 1
+        return [(label, (0, 0)) for label in screen]
+
+    def adb(self, *args):
+        self.commands.append(args)
+
+    def time(self):
+        return self.now
+
+    def sleep(self, seconds):
+        self.now += seconds
+
+
+SIGN_IN = ["Longvita", "Thực đơn trường thọ cho cả tuần", "Đăng nhập bằng Google"]
+ANR = ["Google Play services isn't responding", "Close app", "Wait"]
+
+
+def home(account):
+    return ["Longvita Dashboard", "Hồ sơ", f"Test User\n{account}\nROLE: USER"]
+
+
+def raises_setup_error(error):
+    """The setup failed as setup, not as an assertion on what the agent saw."""
+    assert type(error).__name__ == "SetupError", type(error).__name__
+    assert "precondition" in str(error)
+
+
+# PM-S64-01: being signed in is not enough; it must be the configured account.
+
+def test_signed_in_setup_rejects_another_account(monkeypatch):
+    FakeDevice(monkeypatch, home("someone.else@example.com"))
+    with pytest.raises(Exception) as caught:
+        harness.ensure_signed_in()
+    raises_setup_error(caught.value)
+    assert "someone.else" not in str(caught.value)
+
+
+def test_signed_in_setup_accepts_the_configured_account(monkeypatch):
+    device = FakeDevice(monkeypatch, home(PLACEHOLDER_ACCOUNT))
+    harness.ensure_signed_in()
+    assert ("shell", "am", "force-stop", harness.APP_PACKAGE) in device.commands
+
+
+# PM-S64-02: a sign-in screen seen for a moment is not proof of signed out.
+
+def test_sign_in_screen_that_gives_way_to_a_system_dialog_is_not_signed_out(monkeypatch):
+    FakeDevice(monkeypatch, SIGN_IN, ANR)
+    with pytest.raises(Exception) as caught:
+        harness._open_app()
+    raises_setup_error(caught.value)
+
+
+def test_signed_out_setup_stops_on_a_system_dialog(monkeypatch):
+    FakeDevice(monkeypatch, SIGN_IN, ANR)
+    with pytest.raises(Exception) as caught:
+        harness.ensure_signed_out()
+    raises_setup_error(caught.value)
+
+
+def test_sign_in_screen_that_stays_is_signed_out(monkeypatch):
+    FakeDevice(monkeypatch, SIGN_IN)
+    assert harness._open_app() == harness.SIGN_IN_BUTTON
+
+
+def test_sign_in_screen_before_a_restored_session_is_signed_in(monkeypatch):
+    FakeDevice(monkeypatch, SIGN_IN, SIGN_IN, home(PLACEHOLDER_ACCOUNT))
+    assert harness._open_app() == harness.HOME_TITLE
+
+
+# PM-S64-03: a missing account must not make a negative check pass early.
+
+async def test_missing_account_is_a_setup_error_before_any_replay(monkeypatch):
+    monkeypatch.setattr(harness, "TEST_ACCOUNT", "")
+    monkeypatch.setattr(auth_cases, "TEST_ACCOUNT", "", raising=False)
+    calls = []
+    with pytest.raises(Exception) as caught:
+        await auth_cases.test_tc01_sign_in_with_google(observe(
+            "Longvita Dashboard, ROLE: USER.", calls=calls,
+        ))
+    raises_setup_error(caught.value)
+    assert calls == []
+
+
 async def test_sign_in_does_not_accept_role_seen_before_the_final_screen():
+    calls = []
     with pytest.raises(AssertionError):
         await auth_cases.test_tc01_sign_in_with_google(observe(
             "Longvita Dashboard, ROLE: USER before sign-out.",
             "The account picker was cancelled; Đăng nhập bằng Google is visible.",
+            calls=calls,
         ))
+    # Failed on the replay, not on configuration.
+    assert calls == [True]
 
 
 async def test_cancel_does_not_accept_a_notice_seen_before_back():
@@ -301,3 +421,51 @@ async def test_missing_replay_cannot_fall_back_to_final_output(monkeypatch, tmp_
     run = harness.run_case.__wrapped__(Client(), request)
     with pytest.raises(AssertionError, match="no action-scoped replay observations"):
         await run("fixture goal", "fixture expectation")
+
+
+# PM-S64-03 (setup phase): run the real TC-01 in a separate pytest process
+# with no account. The harness is loaded fresh there and reads its settings
+# from the environment: adb is a spy script and the daemon URL a closed port,
+# so any device step or daemon call would show.
+
+def test_missing_account_stops_tc01_in_setup_without_device_or_agent(pytester, monkeypatch, tmp_path):
+    e2e = Path(harness.__file__).parent
+    adb_log = tmp_path / "adb-calls.txt"
+    if os.name == "nt":
+        adb = tmp_path / "adb.bat"
+        adb.write_text(f'@echo %* >> "{adb_log}"\r\n', encoding="utf-8")
+    else:
+        adb = tmp_path / "adb"
+        adb.write_text(f'#!/bin/sh\necho "$@" >> "{adb_log}"\n', encoding="utf-8")
+        adb.chmod(0o755)
+    monkeypatch.setenv("ARTEMIS_TEST_ACCOUNT", "")
+    monkeypatch.setenv("ADB", str(adb))
+    monkeypatch.setenv("ARTEMIS_BASE_URL", "http://127.0.0.1:9")
+
+    result = pytester.runpytest_subprocess(
+        f"{e2e / 'test_auth.py'}::test_tc01_sign_in_with_google",
+        f"--rootdir={e2e}", "-p", "no:cacheprovider",
+    )
+
+    result.assert_outcomes(errors=1)
+    output = result.stdout.str()
+    assert "SetupError" in output and "ARTEMIS_TEST_ACCOUNT" in output
+    assert "NetworkError" not in output, "the daemon was contacted"
+    assert not adb_log.exists(), adb_log.read_text() if adb_log.exists() else ""
+
+
+def test_configured_account_lets_tc01_reach_the_daemon(pytester, monkeypatch, tmp_path):
+    """Control: with an account the check passes and setup goes on to the daemon."""
+    e2e = Path(harness.__file__).parent
+    monkeypatch.setenv("ARTEMIS_TEST_ACCOUNT", PLACEHOLDER_ACCOUNT)
+    monkeypatch.setenv("ARTEMIS_BASE_URL", "http://127.0.0.1:9")
+
+    result = pytester.runpytest_subprocess(
+        f"{e2e / 'test_auth.py'}::test_tc01_sign_in_with_google",
+        f"--rootdir={e2e}", "-p", "no:cacheprovider",
+    )
+
+    result.assert_outcomes(errors=1)
+    output = result.stdout.str()
+    assert "NetworkError" in output
+    assert "SetupError" not in output

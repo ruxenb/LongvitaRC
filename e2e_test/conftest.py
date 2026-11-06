@@ -84,8 +84,11 @@ def _step_summaries(task_id: str) -> list[str]:
 
 
 @pytest.fixture
-async def artemis():
-    """A client whose daemon has answered, so a dead daemon fails in setup."""
+async def artemis(case_config):
+    """A client whose daemon has answered, so a dead daemon fails in setup.
+
+    Depends on case_config, so a case's configuration is checked first.
+    """
     client = ArtemisClient(BASE_URL, device_serial=DEVICE_SERIAL, default_profile=PROFILE)
     await client.health()
     return client
@@ -104,13 +107,18 @@ def _screen_xml() -> str:
     task, and a dump made meanwhile is killed, so it is retried for a while.
     """
     for attempt in range(10):
+        # A dump can exit 0 without writing (for example "could not get idle
+        # state"); removing the old file first keeps a stale screen from being read.
         try:
-            _adb("shell", "uiautomator", "dump", "/sdcard/artemis-screen.xml")
-            break
+            _adb("shell", "rm", "-f", "/sdcard/artemis-screen.xml")
+            dumped = _adb("shell", "uiautomator", "dump", "/sdcard/artemis-screen.xml")
+            if b"dumped to" in dumped.stdout:
+                break
         except subprocess.CalledProcessError:
-            if attempt == 9:
-                raise
-            time.sleep(2)
+            pass
+        if attempt == 9:
+            raise RuntimeError("uiautomator could not dump the screen")
+        time.sleep(2)
     return _adb("exec-out", "cat", "/sdcard/artemis-screen.xml").stdout.decode("utf-8")
 
 
@@ -135,6 +143,170 @@ def _stop_app() -> None:
     _adb("shell", "am", "force-stop", APP_PACKAGE)
 
 
+# The Google account a case signs in with, from the git-ignored e2e_test/.env.
+# Required when the device has more than one account.
+TEST_ACCOUNT = os.getenv("ARTEMIS_TEST_ACCOUNT", "")
+SIGN_IN_BUTTON = "Đăng nhập bằng Google"
+HOME_TITLE = "Longvita Dashboard"
+
+
+def _nodes() -> list[tuple[str, tuple[int, int]]]:
+    """Each label on screen with the centre of its bounds."""
+    nodes = []
+    for match in re.finditer(r"<node [^>]*>", _screen_xml()):
+        node = match.group(0)
+        label = re.search(r' text="([^"]*)"', node).group(1) or re.search(
+            r'content-desc="([^"]*)"', node).group(1)
+        x1, y1, x2, y2 = map(int, re.findall(r"\d+", re.search(r'bounds="([^"]*)"', node).group(1)))
+        if label:
+            nodes.append((html.unescape(label), ((x1 + x2) // 2, (y1 + y2) // 2)))
+    return nodes
+
+
+class SetupError(Exception):
+    """The device could not be put in a case's starting state.
+
+    Not an AssertionError: it is raised in the fixture's setup, so pytest
+    reports an error before the agent runs, not a failed agent run.
+    """
+
+
+# Poll interval and how long a sign-in screen must stay before it counts as
+# signed out. Module values, so offline tests can run the logic without delay.
+POLL_SECONDS = 1.0
+RESTORE_SECONDS = 8.0
+
+
+def configured_account() -> str:
+    """ARTEMIS_TEST_ACCOUNT, or a setup error when it is not configured."""
+    if not TEST_ACCOUNT:
+        raise SetupError("precondition: set ARTEMIS_TEST_ACCOUNT in e2e_test/.env")
+    return TEST_ACCOUNT
+
+
+def _labels() -> list[str]:
+    return [label for label, _ in _nodes()]
+
+
+def _first_line_starts(labels: list[str], wanted: str) -> bool:
+    return any(label.split("\n")[0].startswith(wanted) for label in labels)
+
+
+def _wait_for(*labels: str, timeout: float = 40) -> str:
+    """Waits until a label starting with one of `labels` is on screen."""
+    deadline = time.time() + timeout
+    while time.time() < deadline:
+        seen = _labels()
+        for wanted in labels:
+            if _first_line_starts(seen, wanted):
+                return wanted
+        time.sleep(POLL_SECONDS)
+    raise SetupError(f"precondition: none of {labels} appeared")
+
+
+def _tap(label: str, timeout: float = 10) -> None:
+    deadline = time.time() + timeout
+    while time.time() < deadline:
+        for text, (x, y) in _nodes():
+            if text.split("\n")[0] == label:
+                _adb("shell", "input", "tap", str(x), str(y))
+                time.sleep(1.5)
+                return
+        time.sleep(POLL_SECONDS)
+    raise SetupError(f"precondition: {label!r} is not on screen")
+
+
+def _open_app() -> str:
+    """Starts the app and returns the screen it settles on.
+
+    The sign-in screen can show for a moment before a saved session is
+    restored. Signed out is only reported when the sign-in screen is still
+    there after RESTORE_SECONDS; any other screen (a system dialog, an
+    unknown page) is a setup error.
+    """
+    _stop_app()
+    _adb("shell", "am", "start", "-n", f"{APP_PACKAGE}/.MainActivity")
+    if _wait_for(SIGN_IN_BUTTON, HOME_TITLE) == HOME_TITLE:
+        return HOME_TITLE
+    deadline = time.time() + RESTORE_SECONDS
+    while time.time() < deadline:
+        if _first_line_starts(_labels(), HOME_TITLE):
+            return HOME_TITLE
+        time.sleep(POLL_SECONDS)
+    final = _labels()
+    if _first_line_starts(final, HOME_TITLE):
+        return HOME_TITLE
+    if _first_line_starts(final, SIGN_IN_BUTTON):
+        return SIGN_IN_BUTTON
+    raise SetupError("precondition: the sign-in screen did not stay, and the app is not on its home screen")
+
+
+def _home_shows_test_account() -> bool:
+    """Whether the signed-in identity on the home screen is TEST_ACCOUNT."""
+    account = configured_account().lower()
+    return any(account in label.lower().split("\n") for label in _labels())
+
+
+def ensure_signed_out() -> None:
+    """Starts a case on the sign-in screen, through the app's own sign-out."""
+    if _open_app() == HOME_TITLE:
+        _tap("Hồ sơ")
+        _wait_for("Đăng xuất")
+        _tap("Đăng xuất")
+        _tap("Đồng ý")
+        _wait_for(SIGN_IN_BUTTON)
+    if _open_app() != SIGN_IN_BUTTON:
+        raise SetupError("precondition: still signed in")
+    _stop_app()
+
+
+def ensure_signed_in() -> None:
+    """Starts a case signed in as TEST_ACCOUNT, picked in Google's account picker.
+
+    A session of another account is a setup error; the message does not name it.
+    """
+    account = configured_account()
+    if _open_app() == SIGN_IN_BUTTON:
+        _tap(SIGN_IN_BUTTON)
+        _wait_for(account)
+        _tap(account)
+        _wait_for(HOME_TITLE, timeout=60)
+    if _open_app() != HOME_TITLE:
+        raise SetupError("precondition: not signed in")
+    if not _home_shows_test_account():
+        raise SetupError("precondition: signed in with an account other than ARTEMIS_TEST_ACCOUNT")
+    _stop_app()
+
+
+def _set_up_account_state(request) -> dict | None:
+    """Puts the device in the state the case's marker asks for, and reports it."""
+    if request.node.get_closest_marker("signed_out"):
+        state, ensure = "signed_out", ensure_signed_out
+    elif request.node.get_closest_marker("signed_in"):
+        state, ensure = "signed_in", ensure_signed_in
+    else:
+        return None
+    started = time.time()
+    ensure()
+    return {
+        "state": state,
+        "verified_by": "uiautomator after reopening the app",
+        "account_checked": state == "signed_in",
+        "seconds": round(time.time() - started, 1),
+    }
+
+
+@pytest.fixture
+def case_config(request):
+    """Checks a case's configuration before the daemon or the device is used.
+
+    The artemis fixture depends on it, so a missing account is a setup error
+    before the daemon is contacted, with no device action and no agent run.
+    """
+    if request.node.get_closest_marker("needs_account") or request.node.get_closest_marker("signed_in"):
+        configured_account()
+
+
 @pytest.fixture
 def run_case(artemis, request):
     """Runs one instruction, keeps the raw result, and fails unless it succeeded.
@@ -144,6 +316,10 @@ def run_case(artemis, request):
 
     Returns an `Observation`, for assertions on real values.
     """
+
+    # Set the account state during setup, so no case depends on the one before
+    # and a failure here is a setup error, not a failed agent run.
+    precondition = _set_up_account_state(request)
 
     async def run(goal: str, expected_output: str) -> Observation:
         if request.node.get_closest_marker("keep_app") is None:
@@ -170,6 +346,7 @@ def run_case(artemis, request):
         EVIDENCE_DIR.mkdir(parents=True, exist_ok=True)
         record = {
             "test": request.node.nodeid,
+            "precondition": precondition,
             "profile": PROFILE,
             "model": selected_model,
             "task_id": result.task_id,

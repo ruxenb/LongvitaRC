@@ -1,10 +1,15 @@
 """S6-4: sign-in through the native Google picker, cancel and sign-out.
 
-Precondition for each test: the test Google account is on the device. Each test
-states the app state it starts from and reports what it saw.
+Precondition: the test Google account (ARTEMIS_TEST_ACCOUNT) is on the device.
+Each case sets its own starting state through a marker (signed_out or
+signed_in), so the cases do not depend on the order they run in.
 """
 
 import re
+
+import pytest
+
+import conftest as harness
 
 # Signs of Android's launcher in the agent's description, as opposed to the app.
 LAUNCHER = re.compile(r"launcher|device'?s home screen|app icons|app drawer|\bdock\b", re.I)
@@ -12,14 +17,17 @@ LAUNCHER = re.compile(r"launcher|device'?s home screen|app icons|app drawer|\bdo
 APP_HOME = re.compile(r"Longvita Dashboard|Dashbo|ROLE: USER|Hành Động Nhanh|Tạo thực đơn mẫu ngay|Hồ sơ")
 
 
+@pytest.mark.needs_account
+@pytest.mark.signed_out
 async def test_tc01_sign_in_with_google(run_case):
     """TC-01. The bottom navigation in the plan waits for the S01 screen."""
+    # needs_account: a missing account is a setup error before any device step.
+    account = harness.configured_account()
     output = await run_case(
-        "Open the Longvita app. If the home screen is showing, sign out first from "
-        "the profile icon. On the sign-in screen tap 'Đăng nhập bằng Google'. In the "
-        "native Google account picker choose the test account, and wait for the app "
-        "to leave the sign-in screen. Then wait 3 seconds and read the screen title "
-        "and the role label on the home screen.",
+        "Open the Longvita app; it opens on the sign-in screen. Tap 'Đăng nhập bằng "
+        f"Google'. In the native Google account picker choose the account {account}, "
+        "and wait for the app to leave the sign-in screen. Then wait 3 seconds and "
+        "read the screen title and the role label on the home screen.",
         "The title of the screen shown after signing in, and the role text on it.",
     )
 
@@ -28,9 +36,10 @@ async def test_tc01_sign_in_with_google(run_case):
     assert "USER" in output.last.upper()
 
 
+@pytest.mark.signed_out
 async def test_tc01b_cancelled_sign_in_stays_on_sign_in(run_case):
     output = await run_case(
-        "Open the Longvita app on the sign-in screen, signing out first if needed. "
+        "Open the Longvita app; it opens on the sign-in screen. "
         "Tap 'Đăng nhập bằng Google'. When the native account picker opens, press the "
         "Android Back button instead of choosing an account. Then wait 3 seconds for "
         "the sign-in screen to settle, and read the notice text and the button label.",
@@ -42,9 +51,10 @@ async def test_tc01b_cancelled_sign_in_stays_on_sign_in(run_case):
     assert "Đăng nhập bằng Google" in after_back
 
 
+@pytest.mark.signed_in
 async def test_tc11_sign_out_cannot_return_with_back(run_case):
     output = await run_case(
-        "Open the Longvita app signed in, and open 'Hồ sơ'. Tap 'Đăng xuất'. In the "
+        "Open the Longvita app; it opens signed in on the home screen. Open 'Hồ sơ'. Tap 'Đăng xuất'. In the "
         "confirmation dialog tap 'Đồng ý'. When the sign-in screen shows, press the "
         "Android Back button once.",
         "Whether the sign-in screen appeared after confirming, and what is on screen "
