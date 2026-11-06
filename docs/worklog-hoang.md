@@ -35,3 +35,13 @@
 - SHA-1 and SHA-256 saved in docs/hoang-android-sha.md.
 - Compared only Android OAuth SHA-1 with the committed android/app/google-services.json: **mismatch**. Current config may be stale, so team must verify Firebase Console before changing it. No production Firebase changes performed.
 - android/app/build.gradle.kts still signs release with debug signing configuration; requires team-approved release signing plan before distribution.
+
+## 2026-11-06 — Sync main, portable environment and independent QA
+- Fast-forwarded `main` from `96c9f57` to `ec576be` (53 upstream commits) in `D:\PRM393\LongvitaRC`. Preserved all untracked Charlie UI evidence folders.
+- Verified PR #10 already merged on 2026-11-04. Formal completion of the 26 tasks still depends on device, Figma, Firebase and team acceptance; did not edit the master status tracker.
+- Repaired `scripts/project-env.ps1` to work with existing `D:\Tools` while retaining the team's original `T:\` paths. Dot-source smoke test resolves Flutter, Dart, ADB, Java, FlutterFire and Firebase CLI.
+- Ran Flutter 3.47.2/Dart 3.13.2: `flutter pub get` success, `flutter analyze --no-pub` clean, **337/337 Flutter tests pass**.
+- Firestore Emulator with demo-longvita: **22/22 Firestore rules tests pass** using the local shared npm dependencies. ARTEMIS Python scripts compile successfully but were **not run against a device**.
+- Android doctor remains blocked by missing SDK platform packages; ADB shows no device. Did not accept Android SDK licenses or modify production Firebase/OAuth settings.
+- Created `docs/hoang-verification-20261106.md` with current evidence/blockers.
+- Commit `821daf4`, pushed `fix/hoang-environment-qa-20261106`, opened PR #15: https://github.com/ruxenb/LongvitaRC/pull/15 for review. No merge performed.
