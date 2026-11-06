@@ -35,3 +35,11 @@
 - SHA-1 and SHA-256 saved in docs/hoang-android-sha.md.
 - Compared only Android OAuth SHA-1 with the committed android/app/google-services.json: **mismatch**. Current config may be stale, so team must verify Firebase Console before changing it. No production Firebase changes performed.
 - android/app/build.gradle.kts still signs release with debug signing configuration; requires team-approved release signing plan before distribution.
+
+## 2026-11-06 — Recipe-source intake, registered debug SHA, and publication approval
+- User supplied Firebase Console evidence for `longvita-8da7e`/`vn.edu.fpt.longvita` showing existing ASUS debug SHA-1 and SHA-256 registered; corrected previous assumptions in `docs/hoang-android-sha.md` and `docs/hoang-firestore-schema.md`. The checked-in OAuth fingerprint comparison only indicated potentially stale config; Android sign-in still needs runtime validation.
+- Reviewed the active recipe/ingredient models, Firestore rules, local project, prior UX repository, accessible Drive and related email. No reviewed import-ready recipe catalog or explicit batch publication approval was located. No production collection read/write was performed.
+- Identified official potential recipe and food composition sources (Valter Longo Foundation, Vietnam National Institute of Nutrition lookup, USDA FoodData Central). None implies team-approved exact recipe data.
+- Added `docs/hoang-recipe-approval-20261106.md` with exact current Firestore field mapping, per-serving nutrition provenance, reviewer checklist, rights and source gates, and no production dataset.
+- Implemented a read-only `scripts/validate-recipe-intake.cjs` with batch hash and explicit approval gate; seven synthetic test-only unit scenarios in `test/firestore/recipe_intake.test.cjs` all pass. No data seeds or Firebase writers were added.
+- Opened approval request https://github.com/ruxenb/LongvitaRC/issues/16 to obtain approved recipe IDs, citations, numerical values and permission for the exact batch and writer role. Until team responds, collection writes remain blocked.
