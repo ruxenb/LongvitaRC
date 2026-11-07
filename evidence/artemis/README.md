@@ -1,5 +1,25 @@
 # ARTEMIS — chạy thật S6-4, S6-7, 03/11/2026
 
+## TC-11 chạy lại trên máy Thắng, 07/11/2026
+
+TC-11 được chạy lại bằng ARTEMIS thật trên `Longvita_API_36`
+(`emulator-5554`) với profile Flash và model `gemini-3.5-flash-lite`.
+
+- Pytest: **1 passed in 77.88s**.
+- ARTEMIS task: `9a885faf-776a-457a-8cc4-2cdfb007b93d`.
+- Precondition `signed_in` được fixture xác minh bằng UIAutomator sau khi mở lại
+  ứng dụng; tài khoản đang đăng nhập được kiểm tra trước khi agent chạy.
+- Sáu replay steps ghi nhận Dashboard → Hồ sơ → Đăng xuất → Đồng ý → Sign-in →
+  Android Back. Bước cuối thấy launcher với các app icons, không quay lại
+  Dashboard/protected route.
+- Raw record được nối vào `raw/runs.jsonl`; `status=completed`, không có
+  `error` hoặc `observation_error`.
+
+Lượt ngay trước đó (`df18f86f-6cdc-45e4-890c-d4e530a285a5`) fail trước bước UI
+vì model `gemini-3.8-flash` timeout sau 180 giây và có 0 replay steps. Daemon
+được đưa về model Flash-Lite đã dùng trong đợt chạy thành công trước; lịch sử
+failed được giữ nguyên, không xóa khỏi raw evidence.
+
 Bộ test `e2e_test/` chạy bằng `artemis-client` ghim commit `351ca84` với daemon ARTEMIS thật cùng commit, trên AVD `LocalMate_API_35` (Android 15, 320×640), app debug của nhánh `feature/charlie-artemis-01`. Đây là lần chạy của Charlie, chưa phải lần chạy chính thức S6-9 của Thái An.
 
 ## Cấu hình daemon

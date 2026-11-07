@@ -8,8 +8,9 @@
 ## 1. Tóm tắt trạng thái
 
 - Tổng số task của Thắng: **28**.
-- Đã hoàn thành và có bằng chứng: **11/28 (39%)**.
-- Hoàn thành mới ngày 07/11: **S7-2-VLQ**, **S7-3-VLQ** và **S8-1**.
+- Đã hoàn thành và có bằng chứng: **12/28 (43%)**.
+- Hoàn thành mới ngày 07/11: **S7-2-VLQ**, **S7-3-VLQ**, **S8-1** và
+  **S9-5-VLQ**.
 - Hoàn thành mới ngày 04/11: **S0-3-VLQ** và **S3-6**.
 - Không còn blocker Android SDK/ADB/emulator trên máy Thắng.
 - Tooling hỗ trợ Firebase, ARTEMIS, review, security scan và video được ghi tại [`docs/thang-tooling-setup-20261104.md`](thang-tooling-setup-20261104.md).
@@ -170,7 +171,8 @@ Evidence khử PII:
 - Đã soạn kịch bản clip S8-14 tại
   [`docs/report-drafts/s8-14-thang-clip-script.md`](report-drafts/s8-14-thang-clip-script.md);
   chưa quay hoặc ghép video cuối.
-- Kịch bản S9-5-VLQ vẫn là phần chuẩn bị, chưa được tính hoàn thành.
+- S9-5-VLQ đã có bài nói hoàn chỉnh để Thắng học, kèm Remote Config live và
+  TC-11 ARTEMIS chạy thật; task được tính hoàn thành.
 
 ## 4. Firebase: trạng thái và phần còn thiếu
 
@@ -245,3 +247,16 @@ text files có prefix đường dẫn máy cũ; đã thay prefix bằng `<user-h
 - Analyzer sạch, 270/270 Flutter tests pass và 7 ARTEMIS cases collect được.
 - Hai commit đã được đưa vào `main` qua merge nhánh `Thang` ngày 04/11/2026.
 - Không thêm API key, service account, keystore hoặc secret.
+
+## 8. TC-11 ARTEMIS chạy lại ngày 07/11/2026
+
+- Emulator: `Longvita_API_36`, serial `emulator-5554`.
+- Profile/model: Flash / `gemini-3.5-flash-lite`.
+- Pytest: **1 passed in 77.88s**.
+- ARTEMIS task: `9a885faf-776a-457a-8cc4-2cdfb007b93d`.
+- Sáu replay steps xác nhận đăng xuất về Sign-in và Android Back ra launcher,
+  không quay lại Dashboard.
+- Lượt model `gemini-3.8-flash` trước đó timeout 180 giây trước thao tác UI; raw
+  failed record được giữ để phân biệt lỗi hạ tầng/model với lỗi ứng dụng.
+- S9-5-VLQ hoàn thành: bài nói 5 phút đã soạn theo source/evidence thật, phần
+  Remote Config và ARTEMIS đều có kết quả kiểm chứng để Thắng tự học và luyện.

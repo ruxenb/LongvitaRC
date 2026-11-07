@@ -2,7 +2,7 @@
 
 > **Thành viên:** Thắng (Thắng VLQ)  
 > **Vai trò:** **Technical Architect & Co-Lead** (MVVM Skeleton, DI & Router, Hồ Sơ Tài Liệu docs/, Feature Freeze, Tổng Hợp Report, Slides, Video, Hỗ Trợ Leader Nộp Bài)  
-> **Tổng task:** 28 tasks | **Đã hoàn thành:** 11/28 (39%)
+> **Tổng task:** 28 tasks | **Đã hoàn thành:** 12/28 (43%)
 
 ---
 
@@ -54,5 +54,5 @@
 | **S9-2** | 9. Nộp bài | Đối chiếu Project ID trên các ảnh chụp console với file `google-services.json` (bắt buộc phải trùng khớp) | Charlie | S8-5 | Khớp project ID | Mục 11 | Cao | 4 | | Chưa bắt đầu | Tiêu chí chính chủ |
 | **S9-3** | 9. Nộp bài | Mở repo, báo cáo PDF, slide PDF, video link bằng cửa sổ ẩn danh (incognito); sửa quyền truy cập nếu bị chặn | — | S8-16 | Mở thành công cả 4 | Access rule | Cao | 4 | | Chưa bắt đầu | Tránh điểm 0 |
 | **S9-4** | 9. Nộp bài | Kiểm tra lịch sử Git: Commit rải đều theo thời gian, đúng thứ tự các giai đoạn; đạt số commit/ngày tối thiểu | — | S8-16 | `git log` đạt chuẩn | Mục 11 | Cao | 4 | | Đang làm | Audit giữa kỳ ghi 2/55/14 commit theo ngày; chờ ngưỡng giảng viên và lịch sử cuối |
-| **S9-5-VLQ** | 9. Nộp bài | Luyện vấn đáp 5 phút: chạy 1 test ARTEMIS, đổi 1 giá trị Remote Config live, giải thích 1 ViewModel và 1 review | — | S8-16 | Sẵn sàng vấn đáp | Mục 11 | Cao | 4 | | Đang làm | 06/11 đã đổi 2 giá trị Remote Config live và hoàn nguyên; còn chạy 1 test ARTEMIS và luyện phần ViewModel/review đủ 5 phút |
+| **S9-5-VLQ** | 9. Nộp bài | Luyện vấn đáp 5 phút: chạy 1 test ARTEMIS, đổi 1 giá trị Remote Config live, giải thích 1 ViewModel và 1 review | — | S8-16 | Sẵn sàng vấn đáp | Mục 11 | Cao | 4 | | Đã hoàn thành | Bài nói 5 phút đã soạn đầy đủ; RC live đổi/hoàn nguyên 06/11; TC-11 ARTEMIS đạt 1 pass với 6 replay steps ngày 07/11; sẵn sàng để Thắng học và luyện |
 | **S9-6** | 9. Nộp bài | Nộp bài chính thức: Điền link repo GitHub, nộp Report PDF, Slide PDF, link video demo | — | S9-1..S9-4 | Đã nộp thành công | — | Cao | 4 | | Chưa bắt đầu | Hoàn tất môn học |
