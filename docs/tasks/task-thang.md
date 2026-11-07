@@ -2,7 +2,7 @@
 
 > **Thành viên:** Thắng (Thắng VLQ)  
 > **Vai trò:** **Technical Architect & Co-Lead** (MVVM Skeleton, DI & Router, Hồ Sơ Tài Liệu docs/, Feature Freeze, Tổng Hợp Report, Slides, Video, Hỗ Trợ Leader Nộp Bài)  
-> **Tổng task:** 28 tasks | **Đã hoàn thành:** 8/28 (29%)
+> **Tổng task:** 28 tasks | **Đã hoàn thành:** 11/28 (39%)
 
 ---
 
@@ -39,10 +39,10 @@
 | **S6-1** | 6. Test | **Feature freeze:** Chốt bản build ổn định, gắn git tag (`v1.0-rc`), thông báo toàn nhóm (chỉ sửa bug sau mốc này) | — | S4-17, S5-10 | Git tag release candidate | Test quality 0.5 | Cao | 3 | | Chưa bắt đầu | Mốc Milestone M5 |
 | **S6-12** | 6. Test | Sửa lỗi ứng dụng / bổ sung thuộc tính Semantics khi kiểm thử ARTEMIS phát hiện lỗi (thuộc phạm vi của mình) | — | S6-9 | Fix commit | Test quality 0.5 | Trung bình | 4 | | Chưa bắt đầu | Fix theo log ARTEMIS |
 | **S7-1-VLQ** | 7. Review | Mở PR cho phần của mình; chạy $\ge 1$ công cụ AI review (CodeRabbit/Copilot/SonarCloud); lưu output | — | S6-1 | PR + output trong `evidence/review/` | Review 0.5 | Cao | 4 | | Chưa bắt đầu | AI review trên PR |
-| **S7-2-VLQ** | 7. Review | Ghi $\ge 1-2$ findings (file:dòng, loại, tóm tắt), quyết định Accept/Modify/Reject kèm lý do; kê khai AI tools | — | S7-1-VLQ | Dòng ghi trong `code-review.md` | Findings 0.25 | Cao | 4 | | Đang làm | Hồ sơ PR #6 có 5 findings, quyết định và lý do; chờ đối chiếu dependency PR sau feature freeze |
-| **S7-3-VLQ** | 7. Review | Sửa $\ge 1$ finding đã chấp nhận; commit riêng ghi ID finding; dẫn link commit vào bảng | — | S7-2-VLQ | Fix commit liên kết | Fixes 0.25 | Cao | 4 | | Đang làm | Commit `55bdf3e` sửa PR6-01..05 đã link; chưa tự đánh hoàn tất vì S7-1-VLQ/S6-1 chưa đạt |
+| **S7-2-VLQ** | 7. Review | Ghi $\ge 1-2$ findings (file:dòng, loại, tóm tắt), quyết định Accept/Modify/Reject kèm lý do; kê khai AI tools | — | S7-1-VLQ | Dòng ghi trong `code-review.md` | Findings 0.25 | Cao | 4 | | Đã hoàn thành | 07/11: hồ sơ PR #6 có 5 findings thật, vị trí/loại, quyết định, lý do và AI disclosure trong `docs/code-review.md` cùng raw evidence |
+| **S7-3-VLQ** | 7. Review | Sửa $\ge 1$ finding đã chấp nhận; commit riêng ghi ID finding; dẫn link commit vào bảng | — | S7-2-VLQ | Fix commit liên kết | Fixes 0.25 | Cao | 4 | | Đã hoàn thành | Commit `55bdf3e` sửa PR6-01..05, đã liên kết từng finding và merge vào `main` qua `90d9fd0` |
 | **S7-4** | 7. Review | Tổng hợp `docs/code-review.md`: $\ge 5$ findings, $\ge 2$ loại, đầy đủ quyết định + link commit, mục Disclosure AI tools | Hoàng, Charlie, Thái An | S7-2-VLQ, S7-2-HD, S7-2-CM, S7-2-TA | `docs/code-review.md` | Review 0.5 | Cao | 4 | | Chưa bắt đầu | Mốc Milestone M7 |
-| **S8-1** | 8. Report | Báo cáo: tổng quan + Lab 2 recap (persona, 3 flow, success criterion); traceability & deviations; MVVM; design system; lessons | — | S4-17, S2-5, S7-4 | Phần báo cáo của Thắng | Cả rubric | Cao | 4 | | Đang làm | Có bản nháp evidence-based tại `docs/report-drafts/s8-1-thang.md`; chờ flow và review cuối |
+| **S8-1** | 8. Report | Báo cáo: tổng quan + Lab 2 recap (persona, 3 flow, success criterion); traceability & deviations; MVVM; design system; lessons | — | S4-17, S2-5, S7-4 | Phần báo cáo của Thắng | Cả rubric | Cao | 4 | | Đã hoàn thành | 07/11: nội dung cá nhân đã chốt theo `main` `c4e8024`, phân biệt rõ Flutter tests, native/Firebase evidence và các giới hạn chưa nghiệm thu |
 | **S8-5** | 8. Report | Ghép hoàn chỉnh `report/Lab03_<StudentID>.pdf` (8–12 trang); mọi claim “chạy được” đều có ảnh/link bằng chứng | Hoàng, Charlie, Thái An | S8-1, S8-2, S8-3, S8-4 | `report/Lab03_<StudentID>.pdf` | Mọi tiêu chí | Cao | 4 | | Chưa bắt đầu | Không để thiếu ảnh |
 | **S8-9** | 8. Report | Soạn Slide: Topic/Persona/Success criterion, kiến trúc MVVM, design system in code, code review, lessons | — | S8-1 | Phần slide của Thắng | Slides 1.0 | Cao | 4 | | Đang làm | Đã soạn 6 thông điệp tại `docs/report-drafts/s8-9-slides-thang.md`; chưa ghép deck cuối |
 | **S8-10** | 8. Report | Ghép hoàn chỉnh `slides/Lab03_<StudentID>_slides.pdf` (12–15 trang, mỗi slide 1 thông điệp, link docs/ thay vì copy) | Hoàng, Charlie, Thái An | S8-6, S8-7, S8-8, S8-9 | `slides/Lab03_<StudentID>_slides.pdf` | Slides 1.0 | Cao | 4 | | Chưa bắt đầu | 12-15 slides |

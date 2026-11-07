@@ -1,20 +1,22 @@
 # Worklog — Thắng VLQ
 
 > **Vai trò:** Technical Architect & Co-Lead  
-> **Ngày cập nhật:** 06/11/2026
+> **Ngày cập nhật:** 07/11/2026
 > **Nhánh kiểm tra:** `main`  
 > **Mục đích:** Ghi bằng chứng hoàn thành, phần còn thiếu, lỗi đã phát hiện và điều kiện tiếp tục cho các task do Thắng phụ trách.
 
 ## 1. Tóm tắt trạng thái
 
 - Tổng số task của Thắng: **28**.
-- Đã hoàn thành và có bằng chứng: **8/28 (29%)**.
+- Đã hoàn thành và có bằng chứng: **11/28 (39%)**.
+- Hoàn thành mới ngày 07/11: **S7-2-VLQ**, **S7-3-VLQ** và **S8-1**.
 - Hoàn thành mới ngày 04/11: **S0-3-VLQ** và **S3-6**.
 - Không còn blocker Android SDK/ADB/emulator trên máy Thắng.
 - Tooling hỗ trợ Firebase, ARTEMIS, review, security scan và video được ghi tại [`docs/thang-tooling-setup-20261104.md`](thang-tooling-setup-20261104.md).
 - Nhánh `Thang` đã merge vào `main` tại `90d9fd0`; `origin/Thang` không còn commit riêng chưa có trên `main` tại thời điểm kiểm tra.
 - Sau merge: `flutter analyze lib --no-pub` sạch và **334/334 Flutter tests pass**. Analyzer toàn cây bị ảnh hưởng bởi Dart template bên trong `test/firestore/node_modules/firebase-tools`, không phải source `lib/`.
-- Các task test/review/report/nộp bài chưa hoàn thành vì còn phụ thuộc tính năng, Firebase runtime, bằng chứng ARTEMIS hoặc sản phẩm của thành viên khác.
+- Các task test/review/report/nộp bài còn lại chưa hoàn thành vì vẫn phụ thuộc
+  Firebase runtime, bằng chứng ARTEMIS hoặc sản phẩm của thành viên khác.
 
 ### S5-10 — Hoàn thành có giới hạn ngày 06/11/2026
 
@@ -155,15 +157,20 @@ Trên commit `dcbdedf`, AVD `Longvita_API_36`:
 Evidence khử PII:
 [`evidence/auth/S3-2-S5-10-THANG-20261105/`](../evidence/auth/S3-2-S5-10-THANG-20261105/).
 
-### S7-2-VLQ, S7-3-VLQ và S8-14 — Phần chuẩn bị có thể hoàn thành sớm
+### S7-2-VLQ, S7-3-VLQ và S8-1 — Hoàn thành ngày 07/11/2026
 
 - Hồ sơ PR #6 đã có 5 findings thật, quyết định, lý do và link commit `55bdf3e`.
-- Tracker chuyển S7-2-VLQ/S7-3-VLQ sang **Đang làm**, không đánh hoàn tất vì
-  S7-1-VLQ còn phụ thuộc feature freeze.
+- S7-2-VLQ hoàn thành: đủ 5 findings thật với vị trí, loại, quyết định, lý do và
+  disclosure công cụ trong `docs/code-review.md`.
+- S7-3-VLQ hoàn thành: commit `55bdf3e` sửa PR6-01..05, có link từng finding và
+  đã merge vào `main` qua `90d9fd0`.
+- S8-1 hoàn thành nội dung cá nhân tại
+  [`docs/report-drafts/s8-1-thang.md`](report-drafts/s8-1-thang.md), cập nhật theo
+  `main` `c4e8024` và ghi rõ giới hạn Flutter/native/Firebase/ARTEMIS.
 - Đã soạn kịch bản clip S8-14 tại
   [`docs/report-drafts/s8-14-thang-clip-script.md`](report-drafts/s8-14-thang-clip-script.md);
   chưa quay hoặc ghép video cuối.
-- Bản nháp S8-1 và kịch bản S9-5-VLQ đã cập nhật theo evidence ngày 04/11.
+- Kịch bản S9-5-VLQ vẫn là phần chuẩn bị, chưa được tính hoàn thành.
 
 ## 4. Firebase: trạng thái và phần còn thiếu
 
@@ -221,10 +228,9 @@ text files có prefix đường dẫn máy cũ; đã thay prefix bằng `<user-h
   không phải bằng chứng Storage cloud production.
 - **S6-1:** cần flow, accessibility, instrumentation và failure testing hoàn tất.
 - **S6-12:** cần ARTEMIS chỉ ra lỗi thuộc phạm vi Thắng.
-- **S7-1-VLQ đến S7-4:** PR #6 đã có 5 findings và 1 fix commit trong hồ sơ review,
-  nhưng review riêng của Thắng/feature-freeze và tối thiểu 3 fix commits toàn nhóm
-  vẫn chưa đạt.
-- **S8-1/S8-5/S8-9/S8-10:** cần chức năng, evidence và review hoàn chỉnh.
+- **S7-1-VLQ và S7-4:** S7-2/S7-3 của Thắng đã hoàn thành; S7-1 vẫn chờ feature
+  freeze, còn S7-4 cần nghiệm thu hồ sơ review đủ thành viên.
+- **S8-5/S8-9/S8-10:** S8-1 của Thắng đã hoàn thành; còn ghép report/slide cuối.
 - **S8-14/S8-15:** cần finding đã sửa và clip demo của các thành viên.
 - **S8-16:** README còn thiếu project ID/data source đã xác minh, AI disclosure cuối và video public.
 - **S8-17-VLQ:** worklog đã khởi tạo nhưng chỉ hoàn thành khi cập nhật đến cuối dự án.
