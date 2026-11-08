@@ -8,11 +8,11 @@ FCM history unavailable: FileSystemException: read blocked, path = '<temp>\pm_pr
   Expected: contains all of ['foreground-new', 'old']
     Actual: MappedListIterable<AppNotification, String>:['old']
      Which: has too few elements (1 < 2)
-  
+
   package:matcher                                                          expect
   package:flutter_test/src/widget_tester.dart 473:18                       expect
   docs\coordination\qa\PM-S4-12-20261108\pr19_review_probe_test.dart 53:5  main.<fn>
-  
+
 00:00 +0 -1: CR03: legacy migration cannot evict newer pending at capacity
 00:00 +0 -2: CR03: legacy migration cannot evict newer pending at capacity [E]
   Expected: contains all of [
@@ -70,21 +70,21 @@ FCM history unavailable: FileSystemException: read blocked, path = '<temp>\pm_pr
               ...
             ]
      Which: has too few elements (45 < 50)
-  
+
   package:matcher                                                          expect
   package:flutter_test/src/widget_tester.dart 473:18                       expect
   docs\coordination\qa\PM-S4-12-20261108\pr19_review_probe_test.dart 61:5  main.<fn>
-  
+
 00:00 +0 -2: CR04: interrupted legacy migration resumes without duplicates
 00:00 +0 -3: CR04: interrupted legacy migration resumes without duplicates [E]
   Expected: ['old-1', 'old-2']
     Actual: MappedListIterable<PendingNotification, String>:['old-1', 'old-1', 'old-2']
      Which: at location [1] is 'old-1' instead of 'old-2'
-  
+
   package:matcher                                                          expect
   package:flutter_test/src/widget_tester.dart 473:18                       expect
   docs\coordination\qa\PM-S4-12-20261108\pr19_review_probe_test.dart 81:5  main.<fn>
-  
+
 00:00 +0 -3: Some tests failed.
 
 Failing tests:
