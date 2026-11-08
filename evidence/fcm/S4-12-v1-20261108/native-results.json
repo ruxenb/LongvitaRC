@@ -1,0 +1,161 @@
+{
+  "runs": [
+    {
+      "results": [
+        {
+          "case": "foreground-correct",
+          "sent": "sent qa-foreground-correct-143959",
+          "expected": "inbox+snackbar",
+          "observed": {
+            "snackbar_seen": true,
+            "in_history": true
+          },
+          "result": "PASS",
+          "time": "14:40:39"
+        },
+        {
+          "case": "foreground-missing",
+          "sent": "sent qa-foreground-missing-143959",
+          "expected": "nothing",
+          "observed": {
+            "snackbar_seen": false,
+            "in_history": false
+          },
+          "result": "PASS",
+          "time": "14:40:56"
+        },
+        {
+          "case": "foreground-wrong",
+          "sent": "sent qa-foreground-wrong-143959",
+          "expected": "nothing",
+          "observed": {
+            "snackbar_seen": false,
+            "in_history": false
+          },
+          "result": "PASS",
+          "time": "14:41:14"
+        },
+        {
+          "case": "background-correct",
+          "sent": "sent qa-background-correct-143959",
+          "expected": "profile+inbox",
+          "observed": {
+            "os_shade_shown": true,
+            "queued_by_handler": 1,
+            "opened_profile": true,
+            "app_front": true,
+            "in_history": true,
+            "queue_for_user_left": 0,
+            "queue_for_other_left": 0
+          },
+          "result": "PASS",
+          "time": "14:41:50"
+        },
+        {
+          "case": "background-wrong",
+          "sent": "sent qa-background-wrong-143959",
+          "expected": "no inbox/route",
+          "observed": {
+            "os_shade_shown": true,
+            "queued_by_handler": 1,
+            "opened_profile": false,
+            "app_front": true,
+            "in_history": false,
+            "queue_for_user_left": 0,
+            "queue_for_other_left": 1
+          },
+          "result": "PASS",
+          "time": "14:42:28"
+        },
+        {
+          "case": "background-missing",
+          "sent": "sent qa-background-missing-143959",
+          "expected": "no inbox/route",
+          "observed": {
+            "os_shade_shown": true,
+            "queued_by_handler": 0,
+            "opened_profile": false,
+            "app_front": true,
+            "in_history": false,
+            "queue_for_user_left": 0,
+            "queue_for_other_left": 1
+          },
+          "result": "PASS",
+          "time": "14:43:00"
+        },
+        {
+          "case": "terminated-correct",
+          "sent": "sent qa-terminated-correct-143959",
+          "expected": "profile+inbox",
+          "observed": {
+            "killed_before_send": true,
+            "os_shade_shown": true,
+            "opened_profile": true,
+            "app_front": true,
+            "in_history": true
+          },
+          "result": "PASS",
+          "time": "14:43:42"
+        },
+        {
+          "case": "terminated-wrong",
+          "sent": "sent qa-terminated-wrong-143959",
+          "expected": "no inbox/route",
+          "observed": {
+            "killed_before_send": false,
+            "os_shade_shown": true,
+            "opened_profile": false,
+            "app_front": true,
+            "in_history": false
+          },
+          "result": "FAIL",
+          "time": "14:44:29"
+        }
+      ],
+      "summary": {
+        "run": "143959",
+        "history_ids_qa": [
+          "qa-terminated-correct-143959",
+          "qa-background-correct-143959",
+          "qa-foreground-correct-143959"
+        ],
+        "history_entries_final": 3,
+        "queue_left": {
+          "user": 0,
+          "other": 2
+        }
+      }
+    },
+    {
+      "results": [
+        {
+          "case": "terminated-wrong",
+          "sent": "sent qa-terminated-wrong-144456",
+          "expected": "no inbox/route",
+          "observed": {
+            "killed_before_send": true,
+            "os_shade_shown": true,
+            "opened_profile": false,
+            "app_front": true,
+            "in_history": false
+          },
+          "result": "PASS",
+          "time": "14:45:53"
+        }
+      ],
+      "summary": {
+        "run": "144456",
+        "history_ids_qa": [
+          "qa-terminated-correct-143959",
+          "qa-background-correct-143959",
+          "qa-foreground-correct-143959"
+        ],
+        "history_entries_final": 3,
+        "queue_left": {
+          "user": 0,
+          "other": 3
+        }
+      }
+    }
+  ]
+}

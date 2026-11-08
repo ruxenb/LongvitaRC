@@ -1,0 +1,2 @@
+flutter test --no-pub (ada76da)
+00:12 +376: All tests passed!
