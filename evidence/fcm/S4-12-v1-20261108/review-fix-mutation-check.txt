@@ -1,0 +1,22 @@
+CAUGHT  R1 PM-S412-01: a read does not wait for the same user's saves
+           - NotificationService sessions and persistence a tap arriving while the history loads is saved with it, opened once
+           - PM-S412 review fixes PM-S412-01: a save still running at re-login is read, not lost
+           - PM-S412 review fixes PM-S412-02: read errors at the file boundary a file locked by another process is not overwritten (Windows)
+           - PM-S412 review fixes PM-S412-02: read errors at the file boundary history is not replaced while unreadable, and saved once readable
+CAUGHT  R2 PM-S412-02: a read error on an existing file reads as empty
+           - PM-S412 review fixes PM-S412-02: read errors at the file boundary a file locked by another process is not overwritten (Windows)
+           - PM-S412 review fixes PM-S412-02: read errors at the file boundary a file that exists but cannot be read throws, a missing one is empty
+           - PM-S412 review fixes PM-S412-02: read errors at the file boundary history is not replaced while unreadable, and saved once readable
+           - PM-S412 review fixes PM-S412-02: read errors at the file boundary the old queue file is kept while it cannot be read
+CAUGHT  R3 PM-S412-02: no new read after a failed one
+           - PM-S412 review fixes PM-S412-02: read errors at the file boundary a file locked by another process is not overwritten (Windows)
+           - PM-S412 review fixes PM-S412-02: read errors at the file boundary history is not replaced while unreadable, and saved once readable
+CAUGHT  R4 PM-S412-02: drain does not read again before claiming
+           - NotificationService sessions and persistence history that cannot be read is not overwritten, and is read again
+CAUGHT  M3' read result ignores the session generation
+           - NotificationService sessions and persistence A -> logout -> A while the first load waits: it restores nothing
+CAUGHT  M6' a new message is saved before the history was read
+           - NotificationService sessions and persistence a tap arriving while the history loads is saved with it, opened once
+           - NotificationService sessions and persistence history that cannot be read is not overwritten, and is read again
+           - PM-S412 review fixes PM-S412-02: read errors at the file boundary a file locked by another process is not overwritten (Windows)
+           - PM-S412 review fixes PM-S412-02: read errors at the file boundary history is not replaced while unreadable, and saved once readable
