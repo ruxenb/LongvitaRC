@@ -1,27 +1,59 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../firebase/analytics_service.dart';
 import '../models/recipe_model.dart';
 import '../models/view_state.dart';
+import '../services/secure_recipe_image.dart';
 import '../viewmodels/meal_plan_viewmodel.dart';
 import '../widgets/app_button.dart';
 import '../widgets/state_views.dart';
 import 'flow_ui.dart';
 import 'meal_flow_screens.dart';
 
-/// S05: keep the Figma hero slot without inventing an image or source.
-class _RecipeHero extends StatelessWidget {
+/// S05: show only a bounded, HTTPS-loaded Firestore image without
+/// following redirects or inventing stock assets when an image is absent.
+class _RecipeHero extends StatefulWidget {
   final RecipeModel recipe;
   const _RecipeHero(this.recipe);
 
   @override
-  Widget build(BuildContext context) {
-    final imageUrl = recipe.imageUrl?.trim();
-    final imageUri = imageUrl == null ? null : Uri.tryParse(imageUrl);
-    final validImage =
-        imageUri?.scheme == 'https' && imageUri?.hasAuthority == true;
+  State<_RecipeHero> createState() => _RecipeHeroState();
+}
 
+class _RecipeHeroState extends State<_RecipeHero> {
+  Future<Uint8List>? _image;
+
+  void _loadImage() {
+    final rawUrl = widget.recipe.imageUrl?.trim();
+    final uri = rawUrl == null ? null : Uri.tryParse(rawUrl);
+    _image =
+        uri != null &&
+            uri.scheme == 'https' &&
+            uri.hasAuthority &&
+            uri.userInfo.isEmpty
+        ? fetchSecureRecipeImage(uri)
+        : null;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _loadImage();
+  }
+
+  @override
+  void didUpdateWidget(covariant _RecipeHero oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.recipe.imageUrl != widget.recipe.imageUrl) {
+      _loadImage();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
     Widget placeholder() => ColoredBox(
       color: Theme.of(context).colorScheme.surfaceContainerHighest,
       child: Center(
@@ -40,15 +72,33 @@ class _RecipeHero extends StatelessWidget {
       borderRadius: BorderRadius.circular(12),
       child: AspectRatio(
         aspectRatio: 328 / 126,
-        child: validImage
-            ? Image.network(
-                imageUrl!,
-                key: const Key('recipe-hero-image'),
-                fit: BoxFit.cover,
-                semanticLabel: 'Ảnh món ${recipe.name}',
-                errorBuilder: (_, _, _) => placeholder(),
-              )
-            : placeholder(),
+        child: _image == null
+            ? placeholder()
+            : FutureBuilder<Uint8List>(
+                future: _image,
+                builder: (context, snapshot) {
+                  if (!snapshot.hasData) return placeholder();
+                  return LayoutBuilder(
+                    builder: (context, constraints) {
+                      // Decode near the rendered physical width, avoiding
+                      // excessive memory use for large source photographs.
+                      final cacheWidth =
+                          (constraints.maxWidth *
+                                  MediaQuery.devicePixelRatioOf(context))
+                              .ceil()
+                              .clamp(64, 2048);
+                      return Image.memory(
+                        snapshot.data!,
+                        key: const Key('recipe-hero-image'),
+                        fit: BoxFit.cover,
+                        cacheWidth: cacheWidth,
+                        semanticLabel: 'Ảnh món ${widget.recipe.name}',
+                        errorBuilder: (_, _, _) => placeholder(),
+                      );
+                    },
+                  );
+                },
+              ),
       ),
     );
   }

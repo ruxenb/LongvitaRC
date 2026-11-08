@@ -5,7 +5,7 @@ Date: 2026-11-04 | Tasks: S4-8, S4-16, S4-17
 ## Follow-up — 2026-11-08 (Hoàng S4-8/S4-16/S4-17)
 
 - On main `4f3fd07` (including PR #19), the full Flutter baseline had zero analyzer issues and 388/388 passing tests. The new Hoàng accessibility/hero-image changes passed 390/390 tests with zero analyzer issues before the additional HTTPS-only regression assertion.
-- `FlowFrame` now gives its screen title Android heading level 1; `FlowSection` gives section titles level 2. The regression checks actual semantics data rather than relying on a widget type alone. Flutter's empty route wrapper can still carry an unlevelled header; it is not the labelled screen title.
+- `FlowFrame` and `FlowSection` now provide headings to Android accessibility services. Flutter Semantics assigns heading levels 1 and 2 internally, but Android exposes headings as a boolean rather than distinguishing these numeric levels. The regression checks Flutter semantics data, not a live TalkBack hierarchy; Flutter's empty route wrapper is distinct from the labelled screen title.
 - All loading messages in Hoàng's MealPlan/Ingredient ViewModels and the reusable loading fallback use the single Unicode ellipsis `…` so TalkBack is not asked to speak three ASCII periods.
 - S05 renders only the Firestore-provided HTTPS image URL in a responsive 328:126 hero area; absent, invalid or failed images show a text placeholder. No stock photo, unlicensed asset or fabricated source is added.
 - 360dp/412dp, 1x/2x Flutter widget tests cover the S05 placeholder, basic responsive screens, and quantity validation. Android native TalkBack traversal, real Firestore images, visual pixel fidelity, contrast and font-size measurements still require on-device evidence and team acceptance.
