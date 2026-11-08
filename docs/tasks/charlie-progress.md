@@ -10,9 +10,11 @@ Thắng, Hoàng và Thái An đã đồng ý các phần của PR #4 chạm vào
 
 **Đợt 03/11, [PR #5](https://github.com/ruxenb/LongvitaRC/pull/5), đã vào `main` (`30ca6e3`) sau khi lỗi PM-FCM-02 được xác minh đã sửa; chưa có AI review:** tin đến khi app đang mở hiện thanh thông báo có nút "Xem" (S4-12), TalkBack thật (S4-14), nháp báo cáo FCM (S8-3). Analyzer sạch, 270/270 tests. Đã sửa lỗi tìm thấy khi review (PM-FCM-02): thanh thông báo của phiên cũ còn trên Sign-in sau khi đăng xuất, và nút "Xem" của nó mở được Profile khi chưa đăng nhập. Giờ mọi thao tác của thanh thông báo kiểm đúng phiên lúc chạy, và nội dung thông báo của phiên đã hết tự gỡ khi tới lượt hiện, kể cả khi đang chờ sau snackbar khác; snackbar của màn khác giữ nguyên. Có regression cho đăng xuất, A → B, A → đăng xuất → A và hàng đợi nhiều thông báo; đã thử đăng xuất trên emulator với tin thật. **Thắng xem giúp `auth_gate.dart`.**
 
-## Mức hoàn thành công việc
+## Mức hoàn thành công việc — snapshot lịch sử
 
-**29 task: 11 chờ nghiệm thu / 18 đang thực hiện / 0 chưa bắt đầu; 0/29 Accepted chính thức.** S4-14 đạt PM review, chờ PR/user-team nghiệm thu; ba task S7 đã được đóng gói và merge, chờ nghiệm thu chính thức.
+**Phạm vi:** tổng số và các bảng 29 task trong mục này lưu mốc cũ từ 03–04/11, có một số ghi chú được bổ sung sau đó; chúng không phải tổng tiến độ hiện tại. Số 11/18 và dòng S5-4 80% bên dưới được giữ để đối chiếu lịch sử. Cập nhật kỹ thuật Analytics ngày 08/11 ở mục bàn giao và evidence đã xác nhận S5-4 được Charlie nghiệm thu; không lấy các số cũ để suy task này còn đang làm.
+
+**Snapshot cũ — 29 task: 11 chờ nghiệm thu / 18 đang thực hiện / 0 chưa bắt đầu; 0/29 Accepted chính thức tại thời điểm đó.** S4-14 đạt PM review, chờ PR/user-team nghiệm thu; ba task S7 đã được đóng gói và merge, chờ nghiệm thu chính thức.
 
 Các điểm % cũ trong bảng dưới là ước lượng Dev của các phần ngoài S7, giữ để tham khảo; không tính lại thành % toàn dự án khi các owner dùng cách đo khác nhau. S7 dùng trạng thái chờ nghiệm thu. Các bản nháp report/slide/clip/viva được giữ trên GitHub theo lựa chọn Charlie, dù working copies ở máy chính đã được xóa.
 
@@ -53,7 +55,7 @@ Các điểm % cũ trong bảng dưới là ước lượng Dev của các phầ
 
 </details>
 
-## Tiến độ 29 task
+## Tiến độ 29 task — tổng của snapshot lịch sử
 
 | Trạng thái | Số lượng | IDs |
 |---|---:|---|

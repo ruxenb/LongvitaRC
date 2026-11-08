@@ -55,3 +55,10 @@ QA chỉ bật alias với điều kiện `kDebugMode && bool.fromEnvironment('Q
 Charlie đã xác nhận **“Chốt hoàn thành S5-4”** ngày 08/11/2026 cho code `af129f9` và evidence `1ea1106`. S5-4 hoàn tất/100%; việc nghiệm thu không đồng nghĩa code đã tích hợp main. Gói này được bàn giao qua PR theo yêu cầu tiếp theo của Charlie. Storage project thật/DEC-01 vẫn theo S3-7/S4-11/S4-15; không dùng kết quả Emulator để đóng các task đó. Không mở đợt S6/S7 hoặc xử lý audit S9-1 trong gói này.
 
 Nguồn API: [Firebase DebugView](https://firebase.google.com/docs/analytics/debugview), [firebase_analytics 11.6.0 logEvent](https://pub.dev/documentation/firebase_analytics/11.6.0/firebase_analytics/FirebaseAnalytics/logEvent.html). Đã đối chiếu 08/11/2026.
+
+
+## Review PR #21 — PR21-CR-01
+
+[PR #21](https://github.com/ruxenb/LongvitaRC/pull/21), CodeRabbit review `PRR_kwDOVevJFc8AAAABWszKeA` trên head `73a4058`, 08/11/2026: một **Minor / Functional Correctness** ngoài diff, yêu cầu phân biệt tổng tiến độ cũ với nghiệm thu S5-4 mới. **Accepted:** ghi rõ cả hai mục tổng số/bảng 29 task là snapshot lịch sử, gắn nhãn câu 11/18/0 Accepted tại thời điểm đó; giữ nguyên dữ liệu lịch sử và cập nhật kỹ thuật S5-4 đã xác minh. Không đưa các bảng tiến độ nội bộ vào PR để sửa một nhãn lịch sử.
+
+Chỉ sửa tài liệu/evidence; `git diff --quiet af129f9 HEAD -- lib test` không có khác biệt, `git diff --check` sạch. Giữ kết quả kiểm code 391/391 và runtime ở trên, không chạy lại test/AVD khi không đổi code. Review không có finding trên code app hoặc test; tiếp tục chờ CodeRabbit kiểm head tài liệu mới trước merge.
