@@ -117,11 +117,14 @@ void main() {
       expect(profile.lastExport, same(fileBefore));
       expect(profile.exportState, isA<ViewStateLoading<String>>(),
           reason: 'the ignored call must not read as a result');
+      expect(analytics.events.where((e) => e.startsWith('export_report')), isEmpty);
 
       storage.uploads.single.succeed();
       await first;
       expectConsistent();
       expect(profile.lastExport!.fileName, startsWith('first_'));
+      expect(analytics.events.where((e) => e.startsWith('export_report')),
+          ['export_report:1:0']);
     });
 
     test('a retry while an export runs starts nothing', () async {
@@ -263,12 +266,15 @@ void main() {
 
       expect(profile.isExporting, isTrue, reason: 'B is still uploading');
       expect(profile.lastUploadedUrl, isNull);
+      expect(analytics.events.where((e) => e.startsWith('export_report')), isEmpty);
 
       storage.uploads.last.succeed();
       await second;
       expectConsistent();
       expect(profile.lastExport!.fileName, startsWith('second_'));
       expect(profile.isExporting, isFalse);
+      expect(analytics.events.where((e) => e.startsWith('export_report')),
+          ['export_report:1:0']);
     });
 
     test('A signing back in is not blocked or overwritten by the old upload',

@@ -132,6 +132,8 @@ void main() {
       expect(storage.fileNames, [export.fileName]);
       expect(profile.lastUploadedUrl, contains(export.fileName));
       expect(profile.exportState, isA<ViewStateSuccess<String>>());
+      expect(analytics.events.where((e) => e.startsWith('export_report')),
+          ['export_report:1:0']);
     });
 
     test('a failed upload keeps the file and says so', () async {
@@ -204,7 +206,8 @@ void main() {
       expect(profile.lastExport, same(export));
       expect(profile.lastUploadedUrl, isNotNull);
       expect(profile.exportState, isA<ViewStateSuccess<String>>());
-      expect(analytics.events, contains('export_report:1:0'));
+      expect(analytics.events.where((e) => e.startsWith('export_report')),
+          ['export_report:1:0']);
     });
 
     test('a second failure keeps the file for another retry', () async {
