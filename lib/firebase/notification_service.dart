@@ -11,15 +11,19 @@ import 'notification_inbox.dart';
 enum NotificationPermission { unknown, granted, denied, failed }
 
 /// Runs in its own isolate when a message arrives in background or terminated
-/// state, so it can never navigate, and it does not know who is signed in. The
-/// message waits on the device until the app adds it to that user's inbox. A
-/// tap reaches the app through onMessageOpenedApp or getInitialMessage.
+/// state, so it can never navigate, and it does not know who is signed in. A
+/// message naming a recipient waits on the device until that user's inbox
+/// takes it; one with no valid recipient is not kept. A tap reaches the app
+/// through onMessageOpenedApp or getInitialMessage.
+///
+/// Android may already show the system notification of a notification
+/// message before this runs, so senders use a generic title and body.
 @pragma('vm:entry-point')
 Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
   if (kDebugMode) debugPrint('FCM background: ${message.messageId}');
   final notification = _parseMessage(message);
-  if (notification != null) {
+  if (notification != null && notification.recipientUid != null) {
     await NotificationHistoryStore().addPending(notification);
   }
 }
@@ -83,8 +87,21 @@ class NotificationService {
   final NotificationInbox _inbox = NotificationInbox();
   bool _initialized = false;
 
+  /// Identifies the inbox session. It changes when a user is bound over
+  /// another or nobody, and on sign-out, so work that awaited across a change
+  /// (even the same user signing out and back in) can tell and stop.
+  int _generation = 0;
+
+  /// The session whose saved history has been read into the inbox. Until
+  /// then nothing is saved, so a save cannot replace history not yet read,
+  /// and nothing leaves the device queue.
+  int? _loadedGeneration;
+
+  bool get _historyLoaded => _loadedGeneration == _generation;
+
   /// Saves run one after another, so an older inbox never overwrites a newer.
-  Future<void> _lastSave = Future.value();
+  /// Each completes with whether its save succeeded.
+  Future<bool> _lastSave = Future.value(true);
   NotificationPermission _permission = NotificationPermission.unknown;
   AppNotification? _arrival;
 
@@ -131,34 +148,52 @@ class NotificationService {
 
   /// Starts the inbox of the signed-in user and brings back their history.
   /// The inbox still works in memory when the device files cannot be used.
+  ///
+  /// Binding the user already bound continues their session.
   Future<void> bindUser(String uid) async {
+    if (_inbox.boundUid != uid) _generation++;
+    final generation = _generation;
     _inbox.bind(uid);
     try {
       final saved = await _history.load(uid);
-      if (_inbox.boundUid != uid) return;
+      if (generation != _generation) return;
+      final before = _inbox.items.length;
       _inbox.restore(saved);
-      await drainPending();
+      _loadedGeneration = generation;
+      // Messages that arrived while the history was read are saved now.
+      if (before > 0) unawaited(_save(uid));
     } catch (e) {
+      // The inbox keeps working in memory; nothing is saved this session.
       if (kDebugMode) debugPrint('FCM history unavailable: $e');
     }
+    if (generation != _generation) return;
     onChanged?.call();
+    await drainPending();
   }
 
-  /// Moves messages received in the background into the inbox. Call when the
-  /// app returns to the foreground, since a running app is not bound again.
+  /// Moves this user's messages received in the background into the inbox.
+  /// Call when the app returns to the foreground, since a running app is not
+  /// bound again. A message leaves the device queue only after the history
+  /// holding it was saved; otherwise it waits for the next drain.
   Future<void> drainPending() async {
     final uid = _inbox.boundUid;
     if (uid == null) return;
+    final generation = _generation;
     try {
-      final pending = await _history.takePending();
-      if (_inbox.boundUid != uid) return;
+      final pending = await _history.claimPending(uid);
+      if (generation != _generation || pending.isEmpty) return;
       var added = false;
       // Oldest first, because each new entry goes to the top of the inbox.
-      for (final item in pending.reversed) {
-        added = _inbox.receive(item) || added;
+      for (final entry in pending) {
+        added = _inbox.receive(entry.notification) || added;
       }
       if (added) onChanged?.call();
-      await _save(uid);
+      // Without the saved history read, a save could replace it: the
+      // messages stay queued and are shown from memory meanwhile.
+      if (!_historyLoaded) return;
+      final saved = await _save(uid);
+      if (!saved || generation != _generation) return;
+      await _history.ackPending(pending);
     } catch (e) {
       if (kDebugMode) debugPrint('FCM pending unavailable: $e');
     }
@@ -167,6 +202,7 @@ class NotificationService {
   /// Empties the in-app inbox on sign-out. The saved history stays for the same
   /// user, and a next user only ever loads their own.
   void clearHistory() {
+    _generation++;
     _inbox.clear();
     _arrival = null;
   }
@@ -204,18 +240,25 @@ class NotificationService {
     if (notification == null) return;
     final added = _inbox.receive(notification, tapped: tapped);
     final uid = _inbox.boundUid;
-    if (added && uid != null) unawaited(_save(uid));
+    if (added && uid != null && _historyLoaded) unawaited(_save(uid));
     if (added && !tapped) _arrival = notification;
-    // A tap on a message already in the inbox adds nothing but must still open.
-    if (added || tapped) onChanged?.call();
+    // A tap on a message already in the inbox adds nothing but must still
+    // open. A message for someone else or nobody changes nothing.
+    final forThisUser = uid != null && notification.isFor(uid);
+    if (added || (tapped && forThisUser)) onChanged?.call();
   }
 
-  Future<void> _save(String uid) {
+  /// Saves the inbox as it is now, after the saves already requested.
+  Future<bool> _save(String uid) {
     final items = _inbox.items;
-    return _lastSave = _lastSave.then((_) => _history.save(uid, items)).catchError(
-      (Object e) {
+    return _lastSave = _lastSave.then((_) async {
+      try {
+        await _history.save(uid, items);
+        return true;
+      } catch (e) {
         if (kDebugMode) debugPrint('FCM history not saved: $e');
-      },
-    );
+        return false;
+      }
+    });
   }
 }

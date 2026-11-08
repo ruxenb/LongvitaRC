@@ -107,35 +107,31 @@ Code `2d547c7` / HEAD báo cáo `f1f397e` đã được kiểm độc lập: ana
 6. **Charlie/team:** mời đủ thành viên Firebase, nhận SHA-1/SHA-256 và kiểm Google Sign-in trên từng máy; quyền Console và SHA/Auth là các đầu việc riêng. Đồng thời chốt ngôn ngữ UI và font Roboto cho PDF.
 7. **PDF cần chốt:** app làm theo đề xuất tối thiểu: giữ file để thử lại, mở, chia sẻ trong phiên; khi đăng xuất xóa file của user đó, không đụng dữ liệu cloud. Sau khi mở lại app vẫn chưa xem lại được file cũ. Nếu muốn giữ qua đăng xuất, nhóm cần chốt thêm retention, quota, cách khôi phục và thao tác xóa. Hành vi này chưa được nhóm duyệt và dễ đổi.
 
-## Contract FCM tạm (S4-12)
+## Contract FCM v1 (S4-12)
 
-Thắng, Hoàng, Thái An đã đồng ý dùng tạm (theo Charlie, 02/11): mọi tin bấm vào đều mở Profile, lịch sử lưu trên máy theo UID và còn sau đăng xuất, thiếu `recipient_uid` thì hiện cho người đang đăng nhập, token chỉ dùng để thử. Các câu hỏi dưới đây vẫn cần chốt cho bản cuối.
+Chốt ngày 08/11/2026, thay contract tạm ngày 02/11. Thay đổi chính: tin không có `recipient_uid` hợp lệ **không còn** được đưa cho người đang hoặc sắp đăng nhập.
 
 **Payload, các trường trong `data`:**
 
 | Trường | Bắt buộc | Ý nghĩa |
 |---|---|---|
-| `message_id` | Có, nếu thiếu thì dùng ID của FCM | Khóa chống trùng |
-| `schema_version` | Khi có target | Hiện là `"1"` |
-| `target_type`, `target_id` | Khi tin cần mở một màn | Hiện nhận `meal_plan`, `announcement`. Không nhận route string từ push |
-| `recipient_uid` | Khi tin dành riêng một user | Khác user đang đăng nhập thì tin bị bỏ |
+| `recipient_uid` | **Có** | UID Firebase Auth của người nhận, dạng chuỗi gồm chữ, số, `_` hoặc `-`, so khớp chính xác (không cắt khoảng trắng). Thiếu, rỗng, sai kiểu hoặc khác user đang đăng nhập thì app bỏ tin |
+| `message_id` | Có, nếu thiếu thì dùng ID của FCM | Khóa chống trùng. Không dùng làm tên file |
+| `schema_version`, `target_type`, `target_id` | Không | Metadata (`"1"`, `meal_plan`/`announcement`). v1 không mở màn theo target, không nhận route string từ push |
 
-**Hành vi hiện có:**
-- Target sai hoặc thiếu: tin vẫn vào inbox, không điều hướng.
-- Trùng `message_id` trong một phiên: tin được chấp nhận đầu tiên thắng.
-- Đăng xuất: xóa inbox trong bộ nhớ và tin đang chờ, lịch sử của user đó vẫn ở trên máy. Tin đến khi chưa đăng nhập chờ tới lần đăng nhập kế.
-- Bấm tin: `AuthGate` mở Profile, mỗi tin một lần. `takePendingTarget()` vẫn giữ đích để nối route thật sau. Handler nền không điều hướng, chỉ lưu tin chờ.
+**Nội dung hiển thị:** `notification.title` = "Longvita", `notification.body` = "Bạn có thông báo mới. Mở ứng dụng để xem." Khi app ở nền hoặc đã tắt, Android có thể tự hiện tin trước khi app kiểm người nhận. Vì vậy title/body và data không chứa nội dung riêng của người dùng. App chỉ chặn được inbox và điều hướng cho tin sai người nhận, không chặn được việc hệ điều hành hiện thông báo chung trên khay.
 
-**Câu hỏi cần trả lời:**
+**Gửi thử:** Console hoặc script QA, gửi tới token của thiết bị kiểm (token lấy lại mỗi đợt). Token không phải định danh người dùng. Không có backend lưu token, topic hay Cloud Functions trong v1.
 
-| Câu hỏi | Ai |
-|---|---|
-| `meal_plan`, `announcement` mở màn nào; router gọi `takePendingTarget()` khi nào; đích lỗi hiển thị ra sao | Thắng |
-| Lịch sử lưu local theo UID hay Firestore; nếu Firestore thì schema, rules, read state, retention | Hoàng, Thắng |
-| Gửi theo token từng user hay topic chung; có lưu token theo UID, xóa khi đăng xuất không | Thái An, Thắng |
-| Tin **không có** `recipient_uid` hiện đến người đăng nhập kế tiếp: có chấp nhận không | Thái An, Thắng |
+**Hành vi:**
+- **Bấm tin hợp lệ:** `AuthGate` mở Profile/inbox sau khi đúng người nhận đã đăng nhập, mỗi tin một lần.
+- **Tin đến khi chưa đăng nhập:** chỉ giữ tin có người nhận. Khi đăng nhập, chỉ tin của đúng UID được nhận; tin của người khác bị bỏ.
+- **Lịch sử:** lưu trên máy theo UID (`notifications/{uid}.json`), tối đa 50 tin mỗi người, còn sau đăng xuất. Khi khôi phục, app kiểm lại người nhận từng mục; mục thiếu hoặc sai người nhận không hiện. Mục đọc lỗi chỉ bỏ riêng mục đó.
+- **Tin nhận khi app ở nền:** handler nền xếp mỗi tin thành một file trong `notifications/pending/`, tối đa 50 file cho mọi người dùng. App chỉ lấy tin của user đang đăng nhập và xóa file sau khi đã lưu vào lịch sử. Lưu lỗi thì tin vẫn chờ lần sau. File `pending.json` của bản cũ được chuyển một lần theo người nhận.
+- **Phiên:** mỗi lần đăng nhập/đăng xuất là một phiên mới, kể cả A → đăng xuất → A. Việc đọc lịch sử, lấy tin chờ hay lưu của phiên cũ không tác động phiên mới. App không lưu lịch sử trước khi đọc xong lịch sử cũ, nên không ghi đè.
+- **Trùng `message_id`:** tin được chấp nhận đầu tiên thắng; tin bị từ chối không chặn tin hợp lệ cùng ID.
 
-Tiếp theo: S4-10 với active plan khi có S4-3, S4-12 theo contract FCM cuối, S4-13 kiểm chứng upload và Remote Config Console, S3-7/S4-11 khi DEC-01 rõ. Home đã chuyển phần PDF sang Profile từ PR #4. Giữ nguyên các fix regression đã xác nhận và các task owners.
+Còn lại ngoài S4-12: Storage thật (DEC-01) cho S3-7/S4-11/S4-15; PDF hai thực đơn khác nội dung (S4-10, chờ recipes). Giữ nguyên các fix regression đã xác nhận và các task owners.
 
 ## Gói review bàn giao 03/11 — S7-2/S7-3
 

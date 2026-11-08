@@ -1,17 +1,24 @@
 import '../models/app_notification.dart';
 
 /// Per-user inbox rules, free of Firebase so they can be unit tested.
+/// Contract FCM v1:
 ///
-/// - One message reaching several callbacks gives one entry and one route.
+/// - A message is accepted only for the user its `recipient_uid` names
+///   exactly. With no valid recipient it is never accepted, held, routed or
+///   announced, and it is not given to whoever signs in next.
+/// - One message reaching several callbacks gives one entry and one open.
 /// - The first accepted message wins: a later one with the same id changes
-///   neither the entry nor where a tap leads.
-/// - A message for another recipient never enters the inbox.
-/// - Messages arriving with no user signed in wait for the next sign-in, and
-///   are dropped on sign-out.
+///   neither the entry nor what a tap does. A rejected message changes nothing.
+/// - A message with a recipient that arrives with nobody signed in waits for
+///   that user's sign-in in this process, and is dropped on sign-out.
+/// - Restored history is checked again: only entries for the bound user count.
 ///
 /// This class holds the inbox in memory; `NotificationService` saves and
 /// restores it per user.
 class NotificationInbox {
+  /// Messages held for a sign-in, at most this many, newest kept.
+  static const maxHeld = 50;
+
   String? _uid;
   final List<AppNotification> _items = [];
   final List<_Held> _held = [];
@@ -24,7 +31,8 @@ class NotificationInbox {
 
   String? get boundUid => _uid;
 
-  /// Starts [uid]'s session and delivers what arrived before sign-in.
+  /// Starts [uid]'s session and delivers what arrived for them before
+  /// sign-in. What was held for anyone else is dropped.
   void bind(String uid) {
     if (_uid != uid) _resetSession();
     _uid = uid;
@@ -36,9 +44,13 @@ class NotificationInbox {
   }
 
   /// Adds saved history of the bound user behind what is already in the inbox.
-  /// Later messages with the same id count as duplicates.
+  /// Entries for another or no recipient are skipped, whatever file they came
+  /// from. Later messages with the same id count as duplicates.
   void restore(List<AppNotification> saved) {
+    final uid = _uid;
+    if (uid == null) return;
     for (final item in saved) {
+      if (!item.isFor(uid)) continue;
       if (_accepted.containsKey(item.messageId)) continue;
       _accepted[item.messageId] = item;
       _items.add(item);
@@ -54,13 +66,16 @@ class NotificationInbox {
 
   /// Returns true when the message was added to the inbox as a new entry.
   bool receive(AppNotification notification, {bool tapped = false}) {
+    final recipient = notification.recipientUid;
+    if (recipient == null) return false;
+
     final uid = _uid;
     if (uid == null) {
       _held.add(_Held(notification, tapped));
+      if (_held.length > maxHeld) _held.removeAt(0);
       return false;
     }
-    final recipient = notification.recipientUid;
-    if (recipient != null && recipient != uid) return false;
+    if (recipient != uid) return false;
 
     final accepted = _accepted[notification.messageId];
     if (accepted == null) {
@@ -76,7 +91,8 @@ class NotificationInbox {
     return accepted == null;
   }
 
-  /// Hands the tapped target to whoever routes it, once.
+  /// Hands the tapped target to whoever routes it, once. Metadata only in v1:
+  /// every accepted tap opens the notification center.
   NotificationTarget? takePendingTarget() {
     final target = _pendingTarget;
     _pendingTarget = null;
