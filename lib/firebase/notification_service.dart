@@ -94,14 +94,17 @@ class NotificationService {
 
   /// The session whose saved history has been read into the inbox. Until
   /// then nothing is saved, so a save cannot replace history not yet read,
-  /// and nothing leaves the device queue.
+  /// and nothing leaves the device queue. A failed read is tried again when a
+  /// message arrives or the queue is drained.
   int? _loadedGeneration;
 
   bool get _historyLoaded => _loadedGeneration == _generation;
 
-  /// Saves run one after another, so an older inbox never overwrites a newer.
-  /// Each completes with whether its save succeeded.
-  Future<bool> _lastSave = Future.value(true);
+  /// Reads and saves of one user's history file run one after another, in the
+  /// order requested: a read waits for every save requested before it, so a
+  /// new session of the same user reads what an earlier session saved. Other
+  /// users' files are not held up. Each completes with whether it succeeded.
+  final Map<String, Future<bool>> _historyTasks = {};
   NotificationPermission _permission = NotificationPermission.unknown;
   AppNotification? _arrival;
 
@@ -154,18 +157,7 @@ class NotificationService {
     if (_inbox.boundUid != uid) _generation++;
     final generation = _generation;
     _inbox.bind(uid);
-    try {
-      final saved = await _history.load(uid);
-      if (generation != _generation) return;
-      final before = _inbox.items.length;
-      _inbox.restore(saved);
-      _loadedGeneration = generation;
-      // Messages that arrived while the history was read are saved now.
-      if (before > 0) unawaited(_save(uid));
-    } catch (e) {
-      // The inbox keeps working in memory; nothing is saved this session.
-      if (kDebugMode) debugPrint('FCM history unavailable: $e');
-    }
+    await _loadHistory(uid, generation);
     if (generation != _generation) return;
     onChanged?.call();
     await drainPending();
@@ -179,6 +171,7 @@ class NotificationService {
     final uid = _inbox.boundUid;
     if (uid == null) return;
     final generation = _generation;
+    if (!_historyLoaded) await _loadHistory(uid, generation);
     try {
       final pending = await _history.claimPending(uid);
       if (generation != _generation || pending.isEmpty) return;
@@ -207,9 +200,15 @@ class NotificationService {
     _arrival = null;
   }
 
-  /// Completes when every save requested so far has finished.
+  /// Completes when every read and save requested so far has finished.
   @visibleForTesting
-  Future<void> get savesDone => _lastSave;
+  Future<void> get savesDone async {
+    while (true) {
+      final tasks = List.of(_historyTasks.values);
+      await Future.wait(tasks);
+      if (_historyTasks.values.every(tasks.contains)) return;
+    }
+  }
 
   /// The target of a tapped message, once. The router owner decides when to
   /// call this and where each target type leads.
@@ -240,7 +239,10 @@ class NotificationService {
     if (notification == null) return;
     final added = _inbox.receive(notification, tapped: tapped);
     final uid = _inbox.boundUid;
-    if (added && uid != null && _historyLoaded) unawaited(_save(uid));
+    if (added && uid != null) {
+      // Saved once the history is read; until then reading is tried again.
+      unawaited(_historyLoaded ? _save(uid) : _loadHistory(uid, _generation));
+    }
     if (added && !tapped) _arrival = notification;
     // A tap on a message already in the inbox adds nothing but must still
     // open. A message for someone else or nobody changes nothing.
@@ -248,17 +250,54 @@ class NotificationService {
     if (added || (tapped && forThisUser)) onChanged?.call();
   }
 
-  /// Saves the inbox as it is now, after the saves already requested.
-  Future<bool> _save(String uid) {
-    final items = _inbox.items;
-    return _lastSave = _lastSave.then((_) async {
+  /// Runs [task] on [uid]'s history after the tasks already requested for it.
+  Future<bool> _historyTask(String uid, Future<bool> Function() task) {
+    final previous = _historyTasks[uid] ?? Future.value(true);
+    final next = previous.then((_) async {
       try {
-        await _history.save(uid, items);
-        return true;
+        return await task();
       } catch (e) {
-        if (kDebugMode) debugPrint('FCM history not saved: $e');
+        if (kDebugMode) debugPrint('FCM history task failed: $e');
         return false;
       }
+    });
+    _historyTasks[uid] = next;
+    return next;
+  }
+
+  /// Reads [uid]'s saved history into the inbox of session [generation],
+  /// after that user's earlier saves. A read that fails leaves the session
+  /// unloaded, so nothing replaces the file until a later read succeeds.
+  /// Messages already in the inbox are saved together with what was read.
+  Future<bool> _loadHistory(String uid, int generation) =>
+      _historyTask(uid, () async {
+        if (generation != _generation || _loadedGeneration == generation) {
+          return false;
+        }
+        final List<AppNotification> saved;
+        try {
+          saved = await _history.load(uid);
+        } catch (e) {
+          // The inbox keeps working in memory meanwhile.
+          if (kDebugMode) debugPrint('FCM history unavailable: $e');
+          return false;
+        }
+        if (generation != _generation) return false;
+        final before = _inbox.items.length;
+        _inbox.restore(saved);
+        _loadedGeneration = generation;
+        if (before > 0) await _history.save(uid, _inbox.items);
+        return true;
+      });
+
+  /// Saves the inbox as it is now, after the reads and saves already
+  /// requested for [uid]. Call only once the history of this session is read:
+  /// the inbox then holds it, so the save replaces nothing unread.
+  Future<bool> _save(String uid) {
+    final items = _inbox.items;
+    return _historyTask(uid, () async {
+      await _history.save(uid, items);
+      return true;
     });
   }
 }

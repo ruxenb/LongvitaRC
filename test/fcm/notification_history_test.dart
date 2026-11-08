@@ -47,15 +47,20 @@ class Gate {
 /// a slow read finishing late would have.
 class GatedStore extends NotificationHistoryStore {
   Gate? loadGate, claimGate, saveGate;
-  Object? loadError, saveError;
+  Object? saveError;
+
+  /// The next [loadFailures] loads throw [loadError].
+  Object loadError = const FileSystemException('busy');
+  int loadFailures = 0;
 
   GatedStore(Directory dir) : super(baseDirectory: () async => dir);
 
   @override
   Future<List<AppNotification>> load(String uid) async {
-    final error = loadError;
-    loadError = null;
-    if (error != null) throw error;
+    if (loadFailures > 0) {
+      loadFailures--;
+      throw loadError;
+    }
     final items = await super.load(uid);
     final gate = loadGate;
     loadGate = null;
@@ -491,17 +496,20 @@ void main() {
       final first = service.bindUser('uid-a');
       await gate.entered;
       service.clearHistory();
+      final changesAtSignOut = changes;
       await store.save('uid-a', [note('fresh')]);
-      await service.bindUser('uid-a');
-      final changesOfSecond = changes;
-
+      // Reads of one user's file run in order, so the second read waits for
+      // the held one; it is released before waiting for the second bind.
+      final second = service.bindUser('uid-a');
       gate.release();
       await first;
+      await second;
       await settle(service);
 
       expect(ids(service.inbox), ['fresh']);
       expect(ids(await store.load('uid-a')), ['fresh']);
-      expect(changes, changesOfSecond);
+      // Only the second bind reported a change; the held read reported none.
+      expect(changes, changesAtSignOut + 1);
     });
 
     test("A -> B while A's history loads: B gets nothing of A", () async {
@@ -607,10 +615,11 @@ void main() {
       expect(ids(await store.load('uid-a')), ['p1']);
     });
 
-    test('history that could not be read is never overwritten', () async {
+    test('history that cannot be read is not overwritten, and is read again',
+        () async {
       await store.save('uid-a', [note('old')]);
       await store.addPending(note('p1'));
-      gated.loadError = const FileSystemException('busy');
+      gated.loadFailures = 1000;
       final service = newService();
 
       await service.bindUser('uid-a');
@@ -621,6 +630,16 @@ void main() {
       expect(ids(service.inbox), ['new', 'p1']);
       expect(ids(await store.load('uid-a')), ['old']);
       expect(pendingIds(await store.claimPending('uid-a')), ['p1']);
+
+      // The read works again: the next drain (app resumed) reads, then saves
+      // all three and only then removes p1 from the queue.
+      gated.loadFailures = 0;
+      await service.drainPending();
+      await settle(service);
+
+      expect(ids(service.inbox), ['new', 'p1', 'old']);
+      expect(ids(await store.load('uid-a')), ['new', 'p1', 'old']);
+      expect(await store.claimPending('uid-a'), isEmpty);
     });
 
     test('a tap arriving while the history loads is saved with it, opened once',
@@ -661,6 +680,175 @@ void main() {
       expect(service.takeArrival(), isNull);
       expect(service.takeOpenRequest(), isFalse);
       expect(ids(await store.load('uid-a')), ['m1']);
+    });
+  });
+
+  // PM review of bfd17f4. PM-S412-01: a new session of the same user reads
+  // the history only after the earlier session's saves. PM-S412-02: a file
+  // that exists but cannot be read is not an empty history.
+  group('PM-S412 review fixes', () {
+    late FakeGateway gateway;
+
+    Future<void> settle(NotificationService service) async {
+      await Future<void>.delayed(Duration.zero);
+      await service.savesDone;
+    }
+
+    setUp(() => gateway = FakeGateway());
+
+    test('PM-S412-01: a save still running at re-login is read, not lost',
+        () async {
+      final gated = GatedStore(dir);
+      await store.save('uid-a', [note('saved-before')]);
+      final service = NotificationService(gateway: gateway, history: gated);
+      await service.bindUser('uid-a');
+      await service.initialize();
+
+      gated.saveGate = Gate();
+      final gate = gated.saveGate!;
+      gateway.foreground.add(push('first-session'));
+      await gate.entered;
+
+      service.clearHistory();
+      final rebound = service.bindUser('uid-a');
+      await Future<void>.delayed(Duration.zero);
+      gate.release();
+      await rebound;
+      gateway.foreground.add(push('second-session'));
+      await settle(service);
+
+      const all = ['second-session', 'first-session', 'saved-before'];
+      expect(ids(service.inbox), all);
+      expect(ids(await store.load('uid-a')), all);
+    });
+
+    test('PM-S412-01: another user is not held up by A\'s pending save',
+        () async {
+      final gated = GatedStore(dir);
+      await store.save('uid-b', [note('b-old', recipient: 'uid-b')]);
+      final service = NotificationService(gateway: gateway, history: gated);
+      await service.bindUser('uid-a');
+      await service.initialize();
+
+      gated.saveGate = Gate();
+      final gate = gated.saveGate!;
+      gateway.foreground.add(push('a1'));
+      await gate.entered;
+
+      service.clearHistory();
+      // Fails rather than hangs if B waited for A's held save.
+      await service.bindUser('uid-b').timeout(const Duration(seconds: 10));
+      expect(ids(service.inbox), ['b-old']);
+
+      gate.release();
+      await settle(service);
+      expect(ids(await store.load('uid-a')), ['a1']);
+      expect(ids(await store.load('uid-b')), ['b-old']);
+    });
+
+    group('PM-S412-02: read errors at the file boundary', () {
+      /// A store on the real folder whose reads of files whose name ends
+      /// with one of [blocked] fail while the file exists.
+      final blocked = <String>{};
+
+      NotificationHistoryStore blockingStore() => NotificationHistoryStore(
+            baseDirectory: () async => dir,
+            readFile: (file) async {
+              final name = file.uri.pathSegments.last;
+              if (blocked.any(name.endsWith)) {
+                throw FileSystemException('read blocked', file.path);
+              }
+              return file.readAsString();
+            },
+          );
+
+      setUp(blocked.clear);
+
+      test('a file that exists but cannot be read throws, a missing one is empty',
+          () async {
+        await store.save('uid-a', [note('must-keep')]);
+        blocked.add('uid-a.json');
+
+        await expectLater(blockingStore().load('uid-a'),
+            throwsA(isA<FileSystemException>()));
+        expect(await blockingStore().load('uid-b'), isEmpty);
+      });
+
+      test('history is not replaced while unreadable, and saved once readable',
+          () async {
+        await store.save('uid-a', [note('must-keep')]);
+        blocked.add('uid-a.json');
+        final service =
+            NotificationService(gateway: gateway, history: blockingStore());
+
+        await service.bindUser('uid-a');
+        await service.initialize();
+        gateway.foreground.add(push('while-blocked'));
+        await settle(service);
+        expect(ids(await store.load('uid-a')), ['must-keep']);
+
+        blocked.clear();
+        gateway.foreground.add(push('after-recovery'));
+        await settle(service);
+
+        const all = ['after-recovery', 'while-blocked', 'must-keep'];
+        expect(ids(service.inbox), all);
+        expect(ids(await store.load('uid-a')), all);
+      });
+
+      test('the old queue file is kept while it cannot be read', () async {
+        final legacy = File('${dir.path}/notifications/pending.json')
+          ..parent.createSync(recursive: true)
+          ..writeAsStringSync(jsonEncode([note('legacy-a').toJson()]));
+        blocked.add('pending.json');
+
+        await expectLater(blockingStore().claimPending('uid-a'),
+            throwsA(isA<FileSystemException>()));
+        expect(legacy.existsSync(), isTrue);
+
+        blocked.clear();
+        expect(pendingIds(await blockingStore().claimPending('uid-a')),
+            ['legacy-a']);
+        expect(legacy.existsSync(), isFalse);
+      });
+
+      test('a queued message that cannot be read now stays queued', () async {
+        await store.addPending(note('p1'));
+        await store.addPending(note('p2'));
+        final queue = Directory('${dir.path}/notifications/pending');
+        final names = queue.listSync().map((f) => f.uri.pathSegments.last).toList()
+          ..sort();
+        blocked.add(names.first); // p1's file
+
+        final claimed = await blockingStore().claimPending('uid-a');
+        expect(pendingIds(claimed), ['p2']);
+        await blockingStore().ackPending(claimed);
+
+        blocked.clear();
+        expect(pendingIds(await store.claimPending('uid-a')), ['p1']);
+      });
+
+      test('a file locked by another process is not overwritten (Windows)',
+          () async {
+        await store.save('uid-a', [note('must-keep')]);
+        final file = File('${dir.path}/notifications/uid-a.json');
+        final service = NotificationService(gateway: gateway, history: store);
+        RandomAccessFile? lock = file.openSync(mode: FileMode.append)
+          ..lockSync(FileLock.exclusive);
+        try {
+          await expectLater(file.readAsString(), throwsA(isA<FileSystemException>()));
+          await service.bindUser('uid-a');
+          await service.initialize();
+        } finally {
+          lock.unlockSync();
+          lock.closeSync();
+          lock = null;
+        }
+        gateway.foreground.add(push('after-unlock'));
+        await settle(service);
+
+        expect(ids(await store.load('uid-a')), ['after-unlock', 'must-keep']);
+      }, skip: !Platform.isWindows);
     });
   });
 }

@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
 
+import 'package:flutter/foundation.dart';
 import 'package:path_provider/path_provider.dart';
 
 import '../models/app_notification.dart';
@@ -42,13 +43,19 @@ class NotificationHistoryStore {
   static final _pendingName = RegExp(r'^\d{16}-[0-9a-f]{8}\.json$');
 
   final Future<Directory> Function() _baseDirectory;
+  final Future<String> Function(File file) _readFile;
 
-  NotificationHistoryStore({Future<Directory> Function()? baseDirectory})
-      : _baseDirectory = baseDirectory ?? getApplicationDocumentsDirectory;
+  NotificationHistoryStore({
+    Future<Directory> Function()? baseDirectory,
+    @visibleForTesting Future<String> Function(File file)? readFile,
+  })  : _baseDirectory = baseDirectory ?? getApplicationDocumentsDirectory,
+        _readFile = readFile ?? ((file) => file.readAsString());
 
-  /// Newest first. A missing or unreadable file is an empty history, and an
-  /// unreadable entry is skipped. Entries are returned as saved; the inbox
-  /// decides which belong to the user.
+  /// Newest first. A missing file is an empty history; a file that is not
+  /// valid JSON reads as empty, and an unreadable entry is skipped. A file
+  /// that exists but cannot be read throws, so the caller does not mistake it
+  /// for an empty history and replace it. Entries are returned as saved; the
+  /// inbox decides which belong to the user.
   Future<List<AppNotification>> load(String uid) async {
     _checkUid(uid);
     return _readList(await _fileFor(uid));
@@ -142,6 +149,7 @@ class NotificationHistoryStore {
   /// Moves recipients' messages from the old single queue file into the new
   /// queue and removes it. Its entries with no valid recipient are not moved:
   /// under v1 nobody may see them. Only the app isolate reads that file now.
+  /// A read that fails throws before anything is removed.
   Future<void> _migrateLegacyPending() async {
     final legacy = await _fileFor(_legacyPendingFile);
     if (!await legacy.exists()) return;
@@ -158,8 +166,16 @@ class NotificationHistoryStore {
 
   Future<List<AppNotification>> _readList(File file) async {
     if (!await file.exists()) return const [];
+    final String text;
     try {
-      final decoded = jsonDecode(await file.readAsString());
+      text = await _readFile(file);
+    } on FileSystemException {
+      // Gone since the check: nothing saved. Still there: a read error.
+      if (!await file.exists()) return const [];
+      rethrow;
+    }
+    try {
+      final decoded = jsonDecode(text);
       if (decoded is! List) return const [];
       return decoded
           .map(AppNotification.tryFromJson)
@@ -167,14 +183,14 @@ class NotificationHistoryStore {
           .toList();
     } on FormatException {
       return const [];
-    } on FileSystemException {
-      return const [];
     }
   }
 
+  /// One queued message, or null when it cannot be read now. It is then not
+  /// claimed, so it is not removed either, and a later drain tries again.
   Future<AppNotification?> _readOne(File file) async {
     try {
-      return AppNotification.tryFromJson(jsonDecode(await file.readAsString()));
+      return AppNotification.tryFromJson(jsonDecode(await _readFile(file)));
     } on FormatException {
       return null;
     } on FileSystemException {
