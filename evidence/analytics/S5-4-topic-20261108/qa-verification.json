@@ -1,0 +1,16 @@
+{
+  "phase": "qa-alias",
+  "deviceBytes": 18950,
+  "storageBytes": 18950,
+  "sha256": "97a469e7f695c8c4eda79da433aabb5d0aaf609bd4db021395232c155690198d",
+  "byteMatch": true,
+  "expectedFileSizeKb": 19,
+  "sdkExportCount": 1,
+  "debugViewExportCount": 1,
+  "debugViewParams": {
+    "report_topic": "longevity_meal_plan",
+    "file_size_kb": 19,
+    "has_shopping_list": 0
+  },
+  "topicListedInDebugView": false
+}

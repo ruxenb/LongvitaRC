@@ -1,0 +1,29 @@
+{
+  "phase": "final-code-no-qa-alias-flag",
+  "deviceBytes": 18950,
+  "storageBytes": 18950,
+  "sha256": "637cb107d28f08089b09c1734a95923f3c6a28a0a9a973b74d4cda72de10da59",
+  "byteMatch": true,
+  "expectedFileSizeKb": 19,
+  "sdkExportCountThisPhase": 1,
+  "sdkExportCountAcrossTwoPhases": 2,
+  "sdkParameters": {
+    "topic": "longevity_meal_plan",
+    "report_topic": "longevity_meal_plan",
+    "file_size_kb": 19,
+    "has_shopping_list": 0
+  },
+  "debugViewExportCountAcrossTwoPhases": 2,
+  "debugViewExportCountThisPhase": 1,
+  "debugViewEventTimeLocal": "2026-11-08T21:27:41+07:00",
+  "debugViewParams": {
+    "report_topic": "longevity_meal_plan",
+    "file_size_kb": 19,
+    "has_shopping_list": 0
+  },
+  "topicListedInDebugView": false,
+  "normalApkRestored": true,
+  "analyticsDebugDisabled": true,
+  "firebaseStorageEmulatorStopped": true,
+  "avdStopped": true
+}

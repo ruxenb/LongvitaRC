@@ -1,0 +1,37 @@
+00:00 +0: loading <worktree>/docs/coordination/qa/S5-4-20261108/baseline_service_contract_test.dart
+00:00 +0: export sends exactly one SDK event with typed report parameters
+00:00 +0 -1: export sends exactly one SDK event with typed report parameters [E]
+  Expected: {
+              'topic': 'longevity_meal_plan',
+              'report_topic': 'longevity_meal_plan',
+              'file_size_kb': 19,
+              'has_shopping_list': 0
+            }
+    Actual: {'topic': 'longevity_meal_plan', 'file_size_kb': 19, 'has_shopping_list': 0}
+     Which: has different length and is missing map key 'report_topic'
+
+  package:matcher                                                              expect
+  package:flutter_test/src/widget_tester.dart 473:18                           expect
+  docs\coordination\qa\S5-4-20261108\baseline_service_contract_test.dart 33:5  main.<fn>
+
+00:00 +0 -1: the SDK receives the supplied topic and actual report values
+00:00 +0 -2: the SDK receives the supplied topic and actual report values [E]
+  Expected: {
+              'topic': 'another_report',
+              'report_topic': 'another_report',
+              'file_size_kb': 7,
+              'has_shopping_list': 1
+            }
+    Actual: {'topic': 'another_report', 'file_size_kb': 7, 'has_shopping_list': 1}
+     Which: has different length and is missing map key 'report_topic'
+
+  package:matcher                                                              expect
+  package:flutter_test/src/widget_tester.dart 473:18                           expect
+  docs\coordination\qa\S5-4-20261108\baseline_service_contract_test.dart 48:5  main.<fn>
+
+00:00 +0 -2: SDK failure neither breaks the export nor retries the event
+00:00 +1 -2: Some tests failed.
+
+Failing tests:
+  <worktree>/docs/coordination/qa/S5-4-20261108/baseline_service_contract_test.dart: export sends exactly one SDK event with typed report parameters
+  <worktree>/docs/coordination/qa/S5-4-20261108/baseline_service_contract_test.dart: the SDK receives the supplied topic and actual report values
