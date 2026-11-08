@@ -1,7 +1,7 @@
 # Worklog — Thắng VLQ
 
 > **Vai trò:** Technical Architect & Co-Lead  
-> **Ngày cập nhật:** 07/11/2026
+> **Ngày cập nhật:** 08/11/2026
 > **Nhánh kiểm tra:** `main`  
 > **Mục đích:** Ghi bằng chứng hoàn thành, phần còn thiếu, lỗi đã phát hiện và điều kiện tiếp tục cho các task do Thắng phụ trách.
 
@@ -15,6 +15,8 @@
 - Không còn blocker Android SDK/ADB/emulator trên máy Thắng.
 - Tooling hỗ trợ Firebase, ARTEMIS, review, security scan và video được ghi tại [`docs/thang-tooling-setup-20261104.md`](thang-tooling-setup-20261104.md).
 - Nhánh `Thang` đã merge vào `main` tại `90d9fd0`; `origin/Thang` không còn commit riêng chưa có trên `main` tại thời điểm kiểm tra.
+- Snapshot 08/11: working tree sạch, `main` đồng bộ `origin/main` tại `4f3fd07` (merge PR #19). PR #19 thuộc phạm vi FCM của Charlie nên không làm tăng số task hoàn thành của Thắng.
+- Baseline sau PR #19 có evidence **388/388 Flutter tests pass** trong `evidence/fcm/S4-12-v1-20261108/README.md`; đây là kết quả đã lưu của PR, không phải lượt chạy lại độc lập trong lần cập nhật worklog này.
 - Sau merge: `flutter analyze lib --no-pub` sạch và **334/334 Flutter tests pass**. Analyzer toàn cây bị ảnh hưởng bởi Dart template bên trong `test/firestore/node_modules/firebase-tools`, không phải source `lib/`.
 - Các task test/review/report/nộp bài còn lại chưa hoàn thành vì vẫn phụ thuộc
   Firebase runtime, bằng chứng ARTEMIS hoặc sản phẩm của thành viên khác.

@@ -3,6 +3,8 @@
 > **Thành viên:** Thắng (Thắng VLQ)  
 > **Vai trò:** **Technical Architect & Co-Lead** (MVVM Skeleton, DI & Router, Hồ Sơ Tài Liệu docs/, Feature Freeze, Tổng Hợp Report, Slides, Video, Hỗ Trợ Leader Nộp Bài)  
 > **Tổng task:** 28 tasks | **Đã hoàn thành:** 12/28 (43%)
+>
+> **Đối chiếu gần nhất:** 08/11/2026 trên `main` `4f3fd07`; số task hoàn thành của Thắng không đổi sau PR #19 vì PR này thuộc phạm vi FCM của Charlie.
 
 ---
 
@@ -49,7 +51,7 @@
 | **S8-14** | 8. Report | Quay video: Phần mở đầu giới thiệu dự án, trình bày 1 finding code review và cách sửa | — | S7-3-VLQ | Clip của Thắng | Video 1.0 | Cao | 4 | | Đang làm | Đã soạn kịch bản evidence-based; chưa quay clip cuối |
 | **S8-15** | 8. Report | Biên tập & ghép Video demo 5–10 phút (quay thật, không dựng kết quả); upload YouTube/Drive; đặt link public | Hoàng, Charlie, Thái An | S8-11, S8-12, S8-13, S8-14 | Link video công khai | Video 1.0 | Cao | 4 | | Chưa bắt đầu | 5-10 phút |
 | **S8-16** | 8. Report | Hoàn thiện `README.md`: topic, API, cách chạy app và test, pinned versions, AI tools, link video, deliverable map | Hoàng, Charlie, Thái An | S8-15 | `README.md` | Mục 9 | Cao | 4 | | Đang làm | Đã thêm setup tự động trên ổ T và ARTEMIS `.env.example`; còn link video/deliverables cuối |
-| **S8-17-VLQ** | 8. Report | Cập nhật worklog cá nhân `docs/worklog-thang.md` để đối chiếu lịch sử Git | — | S8-16 | `docs/worklog-thang.md` | Mục 11 | Thấp | 4 | | Đang làm | Đã khởi tạo; tiếp tục cập nhật đến cuối dự án |
+| **S8-17-VLQ** | 8. Report | Cập nhật worklog cá nhân `docs/worklog-thang.md` để đối chiếu lịch sử Git | — | S8-16 | `docs/worklog-thang.md` | Mục 11 | Thấp | 4 | | Đang làm | Đã cập nhật snapshot đến `main` `4f3fd07` ngày 08/11; tiếp tục cập nhật đến lúc đóng gói/nộp bài |
 | **S9-1** | 9. Nộp bài | Kiểm tra quét bảo mật: Không có secret trong repo (service account, API key, keystore); kiểm tra toàn bộ git log | — | S8-16 | Rà soát sạch sẽ | Mục 9, 11 | Cao | 4 | | Đang làm | Audit giữa kỳ không thấy secret; đã khử 18 đường dẫn máy; phải chạy lại trước nộp |
 | **S9-2** | 9. Nộp bài | Đối chiếu Project ID trên các ảnh chụp console với file `google-services.json` (bắt buộc phải trùng khớp) | Charlie | S8-5 | Khớp project ID | Mục 11 | Cao | 4 | | Chưa bắt đầu | Tiêu chí chính chủ |
 | **S9-3** | 9. Nộp bài | Mở repo, báo cáo PDF, slide PDF, video link bằng cửa sổ ẩn danh (incognito); sửa quyền truy cập nếu bị chặn | — | S8-16 | Mở thành công cả 4 | Access rule | Cao | 4 | | Chưa bắt đầu | Tránh điểm 0 |
