@@ -29,12 +29,12 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 }
 
 AppNotification? _parseMessage(RemoteMessage message) => AppNotification.parse(
-      data: message.data,
-      fcmMessageId: message.messageId,
-      title: message.notification?.title,
-      body: message.notification?.body,
-      source: message,
-    );
+  data: message.data,
+  fcmMessageId: message.messageId,
+  title: message.notification?.title,
+  body: message.notification?.body,
+  source: message,
+);
 
 /// The Firebase Messaging calls [NotificationService] depends on.
 abstract interface class FcmGateway {
@@ -50,7 +50,7 @@ class FirebaseFcmGateway implements FcmGateway {
   final FirebaseMessaging _fcm;
 
   FirebaseFcmGateway({FirebaseMessaging? fcm})
-      : _fcm = fcm ?? FirebaseMessaging.instance;
+    : _fcm = fcm ?? FirebaseMessaging.instance;
 
   @override
   Future<bool> requestPermission() async {
@@ -105,6 +105,7 @@ class NotificationService {
   /// new session of the same user reads what an earlier session saved. Other
   /// users' files are not held up. Each completes with whether it succeeded.
   final Map<String, Future<bool>> _historyTasks = {};
+  final Set<Future<void>> _pendingWrites = {};
   NotificationPermission _permission = NotificationPermission.unknown;
   AppNotification? _arrival;
 
@@ -112,15 +113,17 @@ class NotificationService {
   void Function()? onChanged;
 
   NotificationService({FcmGateway? gateway, NotificationHistoryStore? history})
-      : _gateway = gateway ?? FirebaseFcmGateway(),
-        _history = history ?? NotificationHistoryStore();
+    : _gateway = gateway ?? FirebaseFcmGateway(),
+      _history = history ?? NotificationHistoryStore();
 
   NotificationPermission get permission => _permission;
 
   List<AppNotification> get inbox => _inbox.items;
 
-  List<RemoteMessage> get messages =>
-      _inbox.items.map((item) => item.source).whereType<RemoteMessage>().toList();
+  List<RemoteMessage> get messages => _inbox.items
+      .map((item) => item.source)
+      .whereType<RemoteMessage>()
+      .toList();
 
   /// Requests permission and attaches listeners once per app process.
   ///
@@ -135,8 +138,9 @@ class NotificationService {
           : NotificationPermission.denied;
       _gateway.registerBackgroundHandler();
       _gateway.onMessage.listen((message) => _receive(message));
-      _gateway.onMessageOpenedApp
-          .listen((message) => _receive(message, tapped: true));
+      _gateway.onMessageOpenedApp.listen(
+        (message) => _receive(message, tapped: true),
+      );
 
       final initial = await _gateway.getInitialMessage();
       if (initial != null) _receive(initial, tapped: true);
@@ -205,8 +209,12 @@ class NotificationService {
   Future<void> get savesDone async {
     while (true) {
       final tasks = List.of(_historyTasks.values);
+      final writes = List.of(_pendingWrites);
+      await Future.wait(writes);
       await Future.wait(tasks);
-      if (_historyTasks.values.every(tasks.contains)) return;
+      if (_pendingWrites.isEmpty && _historyTasks.values.every(tasks.contains)) {
+        return;
+      }
     }
   }
 
@@ -240,14 +248,34 @@ class NotificationService {
     final added = _inbox.receive(notification, tapped: tapped);
     final uid = _inbox.boundUid;
     if (added && uid != null) {
-      // Saved once the history is read; until then reading is tried again.
-      unawaited(_historyLoaded ? _save(uid) : _loadHistory(uid, _generation));
+      if (_historyLoaded) {
+        unawaited(_save(uid));
+      } else {
+        // Keep a durable copy without replacing history we could not read.
+        // It survives sign-out and is acknowledged only after a later save.
+        final generation = _generation;
+        late final Future<void> write;
+        write = _stageUnread(notification, generation).whenComplete(() {
+          _pendingWrites.remove(write);
+        });
+        _pendingWrites.add(write);
+      }
     }
     if (added && !tapped) _arrival = notification;
     // A tap on a message already in the inbox adds nothing but must still
     // open. A message for someone else or nobody changes nothing.
     final forThisUser = uid != null && notification.isFor(uid);
     if (added || (tapped && forThisUser)) onChanged?.call();
+  }
+
+  Future<void> _stageUnread(AppNotification item, int generation) async {
+    try {
+      await _history.addPending(item);
+      if (generation == _generation) await drainPending();
+    } catch (e) {
+      // Preserve the unread history even if the device cannot stage a copy.
+      if (kDebugMode) debugPrint('FCM staging unavailable: $e');
+    }
   }
 
   /// Runs [task] on [uid]'s history after the tasks already requested for it.

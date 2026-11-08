@@ -41,6 +41,7 @@ class NotificationHistoryStore {
 
   static final _random = Random.secure();
   static final _pendingName = RegExp(r'^\d{16}-[0-9a-f]{8}\.json$');
+  static final Map<String, Future<void>> _migrationTasks = {};
 
   final Future<Directory> Function() _baseDirectory;
   final Future<String> Function(File file) _readFile;
@@ -48,8 +49,8 @@ class NotificationHistoryStore {
   NotificationHistoryStore({
     Future<Directory> Function()? baseDirectory,
     @visibleForTesting Future<String> Function(File file)? readFile,
-  })  : _baseDirectory = baseDirectory ?? getApplicationDocumentsDirectory,
-        _readFile = readFile ?? ((file) => file.readAsString());
+  }) : _baseDirectory = baseDirectory ?? getApplicationDocumentsDirectory,
+       _readFile = readFile ?? ((file) => file.readAsString());
 
   /// Newest first. A missing file is an empty history; a file that is not
   /// valid JSON reads as empty, and an unreadable entry is skipped. A file
@@ -152,16 +153,99 @@ class NotificationHistoryStore {
   /// A read that fails throws before anything is removed.
   Future<void> _migrateLegacyPending() async {
     final legacy = await _fileFor(_legacyPendingFile);
-    if (!await legacy.exists()) return;
-    final items = await _readList(legacy);
-    for (final item in items.reversed) {
-      await addPending(item);
+    final key = legacy.absolute.path;
+    final previous = _migrationTasks[key] ?? Future<void>.value();
+    final next = previous.then((_) => _resumeLegacyMigration(legacy));
+    // Keep an error-free barrier: a failed migration must be retryable.
+    late final Future<void> barrier;
+    void release() {
+      if (identical(_migrationTasks[key], barrier)) _migrationTasks.remove(key);
     }
-    try {
-      await legacy.delete();
-    } on FileSystemException {
-      // Another drain moved it first.
+
+    barrier = next.then<void>(
+      (_) => release(),
+      onError: (Object e, StackTrace stack) => release(),
+    );
+    _migrationTasks[key] = barrier;
+    return next;
+  }
+
+  Future<void> _resumeLegacyMigration(File legacy) async {
+    final manifest = File('${legacy.parent.path}/pending.migration.json');
+    if (!await manifest.exists()) {
+      if (!await legacy.exists()) return;
+      final items = (await _readList(legacy))
+          .where((item) => item.recipientUid != null)
+          .take(maxPending)
+          .toList();
+      final files = await _pendingFiles();
+      var oldest = (await legacy.lastModified()).microsecondsSinceEpoch;
+      if (files.isNotEmpty) {
+        oldest = min(
+          oldest,
+          int.parse(_baseName(files.first).split('-').first),
+        );
+      }
+      // Legacy entries predate the per-message queue. Preserve that age when
+      // applying the shared capacity limit, including across retries.
+      if (oldest <= items.length) {
+        throw const FormatException('Invalid legacy queue timestamp');
+      }
+      final entries = <Map<String, Object>>[];
+      var stamp = oldest - items.length;
+      for (final item in items.reversed) {
+        final nonce = _random
+            .nextInt(1 << 32)
+            .toRadixString(16)
+            .padLeft(8, '0');
+        entries.add({
+          'ref': '${(stamp++).toString().padLeft(16, '0')}-$nonce.json',
+          'item': item.toJson(),
+        });
+      }
+      // Persist stable names BEFORE importing anything. An interruption then
+      // resumes these same files rather than duplicating legacy messages.
+      await manifest.parent.create(recursive: true);
+      final temp = File('${manifest.path}.tmp');
+      await temp.writeAsString(jsonEncode(entries), flush: true);
+      await temp.rename(manifest.path);
     }
+    final decoded = jsonDecode(await _readFile(manifest));
+    if (decoded is! List || decoded.length > maxPending) {
+      throw const FormatException('Invalid legacy migration manifest');
+    }
+    final entries = <PendingNotification>[];
+    final refs = <String>{};
+    for (final entry in decoded) {
+      final ref = entry is Map ? entry['ref'] : null;
+      final item = entry is Map
+          ? AppNotification.tryFromJson(entry['item'])
+          : null;
+      if (ref is! String ||
+          !_pendingName.hasMatch(ref) ||
+          !refs.add(ref) ||
+          item?.recipientUid == null) {
+        throw const FormatException('Invalid legacy migration entry');
+      }
+      entries.add(PendingNotification(item!, ref));
+    }
+    final dir = await _pendingDirectory();
+    await dir.create(recursive: true);
+    for (final entry in entries) {
+      final file = File('${dir.path}/${entry.ref}');
+      if (await file.exists()) continue;
+      final temp = File('${file.path}.tmp');
+      await temp.writeAsString(
+        jsonEncode(entry.notification.toJson()),
+        flush: true,
+      );
+      await temp.rename(file.path);
+    }
+    await _prunePending(dir);
+    // Keep the checkpoint until the original is gone. If either operation
+    // fails, the next attempt reuses the same names and chronological order.
+    if (await legacy.exists()) await legacy.delete();
+    await manifest.delete();
   }
 
   Future<List<AppNotification>> _readList(File file) async {
@@ -203,8 +287,9 @@ class NotificationHistoryStore {
     await file.parent.create(recursive: true);
     final temp = File('${file.path}.tmp');
     await temp.writeAsString(
-        jsonEncode(items.map((item) => item.toJson()).toList()),
-        flush: true);
+      jsonEncode(items.map((item) => item.toJson()).toList()),
+      flush: true,
+    );
     await temp.rename(file.path);
   }
 

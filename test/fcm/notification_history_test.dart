@@ -629,10 +629,11 @@ void main() {
 
       expect(ids(service.inbox), ['new', 'p1']);
       expect(ids(await store.load('uid-a')), ['old']);
-      expect(pendingIds(await store.claimPending('uid-a')), ['p1']);
+      // Foreground arrivals also wait durably while history is unreadable.
+      expect(pendingIds(await store.claimPending('uid-a')), ['p1', 'new']);
 
       // The read works again: the next drain (app resumed) reads, then saves
-      // all three and only then removes p1 from the queue.
+      // all three and only then acknowledges both queued messages.
       gated.loadFailures = 0;
       await service.drainPending();
       await settle(service);
