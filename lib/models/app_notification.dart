@@ -1,12 +1,25 @@
-/// In-app form of a push message. See the payload proposal in
-/// docs/tasks/charlie-progress.md (FCM contracts pending team approval).
+/// In-app form of a push message. Contract FCM v1 in
+/// docs/tasks/charlie-progress.md.
 ///
-/// A push never carries a route: it names a target type and id, and the
-/// router decides where that leads. Target types are a proposal until the
-/// route contract is agreed with the router owner.
+/// A push never carries a route. In v1 every accepted tap opens the
+/// notification center on Profile; target type and id are kept as metadata.
+///
+/// A message is for one user only: [AppNotification.recipientUid] must name
+/// them, or the app never shows it.
 library;
 
 const int notificationSchemaVersion = 1;
+
+/// The form a recipient uid must have: a non-empty string of letters, digits,
+/// `_` or `-` (as Firebase Auth gives for Google sign-in), compared exactly.
+/// The same rule keeps a uid safe to use as a file name.
+final RegExp recipientUidPattern = RegExp(r'^[A-Za-z0-9_-]{1,128}$');
+
+/// The uid [value] names, or null when it is missing, not a string or not in
+/// the expected form. It is not trimmed: " uid-a" is not "uid-a".
+String? parseRecipientUid(Object? value) =>
+    value is String && recipientUidPattern.hasMatch(value) ? value : null;
+
 const Set<String> notificationTargetTypes = {'meal_plan', 'announcement'};
 
 enum NotificationTargetIssue { none, unsupportedVersion, unknownType, missingId }
@@ -34,7 +47,8 @@ class AppNotification {
   /// Why a message that asked for a target has none. It stays in the inbox.
   final NotificationTargetIssue targetIssue;
 
-  /// When set, only this user may see the message.
+  /// The only user who may see the message. Null when the payload named no
+  /// valid recipient: such a message is never accepted.
   final String? recipientUid;
 
   /// The message this was parsed from. It travels with the entry, so what is
@@ -69,10 +83,13 @@ class AppNotification {
       body: body,
       target: target,
       targetIssue: issue,
-      recipientUid: _text(data['recipient_uid']),
+      recipientUid: parseRecipientUid(data['recipient_uid']),
       source: source,
     );
   }
+
+  /// True when the message names exactly [uid] as its recipient.
+  bool isFor(String uid) => recipientUid != null && recipientUid == uid;
 
   /// The form kept on the device. [source] stays out: it only lives in memory.
   Map<String, dynamic> toJson() => {
@@ -97,8 +114,21 @@ class AppNotification {
         (issue) => issue.name == json['target_issue'],
         orElse: () => NotificationTargetIssue.none,
       ),
-      recipientUid: json['recipient_uid'] as String?,
+      recipientUid: parseRecipientUid(json['recipient_uid']),
     );
+  }
+
+  /// One saved entry, or null when it is not a well-formed one, so a single
+  /// bad entry does not cost the others in the same file.
+  static AppNotification? tryFromJson(Object? json) {
+    if (json is! Map<String, dynamic>) return null;
+    final messageId = json['message_id'];
+    if (messageId is! String || messageId.trim().isEmpty) return null;
+    try {
+      return AppNotification.fromJson(json);
+    } on TypeError {
+      return null;
+    }
   }
 
   static (NotificationTarget?, NotificationTargetIssue) _parseTarget(

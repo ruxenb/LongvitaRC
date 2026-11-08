@@ -1,0 +1,4 @@
+00:00 +0: PM-01: retained history includes an old-session save across same-UID re-login
+00:00 +1: PM control: waiting for the save before re-login retains all messages
+00:00 +2: PM-02: actual read failure does not authorize overwriting retained history
+00:00 +3: All tests passed!

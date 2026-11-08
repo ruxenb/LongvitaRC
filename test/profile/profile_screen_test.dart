@@ -79,6 +79,8 @@ class ScriptedRemoteConfig extends FakeRemoteConfig {
 /// No file system in widget tests, where real file futures never complete.
 class MemoryHistory implements NotificationHistoryStore {
   final Map<String, List<AppNotification>> saved = {};
+
+  /// Waiting background messages, oldest first.
   final List<AppNotification> pending = [];
 
   @override
@@ -89,14 +91,17 @@ class MemoryHistory implements NotificationHistoryStore {
       saved[uid] = items;
 
   @override
-  Future<void> addPending(AppNotification item) async => pending.insert(0, item);
+  Future<void> addPending(AppNotification item) async => pending.add(item);
 
   @override
-  Future<List<AppNotification>> takePending() async {
-    final items = List.of(pending);
-    pending.clear();
-    return items;
-  }
+  Future<List<PendingNotification>> claimPending(String uid) async => [
+        for (final item in pending)
+          if (item.isFor(uid)) PendingNotification(item, item.messageId),
+      ];
+
+  @override
+  Future<void> ackPending(List<PendingNotification> entries) async =>
+      pending.removeWhere((item) => entries.any((e) => e.ref == item.messageId));
 }
 
 class CountingCrashlytics extends FakeCrashlytics {
@@ -205,11 +210,18 @@ void main() {
     await settle(tester);
   }
 
-  RemoteMessage push(String id, {String? title, String? body, String? type}) =>
+  // Contract FCM v1: a message names its recipient. Messages for uid-a, the
+  // user these tests sign in, unless [recipient] says otherwise.
+  RemoteMessage push(String id,
+          {String? title, String? body, String? type, String? recipient = 'uid-a'}) =>
       RemoteMessage(
         messageId: id,
         notification: RemoteNotification(title: title, body: body),
-        data: {'target_type': ?type, 'schema_version': '1'},
+        data: {
+          'target_type': ?type,
+          'schema_version': '1',
+          'recipient_uid': ?recipient,
+        },
       );
 
   testWidgets('shows who is signed in', (tester) async {
@@ -503,6 +515,44 @@ void main() {
         expect(find.byType(ProfileScreen), findsOneWidget);
       });
 
+      // Contract FCM v1: only a message naming the signed-in user counts.
+      for (final (name, recipient) in const [
+        ('no recipient', null),
+        ('another user', 'uid-b'),
+      ]) {
+        testWidgets('a message for $name shows nothing and opens nothing',
+            (tester) async {
+          final h = await pumpGate(tester);
+
+          h.gateway.foreground
+              .add(push('fg', title: 'Không phải của A', recipient: recipient));
+          h.gateway.opened
+              .add(push('tap', title: 'Không phải của A', recipient: recipient));
+          await settle(tester);
+          await tester.pumpAndSettle();
+
+          expect(find.textContaining('Không phải của A'), findsNothing);
+          expect(find.byType(ProfileScreen), findsNothing);
+          expect(h.profile.inbox, isEmpty);
+          expect(h.history.saved['uid-a'] ?? const [], isEmpty);
+        });
+
+        testWidgets('a tap for $name before sign-in does not open for A',
+            (tester) async {
+          final h = await pumpGate(tester);
+          await signOut(tester, h);
+
+          h.gateway.opened
+              .add(push('tap', title: 'Không phải của A', recipient: recipient));
+          await settle(tester);
+          await signIn(tester, h, 'uid-a');
+          await tester.pumpAndSettle();
+
+          expect(find.byType(ProfileScreen), findsNothing);
+          expect(h.profile.inbox, isEmpty);
+        });
+      }
+
       group('queued behind another snackbar', () {
         Future<void> receive(WidgetTester tester, Harness h, String id) async {
           h.gateway.foreground.add(RemoteMessage(
@@ -794,7 +844,8 @@ void main() {
     testWidgets('saved history shows when Profile opens', (tester) async {
       await pumpProfile(tester, arrange: (h) {
         h.history.saved['uid-a'] = const [
-          AppNotification(messageId: 'old', title: 'Tin đã lưu'),
+          AppNotification(
+              messageId: 'old', title: 'Tin đã lưu', recipientUid: 'uid-a'),
         ];
       });
 
@@ -804,8 +855,8 @@ void main() {
     testWidgets('a background message shows when the app resumes',
         (tester) async {
       final h = await pumpProfile(tester);
-      h.history.pending
-          .add(const AppNotification(messageId: 'bg', title: 'Tin nền'));
+      h.history.pending.add(const AppNotification(
+          messageId: 'bg', title: 'Tin nền', recipientUid: 'uid-a'));
       expect(find.text('Tin nền'), findsNothing);
 
       tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.inactive);

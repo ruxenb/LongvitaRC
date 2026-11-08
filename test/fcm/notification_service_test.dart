@@ -1,5 +1,6 @@
-// S4-12 preparation: payload parsing, dedup, per-user inbox and lifecycle
-// wiring against a fake gateway. Live delivery on a device is not covered.
+// S4-12: payload parsing, dedup, per-user inbox and lifecycle wiring against
+// a fake gateway, under contract FCM v1 (a message must name its recipient).
+// Live delivery on a device is not covered.
 import 'dart:async';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -10,9 +11,11 @@ import 'package:longvita/models/app_notification.dart';
 
 const planTarget = NotificationTarget('meal_plan', 'plan-1');
 
+/// Contract FCM v1: messages name their recipient, uid-a by default. Pass
+/// `recipient: null` for a message that names nobody.
 Map<String, dynamic> payload({
   String id = 'm1',
-  String? recipient,
+  String? recipient = 'uid-a',
   String type = 'meal_plan',
   String targetId = 'plan-1',
 }) =>
@@ -24,7 +27,7 @@ Map<String, dynamic> payload({
       'recipient_uid': ?recipient,
     };
 
-AppNotification note({String id = 'm1', String? recipient}) =>
+AppNotification note({String id = 'm1', String? recipient = 'uid-a'}) =>
     AppNotification.parse(data: payload(id: id, recipient: recipient))!;
 
 class FakeGateway implements FcmGateway {
@@ -92,6 +95,22 @@ void main() {
           AppNotification.parse(data: {...payload(), 'schema_version': '9'})
               ?.targetIssue,
           NotificationTargetIssue.unsupportedVersion);
+    });
+
+    test('reads a recipient only as an exact, well-formed uid string', () {
+      String? recipientOf(Object? value) => AppNotification.parse(
+              data: {'message_id': 'm1', 'recipient_uid': value})
+          ?.recipientUid;
+
+      expect(recipientOf('uid-a'), 'uid-a');
+      for (final bad in <Object?>[
+        null, '', ' ', ' uid-a', 'uid-a ', 123, true, ['uid-a'],
+        {'uid': 'uid-a'}, '../uid-a', 'uid/a', 'x' * 129,
+      ]) {
+        expect(recipientOf(bad), isNull, reason: '$bad');
+      }
+      expect(AppNotification.parse(data: const {'message_id': 'm1'})?.recipientUid,
+          isNull);
     });
   });
 
@@ -177,6 +196,88 @@ void main() {
       inbox.bind('uid-a');
 
       expect(inbox.items, hasLength(1));
+    });
+
+    // Contract FCM v1 replaces the earlier policy that gave a message with no
+    // recipient to whoever was, or next got, signed in.
+    test('a message with no recipient is never accepted, held or opened', () {
+      final signedOut = NotificationInbox();
+      expect(signedOut.receive(note(recipient: null), tapped: true), isFalse);
+      signedOut.bind('uid-a');
+      expect(signedOut.items, isEmpty);
+      expect(signedOut.takeOpenRequest(), isFalse);
+
+      final signedIn = NotificationInbox()..bind('uid-a');
+      expect(signedIn.receive(note(recipient: null), tapped: true), isFalse);
+      expect(signedIn.items, isEmpty);
+      expect(signedIn.takeOpenRequest(), isFalse);
+      expect(signedIn.takePendingTarget(), isNull);
+    });
+
+    test('a rejected message with an id does not block the accepted one', () {
+      final inbox = NotificationInbox()..bind('uid-a');
+
+      inbox.receive(note(id: 'same', recipient: null), tapped: true);
+      inbox.receive(note(id: 'same', recipient: 'uid-b'), tapped: true);
+      expect(inbox.takeOpenRequest(), isFalse);
+
+      expect(inbox.receive(note(id: 'same'), tapped: true), isTrue);
+      expect(inbox.items.single.recipientUid, 'uid-a');
+      expect(inbox.takeOpenRequest(), isTrue);
+    });
+
+    test('held messages of B are dropped when A signs in', () {
+      final inbox = NotificationInbox();
+      inbox.receive(note(id: 'b', recipient: 'uid-b'), tapped: true);
+      inbox.receive(note(id: 'a'), tapped: true);
+
+      inbox.bind('uid-a');
+
+      expect(inbox.items.map((n) => n.messageId), ['a']);
+      expect(inbox.takeOpenRequest(), isTrue);
+    });
+
+    test('restored history keeps only entries for the bound user', () {
+      final inbox = NotificationInbox()..bind('uid-a');
+
+      inbox.restore([
+        note(id: 'a1'),
+        note(id: 'b1', recipient: 'uid-b'),
+        note(id: 'legacy', recipient: null),
+        note(id: 'a2'),
+      ]);
+
+      expect(inbox.items.map((n) => n.messageId), ['a1', 'a2']);
+    });
+
+    test('restore with nobody bound adds nothing', () {
+      final inbox = NotificationInbox()..restore([note()]);
+      inbox.bind('uid-a');
+      expect(inbox.items, isEmpty);
+    });
+
+    test('messages with no recipient cannot push a held message out', () {
+      final inbox = NotificationInbox();
+      inbox.receive(note(id: 'a'), tapped: true);
+      for (var i = 0; i < NotificationInbox.maxHeld + 1; i++) {
+        inbox.receive(note(id: 'junk$i', recipient: null));
+      }
+
+      inbox.bind('uid-a');
+
+      expect(inbox.items.map((n) => n.messageId), ['a']);
+      expect(inbox.takeOpenRequest(), isTrue);
+    });
+
+    test('held messages are bounded, newest kept', () {
+      final inbox = NotificationInbox();
+      for (var i = 0; i < NotificationInbox.maxHeld + 3; i++) {
+        inbox.receive(note(id: 'm$i'));
+      }
+      inbox.bind('uid-a');
+
+      expect(inbox.items, hasLength(NotificationInbox.maxHeld));
+      expect(inbox.items.first.messageId, 'm${NotificationInbox.maxHeld + 2}');
     });
   });
 
@@ -288,6 +389,57 @@ void main() {
       await service.initialize();
 
       expect(service.permission, NotificationPermission.failed);
+    });
+
+    group('contract FCM v1: no valid recipient, no effect', () {
+      RemoteMessage nobody(String id, [Object? recipient]) => RemoteMessage(
+          messageId: id, data: {'message_id': id, 'recipient_uid': ?recipient});
+
+      for (final (name, recipient) in const <(String, Object?)>[
+        ('missing', null),
+        ('empty', ''),
+        ('padded', ' uid-a'),
+        ('another user', 'uid-b'),
+      ]) {
+        test('$name recipient: foreground, opened and initial do nothing',
+            () async {
+          var changes = 0;
+          service.onChanged = () => changes++;
+          await service.bindUser('uid-a');
+          gateway.initial = nobody('initial', recipient);
+          await service.initialize();
+          final afterStart = changes;
+
+          gateway.foreground.add(nobody('fg', recipient));
+          gateway.opened.add(nobody('tap', recipient));
+          await settle();
+
+          expect(service.inbox, isEmpty);
+          expect(service.messages, isEmpty);
+          expect(service.takeArrival(), isNull);
+          expect(service.takeOpenRequest(), isFalse);
+          expect(service.takePendingTarget(), isNull);
+          expect(changes, afterStart);
+        });
+      }
+
+      test('a cold-start tap for A waits, and opens only for A', () async {
+        gateway.initial = message(id: 'cold');
+        await service.initialize();
+        expect(service.takeOpenRequest(), isFalse);
+
+        service.bindUser('uid-b');
+        expect(service.inbox, isEmpty);
+        expect(service.takeOpenRequest(), isFalse);
+
+        service.clearHistory();
+        gateway.opened.add(message(id: 'cold2'));
+        await settle();
+        service.bindUser('uid-a');
+        expect(service.inbox.map((n) => n.messageId), ['cold2']);
+        expect(service.takeOpenRequest(), isTrue);
+        expect(service.takeOpenRequest(), isFalse);
+      });
     });
 
     test('sign-out clears the inbox and the raw messages', () async {

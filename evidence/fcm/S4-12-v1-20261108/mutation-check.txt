@@ -1,0 +1,23 @@
+CAUGHT  M1 inbox accepts a message with no recipient (old policy)
+           - NotificationInbox messages with no recipient cannot push a held message out
+CAUGHT  M2 restore does not check the recipient
+           - NotificationInbox restored history keeps only entries for the bound user
+           - NotificationService sessions and persistence history of A, B and no recipient: A sees only A, valid entries stay
+CAUGHT  M3 bindUser ignores the session generation after the load
+           - NotificationService sessions and persistence A -> logout -> A while the first load waits: it restores nothing
+CAUGHT  M4 sign-out keeps the same generation (A -> logout -> A looks the same)
+           - NotificationService sessions and persistence sign-out during a drain neither empties A's history nor drops it
+CAUGHT  M5 drain acks even when the save failed
+           - NotificationService sessions and persistence a failed save keeps the messages queued; the retry adds no duplicate
+CAUGHT  M6 saves before the history was read
+           - NotificationService sessions and persistence history that could not be read is never overwritten
+CAUGHT  M7 claim returns every user's messages
+           - NotificationService sessions and persistence A -> logout -> B while A drains: A's messages stay queued for A
+           - NotificationService sessions and persistence messages added in the background during a drain are not lost
+           - queue on disk each user claims only their own messages
+           - queue on disk the queue file of the earlier version moves per recipient
+CAUGHT  M8 drain ignores the generation after the claim
+           - NotificationService sessions and persistence A -> logout -> B while A drains: A's messages stay queued for A
+CAUGHT  M9 parser trims and accepts any recipient value
+           - AppNotification.parse reads a recipient only as an exact, well-formed uid string
+           - NotificationService contract FCM v1: no valid recipient, no effect padded recipient: foreground, opened and initial do nothing

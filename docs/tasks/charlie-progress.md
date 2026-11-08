@@ -17,7 +17,7 @@ Thắng, Hoàng và Thái An đã đồng ý các phần của PR #4 chạm vào
 Các điểm % cũ trong bảng dưới là ước lượng Dev của các phần ngoài S7, giữ để tham khảo; không tính lại thành % toàn dự án khi các owner dùng cách đo khác nhau. S7 dùng trạng thái chờ nghiệm thu. Các bản nháp report/slide/clip/viva được giữ trên GitHub theo lựa chọn Charlie, dù working copies ở máy chính đã được xóa.
 
 <details>
-<summary>Chi tiết 29 task</summary>
+<summary>Chi tiết 29 task — snapshot 03–04/11; contract FCM v1 hiện hành ở bên dưới</summary>
 
 | Task | Ước lượng Dev / trạng thái | Lý do |
 |---|---:|---|
@@ -29,12 +29,12 @@ Các điểm % cũ trong bảng dưới là ước lượng Dev của các phầ
 | S3-2 | Chờ nghiệm thu | SHA-1/SHA-256 của 4 máy đã được ghi nhận. Ngày 04/11 Charlie xác nhận An, Thắng, Hoàng đều phản hồi Google Sign-in thành công, hiện không báo lỗi; Charlie có evidence native e12719c. Kết quả 3 bạn là owner report qua Charlie, chưa có ảnh/device/Android/build SHA riêng trong lượt xác nhận này. Chuyển Chờ nghiệm thu; không suy thành PM tự chạy 4 máy. [PR #12](https://github.com/ruxenb/LongvitaRC/pull/12). |
 | S3-3 | 90% | Chạy thật; lỗi mạng và lỗi hồ sơ mới test bằng fake |
 | S3-4 | 95% | Đủ trạng thái; còn chốt layout và ngôn ngữ |
-| S3-5 | Đang thực hiện | [PR #11](https://github.com/ruxenb/LongvitaRC/pull/11) đã merge main `e12719c` ngày 04/11; PM đóng các findings kỹ thuật và CR-01/02/03, analyzer sạch/334 tests. Lượt CodeRabbit bổ sung cuối còn IN_PROGRESS lúc merge, sau đó CANCELLED; không phải approval hoàn tất trên head cuối. S3-5 vẫn chờ Hoàng A3, PDF/history policy, Thắng chốt SDK sign-out failure và An/Thắng chốt recipient-less FCM; chưa hoàn tất task. |
+| S3-5 | Đang thực hiện | [PR #11](https://github.com/ruxenb/LongvitaRC/pull/11) đã merge main `e12719c` ngày 04/11; PM đóng các findings kỹ thuật và CR-01/02/03, analyzer sạch/334 tests. Lượt CodeRabbit bổ sung cuối còn IN_PROGRESS lúc merge, sau đó CANCELLED; không phải approval hoàn tất trên head cuối. Ở snapshot 04/11, S3-5 còn ghi Hoàng A3, PDF/history policy và SDK sign-out failure. Recipient-less FCM đã chốt theo Contract v1 ngày 08/11, không còn là quyết định chờ ở S3-5. |
 | S3-7 | 70% | Rules và 14 test trên emulator; còn deploy lên project thật |
 | S3-9 | 100% | Đủ theo tiêu chí, chờ nghiệm thu |
 | S4-10 | 80% | PDF, lưu, mở, chia sẻ xong; còn thực đơn thật từ S4-3 |
 | S4-11 | 85% | Đủ các ca trên emulator; còn upload lên project thật |
-| S4-12 | 90% | Push thật 3 trạng thái, lịch sử, bấm mở màn, thanh thông báo khi app đang mở; còn token theo user, route theo đích |
+| S4-12 | 90% | Ước lượng ở snapshot 03/11; contract v1 ngày 08/11 bên dưới đã chốt Profile/inbox, local history theo UID và direct-token QA. Backend token registry hoặc detail routing là mở rộng ngoài v1 |
 | S4-13 | 90% | Đủ khu vực; còn upload thật và đổi Remote Config từ Console |
 | S4-14 | Chờ nghiệm thu | PM re-review f83206a đạt, analyzer sạch/279 tests pass. RC pending có Semantics test, Sign-in dùng QA host/Auth giả, Share mở bằng TalkBack trên app thật. HeadingLevel được sửa trong scope; chờ PR/user-team nghiệm thu. |
 | S4-15 | 50% | FCM đủ; Storage trên Console chờ DEC-01 |
@@ -92,7 +92,7 @@ Code `2d547c7` / HEAD báo cáo `f1f397e` đã được kiểm độc lập: ana
 - [Analyzer](../../evidence/review/PM-FCM-01-VERIFY/analyze.txt), [133 tests](../../evidence/review/PM-FCM-01-VERIFY/flutter-test.txt), [APK build](../../evidence/review/PM-FCM-01-VERIFY/build-apk-debug.txt), [recipient regression](../../evidence/review/PM-FCM-01-VERIFY/original-pm-repro.txt).
 - [Rules 41/41](../../evidence/rules/AUD-11-20261102/new-rules-run.txt) là kết quả emulator trước; không chạy lại sau FCM fix vì `firebase/` không đổi. Không coi emulator là live rules/role evidence đầy đủ.
 - [Auth thật](../../evidence/auth/S3-9-20261102/README.md): success/cancel/restore/logout với SHA Charlie. Ba máy còn lại, network/profile lỗi native và A/B native chưa được kiểm đầy đủ.
-- (Ảnh chụp tại `2d547c7`, đã cũ.) Khi đó FCM tests dùng fake gateway, history chỉ ở RAM, chưa push thật. Từ PR #4: lịch sử lưu trên máy theo UID, push thật 3 trạng thái, bấm tin mở Profile; còn thiếu token theo user.
+- (Ảnh chụp tại `2d547c7`, đã cũ.) Khi đó FCM tests dùng fake gateway, history chỉ ở RAM, chưa push thật. Từ PR #4: lịch sử lưu trên máy theo UID, push thật 3 trạng thái, bấm tin mở Profile. Contract v1 ngày 08/11 chọn direct-token QA; backend token registry là mở rộng ngoài v1.
 - [PDF trên Android](../../evidence/pdf/S4-10-export-20261102/) và [xuất chồng nhau](../../evidence/pdf/PM-PDF-01/): 168/168 tests, chạy thật trên emulator: font nạp được, file lưu trong `app_flutter/reports/<uid>/`, upload lỗi thì file còn và có thông báo, mở màn xem trước, mở cửa sổ chia sẻ, bấm xuất liên tiếp 3 lần chỉ tạo 1 file, thử lại khi upload lỗi không tạo file mới. Plan thử dùng món hard-code (A9), không chứng minh đúng plan đang xem. Upload và thử lại **thành công** chỉ test bằng fake vì project chưa có Storage. Trạng thái khóa nút trong lúc chạy lúc đó chỉ test ở ViewModel; từ PR #3 có thêm widget test trên Profile. Chưa thử trên máy thật.
 - ARTEMIS thật, AI review trên PR và deliverables report/slides/video/worklog chưa hoàn tất. Các ví dụ trong `docs/code-review.md` không được tính là findings thật.
 
@@ -103,39 +103,37 @@ Code `2d547c7` / HEAD báo cáo `f1f397e` đã được kiểm độc lập: ana
    **Thắng, khi gộp `d9d0a90`:** commit này gửi `generate_meal_plan` với `eating_window_hours: 12`, `fish_meals_count: 2` cố định và `has_shopping_list` suy từ nguyên liệu của món. Khi gỡ xung đột, `main` giữ cách cũ: chưa có dữ liệu S02 thì không gửi event, đếm cá từ plan, `has_shopping_list: 0` vì PDF chưa có danh sách đi chợ. Lấy theo Thắng phần `age >= 65`, đúng với analytics plan. Nếu nhóm muốn khác thì nói để đổi.
 3. **Hoàng/Thắng (AUD-11 B1–B5):** rejected plan có được resubmit, staff tự duyệt plan, archive/schema/nested data và kiểu createdAt. Rules/test hiện theo schema model; thay policy phải sửa và kiểm lại.
 4. **Thái An/leader (DEC-01):** Guide yêu cầu Storage upload, Final loại Storage; quyết định áp dụng/billing trước S3-7/S4-11. Không chặn Auth hoặc PDF local vì việc này.
-5. **FCM contract còn mở:** route intent của `meal_plan`/`announcement` (Thắng); history local theo UID hay Firestore/schema/rules (Hoàng/Thắng); token theo user hay topic và cách xử lý tin thiếu `recipient_uid` (Thái An/Thắng). Hiện tin không recipient chờ người login kế, chưa được team chốt cho production.
+5. **FCM v1 đã chốt (08/11):** tap mở Profile/inbox, history local theo UID, bắt buộc `recipient_uid` hợp lệ. Tin thiếu/sai dạng người nhận bị loại; handler nền giữ tin có UID hợp lệ cho đúng người đó. v1 gửi trực tiếp token thiết bị kiểm, không có backend token registry, topic hoặc Firestore inbox. Detail routing và các backend này chỉ là mở rộng ngoài v1, cần quyết định riêng nếu bổ sung.
 6. **Charlie/team:** mời đủ thành viên Firebase, nhận SHA-1/SHA-256 và kiểm Google Sign-in trên từng máy; quyền Console và SHA/Auth là các đầu việc riêng. Đồng thời chốt ngôn ngữ UI và font Roboto cho PDF.
 7. **PDF cần chốt:** app làm theo đề xuất tối thiểu: giữ file để thử lại, mở, chia sẻ trong phiên; khi đăng xuất xóa file của user đó, không đụng dữ liệu cloud. Sau khi mở lại app vẫn chưa xem lại được file cũ. Nếu muốn giữ qua đăng xuất, nhóm cần chốt thêm retention, quota, cách khôi phục và thao tác xóa. Hành vi này chưa được nhóm duyệt và dễ đổi.
 
-## Contract FCM tạm (S4-12)
+## Contract FCM v1 (S4-12)
 
-Thắng, Hoàng, Thái An đã đồng ý dùng tạm (theo Charlie, 02/11): mọi tin bấm vào đều mở Profile, lịch sử lưu trên máy theo UID và còn sau đăng xuất, thiếu `recipient_uid` thì hiện cho người đang đăng nhập, token chỉ dùng để thử. Các câu hỏi dưới đây vẫn cần chốt cho bản cuối.
+Chốt ngày 08/11/2026, thay contract tạm ngày 02/11. Thay đổi chính: tin không có `recipient_uid` hợp lệ **không còn** được đưa cho người đang hoặc sắp đăng nhập.
 
 **Payload, các trường trong `data`:**
 
 | Trường | Bắt buộc | Ý nghĩa |
 |---|---|---|
-| `message_id` | Có, nếu thiếu thì dùng ID của FCM | Khóa chống trùng |
-| `schema_version` | Khi có target | Hiện là `"1"` |
-| `target_type`, `target_id` | Khi tin cần mở một màn | Hiện nhận `meal_plan`, `announcement`. Không nhận route string từ push |
-| `recipient_uid` | Khi tin dành riêng một user | Khác user đang đăng nhập thì tin bị bỏ |
+| `recipient_uid` | **Có** | UID Firebase Auth của người nhận, dạng chuỗi gồm chữ, số, `_` hoặc `-`, so khớp chính xác (không cắt khoảng trắng). Thiếu, rỗng, sai kiểu hoặc khác user đang đăng nhập thì app bỏ tin |
+| `message_id` | Có, nếu thiếu thì dùng ID của FCM | Khóa chống trùng. Không dùng làm tên file |
+| `schema_version`, `target_type`, `target_id` | Không | Metadata (`"1"`, `meal_plan`/`announcement`). v1 không mở màn theo target, không nhận route string từ push |
 
-**Hành vi hiện có:**
-- Target sai hoặc thiếu: tin vẫn vào inbox, không điều hướng.
-- Trùng `message_id` trong một phiên: tin được chấp nhận đầu tiên thắng.
-- Đăng xuất: xóa inbox trong bộ nhớ và tin đang chờ, lịch sử của user đó vẫn ở trên máy. Tin đến khi chưa đăng nhập chờ tới lần đăng nhập kế.
-- Bấm tin: `AuthGate` mở Profile, mỗi tin một lần. `takePendingTarget()` vẫn giữ đích để nối route thật sau. Handler nền không điều hướng, chỉ lưu tin chờ.
+**Nội dung hiển thị:** `notification.title` = "Longvita", `notification.body` = "Bạn có thông báo mới. Mở ứng dụng để xem." Khi app ở nền hoặc đã tắt, Android có thể tự hiện tin trước khi app kiểm người nhận. Vì vậy title/body và data không chứa nội dung riêng của người dùng. App chỉ chặn được inbox và điều hướng cho tin sai người nhận, không chặn được việc hệ điều hành hiện thông báo chung trên khay.
 
-**Câu hỏi cần trả lời:**
+**Gửi thử:** Console hoặc script QA, gửi tới token của thiết bị kiểm (token lấy lại mỗi đợt). Token không phải định danh người dùng. Không có backend lưu token, topic hay Cloud Functions trong v1.
 
-| Câu hỏi | Ai |
-|---|---|
-| `meal_plan`, `announcement` mở màn nào; router gọi `takePendingTarget()` khi nào; đích lỗi hiển thị ra sao | Thắng |
-| Lịch sử lưu local theo UID hay Firestore; nếu Firestore thì schema, rules, read state, retention | Hoàng, Thắng |
-| Gửi theo token từng user hay topic chung; có lưu token theo UID, xóa khi đăng xuất không | Thái An, Thắng |
-| Tin **không có** `recipient_uid` hiện đến người đăng nhập kế tiếp: có chấp nhận không | Thái An, Thắng |
+**Hành vi:**
+- **Bấm tin hợp lệ:** `AuthGate` mở Profile/inbox sau khi đúng người nhận đã đăng nhập, mỗi tin một lần.
+- **Tin đến khi chưa đăng nhập:** chỉ giữ tin có người nhận. Khi đăng nhập, chỉ tin của đúng UID được nhận; tin của người khác bị bỏ.
+- **Lịch sử:** lưu trên máy theo UID (`notifications/{uid}.json`), tối đa 50 tin mỗi người, còn sau đăng xuất. Khi khôi phục, app kiểm lại người nhận từng mục; mục thiếu hoặc sai người nhận không hiện. Mục đọc lỗi chỉ bỏ riêng mục đó. File còn mà không đọc được (lỗi I/O) thì app không ghi đè và không xóa tin khỏi hàng chờ; app đọc lại khi có tin mới hoặc khi quay lại foreground.
+- **Tin nhận khi app ở nền:** handler nền xếp mỗi tin thành một file trong `notifications/pending/`, tối đa 50 file cho mọi người dùng. Handler không biết ai đang đăng nhập, nên tin có UID hợp lệ của user khác vẫn được xếp chờ cho đúng người đó; chỉ tin thiếu hoặc sai dạng người nhận bị bỏ. App chỉ lấy tin của user đang đăng nhập và xóa file sau khi đã lưu vào lịch sử. Lưu lỗi thì tin vẫn chờ lần sau. File `pending.json` của bản cũ được chuyển một lần theo người nhận.
+- **Khi chưa đọc được lịch sử:** tin foreground được chấp nhận cũng được ghi vào hàng chờ trên đĩa, không chỉ giữ ở RAM; chỉ xóa bản chờ sau khi lưu lịch sử thành công. Nếu cả ghi hàng chờ cũng lỗi I/O, app giữ lịch sử cũ và chỉ còn bản tin trong RAM; không bảo đảm giữ qua việc tắt tiến trình khi thiết bị không ghi được file.
+- **Chuyển hàng chờ cũ:** dùng checkpoint `pending.migration.json` với tên file cố định, tiếp tục được sau gián đoạn và không nhập trùng khi thử lại. Tin legacy giữ thứ tự cũ và đứng trước tin của hàng chờ mới khi áp dụng giới hạn 50 file chung; không được coi là tin mới chỉ vì vừa chuyển file.
+- **Phiên:** mỗi lần đăng nhập/đăng xuất là một phiên mới, kể cả A → đăng xuất → A. Việc đọc lịch sử, lấy tin chờ hay lưu của phiên cũ không tác động phiên mới. App không lưu lịch sử trước khi đọc xong lịch sử cũ, nên không ghi đè. Đọc và lưu lịch sử của cùng một UID chạy theo thứ tự, nên khi đăng nhập lại, app đọc được cả lần lưu cuối của phiên trước.
+- **Trùng `message_id`:** tin được chấp nhận đầu tiên thắng; tin bị từ chối không chặn tin hợp lệ cùng ID.
 
-Tiếp theo: S4-10 với active plan khi có S4-3, S4-12 theo contract FCM cuối, S4-13 kiểm chứng upload và Remote Config Console, S3-7/S4-11 khi DEC-01 rõ. Home đã chuyển phần PDF sang Profile từ PR #4. Giữ nguyên các fix regression đã xác nhận và các task owners.
+Còn lại ngoài S4-12: Storage thật (DEC-01) cho S3-7/S4-11/S4-15; PDF hai thực đơn khác nội dung (S4-10, chờ recipes). Giữ nguyên các fix regression đã xác nhận và các task owners.
 
 ## Gói review bàn giao 03/11 — S7-2/S7-3
 

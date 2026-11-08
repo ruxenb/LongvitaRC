@@ -1,0 +1,17 @@
+00:00 +0: loading <worktree>/docs/coordination/qa/PM-S4-12-20261108/s412_review_probe_test.dart
+00:00 +0: <worktree>/docs/coordination/qa/PM-S4-12-20261108/s412_review_probe_test.dart: PM-01: retained history includes an old-session save across same-UID re-login
+FCM token: null
+00:00 +1: <worktree>/docs/coordination/qa/PM-S4-12-20261108/s412_review_probe_test.dart: PM control: waiting for the save before re-login retains all messages
+FCM token: null
+00:00 +2: <worktree>/docs/coordination/qa/PM-S4-12-20261108/s412_review_probe_test.dart: PM-02: actual read failure does not authorize overwriting retained history
+FCM history unavailable: PathAccessException: readInto failed, path = '<temp>\pm_s412_read_lock_c3595f85/notifications/uid-a.json' (OS Error: The process cannot access the file because another process has locked a portion of the file, errno = 33)
+FCM history unavailable: PathAccessException: readInto failed, path = '<temp>\pm_s412_read_lock_c3595f85/notifications/uid-a.json' (OS Error: The process cannot access the file because another process has locked a portion of the file, errno = 33)
+FCM token: null
+00:00 +3: <worktree>/docs/coordination/qa/PM-S4-12-20261108/pr19_review_probe_test.dart: CR02: foreground survives logout before unreadable history recovers
+FCM history unavailable: FileSystemException: read blocked, path = '<temp>\pm_pr19_272278e1/notifications/uid-a.json'
+FCM history unavailable: FileSystemException: read blocked, path = '<temp>\pm_pr19_272278e1/notifications/uid-a.json'
+FCM token: null
+FCM history unavailable: FileSystemException: read blocked, path = '<temp>\pm_pr19_272278e1/notifications/uid-a.json'
+00:00 +4: <worktree>/docs/coordination/qa/PM-S4-12-20261108/pr19_review_probe_test.dart: CR03: legacy migration cannot evict newer pending at capacity
+00:01 +5: <worktree>/docs/coordination/qa/PM-S4-12-20261108/pr19_review_probe_test.dart: CR04: interrupted legacy migration resumes without duplicates
+00:01 +6: All tests passed!
