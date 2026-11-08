@@ -31,6 +31,7 @@ $toolPaths = [ordered]@{
     NpmCache = (Resolve-ToolDirectory 'T:\Tools\npm-cache' (Join-Path $localTools 'npm-cache'))
     Python = (Resolve-ToolDirectory 'T:\Tools\uv-python\cpython-3.12.16-windows-x86_64-none' (Join-Path $localTools 'Python312'))
     UvScripts = (Resolve-ToolDirectory 'T:\Tools\PythonUser\Python314\Scripts' (Join-Path $localTools 'Python312\Scripts'))
+    UvCli = (Resolve-ToolDirectory 'T:\Tools\uv' (Join-Path $localTools 'uv'))
     UvCache = (Resolve-ToolDirectory 'T:\Tools\uv-cache' (Join-Path $localTools 'uv-cache'))
     UvPython = (Resolve-ToolDirectory 'T:\Tools\uv-python' (Join-Path $localTools 'uv-python'))
     PipCache = (Resolve-ToolDirectory 'T:\Tools\pip-cache' (Join-Path $localTools 'pip-cache'))
@@ -63,6 +64,7 @@ $prepend = @(
     $toolPaths.NpmPrefix
     (Join-Path $toolPaths.PubCache 'bin')
     $toolPaths.Python
+    $toolPaths.UvCli
     $toolPaths.UvScripts
     (Join-Path $localTools 'LongvitaFirebase\node_modules\.bin')
 ) | Where-Object { $_ -and (Test-Path -LiteralPath $_ -PathType Container) }
