@@ -104,3 +104,29 @@ PM review `bfd17f4`: Changes requested với PM-S412-01, PM-S412-02 và PM-S412-
 - "history that cannot be read…": lỗi kéo dài thì không ghi đè, không xóa tin chờ. Hết lỗi thì lần drain sau đọc lại và lưu đủ.
 
 **Native:** không chạy lại. Phần đổi nằm ở thứ tự đọc/lưu và xử lý lỗi đọc file, đã kiểm bằng test trên thư mục thật và khóa file thật. Kết quả AVD ở trên là của `ada76da`.
+
+
+## PR #19 — CodeRabbit review, 08/11/2026
+
+Sources: [PR reviews](https://github.com/ruxenb/LongvitaRC/pull/19/files).
+The review IDs returned by GitHub are `PRR_kwDOVevJFc8AAAABWrwcRA` (08:46:02Z) and `PRR_kwDOVevJFc8AAAABWrx9sw` (08:54:22Z). Findings were in the review bodies, outside the diff; no inline threads existed.
+
+| Finding | Decision | Result |
+|---|---|---|
+| PR19-CR-01, Minor: historical contract notes still call settled v1 decisions pending | Accepted | `5997e99` labels the historical table and reconciles old pending notes with the v1 contract |
+| PR19-CR-02, Major: foreground arrival lost if history is unreadable until logout | Accepted | `dbf9511` stages accepted arrivals on disk; drain acknowledges only after history save; failed staging keeps unread history intact |
+| PR19-CR-03, Major: legacy import gets fresh timestamps and evicts newer queue files | Accepted | Stable checkpoint gives legacy entries older chronological refs; shared 50-file cap retains newer messages |
+| PR19-CR-04, Major: interrupted migration imports duplicates on retry | Accepted | Checkpoint precedes writes and reuses the same refs; migrations for one folder serialize across store instances |
+
+Verification of production code `dbf9511` (run immediately before commit):
+
+- Independent probes on old `5997e99`: **0/3 pass**, reproducing all three Major findings. [Before log](pr19-probes-before.txt).
+- Original PM probes plus the three new probes on the fix: **6/6 pass**. [After log](pr19-probes-after.txt).
+- Five new permanent regressions in `test/fcm/notification_review_persistence_test.dart`: foreground recovery after logout/restart; mixed-user queue at capacity; interrupted migration; concurrent stores; temporarily unreadable checkpoint. Together with history tests: **50/50 pass**.
+- Full `flutter test --no-pub --reporter expanded`: **388/388 pass** (383 existing + 5 new).
+- `flutter analyze --no-pub`: **no issues**. [Log](pr19-analyze.txt). `git diff --check`: clean.
+- `flutter build apk --debug --no-pub`: success, APK SHA-256 `C07D4903ECB51A622BAC764DB6B0B7BDA44A9F886FB6D2C57FC9D357F7C26CBB`. Existing future Kotlin compatibility warnings from Analytics/Remote Config remain; no dependency upgrade.
+
+One existing expectation was strengthened to require both the background message and the foreground arrival to remain pending while history cannot be read. Its original preservation/recovery assertions remain. During verification, full-suite checks initially reported that old expectation; it was updated to reflect the intended durable staging, then all tests passed. Analyzer warnings in an ignored PM probe were resolved only with local lint comments; app rules/config were not relaxed.
+
+No new AVD/push run was performed for these filesystem fixes; the native matrix above remains evidence from `ada76da`, not this code. Disk persistence is conditional on successful file writes and the documented 50-message pending capacity. The change does not touch Auth API, routing, packages, Firebase configuration, billing or recipes.
