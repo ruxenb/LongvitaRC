@@ -8,7 +8,9 @@
 ## 1. Tóm tắt trạng thái
 
 - Tổng số task của Thắng: **28**.
-- Đã hoàn thành và có bằng chứng: **12/28 (43%)**.
+- Đã hoàn thành và có bằng chứng: **13/28 (46%)**.
+- Hoàn thành mới ngày 08/11: **S8-9** (nội dung slide cá nhân, nguồn evidence,
+  gợi ý hình và AI disclosure; chưa phải deck PDF cuối).
 - Hoàn thành mới ngày 07/11: **S7-2-VLQ**, **S7-3-VLQ**, **S8-1** và
   **S9-5-VLQ**.
 - Hoàn thành mới ngày 04/11: **S0-3-VLQ** và **S3-6**.
@@ -234,7 +236,8 @@ text files có prefix đường dẫn máy cũ; đã thay prefix bằng `<user-h
 - **S6-12:** cần ARTEMIS chỉ ra lỗi thuộc phạm vi Thắng.
 - **S7-1-VLQ và S7-4:** S7-2/S7-3 của Thắng đã hoàn thành; S7-1 vẫn chờ feature
   freeze, còn S7-4 cần nghiệm thu hồ sơ review đủ thành viên.
-- **S8-5/S8-9/S8-10:** S8-1 của Thắng đã hoàn thành; còn ghép report/slide cuối.
+- **S8-5/S8-10:** S8-1 và nội dung cá nhân S8-9 của Thắng đã hoàn thành; còn
+  đầu vào nhóm và bước ghép report/slide cuối.
 - **S8-14/S8-15:** cần finding đã sửa và clip demo của các thành viên.
 - **S8-16:** README còn thiếu project ID/data source đã xác minh, AI disclosure cuối và video public.
 - **S8-17-VLQ:** worklog đã khởi tạo nhưng chỉ hoàn thành khi cập nhật đến cuối dự án.
@@ -262,3 +265,22 @@ text files có prefix đường dẫn máy cũ; đã thay prefix bằng `<user-h
   failed record được giữ để phân biệt lỗi hạ tầng/model với lỗi ứng dụng.
 - S9-5-VLQ hoàn thành: bài nói 5 phút đã soạn theo source/evidence thật, phần
   Remote Config và ARTEMIS đều có kết quả kiểm chứng để Thắng tự học và luyện.
+
+## 9. Cập nhật tài liệu và audit ngày 08/11/2026
+
+- S8-9 hoàn thành ở mức nội dung cá nhân: sáu thông điệp đã được cập nhật theo
+  evidence mới, có nguồn, gợi ý hình và AI disclosure. Dàn trang/PDF thuộc S8-10.
+- S8-16 được bổ sung trạng thái bàn giao, liên kết draft/audit và disclosure;
+  chưa hoàn thành vì còn thiếu report PDF, slide PDF và video public.
+- S7-4 đã tổng hợp hồ sơ thật của Thắng, Charlie và Hoàng; đã đủ ngưỡng số lượng
+  và loại finding nhưng còn thiếu gói review/disclosure được nghiệm thu của Thái
+  An và xác nhận leader nên chỉ chuyển sang Đang làm.
+- Gitleaks quét history và cây hiện tại, mỗi lượt có 5 findings: hai Firebase
+  client keys và ba Firebase Storage download token trong URL PDF ở raw ARTEMIS.
+  Không in token vào worklog; cần xác minh/revoke/rotate và sanitize trước khi
+  đóng S9-1.
+- S9-2 xác nhận Project Settings khớp `longvita-8da7e`, project number
+  `1041459198085` và package `vn.edu.fpt.longvita`; cần rà lại tập ảnh cuối.
+- S9-4 snapshot `main` có 185 commit, phân bố 2/55/54/36/3/23/2/10 từ 01–08/11;
+  chronology hợp lý nhưng chưa có ngưỡng giảng viên và vẫn cần audit cuối.
+- Chi tiết audit: `evidence/audit/S9-1-S9-4-20261108/README.md`.

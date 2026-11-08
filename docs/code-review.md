@@ -1,6 +1,12 @@
 # AI-Assisted Code Review Record — Longvita (Lab 3)
 
 > **03/11/2026 — Có kết quả thật:** mục 1.1 ghi 11 findings CodeRabbit trên PR #7 cùng raw output, quyết định và commit sửa. PR #6 cũng đã được Codex Bugbot và Security Review kiểm tra với **5 findings duy nhất đã xác minh**, đều được xử lý trong commit `55bdf3e`; hồ sơ nằm tại [`evidence/review/PR-6-THANG-20261103/`](../evidence/review/PR-6-THANG-20261103/). Các dòng khung CR-xx và ví dụ EX-xx là tài liệu tham khảo, không được tính vào findings thật. Stage 7 chưa hoàn tất vì nhóm còn phải đạt tổng số fix commits và review các PR/thành viên còn lại.
+>
+> **Đối chiếu S7-4 ngày 08/11/2026:** hồ sơ thật của Thắng (PR #6), Charlie
+> (PR #7/#8) và Hoàng (PR #10) đã vượt ngưỡng 5 findings, có nhiều hơn hai loại
+> lỗi, quyết định và liên kết commit. S7-4 vẫn chưa được đóng vì chưa có gói
+> review/disclosure đã nghiệm thu của Thái An và chưa có xác nhận tổng hợp cuối
+> của leader. Các dòng CR-01..05 bên dưới tiếp tục là placeholder, không tính.
 
 > **Tài liệu:** Sổ ghi nhận kết quả đánh giá mã nguồn bằng công cụ Trí tuệ Nhân tạo (AI-Assisted Code Review).  
 > **Chủ trì nghiệm thu:** Thái An (Team Leader) & Thắng VLQ (Technical Architect) | **Thành viên tham gia:** Cả 4 thành viên (Thái An, Thắng, Hoàng, Charlie).  
@@ -11,7 +17,8 @@
 
 ## 1. Bảng Ghi Nhận Findings & Quyết Định Chính Thức (Stage 7 — Pull Requests)
 
-*Bảng này sẽ được các thành viên điền trực tiếp khi mở PR cho từng module tính năng tại Tuần 4 (Stage 7). Dưới đây là bảng khung sẵn sàng ghi nhận:*
+*Các dòng PR6 bên dưới là finding thật. Các dòng in nghiêng CR-01..05 chỉ là
+placeholder kế hoạch và không được tính vào kết quả tổng hợp.*
 
 | ID | Công cụ AI | Vị trí (File:Line) | Loại lỗi (Kind) | Tóm tắt phát hiện của AI (Finding Summary) | Quyết định (Accepted / Modified / Rejected) | Lý do kỹ thuật & Định lượng (Reason) | Commit khắc phục (Fix Commit) | Người phụ trách |
 |:---:|:---|:---|:---:|:---|:---:|:---|:---:|:---:|

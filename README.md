@@ -1,6 +1,6 @@
 # Longvita — Cloud-Enabled Mobile App
 
-> **Cập nhật 02/11/2026:** **Lab 3 chính là Assignment** đang triển khai, kế thừa thiết kế Lab 2. Xem [bàn giao kỹ thuật và tiến độ Charlie](docs/tasks/charlie-progress.md) cho phạm vi nhánh, kiểm chứng và các quyết định cần team review. Giữ 112 task IDs/owners; các phần mobile/web/shared-core là cùng sản phẩm. Nhánh hiện chưa chứng minh đủ sáu Firebase services hoặc toàn bộ E2E.
+> **Cập nhật 08/11/2026:** **Lab 3 chính là Assignment** đang triển khai, kế thừa thiết kế Lab 2. Giữ 112 task IDs/owners; các phần mobile/web/shared-core là cùng sản phẩm. Sáu dịch vụ Firebase đã có failure-case evidence ở các mức cloud/emulator khác nhau; không suy Storage Emulator thành production. ARTEMIS có một batch 7/7 pass và TC-11 chạy lại thành công, nhưng chưa đủ chiến dịch chính thức tối thiểu ba lượt/test.
 >
 > **Firebase project:** `longvita-8da7e`, app Android `vn.edu.fpt.longvita` (S0-4). Bốn máy đã có xác nhận đăng nhập Google ở S3-2.
 >
@@ -198,3 +198,20 @@ flutter run
 - **Demo Video Link:** `[Đường link YouTube / Google Drive mở công khai]` *(Sẽ cập nhật trước hạn nộp tại Task S8-15)*
 - **Báo cáo PDF:** [`report/Lab03_<StudentID>.pdf`](report/)
 - **Slide Deck PDF:** [`slides/Lab03_<StudentID>_slides.pdf`](slides/)
+
+---
+
+## 7. Trạng thái bàn giao và AI disclosure
+
+- **Nội dung báo cáo của Thắng:** [`docs/report-drafts/s8-1-thang.md`](docs/report-drafts/s8-1-thang.md).
+- **Nội dung slide của Thắng:** [`docs/report-drafts/s8-9-slides-thang.md`](docs/report-drafts/s8-9-slides-thang.md); đã chốt nội dung/evidence ngày 08/11, chưa phải deck PDF cuối.
+- **Kịch bản clip của Thắng:** [`docs/report-drafts/s8-14-thang-clip-script.md`](docs/report-drafts/s8-14-thang-clip-script.md); chưa quay clip thật.
+- **Audit bảo mật/Git/Project ID gần nhất:** [`evidence/audit/S9-1-S9-4-20261108/`](evidence/audit/S9-1-S9-4-20261108/README.md).
+- Report PDF, slide PDF và video public vẫn là placeholder cho đến khi S8-5,
+  S8-10 và S8-15 hoàn tất.
+
+AI đã được dùng có kiểm soát cho code review, viết/kiểm tra test và biên tập tài
+liệu. Output AI không được tính là bằng chứng runtime nếu không có log, ảnh hoặc
+run tương ứng. Chi tiết công cụ, findings, quyết định Accept/Modify/Reject và
+commit sửa nằm tại [`docs/code-review.md`](docs/code-review.md); disclosure cụ
+thể của từng thành viên chỉ được ghi khi có source/output hoặc worklog xác nhận.
