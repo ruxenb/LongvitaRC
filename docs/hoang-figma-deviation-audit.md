@@ -15,7 +15,7 @@ This audit identifies actual screen/layout differences by source node ID; it is 
 | S10 | 103:269 | Three styled saved-plan rows and empty guidance | SavedPlansScreen uses generic FlowItemCards fetched from Firestore (data correct but not Figma style) |
 | S07 | 106:189 | Custom ingredient rows, each 48dp edit target, summary panel | IngredientSummaryScreen uses Material ListTiles with Edit and Delete icons; Undo works but visual placement differs |
 | S08 | 106:235 | Custom shopping-row components | ShoppingListScreen uses default CheckboxListTile styling; persistence is data-backed |
-| S05 | 108:244 | 328x126 recipe hero image, provenance row, ingredient cards and step-number badges | RecipeDetailsScreen is primarily text/list; recipe imageUrl exists in model but is not rendered; provenance shown as sourceNote |
+| S05 | 108:244 | 328x126 recipe hero image, provenance row, ingredient cards and step-number badges | On 2026-11-08, Flutter added responsive 328:126 hero image from HTTPS-only Firestore imageUrl, with a clear placeholder when missing or failed; sourceNote remains text, ingredient/step card visual parity still pending native comparison |
 | S06 | 108:285 | Alternative meal cards with source badges and visible 48dp selection target | MealAlternativesScreen uses RadioGroup/RadioListTiles, without Figma option-card image/metadata arrangement |
 | S09 | 108:332 | Four knowledge principle cards (plant/protein/fats/fish) and Citation | BookKnowledgeScreen only shows recipe source metadata and disclaimer; the four content cards are not implemented |
 

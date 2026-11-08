@@ -10,6 +10,50 @@ import '../widgets/state_views.dart';
 import 'flow_ui.dart';
 import 'meal_flow_screens.dart';
 
+/// S05: keep the Figma hero slot without inventing an image or source.
+class _RecipeHero extends StatelessWidget {
+  final RecipeModel recipe;
+  const _RecipeHero(this.recipe);
+
+  @override
+  Widget build(BuildContext context) {
+    final imageUrl = recipe.imageUrl?.trim();
+    final imageUri = imageUrl == null ? null : Uri.tryParse(imageUrl);
+    final validImage =
+        imageUri?.scheme == 'https' && imageUri?.hasAuthority == true;
+
+    Widget placeholder() => ColoredBox(
+      color: Theme.of(context).colorScheme.surfaceContainerHighest,
+      child: Center(
+        child: Padding(
+          padding: const EdgeInsets.all(12),
+          child: Text(
+            'Chưa có ảnh được xác minh cho món này',
+            textAlign: TextAlign.center,
+            style: Theme.of(context).textTheme.bodyMedium,
+          ),
+        ),
+      ),
+    );
+
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(12),
+      child: AspectRatio(
+        aspectRatio: 328 / 126,
+        child: validImage
+            ? Image.network(
+                imageUrl!,
+                key: const Key('recipe-hero-image'),
+                fit: BoxFit.cover,
+                semanticLabel: 'Ảnh món ${recipe.name}',
+                errorBuilder: (_, _, _) => placeholder(),
+              )
+            : placeholder(),
+      ),
+    );
+  }
+}
+
 /// Search uses real Firestore data; filter is in MealPlanViewModel.
 class RecipeCatalogScreen extends StatefulWidget {
   const RecipeCatalogScreen({super.key});
@@ -127,6 +171,8 @@ class _RecipeDetailsScreenState extends State<RecipeDetailsScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
+          _RecipeHero(recipe),
+          const SizedBox(height: 16),
           FlowSection(
             title: recipe.name,
             child: Text(

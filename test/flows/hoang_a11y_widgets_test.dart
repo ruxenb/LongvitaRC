@@ -3,6 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
 
 import 'package:longvita/firebase/analytics_service.dart';
+import 'package:longvita/models/recipe_model.dart';
 import 'package:longvita/screens/meal_flow_screens.dart';
 import 'package:longvita/screens/recipe_flow_screens.dart';
 import 'package:longvita/screens/shopping_flow_screens.dart';
@@ -81,6 +82,23 @@ void main() {
 
         // 'loading' is not a proof of accessibility: test actual labels.
         expect(find.text('Dinh dưỡng tham khảo'), findsOneWidget);
+        expect(
+          find.text('Chưa có ảnh được xác minh cho món này'),
+          findsOneWidget,
+        );
+        final insecureRecipe = RecipeModel.fromMap({
+          ...beans.toMap(),
+          'imageUrl': 'http://invalid.example/meal.jpg',
+        }, beans.id);
+        await tester.pumpWidget(
+          app(RecipeDetailsScreen(recipe: insecureRecipe)),
+        );
+        await tester.pump();
+        expect(find.byKey(const Key('recipe-hero-image')), findsNothing);
+        expect(
+          find.text('Chưa có ảnh được xác minh cho món này'),
+          findsOneWidget,
+        );
       });
     }
   }

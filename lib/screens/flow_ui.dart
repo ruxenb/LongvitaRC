@@ -20,7 +20,10 @@ class FlowFrame extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(title), actions: actions),
+      appBar: AppBar(
+        title: Semantics(header: true, headingLevel: 1, child: Text(title)),
+        actions: actions,
+      ),
       body: SafeArea(
         child: Center(
           child: ConstrainedBox(
@@ -47,6 +50,7 @@ class FlowSection extends StatelessWidget {
     children: [
       Semantics(
         header: true,
+        headingLevel: 2,
         child: Text(title, style: Theme.of(context).textTheme.titleLarge),
       ),
       const SizedBox(height: AppSpacing.s12),
@@ -121,7 +125,7 @@ class FlowStateView<T> extends StatelessWidget {
     if (current is ViewStateLoading<T>) {
       return LoadingView(
         title: 'Đang tải',
-        message: current.message ?? 'Vui lòng chờ dữ liệu...',
+        message: current.message ?? 'Vui lòng chờ dữ liệu…',
       );
     }
     if (current is ViewStateEmpty<T>) {

@@ -61,7 +61,7 @@ class IngredientViewModel extends BaseViewModel implements SessionScoped {
 
   /// Aggregation is pure local business logic over Firestore-loaded meals.
   void aggregateFromMealPlan(MealPlanModel plan) {
-    _state = const ViewStateLoading('Đang tổng hợp nguyên liệu...');
+    _state = const ViewStateLoading('Đang tổng hợp nguyên liệu…');
     notifyListeners();
     try {
       _uid = plan.uid;
@@ -108,7 +108,7 @@ class IngredientViewModel extends BaseViewModel implements SessionScoped {
     final service = dataService;
     if (plan.id.isEmpty || service == null) return;
     final epoch = _epoch.current;
-    _state = const ViewStateLoading('Đang đồng bộ danh sách mua sắm...');
+    _state = const ViewStateLoading('Đang đồng bộ danh sách mua sắm…');
     notifyListeners();
     try {
       final savedItems = await service.getShoppingItems(plan.uid, plan.id);
@@ -201,7 +201,7 @@ class IngredientViewModel extends BaseViewModel implements SessionScoped {
     }
     final epoch = _epoch.current;
     final snapshot = List<IngredientModel>.unmodifiable(_ingredients);
-    _persistenceState = const ViewStateLoading('Đang lưu danh sách...');
+    _persistenceState = const ViewStateLoading('Đang lưu danh sách…');
     notifyListeners();
 
     final write = _writeTail.then(
