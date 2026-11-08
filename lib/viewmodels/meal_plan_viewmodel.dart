@@ -108,7 +108,7 @@ class MealPlanViewModel extends BaseViewModel implements SessionScoped {
 
     _activePlan = null;
     _currentPlanState = const ViewStateLoading(
-      'Đang tải công thức từ Firestore và lập thực đơn 7 ngày...',
+      'Đang tải công thức từ Firestore và lập thực đơn 7 ngày…',
     );
     _saveState = const ViewStateIdle();
     notifyListeners();
@@ -168,7 +168,7 @@ class MealPlanViewModel extends BaseViewModel implements SessionScoped {
       return false;
     }
     final epoch = _epoch.current;
-    _saveState = const ViewStateLoading('Đang lưu thực đơn trên Firestore...');
+    _saveState = const ViewStateLoading('Đang lưu thực đơn trên Firestore…');
     notifyListeners();
     try {
       final id = await dataService.saveMealPlan(plan);
@@ -195,7 +195,7 @@ class MealPlanViewModel extends BaseViewModel implements SessionScoped {
 
   Future<void> fetchSavedPlans(String uid) async {
     final epoch = _epoch.current;
-    _savedPlansState = const ViewStateLoading('Đang tải thực đơn đã lưu...');
+    _savedPlansState = const ViewStateLoading('Đang tải thực đơn đã lưu…');
     notifyListeners();
     try {
       final plans = await dataService.getUserMealPlans(uid);
@@ -220,7 +220,7 @@ class MealPlanViewModel extends BaseViewModel implements SessionScoped {
   Future<void> searchRecipes(String term) async {
     final epoch = _epoch.current;
     final seq = ++_searchSeq;
-    _recipesState = const ViewStateLoading('Đang tra cứu công thức...');
+    _recipesState = const ViewStateLoading('Đang tra cứu công thức…');
     notifyListeners();
     try {
       final all = await dataService.getRecipes();
@@ -262,7 +262,7 @@ class MealPlanViewModel extends BaseViewModel implements SessionScoped {
   Future<void> loadAlternatives(RecipeModel recipe) async {
     final epoch = _epoch.current;
     final seq = ++_alternativeSeq;
-    _alternativesState = const ViewStateLoading('Đang tìm món thay thế...');
+    _alternativesState = const ViewStateLoading('Đang tìm món thay thế…');
     _replaceState = const ViewStateIdle();
     notifyListeners();
     try {
@@ -359,7 +359,7 @@ class MealPlanViewModel extends BaseViewModel implements SessionScoped {
       );
     final changed = plan.copyWith(days: updatedDays);
     final epoch = _epoch.current;
-    _replaceState = const ViewStateLoading('Đang cập nhật thực đơn...');
+    _replaceState = const ViewStateLoading('Đang cập nhật thực đơn…');
     notifyListeners();
     try {
       if (plan.id.isNotEmpty) {
