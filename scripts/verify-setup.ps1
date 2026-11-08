@@ -23,7 +23,8 @@ function Invoke-Check {
 Push-Location $repoRoot
 try {
     Invoke-Check 'Flutter' { flutter --version }
-    Invoke-Check 'Java' { java -version }
+    # Java -version writes to stderr; Windows PowerShell with ErrorActionPreference=Stop treats it as a terminating error.
+    Invoke-Check 'Java' { java --version }
     Invoke-Check 'ADB' { adb version }
     Invoke-Check 'Firebase CLI' { firebase --version }
     Invoke-Check 'FlutterFire CLI' { flutterfire --version }
