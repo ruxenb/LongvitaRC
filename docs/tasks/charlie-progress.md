@@ -10,14 +10,16 @@ Thắng, Hoàng và Thái An đã đồng ý các phần của PR #4 chạm vào
 
 **Đợt 03/11, [PR #5](https://github.com/ruxenb/LongvitaRC/pull/5), đã vào `main` (`30ca6e3`) sau khi lỗi PM-FCM-02 được xác minh đã sửa; chưa có AI review:** tin đến khi app đang mở hiện thanh thông báo có nút "Xem" (S4-12), TalkBack thật (S4-14), nháp báo cáo FCM (S8-3). Analyzer sạch, 270/270 tests. Đã sửa lỗi tìm thấy khi review (PM-FCM-02): thanh thông báo của phiên cũ còn trên Sign-in sau khi đăng xuất, và nút "Xem" của nó mở được Profile khi chưa đăng nhập. Giờ mọi thao tác của thanh thông báo kiểm đúng phiên lúc chạy, và nội dung thông báo của phiên đã hết tự gỡ khi tới lượt hiện, kể cả khi đang chờ sau snackbar khác; snackbar của màn khác giữ nguyên. Có regression cho đăng xuất, A → B, A → đăng xuất → A và hàng đợi nhiều thông báo; đã thử đăng xuất trên emulator với tin thật. **Thắng xem giúp `auth_gate.dart`.**
 
-## Mức hoàn thành công việc
+## Mức hoàn thành công việc — snapshot lịch sử
 
-**29 task: 11 chờ nghiệm thu / 18 đang thực hiện / 0 chưa bắt đầu; 0/29 Accepted chính thức.** S4-14 đạt PM review, chờ PR/user-team nghiệm thu; ba task S7 đã được đóng gói và merge, chờ nghiệm thu chính thức.
+**Phạm vi:** tổng số và các bảng 29 task trong mục này lưu mốc cũ từ 03–04/11, có một số ghi chú được bổ sung sau đó; chúng không phải tổng tiến độ hiện tại. Số 11/18 và dòng S5-4 80% bên dưới được giữ để đối chiếu lịch sử. Cập nhật kỹ thuật Analytics ngày 08/11 ở mục bàn giao và evidence đã xác nhận S5-4 được Charlie nghiệm thu; không lấy các số cũ để suy task này còn đang làm.
+
+**Snapshot cũ — 29 task: 11 chờ nghiệm thu / 18 đang thực hiện / 0 chưa bắt đầu; 0/29 Accepted chính thức tại thời điểm đó.** S4-14 đạt PM review, chờ PR/user-team nghiệm thu; ba task S7 đã được đóng gói và merge, chờ nghiệm thu chính thức.
 
 Các điểm % cũ trong bảng dưới là ước lượng Dev của các phần ngoài S7, giữ để tham khảo; không tính lại thành % toàn dự án khi các owner dùng cách đo khác nhau. S7 dùng trạng thái chờ nghiệm thu. Các bản nháp report/slide/clip/viva được giữ trên GitHub theo lựa chọn Charlie, dù working copies ở máy chính đã được xóa.
 
 <details>
-<summary>Chi tiết 29 task — snapshot 03–04/11; contract FCM v1 hiện hành ở bên dưới</summary>
+<summary>Chi tiết 29 task — snapshot 03–04/11; cập nhật kỹ thuật FCM/Analytics hiện hành ở bên dưới</summary>
 
 | Task | Ước lượng Dev / trạng thái | Lý do |
 |---|---:|---|
@@ -53,7 +55,7 @@ Các điểm % cũ trong bảng dưới là ước lượng Dev của các phầ
 
 </details>
 
-## Tiến độ 29 task
+## Tiến độ 29 task — tổng của snapshot lịch sử
 
 | Trạng thái | Số lượng | IDs |
 |---|---:|---|
@@ -69,7 +71,7 @@ Chi tiết IDs/owner/dependency tại [task Charlie](task-charlie.md) và [maste
 - **UI:** tokens/theme, Fraunces/Newsreader/Quicksand bundle cùng license, 9 nhóm widgets và supporting components. Team dùng `package:longvita/widgets/longvita_widgets.dart`; gallery và QA trong `test/qa/`. Screen integration/visual acceptance còn theo owner.
 - **Auth:** Firebase project `longvita-8da7e`, app ID `vn.edu.fpt.longvita`, google-services; typed Auth outcomes, profile recovery, bootstrap gate, restore/logout và session epoch. UID/profile lỗi không bị báo thành cancel. Đổi phiên loại response/progress/error muộn; không xóa cloud records của user cũ.
 - **Firestore AUD-11:** schema/role/status/owner constraints và 41 emulator tests. Theo ghi nhận của Charlie, rules đã publish lên project trước PR; Hoàng/Thắng còn cần review các policy bên dưới.
-- **Analytics:** callers theo API mới của Thái An. Export params lấy từ PDF bytes thực. Chưa có eating window thật thì không gửi generate event; Hoàng nối dữ liệu S02, không điền số giả. `login` (`method=google`) và `logout` đã thấy trên [DebugView](../../evidence/analytics/S5-4-debugview-20261102/README.md), mỗi lần thao tác một event; `export_report` chưa kiểm thật vì chờ DEC-01.
+- **Analytics:** callers theo API mới của Thái An. Export params lấy từ PDF bytes thực. Chưa có eating window thật thì không gửi generate event; Hoàng nối dữ liệu S02, không điền số giả. `login` (`method=google`) và `logout` đã thấy trên [DebugView](../../evidence/analytics/S5-4-debugview-20261102/README.md), mỗi lần thao tác một event; `export_report` đã kiểm qua hai export thật ngày 08/11 (upload Storage Emulator, Analytics thật): mỗi thao tác đúng một event, GA4 nhận report_topic/19/0. Giữ topic và thêm report_topic cùng giá trị theo [contract](../analytics-plan.md), [evidence](../../evidence/analytics/S5-4-topic-20261108/README.md). Storage project thật vẫn theo DEC-01/S3-7/S4-11/S4-15.
 - **FCM preparation:** gateway và 4 callback, parser, inbox/dedup theo phiên. Payload gốc đi cùng entry đã chấp nhận; first accepted message thắng trong một phiên, tap duplicate dùng target đã chấp nhận. Chưa phải live FCM hoàn chỉnh.
 - **Storage (S3-7, S4-11):** lỗi có kiểu (mất mạng, bị từ chối, chưa cấu hình, hết dung lượng), hủy thật, thử lại cùng ID. Rules owner-only có 14 test. Upload thành công bằng SDK thật **trên Storage Emulator**, [bằng chứng](../../evidence/storage/S4-11-emulator-20261102/README.md). Chưa deploy và chưa có file trên project thật vì DEC-01.
 - **FCM thật (S4-12, S4-15):** tin từ Console về đủ foreground, background, terminated; bấm tin mở Profile; lịch sử lưu trên máy theo UID. [Bằng chứng](../../evidence/fcm/S4-15-push-20261102/README.md). Tin đến khi app đang mở hiện thanh thông báo trên màn đang xem, nút "Xem" mở hộp thư ([bằng chứng 03/11](../../evidence/fcm/S4-12-foreground-20261103/README.md)). Đây là contract tạm nhóm đã đồng ý.

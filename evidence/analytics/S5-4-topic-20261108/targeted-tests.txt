@@ -1,0 +1,51 @@
+00:00 +0: loading <worktree>/test/analytics/analytics_service_test.dart
+00:00 +0: <worktree>/test/analytics/analytics_service_test.dart: export sends exactly one SDK event with typed report parameters
+00:00 +1: <worktree>/test/analytics/analytics_service_test.dart: the SDK receives the supplied topic and actual report values
+00:00 +2: <worktree>/test/analytics/analytics_service_test.dart: SDK failure neither breaks the export nor retries the event
+00:05 +3: <worktree>/test/report/profile_export_test.dart: saving before upload a successful export keeps the file and uploads under its id
+00:05 +4: <worktree>/test/report/profile_export_test.dart: saving before upload a failed upload keeps the file and says so
+00:05 +5: <worktree>/test/report/profile_export_test.dart: saving before upload a failed save stops before the upload
+00:05 +6: <worktree>/test/report/profile_export_test.dart: saving before upload a plan id is made safe for a file name
+00:05 +7: <worktree>/test/report/profile_export_test.dart: saving before upload a plan with no usable id still exports
+00:05 +8: <worktree>/test/report/profile_export_test.dart: saving before upload a new export clears the URL of the previous one
+00:05 +9: <worktree>/test/report/profile_export_test.dart: retryUpload reuses the same id and file, without generating again
+00:05 +10: <worktree>/test/report/profile_export_test.dart: retryUpload a second failure keeps the file for another retry
+00:05 +11: <worktree>/test/report/profile_export_test.dart: retryUpload a missing file asks for a new export
+00:05 +12: <worktree>/test/report/export_overlap_test.dart: one operation at a time a second export while one runs starts nothing
+00:05 +13: <worktree>/test/report/export_overlap_test.dart: one operation at a time a second export while one runs starts nothing
+00:05 +14: <worktree>/test/report/export_overlap_test.dart: one operation at a time a second export while one runs starts nothing
+00:05 +15: <worktree>/test/report/profile_export_test.dart: open and share return false with no export
+00:05 +16: <worktree>/test/report/export_overlap_test.dart: one operation at a time a retry while an export runs starts nothing
+00:05 +17: <worktree>/test/report/export_overlap_test.dart: one operation at a time a retry while an export runs starts nothing
+00:05 +18: <worktree>/test/report/export_overlap_test.dart: one operation at a time an export while a retry runs starts nothing
+00:05 +19: <worktree>/test/report/export_overlap_test.dart: one operation at a time an export while a retry runs starts nothing
+00:05 +20: <worktree>/test/report/profile_export_test.dart: session change B cannot open or retry the export of A
+00:05 +21: <worktree>/test/report/export_overlap_test.dart: one operation at a time a new export can start after the previous one ends
+00:05 +22: <worktree>/test/report/profile_export_test.dart: session change sign-out removes the files of A from the device
+00:05 +23: <worktree>/test/report/export_overlap_test.dart: one operation at a time the busy state ends after success
+00:05 +24: <worktree>/test/report/export_overlap_test.dart: one operation at a time the busy state ends after success
+00:05 +25: <worktree>/test/report/profile_export_test.dart: session change logout during save neither sets the export nor uploads
+00:05 +26: <worktree>/test/report/profile_export_test.dart: session change logout during save neither sets the export nor uploads
+00:05 +27: <worktree>/test/report/export_overlap_test.dart: one operation at a time the busy state ends after error
+00:05 +28: <worktree>/test/report/profile_export_test.dart: upload failures network says why and keeps the file
+00:05 +29: <worktree>/test/report/export_overlap_test.dart: one operation at a time the busy state ends when generating or saving fails
+00:05 +30: <worktree>/test/report/profile_export_test.dart: upload failures denied says why and keeps the file
+00:05 +31: <worktree>/test/report/export_overlap_test.dart: late callbacks of a finished operation progress from an ended upload does not touch the next one
+00:05 +32: <worktree>/test/report/export_overlap_test.dart: late callbacks of a finished operation progress from an ended upload does not touch the next one
+00:05 +33: <worktree>/test/report/profile_export_test.dart: upload failures quota says why and keeps the file
+00:05 +34: <worktree>/test/report/export_overlap_test.dart: late callbacks of a finished operation progress after an upload ended leaves it unchanged
+00:05 +35: <worktree>/test/report/export_overlap_test.dart: late callbacks of a finished operation progress after an upload ended leaves it unchanged
+00:05 +36: <worktree>/test/report/profile_export_test.dart: upload failures a lost connection is not recorded as an app error
+00:05 +37: <worktree>/test/report/export_overlap_test.dart: session change an upload of A does not block B, and ends without touching B
+00:05 +38: <worktree>/test/report/export_overlap_test.dart: session change an upload of A does not block B, and ends without touching B
+00:05 +39: <worktree>/test/report/export_overlap_test.dart: session change A signing back in is not blocked or overwritten by the old upload
+00:05 +40: <worktree>/test/report/export_overlap_test.dart: cancel stops the upload, keeps the file and allows a retry
+00:05 +41: <worktree>/test/report/export_overlap_test.dart: cancel a task that still finishes after cancel changes nothing
+00:05 +42: <worktree>/test/report/export_overlap_test.dart: cancel a retry can start right after cancel
+00:06 +43: <worktree>/test/report/export_overlap_test.dart: cancel does nothing when no upload runs
+00:06 +44: <worktree>/test/report/export_overlap_test.dart: cancel sign-out stops the running upload
+00:06 +45: <worktree>/test/report/export_overlap_test.dart: cancel sign-out with nothing running cancels nothing
+00:06 +46: <worktree>/test/report/export_overlap_test.dart: canRetryUpload is true only after a failed upload, and while nothing runs
+00:06 +47: <worktree>/test/report/export_overlap_test.dart: canRetryUpload a retry after a successful upload does nothing
+00:06 +48: <worktree>/test/report/export_overlap_test.dart: the saved file opens while the upload is still running
+00:06 +49: All tests passed!

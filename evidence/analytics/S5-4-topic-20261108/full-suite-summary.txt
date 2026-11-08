@@ -1,0 +1,2 @@
+Command: flutter test --no-pub --reporter expanded
+00:24 +391: All tests passed!

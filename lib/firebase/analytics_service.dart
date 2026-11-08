@@ -108,6 +108,8 @@ class AnalyticsService {
   }) async {
     await logEvent('export_report', {
       'topic': topic,
+      // GA4 DebugView exposes this alias; retain topic for the existing contract.
+      'report_topic': topic,
       'file_size_kb': fileSizeKb,
       'has_shopping_list': hasShoppingList,
     });

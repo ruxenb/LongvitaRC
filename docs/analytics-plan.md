@@ -18,10 +18,16 @@
 | **`generate_meal_plan`** *(Custom snake_case)* | Người dùng bấm tạo thực đơn 7 ngày tại S03 | `target_age_group` *(string: "under_65" \| "over_65")*,<br/>`meals_per_day` *(int)*,<br/>`eating_window_hours` *(int)*,<br/>`fish_meals_count` *(int)* | Tỷ lệ người dùng cao tuổi ($\ge 65$) chọn chế độ 2 bữa hay 3 bữa? Quy tắc đạm cá ($2-3$ bữa) có đạt không? | **Flow 1:** Bước S03 $\to$ S04 |
 | **`view_recipe_details`** *(Custom snake_case)* | Mở xem chi tiết một món ăn trên S05 | `recipe_id` *(string)*,<br/>`is_fish_meal` *(int: 0 hoặc 1)*,<br/>`is_book_citation` *(int: 0 hoặc 1)*,<br/>`calories` *(int)* | Những món ăn nào trong sách được xem nhiều nhất? Người dùng quan tâm món chay hay cá hơn? | **Flow 3:** Bước S04 $\to$ S05 |
 | **`replace_meal`** *(Custom snake_case)* | Hoàn tất đổi một món trong thực đơn tại S06 | `old_recipe_id` *(string)*,<br/>`new_recipe_id` *(string)*,<br/>`day_index` *(int: 1–7)* | Món ăn nào bị người dùng thay thế nhiều nhất và món nào thường được chọn thay thế? | **Flow 3:** Bước S06 $\to$ S04 |
-| **`export_report`** *(Custom snake_case)* | Sinh file PDF thực đơn và tải lên Firebase Storage | `topic` *(string: "longevity_meal_plan")*,<br/>`file_size_kb` *(int)*,<br/>`has_shopping_list` *(int: 0 hoặc 1)* | Có bao nhiêu phần trăm người dùng tạo thực đơn thực sự xuất file PDF để áp dụng thực tế? | **Flow 2 / Profile:** Xuất báo cáo |
+| **`export_report`** *(Custom snake_case)* | Sinh file PDF thực đơn và tải lên Firebase Storage | `topic` *(string: "longevity_meal_plan", giữ tương thích)*,<br/>`report_topic` *(string: cùng giá trị topic, quan sát trên GA4)*,<br/>`file_size_kb` *(int)*,<br/>`has_shopping_list` *(int: 0 hoặc 1)* | Có bao nhiêu phần trăm người dùng tạo thực đơn thực sự xuất file PDF để áp dụng thực tế? | **Flow 2 / Profile:** Xuất báo cáo |
 | **`toggle_shopping_item`** *(Custom snake_case)* | Người dùng tick chọn mua xong nguyên liệu tại S08 | `ingredient_id` *(string)*,<br/>`is_checked` *(int: 0 hoặc 1)* | Tỷ lệ hoàn thành danh sách đi chợ đạt bao nhiêu phần trăm? Nhóm nguyên liệu nào bị bỏ sót? | **Flow 2:** Bước S08 Shopping List |
 
 ---
+
+### Làm rõ contract export_report — S5-4, 08/11/2026
+
+Event chỉ được gửi một lần sau khi upload thành công và operation còn thuộc phiên hiện tại; lỗi/hủy/kết quả phiên cũ không gửi event thành công. `file_size_kb` là số nguyên làm tròn lên từ số byte PDF thực tế; `has_shopping_list` hiện là 0 vì PDF chưa có danh sách đi chợ.
+
+Đối chứng cùng một export thật trên Android + Storage Emulator cho thấy SDK gửi cả `topic` và `report_topic`, nhưng DebugView chỉ liệt kê `report_topic` với đúng giá trị. Giữ `topic` theo contract trước và bổ sung alias `report_topic` cùng giá trị để quan sát được; không phát thêm event, không đưa plan ID/UID/email vào params. Đây là lựa chọn kỹ thuật theo ủy quyền của Charlie/nhóm; chưa kết luận nguyên nhân phía GA4 hoặc gọi `topic` là reserved. [Evidence S5-4](../evidence/analytics/S5-4-topic-20261108/README.md).
 
 ## 2. Đo Lường Success Criterion Của Lab 2
 
