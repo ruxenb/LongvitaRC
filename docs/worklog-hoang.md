@@ -78,3 +78,9 @@
 - Created `fix/hoang-a11y-20261108`; corrected headings and loading announcements for Hoàng's screens, added S05 Firestore HTTPS image hero with honest fallback, and added widget regression tests.
 - Baseline main: Flutter analyze 0 issues, full Flutter suite 388/388; first updated check: Flutter analyze 0 issues, full suite 390/390, 31/31 offline Node recipe/publisher tests. Firestore Emulator with synthetic `demo-longvita` passed 22/22 after setting `NODE_PATH=D:\Tools\LongvitaFirebase\node_modules`; first attempt failed solely because the local Node dependency path was not configured.
 - Flutter doctor still reports no installed Android SDK platform and no connected ADB device. Real Hoàng ARTEMIS runs, native video, live Firebase recipe publication and Figma visual approval remain unverified. No Firebase production writes or rules deployments were made.
+
+## 2026-11-09 — Merge PR #20 và xác nhận lại chất lượng `main`
+- Đã merge [PR #20](https://github.com/ruxenb/LongvitaRC/pull/20) sau khi CodeRabbit pass; merge SHA `934b7f4`, nhánh `main` trên máy đồng bộ bằng `git pull --ff-only origin main`. Giữ nguyên mọi thư mục evidence/UI chưa track của Charlie.
+- Kết quả `main`: 398/398 Flutter tests pass; `flutter analyze --no-pub` 0 issues; E2E Python compileall pass. Không gọi kiểm thử fake service là bằng chứng E2E Android.
+- Kiểm tra lại S0-3: JDK Temurin D: sử dụng được nếu nạp `scripts/project-env.ps1`; Android SDK platforms/build-tools/emulator/licenses đều trống, ADB không có thiết bị. Firebase CLI vẫn hết xác thực. Không chấp nhận thay người dùng giấy phép SDK và không chạm production Firebase.
+- Cập nhật `report/hoang-implementation-report.md` để sửa trạng thái cũ của PR #10, SHA debug/Firebase và thêm bằng chứng đúng của PR20; không tự chấp nhận 18 task còn chờ nghiệm thu hoặc 3 task bị chặn.

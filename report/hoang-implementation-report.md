@@ -1,6 +1,6 @@
 # Longvita — Phần báo cáo của Hoàng (PRM393 Lab 3)
 
-Ngày lập: 04/11/2026 | Trạng thái: bản thảo kỹ thuật, chờ ảnh demo Android và nghiệm thu nhóm.
+Ngày lập: 04/11/2026 | Cập nhật: 09/11/2026 | Trạng thái: bản thảo kỹ thuật đã kiểm thử lại trên `main`, vẫn chờ ảnh demo Android và nghiệm thu nhóm.
 
 ## 1. Phạm vi
 Hoàng phụ trách dữ liệu nghiệp vụ Cloud Firestore, DataService/ViewModel, 3 user flows kế thừa Lab 2 (S01–S10), accessibility, test scripts, báo cáo và trình bày. Đăng nhập Google/Firebase Core, Profile, PDF Upload, FCM do thành viên khác phụ trách; Hoàng dùng lại contract đã chốt.
@@ -59,12 +59,21 @@ ARTEMIS scripts được viết tại e2e_test/test_flows.py, test_search.py, te
 
 ## 7. Công tác nghiệm thu còn thiếu
 1. Chấp nhận giấy phép Android SDK, cài platforms/build-tools, xác nhận thiết bị/emulator và Google Sign-In.
-2. Đã lấy được SHA-1/SHA-256 Debug từ laptop ASUS và thấy không khớp Android OAuth trong google-services.json. Nhóm cần bổ sung hai dấu vân tay vào Firebase Console, cập nhật cấu hình đúng sau kiểm tra; đồng thời cần recipes có nguồn đã kiểm chứng. Chi tiết tại docs/hoang-android-sha.md.
+2. Đã xác nhận trên Firebase Console (06/11) rằng SHA-1/SHA-256 debug của laptop đã được đăng ký; `google-services.json` trong repo có thể cũ và đăng nhập thực tế vẫn cần chạy kiểm tra. Recipes vẫn phải có nguồn và số liệu được kiểm chứng. Chi tiết tại docs/hoang-android-sha.md.
 3. Review/test/deploy Firestore rules cho shopping list mới, có tách quyền UID.
 4. Chạy ARTEMIS >=3 lượt cho test cases chính, chụp ảnh bằng chứng; kiểm tra Firebase Analytics DebugView.
 5. Xem lại Figma, TalkBack và độ tương phản thực tế.
-6. PR #10 đã mở và CodeRabbit đã phản hồi 4 findings. Những sửa lỗi đã được đưa vào commit 81f8d7e, chờ re-review và phê duyệt từ nhóm; các công cụ khác chưa có bằng chứng chạy.
+6. Các PR #10, #15, #17 và #20 của Hoàng đã được merge vào `main`; riêng PR #20 qua CodeRabbit tại commit `7fb8c26` trước khi merge (`934b7f4`). Điều này không thay thế kiểm thử ARTEMIS, dữ liệu production hay chấp thuận của nhóm.
 7. Quay video 3 user flows, cập nhật slide và báo cáo bằng ảnh thực.
 
 ### Nguồn kiểm chứng trong repository
 docs/tasks/task-hoang.md; docs/design-traceability.md; docs/hoang-firestore-schema.md; docs/hoang-accessibility-audit.md; test/flows; e2e_test; git commits 0dc6253 và d078f89.
+
+## 8. Cập nhật kiểm chứng trên `main` (09/11/2026, giờ Việt Nam)
+- PR [#20](https://github.com/ruxenb/LongvitaRC/pull/20) đã **MERGED** vào `main` tại merge commit `934b7f4`. Đây là phần sửa accessibility (heading semantics), hiển thị ảnh công thức có HTTPS/no-redirect/size bound và trạng thái tải ảnh rõ ràng cho TalkBack; cả 4 nhận xét CodeRabbit đã được xử lý.
+- Sau merge, `flutter test --no-pub`: **398/398 pass**; `flutter analyze --no-pub`: **0 issues**. Chạy trên Flutter 3.47.2 / Dart 3.13.2 tại máy Windows trong `D:\PRM393\LongvitaRC`. Các bài test còn dùng fake services và không phải ARTEMIS chạy trên Android.
+- `python -m compileall -q e2e_test`: **pass** (cú pháp các script E2E). Không thể chạy `pytest`/ARTEMIS trên máy này: thiếu Python pytest/uv, Android SDK platform/build-tools, thiết bị ADB và daemon ARTEMIS. Không tính compile-only là E2E pass.
+- `flutter doctor -v` vẫn cảnh báo Android: chưa có `platforms`, `build-tools`, `emulator`; thư mục licenses trống và `adb devices` không có thiết bị. JDK Temurin hợp lệ nằm ở `D:\Tools\Java21\jdk-21.0.13+9`, được nạp bởi `scripts/project-env.ps1`; khi gọi SDK Manager cần dot-source script này để tránh bản Java C: bị lỗi `java.security`.
+- `firebase projects:list --json` chưa xác thực được. Không sửa Firebase production, không triển khai rules, không nhập batch recipes chưa thẩm định. Việc đánh giá và quyền publish batch recipe được theo dõi tại [issue #16](https://github.com/ruxenb/LongvitaRC/issues/16).
+- Không có ảnh chụp Android thực tế hay video demo 3 flows của Hoàng. Những khác biệt Figma (S02/S03/S04/S09 và các màn khác) còn cần review theo `docs/hoang-figma-deviation-audit.md`.
+- Đối chiếu 26 task: **5 có bằng chứng kỹ thuật, 18 đã triển khai nhưng thiếu nghiệm thu, 3 bị chặn/chưa đủ artifact**. Không xác nhận 26/26 hoàn tất. Tham khảo `docs/hoang-acceptance-audit-20261106.md` để biết yêu cầu nghiệm thu cho từng ID.
