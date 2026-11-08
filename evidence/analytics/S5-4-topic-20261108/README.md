@@ -52,6 +52,6 @@ QA chỉ bật alias với điều kiện `kDebugMode && bool.fromEnvironment('Q
 
 Đã tắt debug Analytics (`.none.`), trả FA/FA-SVC về giá trị rỗng như trước, cài lại APK thường (không STORAGE_EMULATOR_HOST/QA_EXPORT_TOPIC_ALIAS), kiểm Home vẫn đăng nhập A rồi dừng AVD và Storage Emulator do lượt này mở. Giữ PDF local, không xóa dữ liệu người dùng hoặc dữ liệu cloud. Hai event debug vẫn là dữ liệu gửi tới Analytics project thật; không tự đổi data filter hay khẳng định chúng bị loại khỏi mọi báo cáo/export.
 
-S5-4 **Ready for Charlie acceptance**, không tự ghi Charlie đã nghiệm thu. Storage project thật/DEC-01 vẫn theo S3-7/S4-11/S4-15; không dùng kết quả Emulator để đóng các task đó. Không mở đợt S6/S7 hoặc xử lý audit S9-1 trong gói này.
+Charlie đã xác nhận **“Chốt hoàn thành S5-4”** ngày 08/11/2026 cho code `af129f9` và evidence `1ea1106`. S5-4 hoàn tất/100%; việc nghiệm thu không đồng nghĩa code đã tích hợp main. Gói này được bàn giao qua PR theo yêu cầu tiếp theo của Charlie. Storage project thật/DEC-01 vẫn theo S3-7/S4-11/S4-15; không dùng kết quả Emulator để đóng các task đó. Không mở đợt S6/S7 hoặc xử lý audit S9-1 trong gói này.
 
 Nguồn API: [Firebase DebugView](https://firebase.google.com/docs/analytics/debugview), [firebase_analytics 11.6.0 logEvent](https://pub.dev/documentation/firebase_analytics/11.6.0/firebase_analytics/FirebaseAnalytics/logEvent.html). Đã đối chiếu 08/11/2026.
