@@ -99,6 +99,21 @@ void main() {
           find.text('Chưa có ảnh được xác minh cho món này'),
           findsOneWidget,
         );
+
+        // A pending verified HTTPS fetch must not announce a missing image.
+        final loadingRecipe = RecipeModel.fromMap({
+          ...beans.toMap(),
+          'imageUrl': 'https://example.invalid/meal.jpg',
+        }, beans.id);
+        await tester.pumpWidget(
+          app(RecipeDetailsScreen(recipe: loadingRecipe)),
+        );
+        expect(find.byKey(const Key('recipe-hero-loading')), findsOneWidget);
+        expect(find.text('Đang tải ảnh món…'), findsOneWidget);
+        expect(
+          find.text('Chưa có ảnh được xác minh cho món này'),
+          findsNothing,
+        );
       });
     }
   }

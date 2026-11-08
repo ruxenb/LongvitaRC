@@ -54,16 +54,38 @@ class _RecipeHeroState extends State<_RecipeHero> {
 
   @override
   Widget build(BuildContext context) {
-    Widget placeholder() => ColoredBox(
+    Widget placeholder({bool loading = false}) => ColoredBox(
       color: Theme.of(context).colorScheme.surfaceContainerHighest,
       child: Center(
         child: Padding(
           padding: const EdgeInsets.all(12),
-          child: Text(
-            'Chưa có ảnh được xác minh cho món này',
-            textAlign: TextAlign.center,
-            style: Theme.of(context).textTheme.bodyMedium,
-          ),
+          child: loading
+              ? Semantics(
+                  key: const Key('recipe-hero-loading'),
+                  liveRegion: true,
+                  child: const Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      SizedBox(
+                        width: 22,
+                        height: 22,
+                        child: CircularProgressIndicator(strokeWidth: 2),
+                      ),
+                      SizedBox(width: 8),
+                      Flexible(
+                        child: Text(
+                          'Đang tải ảnh món…',
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    ],
+                  ),
+                )
+              : Text(
+                  'Chưa có ảnh được xác minh cho món này',
+                  textAlign: TextAlign.center,
+                  style: Theme.of(context).textTheme.bodyMedium,
+                ),
         ),
       ),
     );
@@ -77,6 +99,9 @@ class _RecipeHeroState extends State<_RecipeHero> {
             : FutureBuilder<Uint8List>(
                 future: _image,
                 builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return placeholder(loading: true);
+                  }
                   if (!snapshot.hasData) return placeholder();
                   return LayoutBuilder(
                     builder: (context, constraints) {
