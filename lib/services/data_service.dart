@@ -18,6 +18,12 @@ class DataService implements IDataService {
   static String draftDocumentId(MealPlanModel plan) =>
       '${plan.uid}_${plan.createdAt.toUtc().microsecondsSinceEpoch}';
 
+  /// Staff archive recipes on the Web instead of deleting them. Archived
+  /// recipes leave the catalogue, generation and alternatives; a saved plan
+  /// can still open one by ID through [getRecipeById].
+  static List<RecipeModel> activeRecipes(Iterable<RecipeModel> recipes) =>
+      recipes.where((recipe) => !recipe.isArchived).toList(growable: false);
+
   final FirebaseFirestore _firestore;
   DataService({FirebaseFirestore? firestore})
     : _firestore = firestore ?? FirebaseFirestore.instance;
@@ -45,9 +51,10 @@ class DataService implements IDataService {
         query = query.where('category', isEqualTo: category.trim());
       }
       final snapshot = await query.get();
-      return snapshot.docs
-          .map((doc) => RecipeModel.fromMap(doc.data(), doc.id))
-          .toList(growable: false);
+      // Filtered here, not in the query: recipes without the field are active.
+      return activeRecipes(
+        snapshot.docs.map((doc) => RecipeModel.fromMap(doc.data(), doc.id)),
+      );
     } catch (error) {
       throw DataFailure.from(error);
     }

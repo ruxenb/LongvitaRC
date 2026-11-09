@@ -173,7 +173,7 @@ Ngoài bảng trên, `firestore.rules.test.js` giữ các ca biên chi tiết (m
 ## 7. Giới hạn đã biết
 
 - **Danh sách lồng nhau:** Rules không duyệt được từng phần tử trong `days`, `ingredients`, `items` (không có vòng lặp), chỉ kiểm kiểu list và số phần tử. Client kiểm phần còn lại.
-- **Công thức đã lưu trữ:** mọi người đăng nhập vẫn đọc được recipe có `isArchived = true`. Mobile cần ẩn chúng khi hiển thị; lọc bằng rules sẽ bắt mọi truy vấn Mobile thêm điều kiện `where`, nên chưa làm.
+- **Công thức đã lưu trữ:** rules vẫn cho người đăng nhập đọc recipe có `isArchived = true` (lọc bằng rules sẽ bắt mọi truy vấn thêm `where`). Mobile loại chúng ở `DataService.getRecipes()`, nên chúng không vào danh mục, tạo thực đơn hay gợi ý thay món; `getRecipeById()` vẫn mở được để thực đơn đã lưu không bị hỏng.
 - **Dashboard:** staff không đọc `users`, nên ba chỉ số của TV-03 đếm trên `recipes` và `meal_plans`. Số người dùng chỉ hiển thị cho admin hoặc qua bộ đếm riêng nếu nhóm cần.
 - **Thực đơn bị từ chối** là trạng thái cuối; chưa có luồng sửa và gửi lại cùng document.
 - Rules mới trong file này **chưa deploy** lên project `longvita-8da7e`. Deploy cần nhóm duyệt và chạy lại bộ test trên đúng bản deploy.

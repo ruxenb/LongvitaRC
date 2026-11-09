@@ -13,6 +13,7 @@ class RecipeModel {
   // Provenance text from Firestore. Use [book] only after the exact edition/page
   // has been verified; [web] marks a website source. Unmarked sources are unknown.
   final String sourceNote;
+  final bool isArchived;
 
   /// A populated sourceNote alone does not prove a book citation.
   bool get isBookCitation {
@@ -33,6 +34,7 @@ class RecipeModel {
     this.imageUrl,
     this.sourceNote =
         '', // Must come from verified Firestore data; never invent a citation.
+    this.isArchived = false,
   });
 
   factory RecipeModel.fromMap(Map<String, dynamic> map, String id) {
@@ -57,6 +59,7 @@ class RecipeModel {
           const [],
       imageUrl: map['imageUrl'] as String?,
       sourceNote: map['sourceNote'] as String? ?? '',
+      isArchived: map['isArchived'] as bool? ?? false,
     );
   }
 
@@ -71,6 +74,7 @@ class RecipeModel {
       'instructions': instructions,
       'imageUrl': imageUrl,
       'sourceNote': sourceNote,
+      'isArchived': isArchived,
     };
   }
 }
