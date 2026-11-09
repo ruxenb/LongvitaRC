@@ -94,13 +94,12 @@ class _PreferencesScreenState extends State<PreferencesScreen> {
               final kg = double.tryParse(
                 _weight.text.trim().replaceAll(',', '.'),
               );
-              final age = _isOlderAdult ? 70 : 55;
               final factor = _isOlderAdult ? 1.0 : 0.8;
               return _ReadOnlyResult(
                 title: 'Mục tiêu được tính toán',
                 value: kg == null || !kg.isFinite || kg < 25 || kg > 300
                     ? 'Nhập cân nặng hợp lệ để xem mục tiêu'
-                    : '${calculateProteinTarget(kg, age).round()} g protein/ngày • ${factor.toStringAsFixed(1).replaceAll('.', ',')} g/kg',
+                    : '${calculateProteinTargetForAgeGroup(kg, isOlderAdult: _isOlderAdult).round()} g protein/ngày • ${factor.toStringAsFixed(1).replaceAll('.', ',')} g/kg',
               );
             },
           ),
@@ -139,7 +138,7 @@ class _PreferencesScreenState extends State<PreferencesScreen> {
                 MaterialPageRoute(
                   builder: (_) => CreatePlanScreen(
                     uid: uid,
-                    age: _isOlderAdult ? 70 : 55,
+                    isOlderAdult: _isOlderAdult,
                     weightKg: double.parse(
                       _weight.text.trim().replaceAll(',', '.'),
                     ),
@@ -159,7 +158,7 @@ class _PreferencesScreenState extends State<PreferencesScreen> {
 /// S03: explicitly start generation; handles Loading/Empty/Error + Retry/Back.
 class CreatePlanScreen extends StatefulWidget {
   final String uid;
-  final int age;
+  final bool isOlderAdult;
   final double weightKg;
   final int mealsPerDay;
   final int eatingWindowHours;
@@ -167,7 +166,7 @@ class CreatePlanScreen extends StatefulWidget {
   const CreatePlanScreen({
     super.key,
     required this.uid,
-    required this.age,
+    required this.isOlderAdult,
     required this.weightKg,
     required this.mealsPerDay,
     required this.eatingWindowHours,
@@ -186,7 +185,7 @@ class _CreatePlanScreenState extends State<CreatePlanScreen> {
     final vm = context.read<MealPlanViewModel>();
     await vm.generatePlan(
       uid: widget.uid,
-      age: widget.age,
+      age: widget.isOlderAdult ? 65 : 64,
       weightKg: widget.weightKg,
       mealsPerDay: widget.mealsPerDay,
       eatingWindowHours: widget.eatingWindowHours,
@@ -238,7 +237,7 @@ class _CreatePlanScreenState extends State<CreatePlanScreen> {
             _ReadOnlyResult(
               title: 'Mục tiêu protein',
               value:
-                  '${calculateProteinTarget(widget.weightKg, widget.age).round()} g protein/ngày',
+                  '${calculateProteinTargetForAgeGroup(widget.weightKg, isOlderAdult: widget.isOlderAdult).round()} g protein/ngày',
             ),
             const SizedBox(height: AppSpacing.s8),
             const _ReadOnlyResult(
@@ -275,6 +274,18 @@ class WeeklyPlanScreen extends StatefulWidget {
 
 class _WeeklyPlanScreenState extends State<WeeklyPlanScreen> {
   var _selectedDay = 0;
+
+  DateTime _dateForDay(MealPlanModel plan, int dayIndex) {
+    final created = DateTime(
+      plan.createdAt.year,
+      plan.createdAt.month,
+      plan.createdAt.day,
+    );
+    final monday = created.subtract(
+      Duration(days: created.weekday - DateTime.monday),
+    );
+    return monday.add(Duration(days: dayIndex.clamp(0, 6)));
+  }
 
   Future<void> _save(BuildContext context) async {
     final vm = context.read<MealPlanViewModel>();
@@ -313,6 +324,9 @@ class _WeeklyPlanScreenState extends State<WeeklyPlanScreen> {
                 final selected = plan.days.isEmpty
                     ? null
                     : plan.days[_selectedDay.clamp(0, plan.days.length - 1)];
+                final selectedDate = selected == null
+                    ? null
+                    : _dateForDay(plan, selected.dayIndex);
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
@@ -331,9 +345,7 @@ class _WeeklyPlanScreenState extends State<WeeklyPlanScreen> {
                         itemBuilder: (context, index) {
                           final day = plan.days[index];
                           final selectedDay = index == _selectedDay;
-                          final date = plan.createdAt.add(
-                            Duration(days: index),
-                          );
+                          final date = _dateForDay(plan, day.dayIndex);
                           return Semantics(
                             button: true,
                             selected: selectedDay,
@@ -373,7 +385,7 @@ class _WeeklyPlanScreenState extends State<WeeklyPlanScreen> {
                     const SizedBox(height: AppSpacing.s12),
                     if (selected != null) ...[
                       Text(
-                        '${selected.dayName} • ${plan.createdAt.add(Duration(days: _selectedDay)).day} tháng ${plan.createdAt.add(Duration(days: _selectedDay)).month}',
+                        '${selected.dayName} • ${selectedDate!.day} tháng ${selectedDate.month}',
                         style: AppTypography.labelStrong,
                       ),
                       const SizedBox(height: AppSpacing.s8),

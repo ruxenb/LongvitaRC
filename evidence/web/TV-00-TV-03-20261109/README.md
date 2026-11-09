@@ -30,6 +30,13 @@ A live Hosting URL and incognito check remain separate TV-00 deployment evidence
 - Modified: archived recipes remain visible in Web Admin so staff can restore
   them. Mobile filtering is already enforced by `DataService` from PR #27.
 - Accepted: stale English widget-test assertion changed to the Vietnamese UI.
+- Accepted: make the recipe table scroll vertically and horizontally, and pass
+  its edit callback explicitly instead of searching for ancestor state.
+- Accepted: select today's meal by Monday-based `dayIndex`, align weekly dates
+  to the containing Monday, and connect Saved Plans/Shopping to their intended
+  destinations.
+- Accepted: carry the selected age group through plan creation and remove the
+  invented numeric age from saved-plan titles.
 
 ## Commands
 

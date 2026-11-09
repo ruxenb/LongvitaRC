@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../models/announcement_model.dart';
+import '../models/recipe_model.dart';
 import '../services/i_data_service.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_spacing.dart';
@@ -78,10 +79,16 @@ class _HomeScreenState extends State<HomeScreen> {
     final user = context.watch<AuthViewModel>().currentUser;
     final profile = context.watch<ProfileViewModel>();
     final plan = context.watch<MealPlanViewModel>().activePlan;
-    final todayMeal =
-        plan?.days.isNotEmpty == true && plan!.days.first.meals.isNotEmpty
-        ? plan.days.first.meals.first
-        : null;
+    RecipeModel? todayMeal;
+    final todayIndex = DateTime.now().weekday - DateTime.monday;
+    if (plan != null) {
+      for (final day in plan.days) {
+        if (day.dayIndex == todayIndex && day.meals.isNotEmpty) {
+          todayMeal = day.meals.first;
+          break;
+        }
+      }
+    }
     return Scaffold(
       appBar: AppBar(
         title: const Text('Longvita'),
@@ -244,6 +251,12 @@ class _HomeScreenState extends State<HomeScreen> {
                       AppButton(
                         text: 'Thực đơn đã lưu',
                         variant: AppButtonVariant.secondary,
+                        onPressed: () => _navigateTo(1),
+                      ),
+                      const SizedBox(height: AppSpacing.s8),
+                      AppButton(
+                        text: 'Danh sách mua sắm',
+                        variant: AppButtonVariant.secondary,
                         onPressed: plan == null
                             ? null
                             : () => Navigator.of(context).push(
@@ -252,12 +265,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                       const IngredientSummaryScreen(),
                                 ),
                               ),
-                      ),
-                      const SizedBox(height: AppSpacing.s8),
-                      AppButton(
-                        text: 'Danh sách mua sắm',
-                        variant: AppButtonVariant.secondary,
-                        onPressed: () => _navigateTo(1),
                       ),
                       const SizedBox(height: AppSpacing.s8),
                       AppButton(

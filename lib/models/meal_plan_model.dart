@@ -3,6 +3,11 @@ import 'recipe_model.dart';
 double calculateProteinTarget(double weightKg, int age) =>
     (weightKg * (age >= 65 ? 1.0 : 0.8)).clamp(40.0, 95.0).toDouble();
 
+double calculateProteinTargetForAgeGroup(
+  double weightKg, {
+  required bool isOlderAdult,
+}) => (weightKg * (isOlderAdult ? 1.0 : 0.8)).clamp(40.0, 95.0).toDouble();
+
 class DailyMeal {
   final int dayIndex; // 0 to 6
   final String dayName; // 'Thứ Hai'..'Chủ Nhật'

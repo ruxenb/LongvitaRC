@@ -51,7 +51,10 @@ class _RecipeManagementScreenState extends State<RecipeManagementScreen> {
           const SizedBox(height: 20),
           Expanded(
             child: vm.state == AdminLoadState.ready
-                ? _RecipeTable(vm: vm)
+                ? _RecipeTable(
+                    vm: vm,
+                    onEdit: (recipe) => _openEditor(context, vm, recipe),
+                  )
                 : AdminStateView(
                     state: vm.state,
                     error: vm.error,
@@ -94,7 +97,9 @@ class _RecipeManagementScreenState extends State<RecipeManagementScreen> {
 
 class _RecipeTable extends StatelessWidget {
   final RecipeAdminViewModel vm;
-  const _RecipeTable({required this.vm});
+  final Future<void> Function(RecipeModel recipe) onEdit;
+
+  const _RecipeTable({required this.vm, required this.onEdit});
 
   @override
   Widget build(BuildContext context) {
@@ -108,74 +113,74 @@ class _RecipeTable extends StatelessWidget {
     }
     return Card(
       child: SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
-        child: DataTable(
-          columns: const [
-            DataColumn(label: Text('Tên món')),
-            DataColumn(label: Text('Danh mục')),
-            DataColumn(label: Text('Kcal'), numeric: true),
-            DataColumn(label: Text('Protein'), numeric: true),
-            DataColumn(label: Text('Trạng thái')),
-            DataColumn(label: Text('Thao tác')),
-          ],
-          rows: [
-            for (final recipe in rows)
-              DataRow(
-                cells: [
-                  DataCell(Text(recipe.name)),
-                  DataCell(Text(recipe.category)),
-                  DataCell(Text(recipe.calories.toStringAsFixed(0))),
-                  DataCell(Text('${recipe.proteinGrams.toStringAsFixed(1)} g')),
-                  DataCell(
-                    Chip(
-                      label: Text(
-                        recipe.isArchived ? 'Đã lưu trữ' : 'Đang dùng',
+        child: SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: DataTable(
+            columns: const [
+              DataColumn(label: Text('Tên món')),
+              DataColumn(label: Text('Danh mục')),
+              DataColumn(label: Text('Kcal'), numeric: true),
+              DataColumn(label: Text('Protein'), numeric: true),
+              DataColumn(label: Text('Trạng thái')),
+              DataColumn(label: Text('Thao tác')),
+            ],
+            rows: [
+              for (final recipe in rows)
+                DataRow(
+                  cells: [
+                    DataCell(Text(recipe.name)),
+                    DataCell(Text(recipe.category)),
+                    DataCell(Text(recipe.calories.toStringAsFixed(0))),
+                    DataCell(
+                      Text('${recipe.proteinGrams.toStringAsFixed(1)} g'),
+                    ),
+                    DataCell(
+                      Chip(
+                        label: Text(
+                          recipe.isArchived ? 'Đã lưu trữ' : 'Đang dùng',
+                        ),
+                        backgroundColor: recipe.isArchived
+                            ? AppColors.disabledBg
+                            : AppColors.bgSelected,
                       ),
-                      backgroundColor: recipe.isArchived
-                          ? AppColors.disabledBg
-                          : AppColors.bgSelected,
                     ),
-                  ),
-                  DataCell(
-                    Row(
-                      children: [
-                        IconButton(
-                          tooltip: 'Chỉnh sửa',
-                          onPressed: () async {
-                            final state = context
-                                .findAncestorStateOfType<
-                                  _RecipeManagementScreenState
-                                >();
-                            await state?._openEditor(context, vm, recipe);
-                          },
-                          icon: const Icon(Icons.edit_outlined),
-                        ),
-                        IconButton(
-                          tooltip: recipe.isArchived ? 'Khôi phục' : 'Lưu trữ',
-                          onPressed: () async {
-                            final messenger = ScaffoldMessenger.of(context);
-                            try {
-                              await vm.archive(recipe);
-                            } catch (error) {
-                              messenger.showSnackBar(
-                                SnackBar(
-                                  content: Text('Không thể cập nhật: $error'),
-                                ),
-                              );
-                            }
-                          },
-                          icon: Icon(
-                            recipe.isArchived
-                                ? Icons.unarchive_outlined
-                                : Icons.archive_outlined,
+                    DataCell(
+                      Row(
+                        children: [
+                          IconButton(
+                            tooltip: 'Chỉnh sửa',
+                            onPressed: () => onEdit(recipe),
+                            icon: const Icon(Icons.edit_outlined),
                           ),
-                        ),
-                      ],
+                          IconButton(
+                            tooltip: recipe.isArchived
+                                ? 'Khôi phục'
+                                : 'Lưu trữ',
+                            onPressed: () async {
+                              final messenger = ScaffoldMessenger.of(context);
+                              try {
+                                await vm.archive(recipe);
+                              } catch (error) {
+                                messenger.showSnackBar(
+                                  SnackBar(
+                                    content: Text('Không thể cập nhật: $error'),
+                                  ),
+                                );
+                              }
+                            },
+                            icon: Icon(
+                              recipe.isArchived
+                                  ? Icons.unarchive_outlined
+                                  : Icons.archive_outlined,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                ],
-              ),
-          ],
+                  ],
+                ),
+            ],
+          ),
         ),
       ),
     );

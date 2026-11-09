@@ -309,7 +309,7 @@ class DataService implements IDataService {
     return MealPlanModel(
       id: '',
       uid: uid,
-      title: 'Thực đơn 7 ngày ($age tuổi, ${weightKg.toStringAsFixed(1)} kg)',
+      title: 'Thực đơn 7 ngày (${weightKg.toStringAsFixed(1)} kg)',
       targetCalories: calories,
       targetProteinGrams: protein,
       days: days,
