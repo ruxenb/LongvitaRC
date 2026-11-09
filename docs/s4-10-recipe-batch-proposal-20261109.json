@@ -1,0 +1,284 @@
+{
+  "projectId": "longvita-8da7e",
+  "collection": "recipes",
+  "manifestType": "S4-10 proposed batch for data review (not approved)",
+  "preparedBy": "Claude Code for Charlie (S4-10), 2026-11-09",
+  "derivedFrom": [
+    "docs/hoang-staged-usda-recipes-20261106.json (REVIEW_spelt_lentil_sesame_01)",
+    "docs/hoang-recipe-research-ledger-20261106.json (FOUNDATION-LUNCH-01)"
+  ],
+  "sourceCheckedAt": "2026-11-09T09:24:00+07:00",
+  "recipes": [
+    {
+      "id": "lv-fvl-spelt-chicory-carrot-v1",
+      "reviewBlockers": [
+        "Reviewer chấp nhận giả định spelt 60 g là khối lượng khô (trang nguồn không ghi khô/chín).",
+        "Reviewer chấp nhận dùng 'Cheese, parmesan, grated' (FDC 171247) làm số đại diện cho Grana Padano.",
+        "Reviewer chấp nhận 'chicory' là rau diếp xoăn phần lá (FDC 169992, cân sống).",
+        "Nhóm duyệt nội dung tên/mô tả/các bước do nhóm tự viết và phạm vi tạo mới."
+      ],
+      "resolvedBlockers": [
+        "Định lượng đủ cả bữa: nguồn liệt kê 5 thành phần với khối lượng g; không có món ăn kèm bị loại trừ.",
+        "Số dinh dưỡng: mỗi thành phần có mã FDC, trạng thái, kcal và đạm/100 g; tổng tính lại được.",
+        "Nội dung không sao chép: chỉ dùng tên và khối lượng thành phần; các bước do nhóm tự viết.",
+        "imageUrl=null; sourceNote ghi [web], không nhận là trang sách hay Phụ lục A.",
+        "Số FDC 171247 đọc lại qua API USDA 09/11 09:24: 420 kcal, 28,42 g đạm/100 g (trang FDC hiển thị 28,4 do làm tròn)."
+      ],
+      "allergens": [
+        "gluten (spelt)",
+        "sữa (Grana Padano)"
+      ],
+      "clinicalUse": "Thông tin tham khảo cho demo; không phải tư vấn dinh dưỡng cá nhân.",
+      "firestore": {
+        "name": "Farro (spelt) với rau diếp xoăn, cà rốt và Grana Padano",
+        "description": "Bữa trưa mẫu của Quỹ Valter Longo cho người lớn: 60 g farro/spelt cân khô, 150 g rau diếp xoăn, 50 g cà rốt, 9 g dầu ô liu và 5 g Grana Padano bào. Dinh dưỡng ước tính từ USDA cho nguyên liệu sống.",
+        "category": "ngu_coc",
+        "proteinGrams": 13.178,
+        "calories": 358.36,
+        "ingredients": [
+          {
+            "id": "spelt-dry",
+            "name": "Farro/spelt (cân khô)",
+            "amount": 60,
+            "unit": "g",
+            "category": "ngũ cốc",
+            "isPurchased": false
+          },
+          {
+            "id": "chicory-greens",
+            "name": "Rau diếp xoăn (cicoria, phần lá)",
+            "amount": 150,
+            "unit": "g",
+            "category": "rau",
+            "isPurchased": false
+          },
+          {
+            "id": "carrot",
+            "name": "Cà rốt",
+            "amount": 50,
+            "unit": "g",
+            "category": "rau",
+            "isPurchased": false
+          },
+          {
+            "id": "olive-oil",
+            "name": "Dầu ô liu nguyên chất",
+            "amount": 9,
+            "unit": "g",
+            "category": "dầu",
+            "isPurchased": false
+          },
+          {
+            "id": "grana-padano",
+            "name": "Phô mai Grana Padano bào",
+            "amount": 5,
+            "unit": "g",
+            "category": "phô mai",
+            "isPurchased": false
+          }
+        ],
+        "instructions": [
+          "Luộc farro/spelt trong nhiều nước đến khi mềm, gạn ráo.",
+          "Rửa rau diếp xoăn, chần nhanh rồi để ráo; cà rốt cắt lát mỏng hoặc bào sợi.",
+          "Trộn farro với rau và cà rốt, rưới dầu ô liu và rắc Grana Padano bào khi dùng."
+        ],
+        "imageUrl": null,
+        "sourceNote": "[web] Theo thành phần bữa trưa mẫu (người lớn) của Fondazione Valter Longo, 20/04/2020; https://www.fondazionevalterlongo.org/en/sample-longevity-diets/. Số dinh dưỡng là ước tính theo USDA SR Legacy, không phải đo món đã nấu."
+      },
+      "provenance": {
+        "recipeSource": {
+          "type": "team-original",
+          "title": "Bữa trưa 'Spelt with chicory and carrots' trong thực đơn mẫu của Fondazione Valter Longo (người lớn béo phì)",
+          "locator": "https://www.fondazionevalterlongo.org/en/sample-longevity-diets/ — Profile 'Adult obese man', Lunch",
+          "rightsEvidence": "Only ingredient names and quantities (facts) from the Foundation sample menu are used. Name, description and the three short steps are written by the team; no text, image or layout of the source page is reproduced. Team content approval is part of the batch approval.",
+          "url": "https://www.fondazionevalterlongo.org/en/sample-longevity-diets/"
+        },
+        "nutrition": {
+          "servings": 1,
+          "entries": [
+            {
+              "ingredientId": "spelt-dry",
+              "foodCode": "FDC:169745",
+              "sourceName": "USDA FoodData Central SR Legacy (April 2018) — Spelt, uncooked",
+              "sourceUrl": "https://api.nal.usda.gov/fdc/v1/food/169745",
+              "preparationState": "uncooked, weighed dry",
+              "edibleGrams": 60,
+              "kcalPer100g": 338.0,
+              "proteinPer100g": 14.57
+            },
+            {
+              "ingredientId": "chicory-greens",
+              "foodCode": "FDC:169992",
+              "sourceName": "USDA FoodData Central SR Legacy (April 2018) — Chicory greens, raw",
+              "sourceUrl": "https://api.nal.usda.gov/fdc/v1/food/169992",
+              "preparationState": "raw leaves, weighed raw",
+              "edibleGrams": 150,
+              "kcalPer100g": 23.0,
+              "proteinPer100g": 1.7
+            },
+            {
+              "ingredientId": "carrot",
+              "foodCode": "FDC:170393",
+              "sourceName": "USDA FoodData Central SR Legacy (April 2018) — Carrots, raw",
+              "sourceUrl": "https://api.nal.usda.gov/fdc/v1/food/170393",
+              "preparationState": "raw, weighed raw",
+              "edibleGrams": 50,
+              "kcalPer100g": 41.0,
+              "proteinPer100g": 0.93
+            },
+            {
+              "ingredientId": "olive-oil",
+              "foodCode": "FDC:171413",
+              "sourceName": "USDA FoodData Central SR Legacy (April 2018) — Oil, olive, salad or cooking",
+              "sourceUrl": "https://api.nal.usda.gov/fdc/v1/food/171413",
+              "preparationState": "liquid oil, weighed in g",
+              "edibleGrams": 9,
+              "kcalPer100g": 884.0,
+              "proteinPer100g": 0.0
+            },
+            {
+              "ingredientId": "grana-padano",
+              "foodCode": "FDC:171247",
+              "sourceName": "USDA FoodData Central SR Legacy (April 2018) — Cheese, parmesan, grated (proxy for Grana Padano)",
+              "sourceUrl": "https://api.nal.usda.gov/fdc/v1/food/171247",
+              "preparationState": "grated hard cheese",
+              "edibleGrams": 5,
+              "kcalPer100g": 420.0,
+              "proteinPer100g": 28.42
+            }
+          ]
+        },
+        "nutrientCalculation": "sum(edibleGrams * per100g / 100) / servings"
+      }
+    },
+    {
+      "id": "lv-fvl-spelt-lentil-sesame-v1",
+      "reviewBlockers": [
+        "Reviewer chấp nhận giả định spelt 70 g là khối lượng khô (đậu lăng được nguồn ghi rõ là khô).",
+        "Reviewer chấp nhận món là phần chính: 200 g fennel sống và salad ăn kèm không có tỷ lệ từng loại nên không tính.",
+        "Nhóm duyệt nội dung tên/mô tả/các bước do nhóm tự viết và phạm vi tạo mới."
+      ],
+      "resolvedBlockers": [
+        "Phạm vi món ghi rõ ở tên ('phần chính') và mô tả: không nhận là cả bữa trưa.",
+        "Số dinh dưỡng khớp bản staged của Hoàng (USDA API, đọc lại 09/11 cho 4 mã).",
+        "Nội dung không sao chép; imageUrl=null; sourceNote ghi [web]."
+      ],
+      "allergens": [
+        "gluten (spelt)",
+        "mè"
+      ],
+      "clinicalUse": "Thông tin tham khảo cho demo; không phải tư vấn dinh dưỡng cá nhân.",
+      "firestore": {
+        "name": "Farro (spelt) với đậu lăng và mè — phần chính",
+        "description": "Phần chính của bữa trưa mẫu của Quỹ Valter Longo cho người trên 70 tuổi: 70 g farro cân khô, 50 g đậu lăng khô, 15 g mè và 9 g dầu ô liu. Chưa gồm 200 g fennel và salad ăn kèm. Dinh dưỡng ước tính từ USDA.",
+        "category": "ngu_coc",
+        "proteinGrams": 25.1735,
+        "calories": 578.11,
+        "ingredients": [
+          {
+            "id": "spelt-dry",
+            "name": "Farro/spelt (cân khô)",
+            "amount": 70,
+            "unit": "g",
+            "category": "ngũ cốc",
+            "isPurchased": false
+          },
+          {
+            "id": "lentils-dry",
+            "name": "Đậu lăng khô",
+            "amount": 50,
+            "unit": "g",
+            "category": "các loại đậu",
+            "isPurchased": false
+          },
+          {
+            "id": "sesame",
+            "name": "Hạt mè",
+            "amount": 15,
+            "unit": "g",
+            "category": "hạt",
+            "isPurchased": false
+          },
+          {
+            "id": "olive-oil",
+            "name": "Dầu ô liu nguyên chất",
+            "amount": 9,
+            "unit": "g",
+            "category": "dầu",
+            "isPurchased": false
+          }
+        ],
+        "instructions": [
+          "Luộc farro/spelt và đậu lăng riêng đến khi chín, gạn ráo.",
+          "Rang nhẹ hạt mè.",
+          "Trộn farro, đậu lăng và mè, rưới dầu ô liu. Phần rau ăn kèm dùng riêng."
+        ],
+        "imageUrl": null,
+        "sourceNote": "[web] Theo thành phần bữa trưa mẫu (người trên 70 tuổi) của Fondazione Valter Longo, 20/04/2020; https://www.fondazionevalterlongo.org/en/sample-longevity-diets/. Chỉ phần chính. Số dinh dưỡng là ước tính theo USDA SR Legacy."
+      },
+      "provenance": {
+        "recipeSource": {
+          "type": "team-original",
+          "title": "Bữa trưa 'Farro (spelt) salad with lentils and sesame seeds' trong thực đơn mẫu của Fondazione Valter Longo (người trên 70 tuổi)",
+          "locator": "https://www.fondazionevalterlongo.org/en/sample-longevity-diets/ — Profile 'Adult man over 70', Lunch (main component only)",
+          "rightsEvidence": "Only ingredient names and quantities (facts) from the Foundation sample menu are used. Name, description and the three short steps are written by the team; no text, image or layout of the source page is reproduced. Team content approval is part of the batch approval.",
+          "url": "https://www.fondazionevalterlongo.org/en/sample-longevity-diets/"
+        },
+        "nutrition": {
+          "servings": 1,
+          "entries": [
+            {
+              "ingredientId": "spelt-dry",
+              "foodCode": "FDC:169745",
+              "sourceName": "USDA FoodData Central SR Legacy (April 2018) — Spelt, uncooked",
+              "sourceUrl": "https://api.nal.usda.gov/fdc/v1/food/169745",
+              "preparationState": "uncooked, weighed dry",
+              "edibleGrams": 70,
+              "kcalPer100g": 338.0,
+              "proteinPer100g": 14.57
+            },
+            {
+              "ingredientId": "lentils-dry",
+              "foodCode": "FDC:172420",
+              "sourceName": "USDA FoodData Central SR Legacy (April 2018) — Lentils, raw",
+              "sourceUrl": "https://api.nal.usda.gov/fdc/v1/food/172420",
+              "preparationState": "dry, before cooking",
+              "edibleGrams": 50,
+              "kcalPer100g": 352.0,
+              "proteinPer100g": 24.63
+            },
+            {
+              "ingredientId": "sesame",
+              "foodCode": "FDC:170150",
+              "sourceName": "USDA FoodData Central SR Legacy (April 2018) — Seeds, sesame seeds, whole, dried",
+              "sourceUrl": "https://api.nal.usda.gov/fdc/v1/food/170150",
+              "preparationState": "whole, dried",
+              "edibleGrams": 15,
+              "kcalPer100g": 573.0,
+              "proteinPer100g": 17.73
+            },
+            {
+              "ingredientId": "olive-oil",
+              "foodCode": "FDC:171413",
+              "sourceName": "USDA FoodData Central SR Legacy (April 2018) — Oil, olive, salad or cooking",
+              "sourceUrl": "https://api.nal.usda.gov/fdc/v1/food/171413",
+              "preparationState": "liquid oil, weighed in g",
+              "edibleGrams": 9,
+              "kcalPer100g": 884.0,
+              "proteinPer100g": 0.0
+            }
+          ]
+        },
+        "nutrientCalculation": "sum(edibleGrams * per100g / 100) / servings"
+      }
+    }
+  ],
+  "excludedCandidates": [
+    {
+      "id": "REVIEW_salmon_cauliflower_bread_01",
+      "reason": "Không cần cho hai ca S4-10; còn giả định loại cá hồi, trạng thái súp lơ và món tráng miệng không xác định."
+    }
+  ],
+  "approval": null,
+  "publicationAuthorized": false
+}

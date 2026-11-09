@@ -1,0 +1,41 @@
+P1 and P2 differ in content from the same batch
+P1 (2 bữa/ngày):
+Thứ Hai: lv-fvl-spelt-chicory-carrot-v1 + lv-fvl-spelt-lentil-sesame-v1 (936.47 kcal, 38.3515 g)
+Thứ Ba: lv-fvl-spelt-chicory-carrot-v1 + lv-fvl-spelt-lentil-sesame-v1 (936.47 kcal, 38.3515 g)
+Thứ Tư: lv-fvl-spelt-chicory-carrot-v1 + lv-fvl-spelt-lentil-sesame-v1 (936.47 kcal, 38.3515 g)
+Thứ Năm: lv-fvl-spelt-chicory-carrot-v1 + lv-fvl-spelt-lentil-sesame-v1 (936.47 kcal, 38.3515 g)
+Thứ Sáu: lv-fvl-spelt-chicory-carrot-v1 + lv-fvl-spelt-lentil-sesame-v1 (936.47 kcal, 38.3515 g)
+Thứ Bảy: lv-fvl-spelt-chicory-carrot-v1 + lv-fvl-spelt-lentil-sesame-v1 (936.47 kcal, 38.3515 g)
+Chủ Nhật: lv-fvl-spelt-chicory-carrot-v1 + lv-fvl-spelt-lentil-sesame-v1 (936.47 kcal, 38.3515 g)
+
+P2 (3 bữa/ngày):
+Thứ Hai: lv-fvl-spelt-chicory-carrot-v1 + lv-fvl-spelt-lentil-sesame-v1 + lv-fvl-spelt-chicory-carrot-v1 (1294.83 kcal, 51.5295 g)
+Thứ Ba: lv-fvl-spelt-lentil-sesame-v1 + lv-fvl-spelt-chicory-carrot-v1 + lv-fvl-spelt-lentil-sesame-v1 (1514.58 kcal, 63.5250 g)
+Thứ Tư: lv-fvl-spelt-chicory-carrot-v1 + lv-fvl-spelt-lentil-sesame-v1 + lv-fvl-spelt-chicory-carrot-v1 (1294.83 kcal, 51.5295 g)
+Thứ Năm: lv-fvl-spelt-lentil-sesame-v1 + lv-fvl-spelt-chicory-carrot-v1 + lv-fvl-spelt-lentil-sesame-v1 (1514.58 kcal, 63.5250 g)
+Thứ Sáu: lv-fvl-spelt-chicory-carrot-v1 + lv-fvl-spelt-lentil-sesame-v1 + lv-fvl-spelt-chicory-carrot-v1 (1294.83 kcal, 51.5295 g)
+Thứ Bảy: lv-fvl-spelt-lentil-sesame-v1 + lv-fvl-spelt-chicory-carrot-v1 + lv-fvl-spelt-lentil-sesame-v1 (1514.58 kcal, 63.5250 g)
+Chủ Nhật: lv-fvl-spelt-chicory-carrot-v1 + lv-fvl-spelt-lentil-sesame-v1 + lv-fvl-spelt-chicory-carrot-v1 (1294.83 kcal, 51.5295 g)
+alternative matrix from the app filter
+lv-fvl-spelt-chicory-carrot-v1 -> lv-fvl-spelt-lentil-sesame-v1: |dkcal| 219.75 <= 179.18, |dprotein| 11.9955 <= 8.0000 => not offered
+lv-fvl-spelt-lentil-sesame-v1 -> lv-fvl-spelt-chicory-carrot-v1: |dkcal| 219.75 <= 289.06, |dprotein| 11.9955 <= 15.1041 => OFFERED
+a saved draft accepts the offered meal and keeps the new totals
+Draft plan-proof-1, Thứ Hai: lv-fvl-spelt-lentil-sesame-v1 (578.11 kcal, 25.1735 g) -> lv-fvl-spelt-chicory-carrot-v1 (358.36 kcal, 13.178 g)
+Before:
+Thứ Hai: lv-fvl-spelt-chicory-carrot-v1 + lv-fvl-spelt-lentil-sesame-v1 (936.47 kcal, 38.3515 g)
+Thứ Ba: lv-fvl-spelt-chicory-carrot-v1 + lv-fvl-spelt-lentil-sesame-v1 (936.47 kcal, 38.3515 g)
+Thứ Tư: lv-fvl-spelt-chicory-carrot-v1 + lv-fvl-spelt-lentil-sesame-v1 (936.47 kcal, 38.3515 g)
+Thứ Năm: lv-fvl-spelt-chicory-carrot-v1 + lv-fvl-spelt-lentil-sesame-v1 (936.47 kcal, 38.3515 g)
+Thứ Sáu: lv-fvl-spelt-chicory-carrot-v1 + lv-fvl-spelt-lentil-sesame-v1 (936.47 kcal, 38.3515 g)
+Thứ Bảy: lv-fvl-spelt-chicory-carrot-v1 + lv-fvl-spelt-lentil-sesame-v1 (936.47 kcal, 38.3515 g)
+Chủ Nhật: lv-fvl-spelt-chicory-carrot-v1 + lv-fvl-spelt-lentil-sesame-v1 (936.47 kcal, 38.3515 g)
+
+After:
+Thứ Hai: lv-fvl-spelt-chicory-carrot-v1 + lv-fvl-spelt-chicory-carrot-v1 (716.72 kcal, 26.3560 g)
+Thứ Ba: lv-fvl-spelt-chicory-carrot-v1 + lv-fvl-spelt-lentil-sesame-v1 (936.47 kcal, 38.3515 g)
+Thứ Tư: lv-fvl-spelt-chicory-carrot-v1 + lv-fvl-spelt-lentil-sesame-v1 (936.47 kcal, 38.3515 g)
+Thứ Năm: lv-fvl-spelt-chicory-carrot-v1 + lv-fvl-spelt-lentil-sesame-v1 (936.47 kcal, 38.3515 g)
+Thứ Sáu: lv-fvl-spelt-chicory-carrot-v1 + lv-fvl-spelt-lentil-sesame-v1 (936.47 kcal, 38.3515 g)
+Thứ Bảy: lv-fvl-spelt-chicory-carrot-v1 + lv-fvl-spelt-lentil-sesame-v1 (936.47 kcal, 38.3515 g)
+Chủ Nhật: lv-fvl-spelt-chicory-carrot-v1 + lv-fvl-spelt-lentil-sesame-v1 (936.47 kcal, 38.3515 g)
+All tests passed!

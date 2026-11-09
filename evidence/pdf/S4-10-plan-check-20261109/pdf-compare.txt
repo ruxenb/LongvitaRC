@@ -1,0 +1,4 @@
+P1-export.pdf [P1 (2 bữa/ngày)]: pages 1, 21 day/meal lines, header {'Trạng thái': 'Bản nháp', 'Mục tiêu đạm': '48.0 g/ngày', 'Mục tiêu calo': '1512 kcal/ngày'} -> MATCH
+P2-export.pdf [P2 (3 bữa/ngày)]: pages 2, 28 day/meal lines, header {'Trạng thái': 'Bản nháp', 'Mục tiêu đạm': '48.0 g/ngày', 'Mục tiêu calo': '1512 kcal/ngày'} -> MATCH
+C-after-change-export.pdf [P2 sau đổi Thứ Hai bữa 2]: pages 2, 28 day/meal lines, header {'Trạng thái': 'Bản nháp', 'Mục tiêu đạm': '48.0 g/ngày', 'Mục tiêu calo': '1512 kcal/ngày'} -> MATCH
+ALL MATCH
