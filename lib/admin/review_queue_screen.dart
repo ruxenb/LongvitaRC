@@ -7,7 +7,16 @@ import 'admin_viewmodels.dart';
 import 'review_queue_item.dart';
 
 class ReviewQueueScreen extends StatefulWidget {
-  const ReviewQueueScreen({super.key});
+  final bool showGuidance;
+  final bool refreshingConfig;
+  final VoidCallback? refreshConfig;
+
+  const ReviewQueueScreen({
+    super.key,
+    this.showGuidance = true,
+    this.refreshingConfig = false,
+    this.refreshConfig,
+  });
 
   @override
   State<ReviewQueueScreen> createState() => _ReviewQueueScreenState();
@@ -33,6 +42,36 @@ class _ReviewQueueScreenState extends State<ReviewQueueScreen> {
             title: 'Hàng đợi xét duyệt',
             subtitle: 'Thực đơn người dùng đã gửi cho chuyên gia',
           ),
+          if (widget.showGuidance) ...[
+            const SizedBox(height: 16),
+            Material(
+              color: AppColors.bgPeach,
+              borderRadius: BorderRadius.circular(12),
+              child: ListTile(
+                leading: const Icon(Icons.tips_and_updates_outlined),
+                title: const Text('Hướng dẫn xét duyệt đang bật'),
+                subtitle: const Text(
+                  'Kiểm tra đủ 7 ngày trước khi duyệt; khi từ chối phải nêu rõ lý do.',
+                ),
+                trailing: widget.refreshConfig == null
+                    ? null
+                    : IconButton(
+                        tooltip: 'Cập nhật Remote Config',
+                        onPressed: widget.refreshingConfig
+                            ? null
+                            : widget.refreshConfig,
+                        icon: widget.refreshingConfig
+                            ? const SizedBox.square(
+                                dimension: 18,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                ),
+                              )
+                            : const Icon(Icons.sync),
+                      ),
+              ),
+            ),
+          ],
           const SizedBox(height: 28),
           Expanded(
             child: vm.state == AdminLoadState.ready

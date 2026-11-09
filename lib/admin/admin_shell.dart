@@ -1,15 +1,23 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../theme/app_colors.dart';
 import 'dashboard_screen.dart';
+import 'admin_instrumentation.dart';
 import 'recipe_management_screen.dart';
 import 'review_queue_screen.dart';
 
 class AdminShell extends StatefulWidget {
   final User user;
   final String role;
-  const AdminShell({super.key, required this.user, required this.role});
+  final Future<void> Function() onSignOut;
+  const AdminShell({
+    super.key,
+    required this.user,
+    required this.role,
+    required this.onSignOut,
+  });
 
   @override
   State<AdminShell> createState() => _AdminShellState();
@@ -38,10 +46,15 @@ class _AdminShellState extends State<AdminShell> {
 
   @override
   Widget build(BuildContext context) {
-    final pages = const [
-      DashboardScreen(),
-      RecipeManagementScreen(),
-      ReviewQueueScreen(),
+    final instrumentation = context.watch<AdminWebInstrumentation>();
+    final pages = [
+      const DashboardScreen(),
+      const RecipeManagementScreen(),
+      ReviewQueueScreen(
+        showGuidance: instrumentation.showReviewGuidance,
+        refreshingConfig: instrumentation.refreshing,
+        refreshConfig: instrumentation.refresh,
+      ),
     ];
     return Scaffold(
       body: Row(
@@ -71,7 +84,7 @@ class _AdminShellState extends State<AdminShell> {
                     padding: const EdgeInsets.only(bottom: 20),
                     child: IconButton(
                       tooltip: 'Đăng xuất ${widget.user.email ?? ''}',
-                      onPressed: FirebaseAuth.instance.signOut,
+                      onPressed: widget.onSignOut,
                       icon: const Icon(Icons.logout),
                     ),
                   ),

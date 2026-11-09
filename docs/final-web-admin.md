@@ -27,6 +27,9 @@ The Hosting SPA serves `build/web` and rewrites application routes to
 - **TV-02:** real-time `submitted` meal-plan queue with approve/reject actions;
   rejection requires a reason.
 - **TV-03:** three Firestore aggregation metrics and a responsive bar view.
+- **TV-03B:** Web Remote Config flag `web_show_review_guidance`; successful
+  approve/reject Analytics events, plus the `publish_announcement` hook for the
+  CM-07 form. No identifiers or free-text content are sent as parameters.
 
 The existing mobile status value `submitted` is presented as “Chờ duyệt”; it
 is intentionally not renamed to `pending`, because the model, security rules,
@@ -54,6 +57,9 @@ Detailed evidence and review decisions are recorded in
 
 The 10/11 authentication, Rules and ARTEMIS follow-up is recorded in
 `evidence/review/PR25-followup-20261110/README.md`.
+
+TV-03B implementation evidence is recorded in
+`evidence/web/TV-03B-20261110/README.md`.
 
 ## Browser regression command
 

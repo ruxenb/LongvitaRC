@@ -92,13 +92,14 @@ class RecipeAdminViewModel extends _AdminViewModel {
 
 class ReviewQueueViewModel extends _AdminViewModel {
   final IAdminService service;
+  final Future<void> Function(String status)? trackSuccessfulReview;
   StreamSubscription<List<ReviewQueueItem>>? _subscription;
   List<ReviewQueueItem> plans = const [];
   AdminLoadState state = AdminLoadState.loading;
   String? error;
   String? processingId;
 
-  ReviewQueueViewModel(this.service);
+  ReviewQueueViewModel(this.service, {this.trackSuccessfulReview});
 
   void start() {
     state = AdminLoadState.loading;
@@ -130,6 +131,7 @@ class ReviewQueueViewModel extends _AdminViewModel {
     notifyListeners();
     try {
       await service.reviewPlan(plan.id, status, reason: reason);
+      await trackSuccessfulReview?.call(status);
     } finally {
       processingId = null;
       notifyListeners();

@@ -74,7 +74,8 @@ class _AdminAccessGateState extends State<AdminAccessGate> {
         key: ValueKey(user.uid),
         role: _roleFor(user),
         onDenied: widget.auth.signOut,
-        authorizedBuilder: (role) => AdminShell(user: user, role: role),
+        authorizedBuilder: (role) =>
+            AdminShell(user: user, role: role, onSignOut: widget.auth.signOut),
       );
     },
   );

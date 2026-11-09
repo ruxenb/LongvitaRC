@@ -1,6 +1,7 @@
 {
   "max_meal_recommendations": 5,
   "enable_longevity_score": true,
+  "web_show_review_guidance": true,
   "daily_protein_target_ratio": 0.8,
   "banner_announcement": "Chào mừng đến với Longvita - Dinh dưỡng trường thọ theo TS. Valter Longo"
 }

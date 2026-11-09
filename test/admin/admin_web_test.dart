@@ -213,7 +213,11 @@ void main() {
 
   testWidgets('review queue approves and rejects with reason', (tester) async {
     final service = FakeAdminService();
-    final vm = ReviewQueueViewModel(service);
+    final events = <String>[];
+    final vm = ReviewQueueViewModel(
+      service,
+      trackSuccessfulReview: (status) async => events.add(status),
+    );
     await tester.pumpWidget(
       ChangeNotifierProvider.value(
         value: vm,
@@ -221,6 +225,7 @@ void main() {
       ),
     );
     await tester.pump();
+    expect(find.text('Hướng dẫn xét duyệt đang bật'), findsOneWidget);
     service.plans.add([ReviewQueueItem.fromMap(plan().toMap(), 'p1')]);
     await tester.pump();
     await tester.tap(find.text('Duyệt'));
@@ -232,6 +237,21 @@ void main() {
     await tester.tap(find.text('Xác nhận từ chối'));
     await tester.pumpAndSettle();
     expect(service.reviewed, contains(('p1', 'rejected', 'Thiếu dữ liệu')));
+    expect(events, ['approved', 'rejected']);
+  });
+
+  test('failed review does not emit an Analytics event', () async {
+    final service = FakeAdminService()..failure = StateError('denied');
+    final events = <String>[];
+    final vm = ReviewQueueViewModel(
+      service,
+      trackSuccessfulReview: (status) async => events.add(status),
+    );
+    final item = ReviewQueueItem.fromMap(plan().toMap(), 'p1');
+
+    await expectLater(vm.review(item, 'approved'), throwsStateError);
+    expect(events, isEmpty);
+    vm.dispose();
   });
 
   testWidgets('dashboard covers loading, empty, error and data', (
