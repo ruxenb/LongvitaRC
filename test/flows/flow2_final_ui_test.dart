@@ -499,4 +499,39 @@ void main() {
       expect(find.text('2,5 muỗng canh'), findsOneWidget);
     },
   );
+  for (final (amount, text) in <(double, String)>[
+    (2.25, '2,25'),
+    (0.04, '0,04'),
+    (2.345, '2,345'),
+    (0.004, '0,004'),
+    (0.0000001, '1e-7'),
+    (10.0, '10'),
+  ]) {
+    testWidgets('PR26-CR01: unchanged save preserves $amount', (tester) async {
+      final f = FlowFixture(
+        source: [sampleItems.first.copyWith(amount: amount)],
+      );
+      addTearDown(f.dispose);
+      await tester.pumpWidget(f.host(const IngredientSummaryScreen()));
+      await tester.pumpAndSettle();
+      expect(find.text('$text g'), findsOneWidget);
+      await tester.tap(find.byTooltip('Sửa số lượng Bông cải xanh'));
+      await tester.pumpAndSettle();
+      expect(
+        tester
+            .widget<TextFormField>(
+              find.byKey(const Key('edit-ingredient-amount')),
+            )
+            .controller!
+            .text,
+        text,
+      );
+      await tester.tap(find.text('Lưu'));
+      await tester.pumpAndSettle();
+      expect(find.byType(AlertDialog), findsNothing);
+      expect(f.items.ingredients.single.amount, amount);
+      expect(f.data.checklists['uid-1/plan-1']!.single.amount, amount);
+      expect(find.text('$text g'), findsOneWidget);
+    });
+  }
 }

@@ -160,9 +160,7 @@ class _EditAmountDialog extends StatefulWidget {
 class _EditAmountDialogState extends State<_EditAmountDialog> {
   final _formKey = GlobalKey<FormState>();
   late final TextEditingController _text = TextEditingController(
-    text: widget.item.amount
-        .toStringAsFixed(widget.item.amount % 1 == 0 ? 0 : 1)
-        .replaceAll('.', ','),
+    text: _amountText(widget.item.amount),
   );
 
   @override
@@ -311,9 +309,19 @@ class ShoppingListScreen extends StatelessWidget {
   }
 }
 
+// Double's shortest round-trip representation preserves the source value.
+// Fixed decimal limits would still round e.g. 2.345 or turn 0.004 into zero.
+String _amountText(double amount) {
+  final text = amount.toString();
+  final compact = text.endsWith('.0')
+      ? text.substring(0, text.length - 2)
+      : text;
+  return compact.replaceAll('.', ',');
+}
+
 // Format only the display text; the original amount/unit remains unchanged.
 String _quantity(IngredientModel item) =>
-    '${item.amount.toStringAsFixed(item.amount % 1 == 0 ? 0 : 1).replaceAll('.', ',')} ${_unit(item.unit)}';
+    '${_amountText(item.amount)} ${_unit(item.unit)}';
 
 String _unit(String raw) => switch (raw.trim().toLowerCase()) {
   'can' || 'cans' => 'lon',
