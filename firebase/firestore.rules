@@ -36,6 +36,18 @@ service cloud.firestore {
       return value == null || value is string;
     }
 
+    function isBoundedString(value, maxSize) {
+      return value is string && value.size() <= maxSize;
+    }
+
+    function isNonEmptyBoundedString(value, maxSize) {
+      return isNonEmptyString(value) && value.size() <= maxSize;
+    }
+
+    function isNonNegativeNumber(value) {
+      return value is number && value >= 0;
+    }
+
     function changedKeys() {
       return request.resource.data.diff(resource.data).affectedKeys();
     }
@@ -44,27 +56,29 @@ service cloud.firestore {
     function isValidUser(data) {
       return data.keys().hasOnly(['email', 'displayName', 'photoUrl', 'role', 'createdAt'])
           && data.keys().hasAll(['email', 'displayName', 'role', 'createdAt'])
-          && data.email is string
-          && isNonEmptyString(data.displayName)
-          && isOptionalString(data.get('photoUrl', null))
+          && isBoundedString(data.email, 320)
+          && isNonEmptyBoundedString(data.displayName, 120)
+          && (data.get('photoUrl', null) == null || isBoundedString(data.photoUrl, 2048))
           && data.role in ['user', 'staff', 'admin']
           && data.createdAt is string;
     }
 
     function isValidRecipe(data) {
       return data.keys().hasOnly(['name', 'description', 'category', 'proteinGrams', 'calories',
-                                  'ingredients', 'instructions', 'imageUrl', 'sourceNote'])
+                                  'ingredients', 'instructions', 'imageUrl', 'sourceNote', 'isArchived'])
           && data.keys().hasAll(['name', 'description', 'category', 'proteinGrams', 'calories',
                                  'ingredients', 'instructions', 'sourceNote'])
-          && isNonEmptyString(data.name)
-          && data.description is string
-          && isNonEmptyString(data.category)
-          && data.proteinGrams is number
-          && data.calories is number
-          && data.ingredients is list
-          && data.instructions is list
-          && isOptionalString(data.get('imageUrl', null))
-          && data.sourceNote is string;
+          && isNonEmptyBoundedString(data.name, 120)
+          && isBoundedString(data.description, 2000)
+          && isNonEmptyBoundedString(data.category, 60)
+          && isNonNegativeNumber(data.proteinGrams)
+          && isNonNegativeNumber(data.calories)
+          && data.ingredients is list && data.ingredients.size() <= 50
+          && data.instructions is list && data.instructions.size() <= 30
+          && (data.get('imageUrl', null) == null || isBoundedString(data.imageUrl, 2048))
+          && isBoundedString(data.sourceNote, 1000)
+          // Soft delete (archive). Absent means active, so older recipes stay valid.
+          && data.get('isArchived', false) is bool;
     }
 
     function isValidMealPlan(data) {
@@ -73,28 +87,29 @@ service cloud.firestore {
           && data.keys().hasAll(['uid', 'title', 'targetCalories', 'targetProteinGrams', 'status',
                                  'days', 'createdAt'])
           && data.uid is string
-          && isNonEmptyString(data.title)
-          && data.targetCalories is number
-          && data.targetProteinGrams is number
+          && isNonEmptyBoundedString(data.title, 120)
+          && isNonNegativeNumber(data.targetCalories)
+          && isNonNegativeNumber(data.targetProteinGrams)
           && data.status in ['draft', 'submitted', 'approved', 'rejected']
-          && isOptionalString(data.get('reviewerReason', null))
-          && data.days is list
+          && (data.get('reviewerReason', null) == null || isBoundedString(data.reviewerReason, 500))
+          // A weekly plan; DataService requires exactly 7 days before saving.
+          && data.days is list && data.days.size() <= 7
           && data.createdAt is string;
     }
 
     function isValidAnnouncement(data) {
       return data.keys().hasOnly(['title', 'content', 'authorRole', 'createdAt'])
           && data.keys().hasAll(['title', 'content', 'authorRole', 'createdAt'])
-          && isNonEmptyString(data.title)
-          && isNonEmptyString(data.content)
+          && isNonEmptyBoundedString(data.title, 120)
+          && isNonEmptyBoundedString(data.content, 2000)
           && data.authorRole == getUserData().role
           && data.createdAt is string;
     }
 
     // Collection: users/{uid}
     match /users/{uid} {
-      // Allow user to read their own profile, or staff/admin
-      allow read: if isOwner(uid) || isStaffOrAdmin();
+      // Appendix A: Self; admin. Staff read only their own profile (for the role gate).
+      allow read: if isOwner(uid) || hasRole('admin');
 
       // On first sign in, user can create their profile with role = 'user'
       allow create: if isOwner(uid)
@@ -106,17 +121,19 @@ service cloud.firestore {
                     && ((isOwner(uid) && changedKeys().hasOnly(['displayName', 'photoUrl']))
                         || (hasRole('admin') && !isOwner(uid) && changedKeys().hasOnly(['role'])));
 
-      allow delete: if hasRole('admin');
+      // Appendix A: no client deletes a profile.
+      allow delete: if false;
     }
 
     // Collection: recipes/{id}
     match /recipes/{id} {
-      // Anyone signed in can read longevity recipes
+      // Anyone signed in can read longevity recipes; clients hide isArchived == true.
       allow read: if isAuthenticated();
 
-      // Only staff/admin can create, update, or archive recipes
+      // Only staff/admin can create, update, or archive (isArchived) recipes
       allow create, update: if isStaffOrAdmin() && isValidRecipe(request.resource.data);
-      allow delete: if isStaffOrAdmin();
+      // Archive instead of delete, so saved meal plans keep their recipes.
+      allow delete: if false;
     }
 
     // Collection: meal_plans/{id}
