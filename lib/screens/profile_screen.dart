@@ -100,7 +100,8 @@ class _IdentityCard extends StatelessWidget {
         title: 'Đăng xuất?',
         message:
             'PDF đã lưu trên máy này sẽ bị xóa. '
-            'Bản đã tải lên và thực đơn đã lưu vẫn còn.',
+            'Ứng dụng không lưu bản sao PDF trên đám mây. '
+            'Thực đơn đã lưu vẫn còn.',
         primaryLabel: 'Đồng ý',
         onPrimary: () => Navigator.of(dialogContext).pop(true),
         secondaryLabel: 'Hủy',

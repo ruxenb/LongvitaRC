@@ -100,6 +100,23 @@ void main() {
     expect(find.text('Đã lưu PDF trên máy.'), findsOneWidget);
   }
 
+  testWidgets('Final sign-out warns that the local PDF has no app cloud backup', (tester) async {
+    await setup(tester, textScale: 2);
+    await tap(tester, 'profile-sign-out');
+    expect(find.textContaining('PDF đã lưu trên máy này sẽ bị xóa.'), findsOneWidget);
+    expect(find.textContaining('Ứng dụng không lưu bản sao PDF trên đám mây.'), findsOneWidget);
+    expect(find.textContaining('Thực đơn đã lưu vẫn còn.'), findsOneWidget);
+    expect(find.textContaining('Bản đã tải lên'), findsNothing);
+    expect(tester.takeException(), isNull);
+    await tester.ensureVisible(find.text('Hủy'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Hủy'));
+    await tester.pumpAndSettle();
+    expect(find.text('Đăng xuất?'), findsNothing);
+    expect(h.auth.signOutCalls, 0);
+    expect(h.profile.user?.uid, 'uid-a');
+  });
+
   testWidgets(
     'saving, pending, confirmed are separate from the usable local file',
     (tester) async {
