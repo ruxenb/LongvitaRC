@@ -1,0 +1,43 @@
+{
+  "codeCommit": "8f2bf6a15dbaf081b8e6157daa51ffe74dfc8bb2",
+  "baselineContract": "61fcfdd",
+  "flutterVersion": "3.47.6",
+  "cloudFirestoreVersion": "5.6.12",
+  "firebaseAuthVersion": "5.7.0",
+  "firebaseCoreVersion": "3.15.2",
+  "jsRulesClientVersion": "13.1.0",
+  "flutterTests": {
+    "pass": 411,
+    "fail": 0
+  },
+  "metadataUnitTests": {
+    "pass": 11,
+    "fail": 0
+  },
+  "rulesFirebase": {
+    "pass": 64,
+    "fail": 0,
+    "includesStorageUnchanged": 14
+  },
+  "rulesHoang": {
+    "pass": 22,
+    "fail": 0,
+    "usesSharedFirebaseNodeModules": true
+  },
+  "metadataRulesOnOldRules": {
+    "pass": 3,
+    "fail": 6
+  },
+  "metadataRulesOnNewRules": {
+    "pass": 9,
+    "fail": 0
+  },
+  "sha256": {
+    "lib/models/report_metadata.dart": "0c1dd96f77638204f4e19a03c0dd5e1185f2bcd603ac882f2d2f1b0c75e26129",
+    "lib/services/i_report_metadata_repository.dart": "24976f0eb1098471c28d6786aebcc8f27af0aac86f91ecca386a1f3a32a84651",
+    "lib/services/firestore_report_metadata_repository.dart": "e60de3868e0da7066f4a2f71f633562484182c50f1cfdec39ce454be8f55ceda",
+    "firebase/firestore.rules": "ef05fbfe0a61c3311acdff7d2f2d0c0852d717271e8dd146c1452fec9701d4d9",
+    "test/qa/report_metadata_sdk_probe.dart": "fa83e098f14f857e9540e0e4f6d92c50ec2ee5f1c590aa548ae98f5af89f2d8a",
+    "isolatedQA.apk": "90d4ea1d175e30d88b899d74baf64a15e8e35477bdae61942ae6e060f060f05e"
+  }
+}

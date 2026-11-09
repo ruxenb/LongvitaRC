@@ -250,3 +250,16 @@ Các điểm này được Codex chốt theo ủy quyền kỹ thuật của Cha
 ### Bước tiếp theo được giao
 
 **NC-01 hoàn tất review contract. Tiếp tục DUY NHẤT NC-02**, dùng toàn bộ các quyết định mục14. Chưa đổi default export/UI/Analytics (NC-03/04), chưa production deploy/write, chưa push/PR/merge. Nếu S1/S2 chưa chạy được, vẫn hoàn thành phần độc lập model/repository/rules/tests và báo rõ cổng SDK còn thiếu cho PM; không fake một SDK khác để gắn nhãn đã kiểm.
+
+
+## 15. NC-02 implementation and SDK verification — 09/11/2026
+
+Codex trực tiếp triển khai theo Charlie yêu cầu, kế thừa3file/rules đang dở của Claude sau khi Charlie xác nhận Claude đã dừng. Code8f2bf6a; evidence tại evidence/firebase/NC-02-metadata-20261109/. Chưa push/PR/deploy hoặc ghi production; chưa thực hiện NC-03/04.
+
+- Model/repository metadata và scoped owner-only rules đã có. 11 metadata unit tests, full411Flutter tests,64Firebase rules (50Firestore+14Storage),22Hoang rules đạt; analyzer lib/test sạch. Nodeclient thực dùng13.1.0 từ shared firebase modules, không ghi rằng đã chạy lock13.2.0 của Hoang.
+- S1/S2 đã kiểm bằng đúng cloud_firestore5.6.12/firebase_auth5.7.0/core3.15.2 trên Android15, ứng dụng QA riêng và Auth/FirestoreEmulator demo-longvita. Đây là quan sát SDK đã chạy, không còn chỉ dựa trên JS reference hoặc fake cho hai ca này.
+- S1: localpending=true, Future gốc pending và server absent khioffline; online thì chính Future đó confirmed, server khớp và đúng1document.
+- S2: Awriteoffline; Bonline thì FutureA vẫnpending, cả serverA/B chưa códoc và Bclientserver-read missing. Ađăngnhậplại thì FutureA gốc confirmed, Adata khớp, Bdoc vẫnabsent; không gửi write bù. Không suy thành bảo đảm cho mọi platform/SDK hoặc UIcallbackepoch đã được kiểm; NC-03 vẫn phải thực thi guards.
+- Với baseline rules61fcfdd,6/9nhóm metadata fail,3deny-onlypass; rulesmới9/9pass. Giữ nguyên tất cả expected. Rulesdraft đã compile/chạy Emulator.
+
+NC-02 sẵn sàng PM review. Các T1–T18/UI/Analytics/legacy share/collisionlocal thuộc bước tương ứng chưa tự đánh pass từ kết quả model/repository. Chưa đưa metadata repository vào app main/default export.

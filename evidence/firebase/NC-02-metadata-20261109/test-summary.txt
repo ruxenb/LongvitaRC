@@ -1,0 +1,11 @@
+NC-02 local verification (code 8f2bf6a)
+flutter analyze --no-pub lib test: No issues found
+flutter test --no-pub: 411 passed
+flutter test --no-pub test/report/report_metadata_test.dart: 11 passed
+Firebase Firestore + Storage rules: 64 passed, 0 failed (50 Firestore +14 unchanged Storage)
+Hoang rules suite: 22 passed, 0 failed; shared firebase/node_modules, JS SDK13.1.0
+New metadata rules against baseline61fcfdd: 6 failed, 3 passed (expected; permissions absent)
+New metadata rules after restoring current rules: 9 passed, 0 failed
+Android SDK S1/S2: PASS, see sdk-observations.json
+Isolated QA debug APK: build succeeded; not the normal Longvita APK
+No production rules deployment or production Firestore writes

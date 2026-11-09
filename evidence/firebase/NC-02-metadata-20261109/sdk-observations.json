@@ -1,0 +1,46 @@
+{
+  "hostApplicationId": "vn.edu.fpt.longvita.qa.nc02_probe",
+  "androidVersion": 15,
+  "project": "demo-longvita",
+  "records": [
+    {
+      "step": "S1-offline",
+      "localPendingWrites": true,
+      "originalFuture": "pending",
+      "serverExists": false
+    },
+    {
+      "step": "S1-online",
+      "originalFuture": "confirmed",
+      "serverPayloadMatches": true,
+      "documentCount": 1
+    },
+    {
+      "step": "S2-A-offline",
+      "originalFuture": "pending",
+      "serverAExists": false
+    },
+    {
+      "step": "S2-B-online",
+      "originalFuture": "pending",
+      "serverAExists": false,
+      "serverBExists": false,
+      "BClientRead": "missing"
+    },
+    {
+      "step": "S2-A-return",
+      "originalFuture": "confirmed",
+      "serverAExists": true,
+      "serverBExists": false,
+      "payloadMatches": true,
+      "additionalWrites": 0
+    },
+    {
+      "step": "RESULT",
+      "passed": true,
+      "sdk": "cloud_firestore 5.6.12 / firebase_auth 5.7.0",
+      "project": "demo-longvita",
+      "productionWrites": 0
+    }
+  ]
+}
