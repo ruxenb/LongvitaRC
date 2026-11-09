@@ -215,3 +215,50 @@ liệu. Output AI không được tính là bằng chứng runtime nếu không 
 run tương ứng. Chi tiết công cụ, findings, quyết định Accept/Modify/Reject và
 commit sửa nằm tại [`docs/code-review.md`](docs/code-review.md); disclosure cụ
 thể của từng thành viên chỉ được ghi khi có source/output hoặc worklog xác nhận.
+
+---
+
+## 8. Vai trò, Admin đầu tiên và quản lý role (Final, CM-05)
+
+Role của mỗi tài khoản nằm ở trường `role` trong document Firestore `users/{uid}`. Schema và quyền từng collection: [`docs/data-model.md`](docs/data-model.md).
+
+| Role | Client | Cách có role này |
+|:---|:---|:---|
+| `user` | Mobile | Tự tạo ở lần đăng nhập đầu tiên trên Mobile (`AuthService` ghi `role = 'user'`). |
+| `staff` | Web Admin | Admin đổi role của tài khoản đó thành `staff`. |
+| `admin` | Web Admin | Admin đầu tiên đặt trong Firebase Console; các admin sau do admin cấp. |
+
+### Admin đầu tiên
+
+- **Admin đầu tiên: Charlie (CharlieMinh).** Đặt trực tiếp trong Firebase Console của project `longvita-8da7e`, vì không client nào được tự nâng role của mình.
+- Charlie đã cấp tiếp `role = 'admin'` cho tài khoản Google của Thái An, Hoàng và Thắng. Cả bốn thành viên cũng có quyền quản trị project Firebase (Project settings → Users and permissions).
+- README không ghi email hoặc UID. Danh sách tài khoản xem trong Console.
+
+Cách đặt Admin đầu tiên (chỉ người có quyền quản trị project làm được):
+
+1. Đăng nhập Mobile một lần bằng tài khoản cần làm admin, để `users/{uid}` được tạo với `role = 'user'`.
+2. Firebase Console → Firestore Database → collection `users` → document của tài khoản đó.
+3. Sửa trường `role` từ `user` thành `admin` (kiểu string), lưu lại.
+4. Đăng xuất và đăng nhập lại để client đọc role mới.
+
+### Quy tắc đổi role
+
+Rules trong [`firebase/firestore.rules`](firebase/firestore.rules), match `users/{uid}`:
+
+- Chỉ admin đổi role, chỉ trường `role`, chỉ của **người khác**. Không ai tự đổi role của mình, kể cả admin. Giá trị hợp lệ: `user`, `staff`, `admin`.
+- Không client nào tạo hồ sơ với role cao hơn `user`, và không client nào xoá hồ sơ.
+- Test trên Emulator: R-03 (user tự nâng role → Denied), R-06 (admin đổi role người khác → Allowed), R-07 (admin tự đổi role → Denied) trong `firebase/tests/firestore.rules.matrix.test.js`, cùng các ca chi tiết trong `firebase/tests/firestore.rules.test.js`. Chạy: `cd firebase && npm ci && npm run test:rules`.
+
+Lưu ý: chỉnh sửa trong Firebase Console dùng quyền quản trị project nên **không đi qua Security Rules**. Vì vậy nhóm thống nhất chỉ dùng Console để đặt Admin đầu tiên và cấp role, không ai tự đổi role của chính mình, và mỗi lần đổi role ghi vào worklog của người thực hiện. App chưa có màn hình quản lý role.
+
+### Tài khoản demo theo role
+
+Bốn tài khoản thành viên đều là `admin`. Khi Mobile chỉ nhận role `user` (task HD-03B), các tài khoản này sẽ bị Mobile từ chối, nên demo cần:
+
+| Role | Tài khoản | Ghi chú |
+|:---|:---|:---|
+| `user` | Một tài khoản Google riêng | Đăng nhập Mobile lần đầu là có `role = 'user'`. |
+| `staff` | Một tài khoản Google riêng | Đăng nhập Mobile một lần để có hồ sơ, rồi admin đổi role thành `staff`. |
+| `admin` | Tài khoản của một thành viên | Dùng cho Web Admin. |
+
+Email cụ thể của tài khoản demo sẽ được ghi ở mục tài khoản demo khi hoàn thiện README (TV-05).
