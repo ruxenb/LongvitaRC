@@ -8,6 +8,7 @@ import 'package:longvita/admin/admin_viewmodels.dart';
 import 'package:longvita/admin/dashboard_screen.dart';
 import 'package:longvita/admin/recipe_management_screen.dart';
 import 'package:longvita/admin/review_queue_screen.dart';
+import 'package:longvita/admin/review_queue_item.dart';
 import 'package:longvita/models/ingredient_model.dart';
 import 'package:longvita/models/meal_plan_model.dart';
 import 'package:longvita/models/recipe_model.dart';
@@ -15,7 +16,7 @@ import 'package:provider/provider.dart';
 
 class FakeAdminService implements IAdminService {
   final recipes = StreamController<List<RecipeModel>>.broadcast();
-  final plans = StreamController<List<MealPlanModel>>.broadcast();
+  final plans = StreamController<List<ReviewQueueItem>>.broadcast();
   final saved = <RecipeModel>[];
   final archived = <(String, bool)>[];
   final reviewed = <(String, String, String?)>[];
@@ -29,7 +30,7 @@ class FakeAdminService implements IAdminService {
   @override
   Stream<List<RecipeModel>> watchRecipes() => recipes.stream;
   @override
-  Stream<List<MealPlanModel>> watchSubmittedPlans() => plans.stream;
+  Stream<List<ReviewQueueItem>> watchSubmittedPlans() => plans.stream;
   @override
   Future<void> saveRecipe(RecipeModel recipe) async => saved.add(recipe);
   @override
@@ -80,7 +81,11 @@ MealPlanModel plan() => MealPlanModel(
   targetCalories: 1800,
   targetProteinGrams: 60,
   status: 'submitted',
-  days: const [],
+  days: List.generate(
+    7,
+    (index) =>
+        DailyMeal(dayIndex: index, dayName: 'Ngày $index', meals: [recipe()]),
+  ),
   createdAt: DateTime(2026, 11, 9),
 );
 
@@ -117,7 +122,6 @@ void main() {
     );
     await tester.pumpAndSettle();
     expect(find.text('Tài khoản không có quyền'), findsOneWidget);
-
   });
 
   test('recipe edit preserves structured ingredients and image', () {
@@ -175,7 +179,7 @@ void main() {
       ),
     );
     await tester.pump();
-    service.plans.add([plan()]);
+    service.plans.add([ReviewQueueItem.fromMap(plan().toMap(), 'p1')]);
     await tester.pump();
     await tester.tap(find.text('Duyệt'));
     await tester.pump();

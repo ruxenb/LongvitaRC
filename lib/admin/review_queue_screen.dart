@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../models/meal_plan_model.dart';
 import '../theme/app_colors.dart';
 import 'admin_states.dart';
 import 'admin_viewmodels.dart';
+import 'review_queue_item.dart';
 
 class ReviewQueueScreen extends StatefulWidget {
   const ReviewQueueScreen({super.key});
@@ -58,7 +58,7 @@ class _ReviewQueueScreenState extends State<ReviewQueueScreen> {
 }
 
 class _PlanCard extends StatelessWidget {
-  final MealPlanModel plan;
+  final ReviewQueueItem plan;
   final ReviewQueueViewModel vm;
   const _PlanCard({required this.plan, required this.vm});
 
@@ -134,9 +134,15 @@ class _PlanCard extends StatelessWidget {
                     style: Theme.of(context).textTheme.titleMedium,
                   ),
                   const SizedBox(height: 6),
-                  Text(
-                    '${plan.days.length} ngày • ${plan.targetCalories.toStringAsFixed(0)} kcal • ${plan.targetProteinGrams.toStringAsFixed(0)} g protein',
-                  ),
+                  if (plan.plan case final details?)
+                    Text(
+                      '${details.days.length} ngày • ${details.targetCalories.toStringAsFixed(0)} kcal • ${details.targetProteinGrams.toStringAsFixed(0)} g protein',
+                    )
+                  else
+                    const Text(
+                      'Dữ liệu thực đơn lỗi. Không thể duyệt; hãy từ chối kèm lý do.',
+                      style: TextStyle(color: AppColors.feedbackError),
+                    ),
                   const SizedBox(height: 4),
                   Text(
                     'Người gửi: ${plan.uid}',
@@ -158,7 +164,9 @@ class _PlanCard extends StatelessWidget {
               ),
               const SizedBox(width: 10),
               FilledButton.icon(
-                onPressed: () => _review(context, 'approved'),
+                onPressed: plan.canApprove
+                    ? () => _review(context, 'approved')
+                    : null,
                 icon: const Icon(Icons.check),
                 label: const Text('Duyệt'),
               ),

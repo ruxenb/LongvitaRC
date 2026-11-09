@@ -208,7 +208,7 @@ class _RecipeEditorState extends State<_RecipeEditor> {
     text: widget.recipe?.proteinGrams.toString(),
   );
   late final ingredients = TextEditingController(
-    text: widget.recipe?.ingredients.map((row) => row.name).join(', '),
+    text: widget.recipe?.ingredients.map((row) => row.name).join('\n'),
   );
   late final instructions = TextEditingController(
     text: widget.recipe?.instructions.join('\n'),
@@ -216,12 +216,33 @@ class _RecipeEditorState extends State<_RecipeEditor> {
   late final source = TextEditingController(text: widget.recipe?.sourceNote);
   late String category = widget.recipe?.category ?? 'rau_cu';
 
+  static const categoryLabels = {
+    'rau_cu': 'Rau củ',
+    'dau': 'Đậu',
+    'ca': 'Cá',
+    'ngu_coc': 'Ngũ cốc',
+  };
+
+  @override
+  void dispose() {
+    name.dispose();
+    description.dispose();
+    calories.dispose();
+    protein.dispose();
+    ingredients.dispose();
+    instructions.dispose();
+    source.dispose();
+    super.dispose();
+  }
+
   String? requiredText(String? value) =>
       value == null || value.trim().isEmpty ? 'Không được để trống' : null;
 
   String? positiveNumber(String? value) {
     final number = double.tryParse(value ?? '');
-    return number == null || number < 0 ? 'Nhập số hợp lệ' : null;
+    return number == null || !number.isFinite || number < 0
+        ? 'Nhập số hợp lệ'
+        : null;
   }
 
   @override
@@ -243,11 +264,14 @@ class _RecipeEditorState extends State<_RecipeEditor> {
                 child: DropdownButtonFormField<String>(
                   initialValue: category,
                   decoration: const InputDecoration(labelText: 'Danh mục'),
-                  items: const [
-                    DropdownMenuItem(value: 'rau_cu', child: Text('Rau củ')),
-                    DropdownMenuItem(value: 'dau', child: Text('Đậu')),
-                    DropdownMenuItem(value: 'ca', child: Text('Cá')),
-                    DropdownMenuItem(value: 'ngu_coc', child: Text('Ngũ cốc')),
+                  items: [
+                    for (final entry in categoryLabels.entries)
+                      DropdownMenuItem(
+                        value: entry.key,
+                        child: Text(entry.value),
+                      ),
+                    if (!categoryLabels.containsKey(category))
+                      DropdownMenuItem(value: category, child: Text(category)),
                   ],
                   onChanged: (value) => category = value!,
                 ),
@@ -256,9 +280,10 @@ class _RecipeEditorState extends State<_RecipeEditor> {
               _field(protein, 'Protein (g)', validator: positiveNumber),
               _field(
                 ingredients,
-                'Nguyên liệu, phân tách bằng dấu phẩy',
+                'Nguyên liệu, mỗi nguyên liệu một dòng',
                 validator: requiredText,
                 wide: true,
+                lines: 4,
               ),
               _field(
                 instructions,

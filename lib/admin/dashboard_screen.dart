@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../theme/app_colors.dart';
+import 'admin_service.dart';
 import 'admin_states.dart';
 import 'admin_viewmodels.dart';
 
@@ -57,19 +58,19 @@ class _DashboardScreenState extends State<DashboardScreen> {
 }
 
 class _DashboardContent extends StatelessWidget {
-  final dynamic metrics;
+  final AdminDashboardMetrics metrics;
   const _DashboardContent({required this.metrics});
 
   @override
   Widget build(BuildContext context) {
     final values = <(String, int, IconData)>[
-      ('Công thức hoạt động', metrics.activeRecipes as int, Icons.restaurant),
+      ('Công thức hoạt động', metrics.activeRecipes, Icons.restaurant),
       (
         'Thực đơn chờ duyệt',
-        metrics.submittedPlans as int,
+        metrics.submittedPlans,
         Icons.pending_actions,
       ),
-      ('Thực đơn đã duyệt', metrics.approvedPlans as int, Icons.verified),
+      ('Thực đơn đã duyệt', metrics.approvedPlans, Icons.verified),
     ];
     return LayoutBuilder(
       builder: (context, constraints) {

@@ -2,13 +2,28 @@ import 'dart:async';
 
 import 'package:flutter/foundation.dart';
 
-import '../models/meal_plan_model.dart';
 import '../models/recipe_model.dart';
 import 'admin_service.dart';
+import 'review_queue_item.dart';
 
 enum AdminLoadState { loading, ready, empty, error }
 
-class RecipeAdminViewModel extends ChangeNotifier {
+abstract class _AdminViewModel extends ChangeNotifier {
+  bool _disposed = false;
+
+  @override
+  void notifyListeners() {
+    if (!_disposed) super.notifyListeners();
+  }
+
+  @override
+  void dispose() {
+    _disposed = true;
+    super.dispose();
+  }
+}
+
+class RecipeAdminViewModel extends _AdminViewModel {
   final IAdminService service;
   StreamSubscription<List<RecipeModel>>? _subscription;
   List<RecipeModel> _all = const [];
@@ -75,10 +90,10 @@ class RecipeAdminViewModel extends ChangeNotifier {
   }
 }
 
-class ReviewQueueViewModel extends ChangeNotifier {
+class ReviewQueueViewModel extends _AdminViewModel {
   final IAdminService service;
-  StreamSubscription<List<MealPlanModel>>? _subscription;
-  List<MealPlanModel> plans = const [];
+  StreamSubscription<List<ReviewQueueItem>>? _subscription;
+  List<ReviewQueueItem> plans = const [];
   AdminLoadState state = AdminLoadState.loading;
   String? error;
   String? processingId;
@@ -104,10 +119,13 @@ class ReviewQueueViewModel extends ChangeNotifier {
   }
 
   Future<void> review(
-    MealPlanModel plan,
+    ReviewQueueItem plan,
     String status, {
     String? reason,
   }) async {
+    if (status == 'approved' && !plan.canApprove) {
+      throw StateError('Không thể duyệt thực đơn có dữ liệu lỗi.');
+    }
     processingId = plan.id;
     notifyListeners();
     try {
@@ -125,7 +143,7 @@ class ReviewQueueViewModel extends ChangeNotifier {
   }
 }
 
-class DashboardViewModel extends ChangeNotifier {
+class DashboardViewModel extends _AdminViewModel {
   final IAdminService service;
   AdminLoadState state = AdminLoadState.loading;
   AdminDashboardMetrics? metrics;

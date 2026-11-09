@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../models/ingredient_model.dart';
-import '../models/meal_plan_model.dart';
 import '../models/recipe_model.dart';
+import 'review_queue_item.dart';
 
 class AdminDashboardMetrics {
   final int activeRecipes;
@@ -20,7 +20,7 @@ abstract class IAdminService {
   Stream<List<RecipeModel>> watchRecipes();
   Future<void> saveRecipe(RecipeModel recipe);
   Future<void> setRecipeArchived(String id, bool archived);
-  Stream<List<MealPlanModel>> watchSubmittedPlans();
+  Stream<List<ReviewQueueItem>> watchSubmittedPlans();
   Future<void> reviewPlan(String id, String status, {String? reason});
   Future<AdminDashboardMetrics> loadMetrics();
 }
@@ -56,10 +56,10 @@ class AdminService implements IAdminService {
       _recipes.doc(id).update({'isArchived': archived});
 
   @override
-  Stream<List<MealPlanModel>> watchSubmittedPlans() =>
+  Stream<List<ReviewQueueItem>> watchSubmittedPlans() =>
       _plans.where('status', isEqualTo: 'submitted').snapshots().map((event) {
         final rows = event.docs
-            .map((doc) => MealPlanModel.fromMap(doc.data(), doc.id))
+            .map((doc) => ReviewQueueItem.fromMap(doc.data(), doc.id))
             .toList();
         rows.sort((a, b) => a.createdAt.compareTo(b.createdAt));
         return rows;
@@ -102,15 +102,18 @@ RecipeModel editableRecipe({
   String? imageUrl,
   List<IngredientModel> existingIngredients = const [],
 }) {
+  final remainingIngredients = List<IngredientModel>.of(existingIngredients);
   final ingredientRows = ingredients
-      .split(',')
+      .split('\n')
       .map((value) => value.trim())
       .where((value) => value.isNotEmpty)
       .map((value) {
-        for (final existing in existingIngredients) {
-          if (existing.name.trim().toLowerCase() == value.toLowerCase()) {
-            return existing;
-          }
+        final index = remainingIngredients.indexWhere(
+          (existing) =>
+              existing.name.trim().toLowerCase() == value.toLowerCase(),
+        );
+        if (index >= 0) {
+          return remainingIngredients.removeAt(index);
         }
         return IngredientModel(id: '', name: value, amount: 1, unit: 'phần');
       })
