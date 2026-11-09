@@ -1,0 +1,39 @@
+# Longvita Web Admin — TV-00 to TV-03
+
+## Run locally
+
+```powershell
+flutter run -d chrome -t lib/admin_main.dart
+```
+
+Only Firebase users whose `users/{uid}.role` is `staff` or `admin` can enter
+the console. Other signed-in users see an explicit access-denied state.
+
+## Build and deploy
+
+```powershell
+flutter build web --target lib/admin_main.dart --release
+firebase deploy --only firestore:rules,hosting --project longvita-8da7e
+```
+
+The Hosting SPA serves `build/web` and rewrites application routes to
+`index.html`.
+
+## Delivered scope
+
+- **TV-00:** Flutter Web target, Firebase Web app configuration, Hosting SPA.
+- **TV-01:** recipe search, create, edit, soft archive/restore, and explicit
+  loading/empty/error states.
+- **TV-02:** real-time `submitted` meal-plan queue with approve/reject actions;
+  rejection requires a reason.
+- **TV-03:** three Firestore aggregation metrics and a responsive bar view.
+
+The existing mobile status value `submitted` is presented as “Chờ duyệt”; it
+is intentionally not renamed to `pending`, because the model, security rules,
+and stored documents already use the audited `submitted` transition.
+
+## Data compatibility
+
+`recipes.isArchived` is optional and defaults to `false` in the model and
+security rules. Existing recipe documents remain active without a migration.
+The dashboard counts all recipes and subtracts explicitly archived documents.

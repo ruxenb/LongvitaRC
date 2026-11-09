@@ -53,7 +53,7 @@ service cloud.firestore {
 
     function isValidRecipe(data) {
       return data.keys().hasOnly(['name', 'description', 'category', 'proteinGrams', 'calories',
-                                  'ingredients', 'instructions', 'imageUrl', 'sourceNote'])
+                                  'ingredients', 'instructions', 'imageUrl', 'sourceNote', 'isArchived'])
           && data.keys().hasAll(['name', 'description', 'category', 'proteinGrams', 'calories',
                                  'ingredients', 'instructions', 'sourceNote'])
           && isNonEmptyString(data.name)
@@ -64,7 +64,8 @@ service cloud.firestore {
           && data.ingredients is list
           && data.instructions is list
           && isOptionalString(data.get('imageUrl', null))
-          && data.sourceNote is string;
+          && data.sourceNote is string
+          && data.get('isArchived', false) is bool;
     }
 
     function isValidMealPlan(data) {
