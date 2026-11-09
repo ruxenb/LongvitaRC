@@ -67,12 +67,12 @@ void main() {
         await tester.pumpWidget(app(const IngredientSummaryScreen()));
         await tester.pump();
         await tester.pump(const Duration(milliseconds: 300));
-        expect(find.text('Ingredients'), findsOneWidget);
+        expect(find.text('Nguyên liệu'), findsOneWidget);
         expect(tester.takeException(), isNull);
 
         await tester.pumpWidget(app(const ShoppingListScreen()));
         await tester.pump();
-        expect(find.text('Shopping list'), findsOneWidget);
+        expect(find.text('Danh sách mua sắm'), findsOneWidget);
         expect(tester.takeException(), isNull);
 
         await tester.pumpWidget(app(const RecipeDetailsScreen(recipe: beans)));

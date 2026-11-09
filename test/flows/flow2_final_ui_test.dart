@@ -19,14 +19,14 @@ import 'hoang_viewmodels_test.dart' show MemoryData, fixturePlan;
 const sampleItems = [
   IngredientModel(
     id: 'broccoli',
-    name: 'Broccoli',
+    name: 'Bông cải xanh',
     amount: 600,
     unit: 'g',
     category: 'rau',
   ),
   IngredientModel(
     id: 'tomatoes',
-    name: 'Tomatoes',
+    name: 'Cà chua',
     amount: 8,
     unit: 'medium',
     category: 'vegetables',
@@ -34,28 +34,28 @@ const sampleItems = [
   ),
   IngredientModel(
     id: 'lentils',
-    name: 'Lentils',
+    name: 'Đậu lăng',
     amount: 500,
     unit: 'g',
     category: 'đậu',
   ),
   IngredientModel(
     id: 'beans',
-    name: 'Cannellini beans',
+    name: 'Đậu trắng',
     amount: 3,
     unit: 'cans',
     category: 'legumes',
   ),
   IngredientModel(
     id: 'walnuts',
-    name: 'Walnuts',
+    name: 'Hạt óc chó',
     amount: 210,
     unit: 'g',
     category: 'hạt',
   ),
   IngredientModel(
     id: 'oil',
-    name: 'Extra virgin olive oil',
+    name: 'Dầu ô liu nguyên chất',
     amount: 315,
     unit: 'ml',
     category: 'dầu hạt',
@@ -141,14 +141,12 @@ void main() {
           await tester.pumpAndSettle();
           expect(tester.takeException(), isNull);
           expect(
-            find.text(
-              shopping ? 'Ready for the store' : 'Ingredients for the week',
-            ),
+            find.text(shopping ? 'Sẵn sàng đi chợ' : 'Nguyên liệu trong tuần'),
             findsOneWidget,
           );
-          expect(find.text('Vegetables'), findsOneWidget);
-          expect(find.text('Legumes'), findsOneWidget);
-          expect(find.text('Nuts and oils'), findsOneWidget);
+          expect(find.text('Rau củ'), findsOneWidget);
+          expect(find.text('Các loại đậu'), findsOneWidget);
+          expect(find.text('Hạt và dầu'), findsOneWidget);
           await captureQa(
             tester,
             boundary,
@@ -185,7 +183,7 @@ void main() {
       addTearDown(f.dispose);
       await tester.pumpWidget(f.host(const IngredientSummaryScreen()));
       await tester.pumpAndSettle();
-      await tester.tap(find.byTooltip('Sửa số lượng Broccoli'));
+      await tester.tap(find.byTooltip('Sửa số lượng Bông cải xanh'));
       await tester.pumpAndSettle();
       await tester.enterText(
         find.byKey(const Key('edit-ingredient-amount')),
@@ -193,22 +191,22 @@ void main() {
       );
       await tester.tap(find.text('Lưu'));
       await tester.pumpAndSettle();
-      expect(find.text('650.5 g'), findsOneWidget);
+      expect(find.text('650,5 g'), findsOneWidget);
       expect(f.data.checklists['uid-1/plan-1']!.first.amount, 650.5);
       await tester.drag(find.byType(SnackBar), const Offset(0, 200));
       await tester.pumpAndSettle();
       await tester.ensureVisible(find.byKey(const Key('create-shopping-list')));
       await tester.tap(find.byKey(const Key('create-shopping-list')));
       await tester.pumpAndSettle();
-      expect(find.text('Shopping list'), findsOneWidget);
-      await tester.tap(find.text('Broccoli · 650.5 g'));
+      expect(find.text('Danh sách mua sắm'), findsOneWidget);
+      await tester.tap(find.text('Bông cải xanh · 650,5 g'));
       await tester.pumpAndSettle();
       expect(f.items.ingredients.first.isPurchased, true);
       expect(f.data.checklists['uid-1/plan-1']!.first.isPurchased, true);
       await tester.tap(find.byType(AppIconButton));
       await tester.pumpAndSettle();
-      expect(find.text('Ingredients'), findsOneWidget);
-      expect(find.text('650.5 g'), findsOneWidget);
+      expect(find.text('Nguyên liệu'), findsOneWidget);
+      expect(find.text('650,5 g'), findsOneWidget);
     },
   );
 
@@ -219,16 +217,16 @@ void main() {
       addTearDown(f.dispose);
       await tester.pumpWidget(f.host(const IngredientSummaryScreen()));
       await tester.pumpAndSettle();
-      await tester.tap(find.byTooltip('Sửa số lượng Broccoli'));
+      await tester.tap(find.byTooltip('Sửa số lượng Bông cải xanh'));
       await tester.pumpAndSettle();
       await tester.tap(find.text('Xóa nguyên liệu'));
       await tester.pumpAndSettle();
-      expect(find.text('Broccoli'), findsNothing);
+      expect(find.text('Bông cải xanh'), findsNothing);
       await tester.tap(find.text('Hoàn tác'));
       await tester.pumpAndSettle();
       expect(f.items.ingredients.first.id, 'broccoli');
       expect(f.data.checklists['uid-1/plan-1']!.first.category, 'rau');
-      expect(find.text('Broccoli'), findsOneWidget);
+      expect(find.text('Bông cải xanh'), findsOneWidget);
     },
   );
 
@@ -241,23 +239,31 @@ void main() {
       await tester.pumpWidget(f.host(const IngredientSummaryScreen()));
       await tester.pumpAndSettle();
       expect(
-        tester.getSemantics(find.text('Ingredients for the week')).headingLevel,
+        tester.getSemantics(find.text('Nguyên liệu trong tuần')).headingLevel,
         2,
       );
-      expect(tester.getSemantics(find.text('Vegetables')).headingLevel, 3);
-      expect(find.bySemanticsLabel('Edit Broccoli'), findsOneWidget);
-      expect(find.bySemanticsLabel('Broccoli, 600 g'), findsOneWidget);
+      expect(tester.getSemantics(find.text('Rau củ')).headingLevel, 3);
       expect(
-        tester.getSize(find.byTooltip('Sửa số lượng Broccoli')).shortestSide,
+        find.bySemanticsLabel('Sửa số lượng Bông cải xanh'),
+        findsOneWidget,
+      );
+      expect(find.bySemanticsLabel('Bông cải xanh, 600 g'), findsOneWidget);
+      expect(
+        tester
+            .getSize(find.byTooltip('Sửa số lượng Bông cải xanh'))
+            .shortestSide,
         greaterThanOrEqualTo(48),
       );
       await tester.pumpWidget(f.host(const ShoppingListScreen()));
       await tester.pumpAndSettle();
-      expect(tester.getSemantics(find.text('Shopping list')).headingLevel, 1);
+      expect(
+        tester.getSemantics(find.text('Danh sách mua sắm')).headingLevel,
+        1,
+      );
       expect(
         tester.getSemantics(find.byKey(const Key('shopping-tomatoes'))),
         matchesSemantics(
-          label: 'Tomatoes · 8 medium',
+          label: 'Cà chua · 8 cỡ vừa',
           hasCheckedState: true,
           isChecked: true,
           hasEnabledState: true,
@@ -307,7 +313,7 @@ void main() {
       f.data.failChecklist = true;
       await tester.pumpWidget(f.host(const ShoppingListScreen()));
       await tester.pumpAndSettle();
-      await tester.tap(find.text('Broccoli · 600 g'));
+      await tester.tap(find.text('Bông cải xanh · 600 g'));
       await tester.pumpAndSettle();
       expect(f.items.ingredients.first.isPurchased, true);
       expect(f.data.checklists['uid-1/plan-1']!.first.isPurchased, false);
@@ -367,10 +373,10 @@ void main() {
     await f.items.loadForPlan(fixturePlan(id: 'plan-1'));
     await tester.pumpWidget(f.host(const ShoppingListScreen()));
     await tester.pumpAndSettle();
-    await tester.tap(find.text('Nutrition'));
+    await tester.tap(find.text('Dinh dưỡng'));
     await tester.pumpAndSettle();
     expect(find.byType(ShoppingListScreen), findsOneWidget);
-    await tester.tap(find.text('Profile'));
+    await tester.tap(find.text('Hồ sơ'));
     await tester.pumpAndSettle();
     expect(find.text('Profile route destination'), findsOneWidget);
   });
@@ -393,14 +399,104 @@ void main() {
       addTearDown(f.dispose);
       await tester.pumpWidget(f.host(const IngredientSummaryScreen()));
       await tester.pumpAndSettle();
-      expect(find.text('Vegetables'), findsOneWidget);
-      expect(find.text('Nuts and oils'), findsOneWidget);
-      expect(find.text('Dairy'), findsOneWidget);
+      expect(find.text('Rau củ'), findsOneWidget);
+      expect(find.text('Hạt và dầu'), findsOneWidget);
+      expect(find.text('Sữa và phô mai'), findsOneWidget);
       expect(f.items.ingredients.map((i) => i.category), [
         'rau',
         'dầu',
         'phô mai',
       ]);
+    },
+  );
+  testWidgets(
+    'Flow2 Vietnamese copy and Material edit controls stay local to this flow',
+    (tester) async {
+      final f = FlowFixture();
+      addTearDown(f.dispose);
+      await tester.pumpWidget(f.host(const IngredientSummaryScreen()));
+      await tester.pumpAndSettle();
+      expect(find.text('Nguyên liệu trong tuần'), findsOneWidget);
+      expect(find.text('Sửa'), findsNWidgets(6));
+      expect(find.text('Ingredients'), findsNothing);
+      expect(find.text('Edit'), findsNothing);
+      await tester.tap(find.byTooltip('Sửa số lượng Bông cải xanh'));
+      await tester.pumpAndSettle();
+      final context = tester.element(
+        find.byKey(const Key('edit-ingredient-amount')),
+      );
+      expect(Localizations.localeOf(context).languageCode, 'vi');
+      final material = MaterialLocalizations.of(context);
+      expect(material.pasteButtonLabel, 'Dán');
+      expect(material.copyButtonLabel, 'Sao chép');
+      expect(material.selectAllButtonLabel, 'Chọn tất cả');
+      final editor = tester.state<EditableTextState>(find.byType(EditableText));
+      editor.widget.controller.selection = const TextSelection.collapsed(
+        offset: 0,
+      );
+      editor.showToolbar();
+      await tester.pumpAndSettle();
+      expect(find.text('Chọn tất cả'), findsOneWidget);
+      expect(find.text('Select all'), findsNothing);
+      editor.hideToolbar();
+      await tester.pumpAndSettle();
+
+      expect(find.byKey(const Key('edit-ingredient-amount')), findsOneWidget);
+      await tester.tap(find.text('Hủy'));
+      await tester.pumpAndSettle();
+      await tester.ensureVisible(find.byKey(const Key('create-shopping-list')));
+      await tester.tap(find.byKey(const Key('create-shopping-list')));
+      await tester.pumpAndSettle();
+      for (final label in ['Trang chủ', 'Kế hoạch', 'Dinh dưỡng', 'Hồ sơ']) {
+        expect(find.text(label), findsOneWidget);
+      }
+      for (final label in ['Home', 'Plan', 'Nutrition', 'Profile']) {
+        expect(find.text(label), findsNothing);
+      }
+    },
+  );
+
+  testWidgets(
+    'Translate display units and decimal separator without rewriting stored data',
+    (tester) async {
+      final source = [
+        sampleItems.first.copyWith(
+          name: 'Original source name',
+          amount: 1.5,
+          unit: 'tbsp',
+        ),
+        sampleItems[3],
+      ];
+      final f = FlowFixture(source: source);
+      addTearDown(f.dispose);
+      await tester.pumpWidget(f.host(const IngredientSummaryScreen()));
+      await tester.pumpAndSettle();
+      expect(find.text('Original source name'), findsOneWidget);
+      expect(find.text('1,5 muỗng canh'), findsOneWidget);
+      expect(find.text('3 lon'), findsOneWidget);
+      await tester.tap(find.byTooltip('Sửa số lượng Original source name'));
+      await tester.pumpAndSettle();
+      expect(
+        tester
+            .widget<TextFormField>(
+              find.byKey(const Key('edit-ingredient-amount')),
+            )
+            .controller!
+            .text,
+        '1,5',
+      );
+      await tester.enterText(
+        find.byKey(const Key('edit-ingredient-amount')),
+        '2,5',
+      );
+      await tester.tap(find.text('Lưu'));
+      await tester.pumpAndSettle();
+      final saved = f.data.checklists['uid-1/plan-1']!.first;
+      expect(saved.name, 'Original source name');
+      expect(saved.unit, 'tbsp');
+      expect(saved.amount, 2.5);
+      expect(saved.category, 'rau');
+      expect(find.text('2,5 muỗng canh'), findsOneWidget);
     },
   );
 }

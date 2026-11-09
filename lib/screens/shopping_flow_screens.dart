@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../l10n/vietnamese_ui.dart';
 import '../models/ingredient_model.dart';
 import '../models/meal_plan_model.dart';
 import '../models/view_state.dart';
@@ -48,7 +49,7 @@ class _IngredientSummaryScreenState extends State<IngredientSummaryScreen> {
     final result = await showDialog<Object>(
       context: context,
       barrierLabel: 'Đóng',
-      builder: (_) => _EditAmountDialog(item: ingredient),
+      builder: (_) => VietnameseUi(child: _EditAmountDialog(item: ingredient)),
     );
     if (!mounted || result == null) return;
     if (result == _IngredientAction.delete) {
@@ -90,14 +91,14 @@ class _IngredientSummaryScreenState extends State<IngredientSummaryScreen> {
     final vm = context.watch<IngredientViewModel>();
     final plan = context.watch<MealPlanViewModel>().activePlan;
     return _ShoppingFrame(
-      title: 'Ingredients',
+      title: 'Nguyên liệu',
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          const _FlowHeading('Ingredients for the week'),
+          const _FlowHeading('Nguyên liệu trong tuần'),
           const SizedBox(height: AppSpacing.s8),
           Text(
-            'Grouped once so you do not add the same food twice.',
+            'Đã gộp nguyên liệu trùng tên và đơn vị.',
             style: AppTypography.supporting,
           ),
           const SizedBox(height: AppSpacing.s8),
@@ -126,7 +127,7 @@ class _IngredientSummaryScreenState extends State<IngredientSummaryScreen> {
               ),
             AppButton(
               key: const Key('create-shopping-list'),
-              text: 'Create Shopping List',
+              text: 'Tạo danh sách mua sắm',
               icon: AppIcons.arrowForward,
               onPressed:
                   vm.isSavedPlan &&
@@ -159,9 +160,9 @@ class _EditAmountDialog extends StatefulWidget {
 class _EditAmountDialogState extends State<_EditAmountDialog> {
   final _formKey = GlobalKey<FormState>();
   late final TextEditingController _text = TextEditingController(
-    text: widget.item.amount.toStringAsFixed(
-      widget.item.amount % 1 == 0 ? 0 : 1,
-    ),
+    text: widget.item.amount
+        .toStringAsFixed(widget.item.amount % 1 == 0 ? 0 : 1)
+        .replaceAll('.', ','),
   );
 
   @override
@@ -184,12 +185,19 @@ class _EditAmountDialogState extends State<_EditAmountDialog> {
           key: const Key('edit-ingredient-amount'),
           autofocus: true,
           controller: _text,
+          // The selection menu is built in the root Overlay, outside this
+          // flow's localization subtree. Carry Vietnamese into that overlay.
+          contextMenuBuilder: (context, editableTextState) => VietnameseUi(
+            child: AdaptiveTextSelectionToolbar.editableText(
+              editableTextState: editableTextState,
+            ),
+          ),
           keyboardType: const TextInputType.numberWithOptions(
             decimal: true,
             signed: true,
           ),
           decoration: InputDecoration(
-            labelText: 'Số lượng (${widget.item.unit})',
+            labelText: 'Số lượng (${_unit(widget.item.unit)})',
             border: const OutlineInputBorder(),
           ),
           validator: (value) {
@@ -236,7 +244,7 @@ class ShoppingListScreen extends StatelessWidget {
     if (!success && context.mounted) {
       flowSnack(
         context,
-        'Chưa có xác nhận đồng bộ. Checklist có thể được lưu khi có mạng; hãy tải lại để kiểm tra.',
+        'Chưa có xác nhận đồng bộ. Danh sách có thể được lưu khi có mạng; hãy tải lại để kiểm tra.',
         actionLabel: 'Thử lại',
         onAction: () => vm.persistChanges(),
       );
@@ -262,18 +270,19 @@ class ShoppingListScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final vm = context.watch<IngredientViewModel>();
     return _ShoppingFrame(
-      title: 'Shopping list',
+      title: 'Danh sách mua sắm',
       bottomNavigationBar: AppNavigationBar(
         selectedIndex: 2,
+        destinations: AppNavigationBar.vietnameseDestinations,
         onDestinationSelected: (index) => _navigate(context, index),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          const _FlowHeading('Ready for the store'),
+          const _FlowHeading('Sẵn sàng đi chợ'),
           const SizedBox(height: AppSpacing.s8),
           Text(
-            'Large check rows stay easy to tap with one hand.',
+            'Chạm vào từng nguyên liệu để đánh dấu đã mua.',
             style: AppTypography.supporting,
           ),
           const SizedBox(height: AppSpacing.s8),
@@ -302,25 +311,40 @@ class ShoppingListScreen extends StatelessWidget {
   }
 }
 
+// Format only the display text; the original amount/unit remains unchanged.
 String _quantity(IngredientModel item) =>
-    '${item.amount.toStringAsFixed(item.amount % 1 == 0 ? 0 : 1)} ${item.unit}';
+    '${item.amount.toStringAsFixed(item.amount % 1 == 0 ? 0 : 1).replaceAll('.', ',')} ${_unit(item.unit)}';
+
+String _unit(String raw) => switch (raw.trim().toLowerCase()) {
+  'can' || 'cans' => 'lon',
+  'medium' => 'cỡ vừa',
+  'tbsp' || 'tablespoon' || 'tablespoons' => 'muỗng canh',
+  'tsp' || 'teaspoon' || 'teaspoons' => 'muỗng cà phê',
+  'cup' || 'cups' => 'cốc',
+  'clove' || 'cloves' => 'tép',
+  'slice' || 'slices' => 'lát',
+  'piece' || 'pieces' => 'miếng',
+  'portion' || 'portions' || 'serving' || 'servings' => 'phần',
+  _ =>
+    raw.trim(), // Preserve unrecognised source units, never guess a conversion.
+};
 
 /// Known category aliases reflect existing Vietnamese/English source data.
 /// Unknown categories are preserved, not guessed from ingredient names.
 String _category(String raw) => switch (raw.trim().toLowerCase()) {
-  'vegetables' || 'rau' || 'rau củ' || 'rau_cu' => 'Vegetables',
-  'legumes' || 'đậu' || 'các loại đậu' || 'dau' => 'Legumes',
+  'vegetables' || 'rau' || 'rau củ' || 'rau_cu' => 'Rau củ',
+  'legumes' || 'đậu' || 'các loại đậu' || 'dau' => 'Các loại đậu',
   'nuts and oils' ||
   'nuts' ||
   'oils' ||
   'hạt' ||
   'dầu' ||
-  'dầu hạt' => 'Nuts and oils',
-  'wholegrains' || 'whole grains' || 'ngũ cốc' || 'ngu_coc' => 'Whole grains',
-  'fish' || 'cá' || 'ca' => 'Fish',
-  'spices' || 'gia vị' => 'Seasonings',
-  'dairy' || 'phô mai' || 'sữa' => 'Dairy',
-  '' || 'khác' || 'other' => 'Other',
+  'dầu hạt' => 'Hạt và dầu',
+  'wholegrains' || 'whole grains' || 'ngũ cốc' || 'ngu_coc' => 'Ngũ cốc',
+  'fish' || 'cá' || 'ca' => 'Cá',
+  'spices' || 'gia vị' => 'Gia vị',
+  'dairy' || 'phô mai' || 'sữa' => 'Sữa và phô mai',
+  '' || 'khác' || 'other' => 'Khác',
   _ => raw.trim(),
 };
 
@@ -387,10 +411,11 @@ class _IngredientRow extends StatelessWidget {
         ),
         const SizedBox(width: AppSpacing.s16),
         Tooltip(
+          excludeFromSemantics: true,
           message: 'Sửa số lượng ${item.name}',
           child: Semantics(
             button: true,
-            label: 'Edit ${item.name}',
+            label: 'Sửa số lượng ${item.name}',
             onTap: onEdit,
             child: ExcludeSemantics(
               child: OutlinedButton(
@@ -406,7 +431,7 @@ class _IngredientRow extends StatelessWidget {
                   ),
                   textStyle: AppTypography.labelStrong,
                 ),
-                child: const Text('Edit'),
+                child: const Text('Sửa'),
               ),
             ),
           ),
@@ -449,7 +474,7 @@ class _PersistenceFeedback extends StatelessWidget {
       return const Padding(
         padding: EdgeInsets.symmetric(vertical: AppSpacing.s12),
         child: LinearProgressIndicator(
-          semanticsLabel: 'Đang đồng bộ checklist',
+          semanticsLabel: 'Đang đồng bộ danh sách mua sắm',
         ),
       );
     }
@@ -491,28 +516,30 @@ class _ShoppingFrame extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) => Scaffold(
-    backgroundColor: AppColors.bgCanvas,
-    appBar: AppTopBar(
-      title: title,
-      onBack: () => Navigator.of(context).maybePop(),
-      backSemanticLabel: 'Quay lại',
-    ),
-    bottomNavigationBar: bottomNavigationBar,
-    body: SafeArea(
-      top: false,
-      child: Align(
-        alignment: Alignment.topCenter,
-        child: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 680),
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.fromLTRB(
-              AppSpacing.s16,
-              AppSpacing.s8,
-              AppSpacing.s16,
-              AppSpacing.s24,
+  Widget build(BuildContext context) => VietnameseUi(
+    child: Scaffold(
+      backgroundColor: AppColors.bgCanvas,
+      appBar: AppTopBar(
+        title: title,
+        onBack: () => Navigator.of(context).maybePop(),
+        backSemanticLabel: 'Quay lại',
+      ),
+      bottomNavigationBar: bottomNavigationBar,
+      body: SafeArea(
+        top: false,
+        child: Align(
+          alignment: Alignment.topCenter,
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 680),
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.fromLTRB(
+                AppSpacing.s16,
+                AppSpacing.s8,
+                AppSpacing.s16,
+                AppSpacing.s24,
+              ),
+              child: child,
             ),
-            child: child,
           ),
         ),
       ),
