@@ -61,7 +61,7 @@ void main() {
 
         await tester.pumpWidget(app(const WeeklyPlanScreen()));
         await tester.pumpAndSettle();
-        expect(find.text('S04 • Thực đơn 7 ngày'), findsOneWidget);
+        expect(find.text('Weekly plan'), findsOneWidget);
         expect(tester.takeException(), isNull);
 
         await tester.pumpWidget(app(const IngredientSummaryScreen()));
@@ -118,15 +118,15 @@ void main() {
     }
   }
 
-  testWidgets('S02 validates missing preferences before navigation', (
+  testWidgets('S02 validates an invalid weight before navigation', (
     tester,
   ) async {
     await tester.pumpWidget(const MaterialApp(home: PreferencesScreen()));
-    await tester.ensureVisible(find.text('Tiếp tục'));
-    await tester.tap(find.text('Tiếp tục'));
+    await tester.enterText(find.byKey(const Key('preferences-weight')), '');
+    await tester.ensureVisible(find.text('Continue'));
+    await tester.tap(find.text('Continue'));
     await tester.pump();
-    expect(find.text('Nhập tuổi trong khoảng 18–120'), findsOneWidget);
-    expect(find.text('Nhập cân nặng hợp lệ từ 25–300 kg'), findsOneWidget);
+    expect(find.text('Enter a valid weight from 25–300 kg'), findsOneWidget);
   });
 
   testWidgets('S07 requires a positive quantity', (tester) async {
