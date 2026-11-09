@@ -308,12 +308,18 @@ String _quantity(IngredientModel item) =>
 /// Known category aliases reflect existing Vietnamese/English source data.
 /// Unknown categories are preserved, not guessed from ingredient names.
 String _category(String raw) => switch (raw.trim().toLowerCase()) {
-  'vegetables' || 'rau củ' || 'rau_cu' => 'Vegetables',
+  'vegetables' || 'rau' || 'rau củ' || 'rau_cu' => 'Vegetables',
   'legumes' || 'đậu' || 'các loại đậu' || 'dau' => 'Legumes',
-  'nuts and oils' || 'nuts' || 'oils' || 'hạt' || 'dầu hạt' => 'Nuts and oils',
+  'nuts and oils' ||
+  'nuts' ||
+  'oils' ||
+  'hạt' ||
+  'dầu' ||
+  'dầu hạt' => 'Nuts and oils',
   'wholegrains' || 'whole grains' || 'ngũ cốc' || 'ngu_coc' => 'Whole grains',
   'fish' || 'cá' || 'ca' => 'Fish',
   'spices' || 'gia vị' => 'Seasonings',
+  'dairy' || 'phô mai' || 'sữa' => 'Dairy',
   '' || 'khác' || 'other' => 'Other',
   _ => raw.trim(),
 };
@@ -360,18 +366,22 @@ class _IngredientRow extends StatelessWidget {
     child: Row(
       children: [
         Expanded(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 9),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(item.name, style: AppTypography.labelStrong),
-                const SizedBox(height: 6),
-                Text(
-                  _quantity(item),
-                  style: AppTypography.supporting.copyWith(height: 20 / 14),
-                ),
-              ],
+          child: Semantics(
+            label: '${item.name}, ${_quantity(item)}',
+            excludeSemantics: true,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 9),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(item.name, style: AppTypography.labelStrong),
+                  const SizedBox(height: 6),
+                  Text(
+                    _quantity(item),
+                    style: AppTypography.supporting.copyWith(height: 20 / 14),
+                  ),
+                ],
+              ),
             ),
           ),
         ),

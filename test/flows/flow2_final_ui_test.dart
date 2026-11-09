@@ -22,7 +22,7 @@ const sampleItems = [
     name: 'Broccoli',
     amount: 600,
     unit: 'g',
-    category: 'rau củ',
+    category: 'rau',
   ),
   IngredientModel(
     id: 'tomatoes',
@@ -227,7 +227,7 @@ void main() {
       await tester.tap(find.text('Hoàn tác'));
       await tester.pumpAndSettle();
       expect(f.items.ingredients.first.id, 'broccoli');
-      expect(f.data.checklists['uid-1/plan-1']!.first.category, 'rau củ');
+      expect(f.data.checklists['uid-1/plan-1']!.first.category, 'rau');
       expect(find.text('Broccoli'), findsOneWidget);
     },
   );
@@ -246,6 +246,7 @@ void main() {
       );
       expect(tester.getSemantics(find.text('Vegetables')).headingLevel, 3);
       expect(find.bySemanticsLabel('Edit Broccoli'), findsOneWidget);
+      expect(find.bySemanticsLabel('Broccoli, 600 g'), findsOneWidget);
       expect(
         tester.getSize(find.byTooltip('Sửa số lượng Broccoli')).shortestSide,
         greaterThanOrEqualTo(48),
@@ -373,4 +374,33 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.text('Profile route destination'), findsOneWidget);
   });
+  testWidgets(
+    'Actual plan category aliases preserve data while grouping for display',
+    (tester) async {
+      final f = FlowFixture(
+        source: [
+          sampleItems.first,
+          sampleItems.last.copyWith(category: 'dầu'),
+          const IngredientModel(
+            id: 'cheese',
+            name: 'Phô mai',
+            amount: 30,
+            unit: 'g',
+            category: 'phô mai',
+          ),
+        ],
+      );
+      addTearDown(f.dispose);
+      await tester.pumpWidget(f.host(const IngredientSummaryScreen()));
+      await tester.pumpAndSettle();
+      expect(find.text('Vegetables'), findsOneWidget);
+      expect(find.text('Nuts and oils'), findsOneWidget);
+      expect(find.text('Dairy'), findsOneWidget);
+      expect(f.items.ingredients.map((i) => i.category), [
+        'rau',
+        'dầu',
+        'phô mai',
+      ]);
+    },
+  );
 }
