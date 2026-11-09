@@ -272,3 +272,8 @@ Charlie xác nhận NC-02 và giao Codex trực tiếp NC-03. Code `13a188c` chu
 `exportState` nay mô tả local PDF; `uploadState` riêng cho demo. Các test upload dùng mode demo rõ ràng. Alias `exportAndUploadPdf` còn để tương thích; default không tự upload. Trạng thái metadata public: `ReportMetadataState`, `metadataError`, `canRetryMetadata`, `retryMetadata()`. 15 giây là ngưỡng hiển thị, không timeout/cancel write gốc. Retry giữ payload/ID/file và không phát Analytics.
 
 440/440 Flutter (thêm29), analyzer lib/test sạch, APK debug Final build được, mutation7/7 bị test bắt. Chưa cài/chạy native NC-03, chưa deploy/write production hoặc đổi rules/package/lock; không suy thành nghiệm thu Final toàn phần. Evidence chi tiết tại [NC-03](../evidence/pdf/NC-03-local-flow-20261109/README.md).
+
+
+## 17. NC-04 implementation — 09/11/2026
+
+Code 5cab63b: Profile tách local file/metadata/demo, thêm trạng thái và retry metadata, xử lý file không còn. 452/452 Flutter, analyzer sạch, debug APK build được;12widgetcases mới gồm360/412dp và textScale1/2, Semantics/actions/liveRegion. Hai kiểm âm tính bị bắt. [Evidence NC-04](../evidence/pdf/NC-04-profile-20261109/README.md). Chưa native/deploy trong NC-04; NC-05 theo yêu cầu Charlie triển khai tiếp sau PM kiểm.
