@@ -263,3 +263,12 @@ Codex trực tiếp triển khai theo Charlie yêu cầu, kế thừa3file/rules
 - Với baseline rules61fcfdd,6/9nhóm metadata fail,3deny-onlypass; rulesmới9/9pass. Giữ nguyên tất cả expected. Rulesdraft đã compile/chạy Emulator.
 
 NC-02 sẵn sàng PM review. Các T1–T18/UI/Analytics/legacy share/collisionlocal thuộc bước tương ứng chưa tự đánh pass từ kết quả model/repository. Chưa đưa metadata repository vào app main/default export.
+
+
+## 16. NC-03 implementation — 09/11/2026
+
+Charlie xác nhận NC-02 và giao Codex trực tiếp NC-03. Code `13a188c` chuyển default sang Final local với metadata state/Future độc lập, Analytics một lần tại local save, owner/session/ID/collision/share guards và demo Emulator opt-in có readiness. Profile/main chỉ wiring và nhãn tối thiểu cho đúng nghĩa; chưa hoàn thiện NC-04.
+
+`exportState` nay mô tả local PDF; `uploadState` riêng cho demo. Các test upload dùng mode demo rõ ràng. Alias `exportAndUploadPdf` còn để tương thích; default không tự upload. Trạng thái metadata public: `ReportMetadataState`, `metadataError`, `canRetryMetadata`, `retryMetadata()`. 15 giây là ngưỡng hiển thị, không timeout/cancel write gốc. Retry giữ payload/ID/file và không phát Analytics.
+
+440/440 Flutter (thêm29), analyzer lib/test sạch, APK debug Final build được, mutation7/7 bị test bắt. Chưa cài/chạy native NC-03, chưa deploy/write production hoặc đổi rules/package/lock; không suy thành nghiệm thu Final toàn phần. Evidence chi tiết tại [NC-03](../evidence/pdf/NC-03-local-flow-20261109/README.md).
