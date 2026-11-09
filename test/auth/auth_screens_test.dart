@@ -1,3 +1,4 @@
+import 'package:longvita/config/pdf_export_mode.dart';
 import 'dart:async';
 
 import 'package:flutter/material.dart';
@@ -40,6 +41,8 @@ class Harness {
   late final ingredients =
       IngredientViewModel(analytics: analytics, crashlytics: crashlytics);
   late final profile = ProfileViewModel(
+      metadataRepository: FakeReportMetadataRepository(),
+      exportMode: PdfExportMode.storageEmulatorDemo,
     authService: auth,
     storageService: FakeStorageService(),
     notificationService: FakeNotificationService(),

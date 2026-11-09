@@ -1,0 +1,10 @@
+{
+  "clientAppUpload": true,
+  "target": "Storage Emulator 127.0.0.1:9199",
+  "independentReadOnlyDownload": true,
+  "sizeBytes": 19247,
+  "allBytesMatch": true,
+  "sha256": "217b682bcd9aae55e34a29b529f0745ec88e62ed099da498c1a3b253b739f36d",
+  "storageCloudUsed": false,
+  "fileName": "pdf_20261109T072754Z_b20577b2e1946c90.pdf"
+}

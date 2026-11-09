@@ -1,0 +1,30 @@
+{
+  "stage": "NC-04",
+  "codeCommit": "5cab63b6f439a7e58a1ca42bf71fc5e64d9d812e",
+  "tests": {
+    "passed": 452,
+    "failed": 0,
+    "newWidgetCases": 12
+  },
+  "analyzeIssues": 0,
+  "apkSha256": "f85e005a189843571922d037815c311e290925efa920bdf0b10e13489a37e8b2",
+  "negativeChecks": [
+    {
+      "id": "M8",
+      "caught": true,
+      "guard": "metadata retry UI"
+    },
+    {
+      "id": "M9",
+      "caught": true,
+      "guard": "missing local file UI"
+    }
+  ],
+  "native": false,
+  "productionWriteOrDeploy": false,
+  "sourceSha256": {
+    "lib/screens/profile_screen.dart": "b6dbe9883e400d76aba83db358fb747d0a7ec502178c43bd4197628ea2882ac7",
+    "lib/viewmodels/profile_viewmodel.dart": "2c9b428db4234112e47770a8fbfee06f1de4f7668d71c6cca0feddd69c72db36",
+    "test/profile/final_pdf_metadata_screen_test.dart": "0da5545650477374839b012f7faab60e388deff7d1ba3acdb68087a4bd39b89d"
+  }
+}

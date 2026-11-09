@@ -1,0 +1,28 @@
+{
+  "pr": 24,
+  "baseMain": "134910da1004baae782764a001f4332511da612b",
+  "reviewedHead": "d3dd075712860810abc393f63c008d4d7fc401e1",
+  "integrationFix": "0634c3e",
+  "reviewId": 5824261765,
+  "commentId": 4511472335,
+  "finding": "PR24-CR-01",
+  "decision": "Accepted",
+  "beforeRegression": "1 failed on old sign-out copy",
+  "after": {
+    "flutterPassed": 453,
+    "flutterFailed": 0,
+    "analyzerIssues": 0,
+    "apkBuilt": true,
+    "missedTapWarnings": 0
+  },
+  "scope": "dialog copy and regression; no change to logout, retention, metadata rules, SDK or dependencies",
+  "sourceSha256": {
+    "lib/screens/profile_screen.dart": "dbe8d7555dc06ce8a271556b1837ca24566637fd396a1acfcbafeb1f11eb649b",
+    "test/profile/final_pdf_metadata_screen_test.dart": "a8e25a24701d527adeee3fe7de97ddcc5c26ce57658b91d528918930a80f2a5b",
+    "lib/screens/recipe_flow_screens.dart": "3b288a1449e8279db6bb18acde44214af84fbe3782c0962a2daf1bee886a8761",
+    "lib/preview_s06.dart": "6ac01fa77a4fc3acf6f949053704fc3bc304cf8964d3b73ffc5d83578307c46f",
+    "test/flows/hoang_a11y_widgets_test.dart": "ff475870cd5eec8d6442f1fa5f395f5ab84d7fa35e3d61a9fe0906d965eec0f1"
+  },
+  "apkSha256": "c849f748e30a81ae48221be51a7f7fb944187cc5fa19c48f5624809b004ee346",
+  "nativeEvidence": "NC-05 code5cab63b; not rerun for this dialog-copy/integration fix"
+}

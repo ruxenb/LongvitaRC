@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'models/ingredient_model.dart';
 import 'models/recipe_model.dart';
 import 'models/view_state.dart';
 import 'screens/recipe_flow_screens.dart';

@@ -77,11 +77,12 @@ void main() {
 
         await tester.pumpWidget(app(const RecipeDetailsScreen(recipe: beans)));
         await tester.pump();
-        expect(find.text('S05 • Chi tiết món ăn'), findsOneWidget);
+        expect(find.text('Recipe details'), findsOneWidget);
+        expect(find.text(beans.name), findsOneWidget);
         expect(tester.takeException(), isNull);
 
         // 'loading' is not a proof of accessibility: test actual labels.
-        expect(find.text('Dinh dưỡng tham khảo'), findsOneWidget);
+        expect(find.text('${beans.proteinGrams.toStringAsFixed(0)} g protein · 1 serving'), findsOneWidget);
         expect(
           find.text('Chưa có ảnh được xác minh cho món này'),
           findsOneWidget,

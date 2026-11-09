@@ -1,3 +1,4 @@
+import 'package:longvita/config/pdf_export_mode.dart';
 // S4-10: the export flow keeps the PDF on the device, reuses its id on retry,
 // and opens it for the current session only. Uses fakes: the plan is a fixture
 // and no Storage bucket or Android share sheet is involved.
@@ -84,6 +85,8 @@ void main() {
   void wire({FakeLocalReportStore? customStore}) {
     store = customStore ?? FakeLocalReportStore();
     profile = ProfileViewModel(
+      metadataRepository: FakeReportMetadataRepository(),
+      exportMode: PdfExportMode.storageEmulatorDemo,
       authService: auth,
       storageService: storage,
       notificationService: FakeNotificationService(),
@@ -145,9 +148,9 @@ void main() {
       expect(profile.lastExport, isNotNull);
       expect(store.files, hasLength(1));
       expect(profile.lastUploadedUrl, isNull);
-      final state = profile.exportState as ViewStateError<String>;
+      final state = profile.uploadState as ViewStateError<String>;
       expect(state.message, contains('đã lưu trên máy'));
-      expect(analytics.events.where((e) => e.startsWith('export_report')), isEmpty);
+      expect(analytics.events.where((e) => e.startsWith('export_report')), ['export_report:1:0']);
     });
 
     test('a failed save stops before the upload', () async {
@@ -162,21 +165,24 @@ void main() {
       expect(crashlytics.errors, hasLength(1));
     });
 
-    test('a plan id is made safe for a file name', () async {
+    test('an invalid plan id is rejected without a file', () async {
       await signIn('uid-a');
       final plan = planFor('uid-a').copyWith(id: '../a b');
 
       await profile.exportAndUploadPdf(plan);
 
-      expect(profile.lastExport!.exportId, matches(RegExp(r'^ab_\d+$')));
+      expect(profile.lastExport, isNull);
+      expect(profile.exportState, isA<ViewStateError<String>>());
+      expect(store.files, isEmpty);
     });
 
-    test('a plan with no usable id still exports', () async {
+    test('an unsaved plan exports with null metadata planId', () async {
       await signIn('uid-a');
 
-      await profile.exportAndUploadPdf(planFor('uid-a').copyWith(id: '///'));
+      await profile.exportAndUploadPdf(planFor('uid-a').copyWith(id: ''));
 
-      expect(profile.lastExport!.exportId, matches(RegExp(r'^plan_\d+$')));
+      expect(profile.lastExport!.exportId, matches(RegExp(r'^pdf_[0-9]{8}T[0-9]{6}Z_[0-9a-f]{16}$')));
+      expect(profile.lastExport!.planId, isNull);
     });
 
     test('a new export clears the URL of the previous one', () async {
@@ -218,7 +224,7 @@ void main() {
       await profile.retryUpload();
 
       expect(profile.lastExport, isNotNull);
-      expect(profile.exportState, isA<ViewStateError<String>>());
+      expect(profile.uploadState, isA<ViewStateError<String>>());
     });
 
     test('a missing file asks for a new export', () async {
@@ -231,7 +237,7 @@ void main() {
 
       expect(profile.lastExport, isNull);
       expect(storage.fileNames, hasLength(1));
-      expect(profile.exportState, isA<ViewStateError<String>>());
+      expect(profile.uploadState, isA<ViewStateError<String>>());
     });
 
     test('does nothing with no export', () async {
@@ -356,7 +362,7 @@ void main() {
 
         await profile.exportAndUploadPdf(planFor('uid-a'));
 
-        final state = profile.exportState as ViewStateError<String>;
+        final state = profile.uploadState as ViewStateError<String>;
         expect(state.message, contains(text));
         expect(state.message, contains('đã lưu trên máy'));
         expect(profile.canRetryUpload, isTrue);

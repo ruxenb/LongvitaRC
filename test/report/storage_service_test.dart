@@ -52,14 +52,16 @@ class FakeUploadTask implements UploadTask {
   }
 
   @override
-  Future<R> then<R>(FutureOr<R> Function(TaskSnapshot) onValue,
-          {Function? onError}) =>
-      _done.future.then(onValue, onError: onError);
+  Future<R> then<R>(
+    FutureOr<R> Function(TaskSnapshot) onValue, {
+    Function? onError,
+  }) => _done.future.then(onValue, onError: onError);
 
   @override
-  Future<TaskSnapshot> catchError(Function onError,
-          {bool Function(Object error)? test}) =>
-      _done.future.catchError(onError, test: test);
+  Future<TaskSnapshot> catchError(
+    Function onError, {
+    bool Function(Object error)? test,
+  }) => _done.future.catchError(onError, test: test);
 
   @override
   Future<TaskSnapshot> whenComplete(FutureOr<void> Function() action) =>
@@ -75,7 +77,7 @@ class FakeReference implements Reference {
   final List<String> paths;
 
   FakeReference({this.task, this.url, List<String>? paths})
-      : paths = paths ?? [];
+    : paths = paths ?? [];
 
   @override
   Reference child(String path) {
@@ -95,17 +97,39 @@ class FakeReference implements Reference {
 
 class FakeStorage implements FirebaseStorage {
   final FakeReference reference;
+  int refCalls = 0;
 
   FakeStorage(this.reference);
 
   @override
-  Reference ref([String? path]) => reference;
+  Reference ref([String? path]) {
+    refCalls++;
+    return reference;
+  }
 
   @override
   void setMaxUploadRetryTime(Duration time) {}
 
   @override
+  Future<void> useStorageEmulator(
+    String host,
+    int port, {
+    bool automaticHostMapping = true,
+  }) async {}
+
+  @override
   dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
+}
+
+class HeldEmulatorStorage extends FakeStorage {
+  final configured = Completer<void>();
+  HeldEmulatorStorage(super.reference);
+  @override
+  Future<void> useStorageEmulator(
+    String host,
+    int port, {
+    bool automaticHostMapping = true,
+  }) => configured.future;
 }
 
 void main() {
@@ -124,8 +148,71 @@ void main() {
   setUp(() {
     task = FakeUploadTask();
     reference = FakeReference(task: task);
-    service = StorageService(storage: FakeStorage(reference));
+    service = StorageService(
+      storage: FakeStorage(reference),
+      emulatorHost: 'localhost',
+    );
   });
+
+  test('does not access Storage until emulator setup succeeds', () async {
+    final sdk = HeldEmulatorStorage(reference);
+    service = StorageService(storage: sdk, emulatorHost: 'localhost');
+    final result = upload();
+    expect(sdk.refCalls, 0);
+    sdk.configured.complete();
+    // A turn of the event loop flushes the ready Future, not a fixed delay.
+    await Future<void>.delayed(Duration.zero);
+    expect(sdk.refCalls, 1);
+    task.succeed(FakeSnapshot(3, 3, url: 'http://localhost/e1.pdf'));
+    expect(await result, 'http://localhost/e1.pdf');
+  });
+
+  test('failed setup never falls back to production Storage', () async {
+    final sdk = HeldEmulatorStorage(reference);
+    service = StorageService(storage: sdk, emulatorHost: 'localhost');
+    sdk.configured.completeError(StateError('setup failed'));
+    await Future<void>.delayed(Duration.zero);
+    await expectLater(
+      upload(),
+      throwsA(
+        isA<UploadFailure>().having(
+          (e) => e.kind,
+          'kind',
+          UploadFailureKind.notConfigured,
+        ),
+      ),
+    );
+    expect(sdk.refCalls, 0);
+  });
+
+  test('cancel during setup prevents a late upload from starting', () async {
+    final sdk = HeldEmulatorStorage(reference);
+    service = StorageService(storage: sdk, emulatorHost: 'localhost');
+    final result = upload();
+    final check = expectLater(
+      result,
+      throwsA(
+        isA<UploadFailure>().having(
+          (e) => e.kind,
+          'kind',
+          UploadFailureKind.cancelled,
+        ),
+      ),
+    );
+    await service.cancelActiveUpload();
+    sdk.configured.complete();
+    await check;
+    expect(sdk.refCalls, 0);
+  });
+
+  test(
+    'adapter rejects remote or missing hosts before obtaining an SDK instance',
+    () {
+      for (final host in ['', 'storage.googleapis.com', 'localhost.evil']) {
+        expect(() => StorageService(emulatorHost: host), throwsArgumentError);
+      }
+    },
+  );
 
   group('a failed upload', () {
     for (final (code, kind) in const [
@@ -139,20 +226,25 @@ void main() {
       ('project-not-found', UploadFailureKind.notConfigured),
       ('something-new', UploadFailureKind.unknown),
     ]) {
-      test('$code becomes ${kind.name}, with no unhandled stream error',
-          () async {
-        final result = upload();
-        await Future<void>.delayed(Duration.zero);
+      test(
+        '$code becomes ${kind.name}, with no unhandled stream error',
+        () async {
+          final result = upload();
+          await Future<void>.delayed(Duration.zero);
 
-        task.fail(FirebaseException(plugin: 'firebase_storage', code: code));
+          task.fail(FirebaseException(plugin: 'firebase_storage', code: code));
 
-        await expectLater(
+          await expectLater(
             result,
-            throwsA(isA<UploadFailure>()
-                .having((f) => f.kind, 'kind', kind)
-                .having((f) => f.code, 'code', code)));
-        await Future<void>.delayed(Duration.zero);
-      });
+            throwsA(
+              isA<UploadFailure>()
+                  .having((f) => f.kind, 'kind', kind)
+                  .having((f) => f.code, 'code', code),
+            ),
+          );
+          await Future<void>.delayed(Duration.zero);
+        },
+      );
     }
 
     test('an error from outside Firebase becomes unknown', () async {
@@ -162,9 +254,15 @@ void main() {
       task.fail(Exception('boom'));
 
       await expectLater(
-          result,
-          throwsA(isA<UploadFailure>()
-              .having((f) => f.kind, 'kind', UploadFailureKind.unknown)));
+        result,
+        throwsA(
+          isA<UploadFailure>().having(
+            (f) => f.kind,
+            'kind',
+            UploadFailureKind.unknown,
+          ),
+        ),
+      );
     });
   });
 
@@ -177,9 +275,15 @@ void main() {
 
       expect(task.cancelCalls, 1);
       await expectLater(
-          result,
-          throwsA(isA<UploadFailure>()
-              .having((f) => f.kind, 'kind', UploadFailureKind.cancelled)));
+        result,
+        throwsA(
+          isA<UploadFailure>().having(
+            (f) => f.kind,
+            'kind',
+            UploadFailureKind.cancelled,
+          ),
+        ),
+      );
     });
 
     test('does nothing after the upload ended', () async {

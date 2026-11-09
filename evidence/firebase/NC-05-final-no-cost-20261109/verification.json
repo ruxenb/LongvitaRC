@@ -1,0 +1,98 @@
+{
+  "stage": "NC-05",
+  "testedCodeCommit": "5cab63b6f439a7e58a1ca42bf71fc5e64d9d812e",
+  "scope": "Final No-Cost PDF local + metadata Firestore; Storage cloud out of scope per Charlie/team",
+  "rules": {
+    "project": "longvita-8da7e",
+    "operator": "existing authenticated Charlie Firebase CLI session (email withheld)",
+    "command": "firebase deploy --only firestore:rules --project longvita-8da7e --config <local-metadata-only-config> --non-interactive",
+    "beforeRelease": "projects/longvita-8da7e/rulesets/47832463-eea2-443c-ab03-5a836dffb34e",
+    "afterRelease": "projects/longvita-8da7e/rulesets/a6f43839-e28e-410c-bb62-0f2e64137cee",
+    "onlyMetadataBlockAdded": true,
+    "preExistingLiveShoppingListsAbsencePreserved": true,
+    "candidateTextSha256LF": "874e571f3b59293c812e4d23df1206f11dc076d770180a88ad31e0174f0c83e9",
+    "rulesTestPassed": 64,
+    "rollbackSnapshotStoredLocally": true,
+    "rollbackPerformed": false,
+    "liveReadbackMatchesCandidate": true
+  },
+  "environment": {
+    "avd": "LocalMate_API_35",
+    "systemImage": "system-images/android-35/google_apis/x86_64",
+    "nativeViewport": "320x640 density160 (AVD config)",
+    "billingEnabled": false,
+    "storageCloudBucketCount": 0
+  },
+  "apks": {
+    "final": {
+      "sha256": "f85e005a189843571922d037815c311e290925efa920bdf0b10e13489a37e8b2",
+      "mode": "default Final, no dart-defines"
+    },
+    "demo": {
+      "sha256": "fb1209df5ce2339a9d22d349d1a86d2223d8673df62166373466602ab7a0220d",
+      "mode": "storage_emulator_demo",
+      "host": "10.0.2.2"
+    }
+  },
+  "clientMetadataDocumentsCreated": 5,
+  "newMealPlansOrRecipes": 0,
+  "localFilesAdded": 5,
+  "preExistingLocalPdfFiles": 17,
+  "localPdfFilesRetained": 22,
+  "nativeChecks": {
+    "onlineSaveOpenShare": true,
+    "twoDifferentPlans": true,
+    "allPdfPlanLinesMatch": true,
+    "offlinePendingAndOpenShare": true,
+    "server404WhileOffline": true,
+    "sameDocumentAndFileConfirmedOnReconnect": true,
+    "demoEmulatorUploadBytesMatch": true,
+    "nativeAnalyticsEvents": 5,
+    "localSaves": 5,
+    "http204Observed": true
+  },
+  "testOnlyChecks": [
+    "typed error/retry payload idempotence",
+    "A -> B and A -> logout -> A late callbacks",
+    "SDK setup failure and cancel-before-ready",
+    "new metadata Semantics/liveRegion/actions and text scale2"
+  ],
+  "limits": [
+    "GA4 DebugView UI was unavailable under the current IAB Google identity; no new access or email settings requested/changed",
+    "No new physical-device or Vietnamese TTS run",
+    "One offline observation scrolled past pending, was not counted as native pending proof; its valid export and SDK event remain in the ledger",
+    "Startup hierarchy occasionally unavailable; driver used fresh dump paths, never stale XML"
+  ],
+  "restoration": {
+    "finalApkInstalled": true,
+    "sameSignedInAccountRestored": true,
+    "network": {
+      "wifi_on": "1",
+      "mobile_data": "1"
+    },
+    "analyticsProperties": {
+      "log.tag.FA-SVC": "",
+      "log.tag.FA": "",
+      "debug.firebase.analytics.app": ""
+    },
+    "pdfFilesRetained": 22,
+    "avdStopped": true,
+    "emulatorsStopped": true,
+    "logcatStopped": true,
+    "finalBuildOutputRestored": true
+  },
+  "flutterSuite": 452,
+  "flutterAnalyzerIssues": 0,
+  "sourceSha256": {
+    "lib/config/pdf_export_mode.dart": "c2f81d5bfaefcc8cb565ef20990721d03f64ce31e811716161f7f0122350db74",
+    "lib/models/report_export.dart": "8ed362964fe47322e4e4fda8bab353fe8afc92eeb63613e0cca50bf5328a846c",
+    "lib/viewmodels/profile_viewmodel.dart": "2c9b428db4234112e47770a8fbfee06f1de4f7668d71c6cca0feddd69c72db36",
+    "lib/screens/profile_screen.dart": "b6dbe9883e400d76aba83db358fb747d0a7ec502178c43bd4197628ea2882ac7",
+    "lib/firebase/storage_service.dart": "bd2e1f5754f199a46ae6ae0a27b54c8c4f3d488c9d577b4aa6b3d91948328365",
+    "lib/services/local_report_store.dart": "83ae896071199c9c5ae93565fddfd740f323be0b020acf58d5191d6bb11778e4",
+    "lib/services/firestore_report_metadata_repository.dart": "e60de3868e0da7066f4a2f71f633562484182c50f1cfdec39ce454be8f55ceda",
+    "firebase/firestore.rules": "ef05fbfe0a61c3311acdff7d2f2d0c0852d717271e8dd146c1452fec9701d4d9",
+    "pubspec.lock": "f70ebc5105226ababee937de07577cd6ce9ce019d8c8ed4d3408c39944cfed6a"
+  },
+  "status": "Technically complete within agreed scope; Ready for Charlie final acceptance; not pushed or merged"
+}

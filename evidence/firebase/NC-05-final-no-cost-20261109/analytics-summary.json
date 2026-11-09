@@ -1,0 +1,48 @@
+{
+  "events": [
+    {
+      "case": "P1-online",
+      "time": "11-09 14:12:33.870",
+      "eventCount": 1,
+      "fileSizeKb": 21,
+      "report_topic": "longevity_meal_plan",
+      "has_shopping_list": 0
+    },
+    {
+      "case": "P1-offline-first-attempt",
+      "time": "11-09 14:16:28.305",
+      "eventCount": 1,
+      "fileSizeKb": 21,
+      "report_topic": "longevity_meal_plan",
+      "has_shopping_list": 0
+    },
+    {
+      "case": "P1-offline",
+      "time": "11-09 14:19:39.852",
+      "eventCount": 1,
+      "fileSizeKb": 21,
+      "report_topic": "longevity_meal_plan",
+      "has_shopping_list": 0
+    },
+    {
+      "case": "P2-online",
+      "time": "11-09 14:21:58.746",
+      "eventCount": 1,
+      "fileSizeKb": 19,
+      "report_topic": "longevity_meal_plan",
+      "has_shopping_list": 0
+    },
+    {
+      "case": "P2-demo-emulator",
+      "time": "11-09 14:27:55.104",
+      "eventCount": 1,
+      "fileSizeKb": 19,
+      "report_topic": "longevity_meal_plan",
+      "has_shopping_list": 0
+    }
+  ],
+  "count": 5,
+  "localSaves": 5,
+  "http204Observed": true,
+  "GA4DebugViewViewed": false
+}

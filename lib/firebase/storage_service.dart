@@ -1,24 +1,45 @@
 import 'dart:async';
 import 'dart:typed_data';
+
 import 'package:firebase_storage/firebase_storage.dart';
 
 import '../models/upload_failure.dart';
+import '../config/pdf_export_mode.dart';
 
 class StorageService {
-  /// Set with --dart-define to run against the local Storage emulator, for
-  /// example 10.0.2.2 from an Android emulator. Empty in every other build.
-  static const _emulatorHost = String.fromEnvironment('STORAGE_EMULATOR_HOST');
-  static const _emulatorPort = 9199;
-
   final FirebaseStorage _storage;
+  late final Future<UploadFailure?> _ready;
   UploadTask? _activeUpload;
+  int _generation = 0;
 
-  StorageService({FirebaseStorage? storage})
-      : _storage = storage ?? FirebaseStorage.instance {
-    // The default of ten minutes leaves an offline upload looking stuck.
-    _storage.setMaxUploadRetryTime(const Duration(seconds: 60));
-    if (_emulatorHost.isNotEmpty) {
-      unawaited(_storage.useStorageEmulator(_emulatorHost, _emulatorPort));
+  /// This adapter is exclusively for the local technology demonstration.
+  /// Final builds do not construct it; no path falls back to production.
+  factory StorageService({
+    FirebaseStorage? storage,
+    String emulatorHost = storageEmulatorHost,
+  }) {
+    if (!isLocalStorageHost(emulatorHost)) {
+      throw ArgumentError.value(
+        emulatorHost,
+        'emulatorHost',
+        'local host required',
+      );
+    }
+    return StorageService._(storage ?? FirebaseStorage.instance, emulatorHost);
+  }
+
+  StorageService._(this._storage, String host) {
+    _ready = _configure(host);
+  }
+
+  Future<UploadFailure?> _configure(String host) async {
+    try {
+      _storage.setMaxUploadRetryTime(const Duration(seconds: 60));
+      await _storage.useStorageEmulator(host, 9199);
+      return null;
+    } catch (error) {
+      // Handle immediately, even if no upload is ever requested.
+      return UploadFailure(UploadFailureKind.notConfigured, cause: error);
     }
   }
 
@@ -32,7 +53,13 @@ class StorageService {
   }) async {
     StreamSubscription<TaskSnapshot>? progress;
     UploadTask? uploadTask;
+    final generation = _generation;
     try {
+      final setupFailure = await _ready;
+      if (setupFailure != null) throw setupFailure;
+      if (generation != _generation) {
+        throw const UploadFailure(UploadFailureKind.cancelled);
+      }
       final ref = _storage.ref().child('reports/$uid/$fileName');
       final metadata = SettableMetadata(contentType: 'application/pdf');
       uploadTask = _activeUpload = ref.putData(bytes, metadata);
@@ -51,6 +78,8 @@ class StorageService {
 
       final snapshot = await uploadTask;
       return await snapshot.ref.getDownloadURL();
+    } on UploadFailure {
+      rethrow;
     } on FirebaseException catch (e) {
       throw UploadFailure(_kindOf(e.code), code: e.code, cause: e);
     } catch (e) {
@@ -64,6 +93,7 @@ class StorageService {
   /// Stops the running upload, if any. Its call to [uploadReportPdf] then fails
   /// with [UploadFailureKind.cancelled].
   Future<void> cancelActiveUpload() async {
+    _generation++;
     try {
       await _activeUpload?.cancel();
     } catch (_) {
@@ -73,14 +103,13 @@ class StorageService {
 
   /// A project with no Storage bucket reports object-not-found on upload.
   static UploadFailureKind _kindOf(String code) => switch (code) {
-        'canceled' => UploadFailureKind.cancelled,
-        'unauthorized' || 'unauthenticated' => UploadFailureKind.denied,
-        'retry-limit-exceeded' => UploadFailureKind.network,
-        'quota-exceeded' => UploadFailureKind.quota,
-        'object-not-found' ||
-        'bucket-not-found' ||
-        'project-not-found' =>
-          UploadFailureKind.notConfigured,
-        _ => UploadFailureKind.unknown,
-      };
+    'canceled' => UploadFailureKind.cancelled,
+    'unauthorized' || 'unauthenticated' => UploadFailureKind.denied,
+    'retry-limit-exceeded' => UploadFailureKind.network,
+    'quota-exceeded' => UploadFailureKind.quota,
+    'object-not-found' ||
+    'bucket-not-found' ||
+    'project-not-found' => UploadFailureKind.notConfigured,
+    _ => UploadFailureKind.unknown,
+  };
 }

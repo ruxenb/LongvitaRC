@@ -9,7 +9,6 @@ import '../models/recipe_model.dart';
 import '../models/view_state.dart';
 import '../services/secure_recipe_image.dart';
 import '../theme/app_colors.dart';
-import '../theme/app_icons.dart';
 import '../theme/app_spacing.dart';
 import '../theme/app_typography.dart';
 import '../widgets/app_badge.dart';
@@ -287,16 +286,6 @@ class _RecipeDetailsScreenState extends State<RecipeDetailsScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  // Hidden elements for test compatibility
-                  const Offstage(
-                    offstage: true,
-                    child: Column(
-                      children: [
-                        Text('S05 • Chi tiết món ăn'),
-                        Text('Dinh dưỡng tham khảo'),
-                      ],
-                    ),
-                  ),
                   _RecipeHero(recipe),
                   const SizedBox(height: 16),
                   Text(
@@ -309,11 +298,13 @@ class _RecipeDetailsScreenState extends State<RecipeDetailsScreen> {
                     ),
                   ),
                   const SizedBox(height: 8),
-                  Row(
+                  Wrap(
+                    spacing: 8,
+                    runSpacing: 8,
+                    crossAxisAlignment: WrapCrossAlignment.center,
                     children: [
                       if (recipe.isBookCitation || recipe.sourceNote.isNotEmpty) ...[
                         const AppBadge(kind: AppBadgeKind.fromBook),
-                        const SizedBox(width: 8),
                       ],
                       Text(
                         '${recipe.proteinGrams.toStringAsFixed(0)} g protein · 1 serving',
