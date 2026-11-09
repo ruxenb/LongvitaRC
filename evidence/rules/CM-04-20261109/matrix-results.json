@@ -1,0 +1,338 @@
+[
+  {
+    "id": "R-01",
+    "collection": "users",
+    "role": "anonymous",
+    "operation": "read a profile",
+    "expected": "Denied",
+    "result": "Pass"
+  },
+  {
+    "id": "R-02",
+    "collection": "users",
+    "role": "user",
+    "operation": "first sign-in creates own profile with role = user",
+    "expected": "Allowed",
+    "result": "Pass"
+  },
+  {
+    "id": "R-03",
+    "collection": "users",
+    "role": "user",
+    "operation": "update own role to admin",
+    "expected": "Denied",
+    "result": "Pass"
+  },
+  {
+    "id": "R-04",
+    "collection": "users",
+    "role": "staff",
+    "operation": "read own profile (role gate)",
+    "expected": "Allowed",
+    "result": "Pass"
+  },
+  {
+    "id": "R-05",
+    "collection": "users",
+    "role": "staff",
+    "operation": "read another user profile",
+    "expected": "Denied",
+    "result": "Pass"
+  },
+  {
+    "id": "R-06",
+    "collection": "users",
+    "role": "admin",
+    "operation": "change another user role to staff",
+    "expected": "Allowed",
+    "result": "Pass"
+  },
+  {
+    "id": "R-07",
+    "collection": "users",
+    "role": "admin",
+    "operation": "change own role",
+    "expected": "Denied",
+    "result": "Pass"
+  },
+  {
+    "id": "R-08",
+    "collection": "recipes",
+    "role": "anonymous",
+    "operation": "read a recipe",
+    "expected": "Denied",
+    "result": "Pass"
+  },
+  {
+    "id": "R-09",
+    "collection": "recipes",
+    "role": "user",
+    "operation": "read a recipe",
+    "expected": "Allowed",
+    "result": "Pass"
+  },
+  {
+    "id": "R-10",
+    "collection": "recipes",
+    "role": "user",
+    "operation": "create a recipe",
+    "expected": "Denied",
+    "result": "Pass"
+  },
+  {
+    "id": "R-11",
+    "collection": "recipes",
+    "role": "staff",
+    "operation": "archive a recipe (isArchived = true)",
+    "expected": "Allowed",
+    "result": "Pass"
+  },
+  {
+    "id": "R-12",
+    "collection": "recipes",
+    "role": "staff",
+    "operation": "hard delete a recipe",
+    "expected": "Denied",
+    "result": "Pass"
+  },
+  {
+    "id": "R-13",
+    "collection": "recipes",
+    "role": "admin",
+    "operation": "create a valid recipe",
+    "expected": "Allowed",
+    "result": "Pass"
+  },
+  {
+    "id": "R-14",
+    "collection": "recipes",
+    "role": "admin",
+    "operation": "create a recipe with name over 120 chars",
+    "expected": "Denied",
+    "result": "Pass"
+  },
+  {
+    "id": "R-15",
+    "collection": "meal_plans",
+    "role": "anonymous",
+    "operation": "read a plan",
+    "expected": "Denied",
+    "result": "Pass"
+  },
+  {
+    "id": "R-16",
+    "collection": "meal_plans",
+    "role": "user",
+    "operation": "owner submits draft (draft → submitted)",
+    "expected": "Allowed",
+    "result": "Pass"
+  },
+  {
+    "id": "R-17",
+    "collection": "meal_plans",
+    "role": "user",
+    "operation": "owner self-approves (submitted → approved)",
+    "expected": "Denied",
+    "result": "Pass"
+  },
+  {
+    "id": "R-18",
+    "collection": "meal_plans",
+    "role": "staff",
+    "operation": "approve a plan (submitted → approved)",
+    "expected": "Allowed",
+    "result": "Pass"
+  },
+  {
+    "id": "R-19",
+    "collection": "meal_plans",
+    "role": "staff",
+    "operation": "reject a plan without a reason",
+    "expected": "Denied",
+    "result": "Pass"
+  },
+  {
+    "id": "R-20",
+    "collection": "meal_plans",
+    "role": "admin",
+    "operation": "reject a plan with a reason",
+    "expected": "Allowed",
+    "result": "Pass"
+  },
+  {
+    "id": "R-21",
+    "collection": "meal_plans",
+    "role": "admin",
+    "operation": "review an already approved plan (approved → rejected)",
+    "expected": "Denied",
+    "result": "Pass"
+  },
+  {
+    "id": "R-22",
+    "collection": "shopping_lists",
+    "role": "anonymous",
+    "operation": "read a shopping list",
+    "expected": "Denied",
+    "result": "Pass"
+  },
+  {
+    "id": "R-23",
+    "collection": "shopping_lists",
+    "role": "user",
+    "operation": "owner saves own checklist",
+    "expected": "Allowed",
+    "result": "Pass"
+  },
+  {
+    "id": "R-24",
+    "collection": "shopping_lists",
+    "role": "user",
+    "operation": "write another user checklist",
+    "expected": "Denied",
+    "result": "Pass"
+  },
+  {
+    "id": "R-25",
+    "collection": "shopping_lists",
+    "role": "staff",
+    "operation": "save own checklist",
+    "expected": "Allowed",
+    "result": "Pass"
+  },
+  {
+    "id": "R-26",
+    "collection": "shopping_lists",
+    "role": "staff",
+    "operation": "read a user checklist",
+    "expected": "Denied",
+    "result": "Pass"
+  },
+  {
+    "id": "R-27",
+    "collection": "shopping_lists",
+    "role": "admin",
+    "operation": "save own checklist",
+    "expected": "Allowed",
+    "result": "Pass"
+  },
+  {
+    "id": "R-28",
+    "collection": "shopping_lists",
+    "role": "admin",
+    "operation": "read a user checklist",
+    "expected": "Denied",
+    "result": "Pass"
+  },
+  {
+    "id": "R-29",
+    "collection": "report_exports",
+    "role": "anonymous",
+    "operation": "read export metadata",
+    "expected": "Denied",
+    "result": "Pass"
+  },
+  {
+    "id": "R-30",
+    "collection": "report_exports",
+    "role": "user",
+    "operation": "owner records PDF metadata of own plan",
+    "expected": "Allowed",
+    "result": "Pass"
+  },
+  {
+    "id": "R-31",
+    "collection": "report_exports",
+    "role": "user",
+    "operation": "owner deletes export history",
+    "expected": "Denied",
+    "result": "Pass"
+  },
+  {
+    "id": "R-32",
+    "collection": "report_exports",
+    "role": "staff",
+    "operation": "record metadata of an unsaved plan (planId = null)",
+    "expected": "Allowed",
+    "result": "Pass"
+  },
+  {
+    "id": "R-33",
+    "collection": "report_exports",
+    "role": "staff",
+    "operation": "read a user export history",
+    "expected": "Denied",
+    "result": "Pass"
+  },
+  {
+    "id": "R-34",
+    "collection": "report_exports",
+    "role": "admin",
+    "operation": "record metadata of an unsaved plan (planId = null)",
+    "expected": "Allowed",
+    "result": "Pass"
+  },
+  {
+    "id": "R-35",
+    "collection": "report_exports",
+    "role": "admin",
+    "operation": "read a user export metadata",
+    "expected": "Denied",
+    "result": "Pass"
+  },
+  {
+    "id": "R-36",
+    "collection": "announcements",
+    "role": "anonymous",
+    "operation": "read announcements",
+    "expected": "Denied",
+    "result": "Pass"
+  },
+  {
+    "id": "R-37",
+    "collection": "announcements",
+    "role": "user",
+    "operation": "stream newest announcements (Inbox)",
+    "expected": "Allowed",
+    "result": "Pass"
+  },
+  {
+    "id": "R-38",
+    "collection": "announcements",
+    "role": "user",
+    "operation": "publish an announcement",
+    "expected": "Denied",
+    "result": "Pass"
+  },
+  {
+    "id": "R-39",
+    "collection": "announcements",
+    "role": "staff",
+    "operation": "publish an announcement as staff",
+    "expected": "Allowed",
+    "result": "Pass"
+  },
+  {
+    "id": "R-40",
+    "collection": "announcements",
+    "role": "staff",
+    "operation": "publish posing as admin",
+    "expected": "Denied",
+    "result": "Pass"
+  },
+  {
+    "id": "R-41",
+    "collection": "announcements",
+    "role": "admin",
+    "operation": "publish an announcement as admin",
+    "expected": "Allowed",
+    "result": "Pass"
+  },
+  {
+    "id": "R-42",
+    "collection": "announcements",
+    "role": "admin",
+    "operation": "publish with content over 2000 chars",
+    "expected": "Denied",
+    "result": "Pass"
+  }
+]

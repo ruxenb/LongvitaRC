@@ -37,6 +37,8 @@ const recipe = (overrides = {}) => ({
   ...overrides,
 });
 
+const SEVEN_DAYS = Array.from({ length: 7 }, (_, dayIndex) => ({ dayIndex }));
+
 const mealPlan = (overrides = {}) => ({
   uid: 'alice',
   title: 'Thực đơn 7 ngày',
@@ -44,7 +46,7 @@ const mealPlan = (overrides = {}) => ({
   targetProteinGrams: 55.5,
   status: 'draft',
   reviewerReason: null,
-  days: [],
+  days: SEVEN_DAYS,
   createdAt: CREATED_AT,
   ...overrides,
 });
@@ -147,8 +149,13 @@ describe('users', () => {
   });
 
   describe('staff', () => {
-    test('allowed: read any user', async () => {
-      await assertSucceeds(staff().doc('users/alice').get());
+    test('allowed: read own profile for the role gate', async () => {
+      await assertSucceeds(staff().doc('users/staff1').get());
+    });
+
+    test('denied: reading or listing other users (Appendix A: Self; admin)', async () => {
+      await assertFails(staff().doc('users/alice').get());
+      await assertFails(staff().collection('users').get());
     });
 
     test('denied: changing roles, own or others', async () => {
@@ -159,10 +166,15 @@ describe('users', () => {
   });
 
   describe('admin', () => {
-    test('allowed: change another user role, read and delete', async () => {
+    test('allowed: read and list users, change another user role', async () => {
       await assertSucceeds(admin().doc('users/alice').get());
+      await assertSucceeds(admin().collection('users').get());
       await assertSucceeds(admin().doc('users/alice').update({ role: 'staff' }));
-      await assertSucceeds(admin().doc('users/bob').delete());
+    });
+
+    test('denied: deleting a profile (Appendix A: no delete)', async () => {
+      await assertFails(admin().doc('users/bob').delete());
+      await assertFails(admin().doc('users/admin1').delete());
     });
 
     test('denied: changing own role (AUD-11)', async () => {
@@ -198,21 +210,38 @@ describe('recipes', () => {
     await assertFails(alice().doc('recipes/r1').delete());
   });
 
-  test('staff allowed: create, update, delete', async () => {
+  test('staff allowed: create, update, archive and restore', async () => {
     await assertSucceeds(staff().doc('recipes/r2').set(recipe()));
     await assertSucceeds(staff().doc('recipes/r1').update({ calories: 300 }));
-    await assertSucceeds(staff().doc('recipes/r1').delete());
+    await assertSucceeds(staff().doc('recipes/r1').update({ isArchived: true }));
+    await assertSucceeds(staff().doc('recipes/r1').update({ isArchived: false }));
+    await assertSucceeds(staff().doc('recipes/r3').set(recipe({ isArchived: false })));
+  });
+
+  test('staff denied: hard delete (archive instead)', async () => {
+    await assertFails(staff().doc('recipes/r1').delete());
   });
 
   test('staff denied: bad shape', async () => {
     await assertFails(staff().doc('recipes/r2').set(recipe({ calories: 'nhiều' })));
     await assertFails(staff().doc('recipes/r2').set(recipe({ extra: true })));
     await assertFails(staff().doc('recipes/r1').update({ name: '' }));
+    await assertFails(staff().doc('recipes/r1').update({ isArchived: 'yes' }));
   });
 
-  test('admin allowed: create and delete; denied: bad shape', async () => {
+  test('staff denied: oversized or negative values', async () => {
+    await assertFails(staff().doc('recipes/r2').set(recipe({ name: 'x'.repeat(121) })));
+    await assertFails(staff().doc('recipes/r2').set(recipe({ description: 'x'.repeat(2001) })));
+    await assertFails(staff().doc('recipes/r2').set(recipe({ calories: -1 })));
+    await assertFails(staff().doc('recipes/r2').set(recipe({ ingredients: Array(51).fill({}) })));
+    await assertFails(staff().doc('recipes/r2').set(recipe({ instructions: Array(31).fill('b') })));
+    await assertSucceeds(staff().doc('recipes/r2').set(recipe({ name: 'x'.repeat(120) })));
+  });
+
+  test('admin allowed: create and archive; denied: delete and bad shape', async () => {
     await assertSucceeds(admin().doc('recipes/r3').set(recipe()));
-    await assertSucceeds(admin().doc('recipes/r3').delete());
+    await assertSucceeds(admin().doc('recipes/r3').update({ isArchived: true }));
+    await assertFails(admin().doc('recipes/r3').delete());
     await assertFails(admin().doc('recipes/r4').set({ name: 'Thiếu trường' }));
   });
 });
@@ -275,6 +304,22 @@ describe('meal_plans', () => {
       await assertFails(alice().doc('meal_plans/draft1').update({ title: '' }));
     });
 
+    test('denied: oversized title, more than 7 days, negative targets', async () => {
+      await assertFails(alice().doc('meal_plans/draft1').update({ title: 'x'.repeat(121) }));
+      await assertFails(alice().doc('meal_plans/draft1').update({ days: Array(8).fill({}) }));
+      await assertFails(alice().doc('meal_plans/draft1').update({ targetCalories: -5 }));
+      await assertSucceeds(alice().doc('meal_plans/draft1').update({ days: Array(7).fill({}) }));
+    });
+
+    test('allowed: partial draft; denied: submitting fewer than 7 days', async () => {
+      await assertSucceeds(alice().doc('meal_plans/partial').set(mealPlan({ days: [] })));
+      await assertSucceeds(alice().doc('meal_plans/partial').update({ days: SEVEN_DAYS.slice(0, 3) }));
+      await assertFails(alice().doc('meal_plans/partial').update({ status: 'submitted' }));
+      await assertSucceeds(
+        alice().doc('meal_plans/partial').update({ days: SEVEN_DAYS, status: 'submitted' }),
+      );
+    });
+
     test('denied: editing, resetting or deleting after submit', async () => {
       await assertFails(alice().doc('meal_plans/sub1').update({ title: 'Sửa sau khi gửi' }));
       await assertFails(alice().doc('meal_plans/sub1').update({ status: 'draft' }));
@@ -307,10 +352,26 @@ describe('meal_plans', () => {
         );
       });
 
-      test('denied: rejecting without a reason', async () => {
+      test('denied: rejecting without a reason or with a reason over 500 chars', async () => {
         await assertFails(reviewer().doc('meal_plans/sub1').update({ status: 'rejected' }));
         await assertFails(
           reviewer().doc('meal_plans/sub1').update({ status: 'rejected', reviewerReason: '' }),
+        );
+        await assertFails(
+          reviewer()
+            .doc('meal_plans/sub1')
+            .update({ status: 'rejected', reviewerReason: 'x'.repeat(501) }),
+        );
+      });
+
+      test('denied: approving a submitted plan with fewer than 7 days', async () => {
+        await seed('meal_plans/short', mealPlan({ status: 'submitted', days: SEVEN_DAYS.slice(0, 6) }));
+        await assertFails(reviewer().doc('meal_plans/short').update({ status: 'approved' }));
+      });
+
+      test('allowed: review queue query of submitted plans (Web TV-02)', async () => {
+        await assertSucceeds(
+          reviewer().collection('meal_plans').where('status', '==', 'submitted').get(),
         );
       });
 
@@ -357,6 +418,8 @@ describe('announcements', () => {
     await assertFails(staff().doc('announcements/a2').set(announcement('staff', { title: '' })));
     await assertFails(staff().doc('announcements/a2').set(announcement('staff', { pinned: true })));
     await assertFails(staff().doc('announcements/a1').update({ createdAt: 'later' }));
+    await assertFails(staff().doc('announcements/a2').set(announcement('staff', { title: 'x'.repeat(121) })));
+    await assertFails(staff().doc('announcements/a2').set(announcement('staff', { content: 'x'.repeat(2001) })));
   });
 
   test('admin allowed: create; denied: posing as staff', async () => {
@@ -401,7 +464,7 @@ describe('report export metadata', () => {
   test('anonymous and other roles cannot read, list, create, update or delete', async () => {
     await seed(path, payload());
     // Access to the parent profile is deliberately different from this subcollection.
-    await assertSucceeds(staff().doc('users/alice').get());
+    await assertSucceeds(admin().doc('users/alice').get());
     for (const context of [anon(), bob(), staff(), admin()]) {
       await assertFails(context.doc(path).get());
       await assertFails(context.collection('users/alice/report_exports').get());
