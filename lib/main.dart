@@ -37,10 +37,9 @@ void main() {
   AppTypography.registerFontLicenses();
 
   final bootstrap = FirebaseBootstrap();
-  runApp(StartupGate(
-    initialize: bootstrap.initialize,
-    buildReadyApp: buildAppScope,
-  ));
+  runApp(
+    StartupGate(initialize: bootstrap.initialize, buildReadyApp: buildAppScope),
+  );
 }
 
 /// Creates services and ViewModels. Only called after Firebase started
@@ -111,7 +110,8 @@ Future<Widget> buildAppScope() async {
       ChangeNotifierProvider<AuthViewModel>.value(value: authViewModel),
       ChangeNotifierProvider<MealPlanViewModel>.value(value: mealPlanViewModel),
       ChangeNotifierProvider<IngredientViewModel>.value(
-          value: ingredientViewModel),
+        value: ingredientViewModel,
+      ),
       ChangeNotifierProvider<ProfileViewModel>.value(value: profileViewModel),
     ],
     child: const LongvitaApp(),
@@ -124,7 +124,7 @@ class LongvitaApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Longvita — Longevity Nutrition',
+      title: 'Longvita — Dinh dưỡng trường thọ',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.lightTheme,
       home: const AuthGate(),

@@ -96,7 +96,8 @@ class _IdentityCard extends StatelessWidget {
       builder: (dialogContext) => AppDialog.confirmation(
         icon: AppIcons.infoOutline,
         title: 'Đăng xuất?',
-        message: 'PDF đã lưu trên máy này sẽ bị xóa. '
+        message:
+            'PDF đã lưu trên máy này sẽ bị xóa. '
             'Bản đã tải lên và thực đơn đã lưu vẫn còn.',
         primaryLabel: 'Đồng ý',
         onPrimary: () => Navigator.of(dialogContext).pop(true),
@@ -121,13 +122,16 @@ class _IdentityCard extends StatelessWidget {
                 child: CircleAvatar(
                   radius: 28,
                   backgroundColor: AppColors.bgSelected,
-                  backgroundImage:
-                      photoUrl != null ? NetworkImage(photoUrl) : null,
-                  onBackgroundImageError:
-                      photoUrl != null ? (_, _) {} : null,
+                  backgroundImage: photoUrl != null
+                      ? NetworkImage(photoUrl)
+                      : null,
+                  onBackgroundImageError: photoUrl != null ? (_, _) {} : null,
                   child: photoUrl == null
-                      ? const Icon(AppIcons.accountCircle,
-                          size: AppSizes.icon, color: AppColors.actionPrimary)
+                      ? const Icon(
+                          AppIcons.accountCircle,
+                          size: AppSizes.icon,
+                          color: AppColors.actionPrimary,
+                        )
                       : null,
                 ),
               ),
@@ -150,8 +154,9 @@ class _IdentityCard extends StatelessWidget {
                           Text(
                             user.email.replaceFirst('@', '​@'),
                             semanticsLabel: user.email,
-                            style: AppTypography.supporting
-                                .copyWith(color: AppColors.textSecondary),
+                            style: AppTypography.supporting.copyWith(
+                              color: AppColors.textSecondary,
+                            ),
                           ),
                         ],
                       ),
@@ -159,7 +164,7 @@ class _IdentityCard extends StatelessWidget {
                     const SizedBox(height: AppSpacing.s8),
                     AppBadge(
                       kind: AppBadgeKind.pending,
-                      label: 'Vai trò: ${user.role}',
+                      label: 'Vai trò: ${_roleLabel(user.role)}',
                     ),
                   ],
                 ),
@@ -177,6 +182,12 @@ class _IdentityCard extends StatelessWidget {
       ),
     );
   }
+
+  String _roleLabel(String role) => switch (role) {
+    'admin' => 'Quản trị viên',
+    'staff' => 'Nhân viên',
+    _ => 'Người dùng',
+  };
 }
 
 /// Title and one line of explanation shared by the demo cards.
@@ -206,8 +217,9 @@ class _CardHeader extends StatelessWidget {
           container: true,
           child: Text(
             description,
-            style: AppTypography.supporting
-                .copyWith(color: AppColors.textSecondary),
+            style: AppTypography.supporting.copyWith(
+              color: AppColors.textSecondary,
+            ),
           ),
         ),
       ],
@@ -237,7 +249,9 @@ class _Notice extends StatelessWidget {
             Icon(
               isError ? AppIcons.errorOutline : AppIcons.infoOutline,
               size: AppSizes.icon,
-              color: isError ? AppColors.feedbackError : AppColors.actionPrimary,
+              color: isError
+                  ? AppColors.feedbackError
+                  : AppColors.actionPrimary,
             ),
             const SizedBox(width: AppSpacing.s8),
             Expanded(
@@ -256,10 +270,7 @@ class _Notice extends StatelessWidget {
 class _ExportCard extends StatelessWidget {
   const _ExportCard();
 
-  Future<void> _open(
-    BuildContext context,
-    Future<bool> Function() open,
-  ) async {
+  Future<void> _open(BuildContext context, Future<bool> Function() open) async {
     final opened = await open();
     if (!opened && context.mounted) {
       showAppSnackBar(context, message: 'Không mở được file PDF đã lưu.');
@@ -281,7 +292,7 @@ class _ExportCard extends StatelessWidget {
             description: plan == null
                 ? 'Chưa có thực đơn để xuất. Hãy tạo thực đơn trước.'
                 : 'Xuất thực đơn đang có, lưu trên máy rồi tải lên '
-                    'Cloud Storage.',
+                      'Cloud Storage.',
           ),
           const SizedBox(height: AppSpacing.s16),
           AppButton(
@@ -325,7 +336,10 @@ class _ExportCard extends StatelessWidget {
             // making the whole card a text field read before its actions.
             Semantics(
               container: true,
-              child: SelectableText(state.data, style: AppTypography.supporting),
+              child: SelectableText(
+                state.data,
+                style: AppTypography.supporting,
+              ),
             ),
           ],
           if (profile.canRetryUpload) ...[
@@ -406,8 +420,7 @@ class _InboxCard extends StatelessWidget {
     final permissionNotice = switch (profile.notificationPermission) {
       NotificationPermission.denied =>
         'Thông báo đang tắt. Bật lại trong Cài đặt của Android để nhận tin.',
-      NotificationPermission.failed =>
-        'Chưa kết nối được dịch vụ thông báo.',
+      NotificationPermission.failed => 'Chưa kết nối được dịch vụ thông báo.',
       _ => null,
     };
 
@@ -417,7 +430,8 @@ class _InboxCard extends StatelessWidget {
         children: [
           const _CardHeader(
             title: 'Thông báo',
-            description: 'Tin nhắn đã nhận, lưu trên máy này theo từng tài '
+            description:
+                'Tin nhắn đã nhận, lưu trên máy này theo từng tài '
                 'khoản.',
           ),
           if (permissionNotice != null) ...[
@@ -430,8 +444,9 @@ class _InboxCard extends StatelessWidget {
               container: true,
               child: Text(
                 'Chưa có thông báo nào.',
-                style:
-                    AppTypography.body.copyWith(color: AppColors.textSecondary),
+                style: AppTypography.body.copyWith(
+                  color: AppColors.textSecondary,
+                ),
               ),
             ),
           for (final (index, item) in items.indexed) ...[
@@ -467,8 +482,9 @@ class _InboxItem extends StatelessWidget {
             const SizedBox(height: AppSpacing.s4),
             Text(
               'Không mở được nội dung liên quan của tin này.',
-              style: AppTypography.supporting
-                  .copyWith(color: AppColors.textSecondary),
+              style: AppTypography.supporting.copyWith(
+                color: AppColors.textSecondary,
+              ),
             ),
           ],
         ],
@@ -485,9 +501,7 @@ class _RemoteConfigCard extends StatelessWidget {
     if (!context.mounted) return;
     showAppSnackBar(
       context,
-      message: applied
-          ? 'Đã áp dụng giá trị mới.'
-          : 'Không có giá trị mới hoặc chưa tải được. Vẫn dùng giá trị hiện có.',
+      message: applied ? 'Đã áp dụng giá trị mới.' : 'Không có giá trị mới hoặc chưa tải được. Vẫn dùng giá trị hiện có.',
     );
   }
 
@@ -500,7 +514,7 @@ class _RemoteConfigCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           const _CardHeader(
-            title: 'Remote Config',
+            title: 'Cấu hình từ xa',
             description: 'Giá trị đang áp dụng trong ứng dụng.',
           ),
           const SizedBox(height: AppSpacing.s16),
@@ -513,13 +527,13 @@ class _RemoteConfigCard extends StatelessWidget {
             value: profile.enableScore ? 'Bật' : 'Tắt',
           ),
           _ConfigRow(
-            label: 'Banner',
+            label: 'Biểu ngữ',
             value: profile.bannerText.isEmpty ? 'Trống' : profile.bannerText,
           ),
           const SizedBox(height: AppSpacing.s8),
           AppButton(
             key: const Key('profile-refresh-config'),
-            text: 'Cập nhật Remote Config',
+            text: 'Cập nhật cấu hình từ xa',
             loadingText: 'Đang cập nhật…',
             variant: AppButtonVariant.secondary,
             isLoading: profile.isRefreshingConfig,
@@ -550,8 +564,9 @@ class _ConfigRow extends StatelessWidget {
             children: [
               Text(
                 label,
-                style: AppTypography.supporting
-                    .copyWith(color: AppColors.textSecondary),
+                style: AppTypography.supporting.copyWith(
+                  color: AppColors.textSecondary,
+                ),
               ),
               Text(value, style: AppTypography.labelStrong),
             ],
@@ -571,10 +586,11 @@ class _CrashlyticsCard extends StatelessWidget {
       context: context,
       barrierLabel: AppDialog.barrierLabel,
       builder: (dialogContext) => AppDialog.error(
-        title: 'Gây crash thử?',
-        message: 'Ứng dụng sẽ đóng ngay để gửi báo cáo lên Crashlytics. '
+        title: 'Tạo lỗi thử nghiệm?',
+        message:
+            'Ứng dụng sẽ đóng ngay để gửi báo cáo lên Crashlytics. '
             'Chỉ dùng để kiểm thử.',
-        primaryLabel: 'Gây crash',
+        primaryLabel: 'Tạo lỗi',
         onPrimary: () => Navigator.of(dialogContext).pop(true),
         secondaryLabel: 'Hủy',
         onSecondary: () => Navigator.of(dialogContext).pop(false),
@@ -590,13 +606,13 @@ class _CrashlyticsCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           const _CardHeader(
-            title: 'Crashlytics',
+            title: 'Theo dõi lỗi',
             description: 'Gây một lỗi thử để kiểm tra báo cáo trên Console.',
           ),
           const SizedBox(height: AppSpacing.s16),
           AppButton(
             key: const Key('profile-test-crash'),
-            text: 'Gây crash thử',
+            text: 'Tạo lỗi thử nghiệm',
             variant: AppButtonVariant.destructive,
             onPressed: () => _confirmCrash(context),
           ),

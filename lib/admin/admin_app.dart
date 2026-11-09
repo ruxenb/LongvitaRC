@@ -11,7 +11,7 @@ class LongvitaAdminApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => MaterialApp(
-    title: 'Longvita Web Admin',
+    title: 'Trang quản trị Longvita',
     debugShowCheckedModeBanner: false,
     theme: AppTheme.lightTheme,
     home: const AdminAccessGate(),
@@ -57,7 +57,7 @@ class AdminAccessGate extends StatelessWidget {
             return _AccessMessage(
               icon: Icons.lock_outline,
               title: 'Tài khoản không có quyền',
-              message: 'Web Admin chỉ dành cho tài khoản staff hoặc admin.',
+              message: 'Trang quản trị chỉ dành cho tài khoản nhân viên hoặc quản trị viên.',
               action: () => FirebaseAuth.instance.signOut(),
             );
           }
@@ -111,7 +111,7 @@ class _AdminSignInState extends State<_AdminSignIn> {
                 ),
                 const SizedBox(height: 20),
                 Text(
-                  'Longvita Web Admin',
+                  'Trang quản trị Longvita',
                   style: Theme.of(context).textTheme.headlineMedium,
                 ),
                 const SizedBox(height: 8),

@@ -61,7 +61,7 @@ void main() {
 
         await tester.pumpWidget(app(const WeeklyPlanScreen()));
         await tester.pumpAndSettle();
-        expect(find.text('Weekly plan'), findsOneWidget);
+        expect(find.text('Thực đơn tuần'), findsOneWidget);
         expect(tester.takeException(), isNull);
 
         await tester.pumpWidget(app(const IngredientSummaryScreen()));
@@ -123,10 +123,10 @@ void main() {
   ) async {
     await tester.pumpWidget(const MaterialApp(home: PreferencesScreen()));
     await tester.enterText(find.byKey(const Key('preferences-weight')), '');
-    await tester.ensureVisible(find.text('Continue'));
-    await tester.tap(find.text('Continue'));
+    await tester.ensureVisible(find.text('Tiếp tục'));
+    await tester.tap(find.text('Tiếp tục'));
     await tester.pump();
-    expect(find.text('Enter a valid weight from 25–300 kg'), findsOneWidget);
+    expect(find.text('Nhập cân nặng hợp lệ từ 25–300 kg'), findsOneWidget);
   });
 
   testWidgets('S07 requires a positive quantity', (tester) async {

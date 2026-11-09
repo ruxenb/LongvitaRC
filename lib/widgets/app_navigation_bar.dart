@@ -23,10 +23,10 @@ class AppNavigationDestination {
 class AppNavigationBar extends StatelessWidget {
   /// Figma keeps the labels Home / Plan / Nutrition / Profile.
   static const List<AppNavigationDestination> longvitaDestinations = [
-    AppNavigationDestination(icon: AppIcons.home, label: 'Home'),
-    AppNavigationDestination(icon: AppIcons.calendarToday, label: 'Plan'),
-    AppNavigationDestination(icon: AppIcons.spa, label: 'Nutrition'),
-    AppNavigationDestination(icon: AppIcons.accountCircle, label: 'Profile'),
+    AppNavigationDestination(icon: AppIcons.home, label: 'Trang chủ'),
+    AppNavigationDestination(icon: AppIcons.calendarToday, label: 'Thực đơn'),
+    AppNavigationDestination(icon: AppIcons.spa, label: 'Dinh dưỡng'),
+    AppNavigationDestination(icon: AppIcons.accountCircle, label: 'Hồ sơ'),
   ];
 
   final int selectedIndex;
@@ -82,8 +82,9 @@ class _NavigationItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final foreground =
-        selected ? AppColors.actionOnPrimary : AppColors.textSecondary;
+    final foreground = selected
+        ? AppColors.actionOnPrimary
+        : AppColors.textSecondary;
 
     return Semantics(
       container: true,

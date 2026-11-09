@@ -26,55 +26,83 @@ void main() {
       'app-bar': (qaTopBars, const Size(792, 112), '56:191'),
       'dialogs': (qaDialogs, const Size(1112, 1000), '57:169'),
       'states': (qaStates, const Size(1432, 820), '57:181 57:212 57:255'),
-      'supporting': (qaSupporting, const Size(1100, 560),
-          '56:35 55:59 56:198 56:213 57:256 57:260'),
+      'supporting': (
+        qaSupporting,
+        const Size(1100, 560),
+        '56:35 55:59 56:198 56:213 57:256 57:260',
+      ),
     };
 
     for (final entry in shots.entries) {
       testWidgets(entry.key, (tester) async {
         final key = GlobalKey();
         final (builder, size, node) = entry.value;
-        await pumpQa(tester, builder(),
-            size: size, theme: theme, boundaryKey: key, realShadows: true);
+        await pumpQa(
+          tester,
+          builder(),
+          size: size,
+          theme: theme,
+          boundaryKey: key,
+          realShadows: true,
+        );
         await tester.pump(const Duration(milliseconds: 50));
         expect(tester.takeException(), isNull);
-        await captureQa(tester, key, entry.key, metadata: {
-          'figmaNode': node,
-          'textScale': 1.0,
-          'host': 'flutter_test widget host (not Android runtime)',
-        });
+        await captureQa(
+          tester,
+          key,
+          entry.key,
+          metadata: {
+            'figmaNode': node,
+            'textScale': 1.0,
+            'host': 'flutter_test widget host (not Android runtime)',
+          },
+        );
       });
     }
 
     for (final viewport in const [Size(360, 674), Size(412, 652)]) {
       for (final scale in const [1.0, 1.3, 2.0]) {
-        final name = 'qa-responsive-${viewport.width.toInt()}'
+        final name =
+            'qa-responsive-${viewport.width.toInt()}'
             '${scale == 1.0 ? '' : '-text${scale.toString().replaceAll('.', '_')}'}';
         testWidgets(name, (tester) async {
           final key = GlobalKey();
-          await pumpQa(tester, qaResponsive(),
-              size: viewport,
-              theme: theme,
-              textScale: scale,
-              boundaryKey: key,
-              realShadows: true);
-          expect(tester.takeException(), isNull,
-              reason: 'no overflow at ${viewport.width} / textScale $scale');
-          await captureQa(tester, key, name,
-              pixelRatio: scale == 1.0 ? 2.0 : 1.0,
-              metadata: {
-                'figmaNode': viewport.width == 360 ? '58:717' : '58:770',
-                'textScale': scale,
-                'host': 'flutter_test widget host (not Android runtime)',
-              });
+          await pumpQa(
+            tester,
+            qaResponsive(),
+            size: viewport,
+            theme: theme,
+            textScale: scale,
+            boundaryKey: key,
+            realShadows: true,
+          );
+          expect(
+            tester.takeException(),
+            isNull,
+            reason: 'no overflow at ${viewport.width} / textScale $scale',
+          );
+          await captureQa(
+            tester,
+            key,
+            name,
+            pixelRatio: scale == 1.0 ? 2.0 : 1.0,
+            metadata: {
+              'figmaNode': viewport.width == 360 ? '58:717' : '58:770',
+              'textScale': scale,
+              'host': 'flutter_test widget host (not Android runtime)',
+            },
+          );
         });
       }
     }
   });
 
   group('spec checks', () {
-    Future<void> pumpOne(WidgetTester tester, Widget child,
-        {double width = 360}) async {
+    Future<void> pumpOne(
+      WidgetTester tester,
+      Widget child, {
+      double width = 360,
+    }) async {
       await pumpQa(
         tester,
         Scaffold(
@@ -92,53 +120,75 @@ void main() {
       );
     }
 
-    testWidgets('button heights: 52 min, 56 with icon; radius 12',
-        (tester) async {
+    testWidgets('button heights: 52 min, 56 with icon; radius 12', (
+      tester,
+    ) async {
       await pumpOne(
         tester,
-        Column(children: [
-          AppButton(key: const Key('plain'), text: 'Save plan', onPressed: () {}),
-          AppButton(
+        Column(
+          children: [
+            AppButton(
+              key: const Key('plain'),
+              text: 'Save plan',
+              onPressed: () {},
+            ),
+            AppButton(
               key: const Key('icon'),
               text: 'Generate Weekly Plan',
               icon: AppIcons.arrowForward,
-              onPressed: () {}),
-        ]),
+              onPressed: () {},
+            ),
+          ],
+        ),
       );
       expect(tester.getSize(find.byKey(const Key('plain'))).height, 52);
       expect(tester.getSize(find.byKey(const Key('icon'))).height, 56);
     });
 
-    testWidgets('button states: disabled, loading, pressed colours',
-        (tester) async {
+    testWidgets('button states: disabled, loading, pressed colours', (
+      tester,
+    ) async {
       var taps = 0;
       await pumpOne(
         tester,
-        Column(children: [
-          const AppButton(key: Key('disabled'), text: 'Disabled'),
-          AppButton(
+        Column(
+          children: [
+            const AppButton(key: Key('disabled'), text: 'Disabled'),
+            AppButton(
               key: const Key('loading'),
               text: 'Save',
               loadingText: 'Please wait…',
               isLoading: true,
-              onPressed: () => taps++),
-          AppButton(
-              key: const Key('primary'), text: 'Go', onPressed: () => taps++),
-        ]),
+              onPressed: () => taps++,
+            ),
+            AppButton(
+              key: const Key('primary'),
+              text: 'Go',
+              onPressed: () => taps++,
+            ),
+          ],
+        ),
       );
 
-      BoxDecoration deco(String key) => tester
-          .widget<Container>(find.descendant(
-              of: find.byKey(Key(key)), matching: find.byType(Container)))
-          .decoration! as BoxDecoration;
+      BoxDecoration deco(String key) =>
+          tester
+                  .widget<Container>(
+                    find.descendant(
+                      of: find.byKey(Key(key)),
+                      matching: find.byType(Container),
+                    ),
+                  )
+                  .decoration!
+              as BoxDecoration;
 
       expect(deco('disabled').color, AppColors.disabledBg);
       await tester.tap(find.byKey(const Key('loading')));
       expect(taps, 0, reason: 'loading ignores taps');
       expect(find.text('Please wait…'), findsOneWidget);
 
-      final gesture = await tester
-          .startGesture(tester.getCenter(find.byKey(const Key('primary'))));
+      final gesture = await tester.startGesture(
+        tester.getCenter(find.byKey(const Key('primary'))),
+      );
       await tester.pump();
       expect(deco('primary').color, AppColors.actionPressed);
       await gesture.up();
@@ -151,10 +201,12 @@ void main() {
       final handle = tester.ensureSemantics();
       await pumpOne(
         tester,
-        Column(children: [
-          AppButton(text: 'Create weekly plan', onPressed: () {}),
-          const AppButton(text: 'Save changes'),
-        ]),
+        Column(
+          children: [
+            AppButton(text: 'Create weekly plan', onPressed: () {}),
+            const AppButton(text: 'Save changes'),
+          ],
+        ),
       );
       expect(
         tester.getSemantics(find.text('Create weekly plan')),
@@ -181,25 +233,34 @@ void main() {
     testWidgets('touch targets >= 48', (tester) async {
       await pumpOne(
         tester,
-        Column(children: [
-          AppIconButton(
+        Column(
+          children: [
+            AppIconButton(
               key: const Key('ib'),
               icon: AppIcons.arrowBack,
               semanticLabel: 'Back',
-              onPressed: () {}),
-          AppCheckboxRow(
+              onPressed: () {},
+            ),
+            AppCheckboxRow(
               key: const Key('cb'),
               label: 'Lentils · 500 g',
               checked: false,
-              onChanged: (_) {}),
-          AppDaySelector(
-              key: const Key('day'), day: 'Mon', date: '14', onTap: () {}),
-          AppQuantityStepper(
+              onChanged: (_) {},
+            ),
+            AppDaySelector(
+              key: const Key('day'),
+              day: 'Mon',
+              date: '14',
+              onTap: () {},
+            ),
+            AppQuantityStepper(
               key: const Key('step'),
               valueLabel: '55 kg',
               onDecrement: () {},
-              onIncrement: () {}),
-        ]),
+              onIncrement: () {},
+            ),
+          ],
+        ),
       );
       for (final k in ['ib', 'cb', 'day', 'step']) {
         final s = tester.getSize(find.byKey(Key(k)));
@@ -208,8 +269,9 @@ void main() {
       }
     });
 
-    testWidgets('navigation: height 80, selected semantics, callback',
-        (tester) async {
+    testWidgets('navigation: height 80, selected semantics, callback', (
+      tester,
+    ) async {
       final handle = tester.ensureSemantics();
       int? tapped;
       await pumpQa(
@@ -225,47 +287,54 @@ void main() {
       );
       expect(tester.getSize(find.byType(AppNavigationBar)).height, 80);
       expect(
-        tester.getSemantics(find.text('Plan')),
+        tester.getSemantics(find.text('Thực đơn')),
         matchesSemantics(
-          label: 'Plan',
+          label: 'Thực đơn',
           isButton: true,
           hasSelectedState: true,
           isSelected: true,
           hasTapAction: true,
         ),
       );
-      await tester.tap(find.text('Profile'));
+      await tester.tap(find.text('Hồ sơ'));
       expect(tapped, 3);
       handle.dispose();
     });
 
-    testWidgets('text field: 58 input, error replaces helper, focus border',
-        (tester) async {
+    testWidgets('text field: 58 input, error replaces helper, focus border', (
+      tester,
+    ) async {
       await pumpOne(
         tester,
-        Column(children: [
-          const AppTextField(
-            key: Key('ok'),
-            label: 'Your weight (kg)',
-            unit: 'kg',
-            helperText: 'Used to personalize your meal plan.',
-          ),
-          AppTextField(
-            key: const Key('err'),
-            label: 'Quantity',
-            controller: TextEditingController(text: '-5'),
-            unit: 'g',
-            helperText: 'Lentils · grams',
-            errorText: 'Enter a positive quantity, for example 500.',
-          ),
-        ]),
+        Column(
+          children: [
+            const AppTextField(
+              key: Key('ok'),
+              label: 'Your weight (kg)',
+              unit: 'kg',
+              helperText: 'Used to personalize your meal plan.',
+            ),
+            AppTextField(
+              key: const Key('err'),
+              label: 'Quantity',
+              controller: TextEditingController(text: '-5'),
+              unit: 'g',
+              helperText: 'Lentils · grams',
+              errorText: 'Enter a positive quantity, for example 500.',
+            ),
+          ],
+        ),
       );
       final input = find.descendant(
-          of: find.byKey(const Key('ok')), matching: find.byType(TextField));
+        of: find.byKey(const Key('ok')),
+        matching: find.byType(TextField),
+      );
       expect(tester.getSize(input).height, 58);
       expect(find.text('Lentils · grams'), findsNothing);
-      expect(find.text('Enter a positive quantity, for example 500.'),
-          findsOneWidget);
+      expect(
+        find.text('Enter a positive quantity, for example 500.'),
+        findsOneWidget,
+      );
     });
 
     testWidgets('checkbox semantics and toggle', (tester) async {
@@ -274,9 +343,10 @@ void main() {
       await pumpOne(
         tester,
         AppCheckboxRow(
-            label: 'Lentils · 500 g',
-            checked: true,
-            onChanged: (v) => value = v),
+          label: 'Lentils · 500 g',
+          checked: true,
+          onChanged: (v) => value = v,
+        ),
       );
       expect(
         tester.getSemantics(find.byType(AppCheckboxRow)),
@@ -294,8 +364,9 @@ void main() {
       handle.dispose();
     });
 
-    testWidgets('EditError dialog keeps primary disabled; cancel closes',
-        (tester) async {
+    testWidgets('EditError dialog keeps primary disabled; cancel closes', (
+      tester,
+    ) async {
       var saved = false;
       await pumpQa(
         tester,
@@ -333,8 +404,11 @@ void main() {
       expect(tester.getSize(find.byType(AppDialog).first).width, 360);
       await tester.tap(find.text('Save changes'));
       await tester.pumpAndSettle();
-      expect(find.text('Edit ingredient'), findsOneWidget,
-          reason: 'disabled primary keeps the dialog open');
+      expect(
+        find.text('Edit ingredient'),
+        findsOneWidget,
+        reason: 'disabled primary keeps the dialog open',
+      );
       expect(saved, isFalse);
       await tester.tap(find.text('Cancel'));
       await tester.pumpAndSettle();

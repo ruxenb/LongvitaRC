@@ -18,26 +18,41 @@ class AppBadge extends StatelessWidget {
   const AppBadge({super.key, required this.kind, this.label});
 
   static String defaultLabel(AppBadgeKind kind) => switch (kind) {
-        AppBadgeKind.fromBook => 'From Book',
-        AppBadgeKind.appSuggestion => 'App Suggestion',
-        AppBadgeKind.logged => 'Logged',
-        AppBadgeKind.pending => 'Pending',
-        AppBadgeKind.plantRich => 'Plant-Rich',
-      };
+    AppBadgeKind.fromBook => 'Từ sách',
+    AppBadgeKind.appSuggestion => 'Ứng dụng gợi ý',
+    AppBadgeKind.logged => 'Đã ghi nhận',
+    AppBadgeKind.pending => 'Đang chờ',
+    AppBadgeKind.plantRich => 'Giàu thực vật',
+  };
 
   @override
   Widget build(BuildContext context) {
     final (IconData icon, Color background, Color foreground) = switch (kind) {
-      AppBadgeKind.fromBook =>
-        (AppIcons.menuBook, AppColors.bgSelected, AppColors.actionPrimary),
-      AppBadgeKind.appSuggestion =>
-        (AppIcons.eco, AppColors.bgSoft, AppColors.actionPrimary),
-      AppBadgeKind.logged =>
-        (AppIcons.check, AppColors.bgSelected, AppColors.actionPrimary),
-      AppBadgeKind.pending =>
-        (AppIcons.infoOutline, AppColors.bgCanvas, AppColors.textSecondary),
-      AppBadgeKind.plantRich =>
-        (AppIcons.spa, AppColors.bgSelected, AppColors.actionPrimary),
+      AppBadgeKind.fromBook => (
+        AppIcons.menuBook,
+        AppColors.bgSelected,
+        AppColors.actionPrimary,
+      ),
+      AppBadgeKind.appSuggestion => (
+        AppIcons.eco,
+        AppColors.bgSoft,
+        AppColors.actionPrimary,
+      ),
+      AppBadgeKind.logged => (
+        AppIcons.check,
+        AppColors.bgSelected,
+        AppColors.actionPrimary,
+      ),
+      AppBadgeKind.pending => (
+        AppIcons.infoOutline,
+        AppColors.bgCanvas,
+        AppColors.textSecondary,
+      ),
+      AppBadgeKind.plantRich => (
+        AppIcons.spa,
+        AppColors.bgSelected,
+        AppColors.actionPrimary,
+      ),
     };
     final text = label ?? defaultLabel(kind);
 

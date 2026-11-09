@@ -112,7 +112,7 @@ class _HomeScreenState extends State<HomeScreen> {
               padding: const EdgeInsets.all(AppSpacing.pageMargin),
               children: [
                 Text(
-                  'Good morning, ${user?.displayName.split(' ').first ?? 'Minh Anh'}',
+                  'Chào buổi sáng, ${user?.displayName.split(' ').first ?? 'Minh Anh'}',
                   style: AppTypography.headingM,
                 ),
                 const SizedBox(height: AppSpacing.s16),
@@ -121,12 +121,12 @@ class _HomeScreenState extends State<HomeScreen> {
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       const Text(
-                        'Your 7-day rhythm',
+                        'Nhịp sống 7 ngày của bạn',
                         style: AppTypography.title,
                       ),
                       const SizedBox(height: AppSpacing.s8),
                       const Text(
-                        'Review meals, recipes and shopping in one place.',
+                        'Theo dõi bữa ăn, công thức và mua sắm tại một nơi.',
                         style: AppTypography.supporting,
                       ),
                       const SizedBox(height: AppSpacing.s12),
@@ -145,7 +145,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             SizedBox(width: AppSpacing.s8),
                             Expanded(
                               child: Text(
-                                'Ready for a new week',
+                                'Sẵn sàng cho một tuần mới',
                                 style: AppTypography.label,
                               ),
                             ),
@@ -157,7 +157,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 const SizedBox(height: AppSpacing.s12),
                 AppButton(
-                  text: 'Create Weekly Plan',
+                  text: 'Tạo thực đơn tuần',
                   icon: Icons.arrow_forward,
                   onPressed: () => Navigator.of(context).push(
                     MaterialPageRoute(
@@ -181,7 +181,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ],
                 const SizedBox(height: AppSpacing.s24),
-                const Text('Today', style: AppTypography.title),
+                const Text('Hôm nay', style: AppTypography.title),
                 const SizedBox(height: AppSpacing.s8),
                 AppCard(
                   child: Column(
@@ -203,12 +203,12 @@ class _HomeScreenState extends State<HomeScreen> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  'Warm lentil and roasted squash',
+                                  'Đậu lăng ấm và bí đỏ nướng',
                                   style: AppTypography.labelStrong,
                                 ),
                                 SizedBox(height: AppSpacing.s4),
                                 Text(
-                                  'Lunch • 12:30 PM',
+                                  'Bữa trưa • 12:30',
                                   style: AppTypography.supporting,
                                 ),
                               ],
@@ -220,19 +220,19 @@ class _HomeScreenState extends State<HomeScreen> {
                       const Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text('From Book', style: AppTypography.label),
-                          Text('Pending', style: AppTypography.supporting),
+                          Text('Từ sách', style: AppTypography.label),
+                          Text('Đang chờ', style: AppTypography.supporting),
                         ],
                       ),
                       const SizedBox(height: AppSpacing.s16),
                       AppButton(
-                        text: 'Saved plans',
+                        text: 'Thực đơn đã lưu',
                         variant: AppButtonVariant.secondary,
                         onPressed: () => _navigateTo(1),
                       ),
                       const SizedBox(height: AppSpacing.s8),
                       AppButton(
-                        text: 'Shopping',
+                        text: 'Danh sách mua sắm',
                         variant: AppButtonVariant.secondary,
                         onPressed: () => _navigateTo(1),
                       ),
@@ -297,7 +297,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                   const SizedBox(height: 4),
                                   Text(announcement.content),
                                   const SizedBox(height: 4),
-                                  Text('Vai trò: ${announcement.authorRole}'),
+                                  Text(
+                                    'Vai trò: ${_roleLabel(announcement.authorRole)}',
+                                  ),
                                 ],
                               ),
                             ),
@@ -313,4 +315,10 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
+
+  String _roleLabel(String role) => switch (role) {
+    'admin' => 'Quản trị viên',
+    'staff' => 'Nhân viên',
+    _ => 'Người dùng',
+  };
 }

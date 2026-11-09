@@ -32,7 +32,8 @@ class _RecipeManagementScreenState extends State<RecipeManagementScreen> {
         children: [
           AdminPageHeader(
             title: 'Quản lý công thức',
-            subtitle: 'Tạo, chỉnh sửa và lưu trữ món ăn dùng trên Mobile',
+            subtitle:
+                'Tạo, chỉnh sửa và lưu trữ món ăn dùng trên ứng dụng di động',
             action: FilledButton.icon(
               onPressed: vm.saving ? null : () => _openEditor(context, vm),
               icon: const Icon(Icons.add),

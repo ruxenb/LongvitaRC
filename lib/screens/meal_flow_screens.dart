@@ -36,42 +36,42 @@ class _PreferencesScreenState extends State<PreferencesScreen> {
 
   @override
   Widget build(BuildContext context) => FlowFrame(
-    title: 'Preferences',
+    title: 'Tùy chọn',
     bottomNavigationBar: const _FlowOneNavigation(selectedIndex: 0),
     child: Form(
       key: _form,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Text('Make the plan fit you', style: AppTypography.headingM),
+          Text('Điều chỉnh thực đơn cho bạn', style: AppTypography.headingM),
           const SizedBox(height: AppSpacing.s4),
           Text(
-            'Only a few inputs are needed. Calculated values stay read-only.',
+            'Chỉ cần một vài thông tin. Các giá trị tính toán chỉ để tham khảo.',
             style: AppTypography.supporting,
           ),
           const SizedBox(height: AppSpacing.s24),
-          const _FieldLabel('Age group'),
+          const _FieldLabel('Nhóm tuổi'),
           _ChoiceCard(
-            title: 'Under 65',
-            subtitle: 'Standard protein guidance',
+            title: 'Dưới 65 tuổi',
+            subtitle: 'Khuyến nghị protein tiêu chuẩn',
             selected: !_isOlderAdult,
             onTap: () => setState(() => _isOlderAdult = false),
           ),
           const SizedBox(height: AppSpacing.s8),
           _ChoiceCard(
-            title: '65 or older',
-            subtitle: 'Adjusted guidance from the source',
+            title: 'Từ 65 tuổi trở lên',
+            subtitle: 'Khuyến nghị được điều chỉnh theo nguồn',
             selected: _isOlderAdult,
             onTap: () => setState(() => _isOlderAdult = true),
           ),
           const SizedBox(height: AppSpacing.s24),
-          const _FieldLabel('Weight and protein'),
+          const _FieldLabel('Cân nặng và protein'),
           TextFormField(
             controller: _weight,
             key: const Key('preferences-weight'),
             keyboardType: const TextInputType.numberWithOptions(decimal: true),
             decoration: const InputDecoration(
-              labelText: 'Your weight (kg)',
+              labelText: 'Cân nặng của bạn',
               suffixText: 'kg',
               border: OutlineInputBorder(),
             ),
@@ -83,37 +83,37 @@ class _PreferencesScreenState extends State<PreferencesScreen> {
                       !value.isFinite ||
                       value < 25 ||
                       value > 300
-                  ? 'Enter a valid weight from 25–300 kg'
+                  ? 'Nhập cân nặng hợp lệ từ 25–300 kg'
                   : null;
             },
           ),
           const SizedBox(height: AppSpacing.s8),
           _ReadOnlyResult(
-            title: 'Calculated target',
+            title: 'Mục tiêu được tính toán',
             value: _isOlderAdult
-                ? '55 g protein/day • 1.0 g/kg'
-                : '44 g protein/day • 0.8 g/kg',
+                ? '55 g protein/ngày • 1,0 g/kg'
+                : '44 g protein/ngày • 0,8 g/kg',
           ),
           const SizedBox(height: AppSpacing.s24),
-          const _FieldLabel('Meals per day'),
+          const _FieldLabel('Số bữa mỗi ngày'),
           _ChoiceCard(
             key: const Key('preferences-meals-3'),
-            title: '3 meals / day',
-            subtitle: 'Balanced default',
+            title: '3 bữa/ngày',
+            subtitle: 'Lựa chọn cân bằng mặc định',
             selected: _mealsPerDay == 3,
             onTap: () => setState(() => _mealsPerDay = 3),
           ),
           const SizedBox(height: AppSpacing.s8),
           _ChoiceCard(
             key: const Key('preferences-meals-2'),
-            title: '2 meals / day',
-            subtitle: 'Longer fasting window',
+            title: '2 bữa/ngày',
+            subtitle: 'Khoảng nhịn ăn dài hơn',
             selected: _mealsPerDay == 2,
             onTap: () => setState(() => _mealsPerDay = 2),
           ),
           const SizedBox(height: 24),
           AppButton(
-            text: 'Continue',
+            text: 'Tiếp tục',
             icon: Icons.arrow_forward,
             onPressed: () {
               if (!(_form.currentState?.validate() ?? false)) return;
@@ -195,7 +195,7 @@ class _CreatePlanScreenState extends State<CreatePlanScreen> {
   Widget build(BuildContext context) {
     final state = context.watch<MealPlanViewModel>().currentPlanState;
     return FlowFrame(
-      title: 'Create plan',
+      title: 'Tạo thực đơn',
       bottomNavigationBar: const _FlowOneNavigation(selectedIndex: 1),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -203,48 +203,48 @@ class _CreatePlanScreenState extends State<CreatePlanScreen> {
           if (!_started &&
               state is! ViewStateError<MealPlanModel> &&
               state is! ViewStateEmpty<MealPlanModel>) ...[
-            Text('Craft your 7-day cycle', style: AppTypography.headingM),
+            Text('Xây dựng chu kỳ 7 ngày', style: AppTypography.headingM),
             const SizedBox(height: AppSpacing.s16),
-            const _FieldLabel('Essential preferences'),
+            const _FieldLabel('Tùy chọn chính'),
             const _ChoiceCard(
-              title: 'Standard 7-day rhythm',
-              subtitle: 'Recommended weekly cycle',
+              title: 'Nhịp 7 ngày tiêu chuẩn',
+              subtitle: 'Chu kỳ tuần được đề xuất',
               selected: true,
             ),
             const SizedBox(height: AppSpacing.s8),
             _ChoiceCard(
-              title: '${widget.mealsPerDay} meals / day',
-              subtitle: 'Meal frequency',
+              title: '${widget.mealsPerDay} bữa/ngày',
+              subtitle: 'Tần suất bữa ăn',
               selected: true,
             ),
             const SizedBox(height: AppSpacing.s8),
             const _ChoiceCard(
-              title: 'Plant-rich longevity',
-              subtitle: 'Dietary pattern',
+              title: 'Trường thọ giàu thực vật',
+              subtitle: 'Chế độ ăn uống',
               selected: true,
             ),
             const SizedBox(height: AppSpacing.s24),
-            const _FieldLabel('Optional nutrient settings'),
+            const _FieldLabel('Thiết lập dinh dưỡng tùy chọn'),
             _ReadOnlyResult(
-              title: 'Protein target',
+              title: 'Mục tiêu protein',
               value:
-                  '${widget.weightKg.toStringAsFixed(0)} kg • calculated from your profile',
+                  '${widget.weightKg.toStringAsFixed(0)} kg • tính từ hồ sơ của bạn',
             ),
             const SizedBox(height: AppSpacing.s8),
             const _ChoiceCard(
-              title: 'Low-mercury fish',
-              subtitle: '2 meals this week',
+              title: 'Cá ít thủy ngân',
+              subtitle: '2 bữa trong tuần này',
               selected: false,
             ),
             const SizedBox(height: AppSpacing.s8),
             const _ReadOnlyResult(
-              title: '7 days • Plant-rich',
-              value: 'Ready to generate your week',
+              title: '7 ngày • Giàu thực vật',
+              value: 'Sẵn sàng tạo thực đơn tuần',
               neutral: true,
             ),
             const SizedBox(height: AppSpacing.s16),
             AppButton(
-              text: 'Generate Weekly Plan',
+              text: 'Tạo thực đơn tuần',
               icon: Icons.arrow_forward,
               onPressed: _generate,
             ),
@@ -293,7 +293,7 @@ class _WeeklyPlanScreenState extends State<WeeklyPlanScreen> {
     final vm = context.watch<MealPlanViewModel>();
     final plan = vm.activePlan;
     return FlowFrame(
-      title: 'Weekly plan',
+      title: 'Thực đơn tuần',
       bottomNavigationBar: const _FlowOneNavigation(selectedIndex: 1),
       child: plan == null
           ? FlowStateView<MealPlanModel>(
@@ -313,7 +313,7 @@ class _WeeklyPlanScreenState extends State<WeeklyPlanScreen> {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     Text(
-                      'Your week at a glance',
+                      'Tổng quan tuần của bạn',
                       style: AppTypography.headingM,
                     ),
                     const SizedBox(height: AppSpacing.s12),
@@ -357,7 +357,7 @@ class _WeeklyPlanScreenState extends State<WeeklyPlanScreen> {
                     const SizedBox(height: AppSpacing.s12),
                     if (selected != null) ...[
                       Text(
-                        '${selected.dayName} • ${19 + _selectedDay} October',
+                        '${selected.dayName} • ${19 + _selectedDay} tháng 10',
                         style: AppTypography.labelStrong,
                       ),
                       const SizedBox(height: AppSpacing.s8),
@@ -390,12 +390,12 @@ class _WeeklyPlanScreenState extends State<WeeklyPlanScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'Daily note',
+                              'Ghi chú trong ngày',
                               style: AppTypography.labelStrong,
                             ),
                             SizedBox(height: AppSpacing.s4),
                             Text(
-                              'Omega-3 reminder • keep source labels visible',
+                              'Nhắc bổ sung Omega-3 • luôn hiển thị nguồn món ăn',
                               style: AppTypography.supporting,
                             ),
                           ],
@@ -404,7 +404,7 @@ class _WeeklyPlanScreenState extends State<WeeklyPlanScreen> {
                     ],
                     const SizedBox(height: 16),
                     AppButton(
-                      text: plan.id.isEmpty ? 'Save Plan' : 'Save Changes',
+                      text: plan.id.isEmpty ? 'Lưu thực đơn' : 'Lưu thay đổi',
                       icon: Icons.arrow_forward,
                       isLoading: vm.saveState is ViewStateLoading<bool>,
                       onPressed: plan.isDraft ? () => _save(context) : null,
@@ -419,7 +419,7 @@ class _WeeklyPlanScreenState extends State<WeeklyPlanScreen> {
                       ),
                     const SizedBox(height: 12),
                     AppButton(
-                      text: 'View Ingredients',
+                      text: 'Xem nguyên liệu',
                       icon: Icons.shopping_cart_outlined,
                       variant: AppButtonVariant.secondary,
                       onPressed: () => Navigator.of(context).push(
@@ -437,13 +437,13 @@ class _WeeklyPlanScreenState extends State<WeeklyPlanScreen> {
 
   String _shortDay(String value) {
     final normalized = value.toLowerCase();
-    if (normalized.contains('hai')) return 'Mon';
-    if (normalized.contains('ba')) return 'Tue';
-    if (normalized.contains('tư')) return 'Wed';
-    if (normalized.contains('năm')) return 'Thu';
-    if (normalized.contains('sáu')) return 'Fri';
-    if (normalized.contains('bảy')) return 'Sat';
-    return 'Sun';
+    if (normalized.contains('hai')) return 'T2';
+    if (normalized.contains('ba')) return 'T3';
+    if (normalized.contains('tư')) return 'T4';
+    if (normalized.contains('năm')) return 'T5';
+    if (normalized.contains('sáu')) return 'T6';
+    if (normalized.contains('bảy')) return 'T7';
+    return 'CN';
   }
 }
 
@@ -472,7 +472,7 @@ class _SavedPlansScreenState extends State<SavedPlansScreen> {
   Widget build(BuildContext context) {
     final vm = context.watch<MealPlanViewModel>();
     return FlowFrame(
-      title: 'Saved plans',
+      title: 'Thực đơn đã lưu',
       bottomNavigationBar: const _FlowOneNavigation(selectedIndex: 1),
       actions: [
         IconButton(
@@ -483,16 +483,16 @@ class _SavedPlansScreenState extends State<SavedPlansScreen> {
       ],
       child: FlowStateView<List<MealPlanModel>>(
         state: vm.savedPlansState,
-        emptyTitle: 'No saved plans yet',
+        emptyTitle: 'Chưa có thực đơn đã lưu',
         onRetry: _refresh,
         onBack: () => Navigator.of(context).pop(),
         onData: (plans) => Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Text('Your saved weeks', style: AppTypography.headingM),
+            Text('Các tuần đã lưu', style: AppTypography.headingM),
             const SizedBox(height: AppSpacing.s4),
             Text(
-              'Open a previous plan or start fresh.',
+              'Mở thực đơn trước đây hoặc tạo một thực đơn mới.',
               style: AppTypography.supporting,
             ),
             const SizedBox(height: AppSpacing.s16),
@@ -511,7 +511,7 @@ class _SavedPlansScreenState extends State<SavedPlansScreen> {
             ],
             const SizedBox(height: AppSpacing.s8),
             AppButton(
-              text: 'Create New Plan',
+              text: 'Tạo thực đơn mới',
               icon: Icons.arrow_forward,
               onPressed: () => Navigator.of(context).push(
                 MaterialPageRoute(builder: (_) => const PreferencesScreen()),
@@ -579,7 +579,7 @@ class _ChoiceCard extends StatelessWidget {
           ),
           if (selected)
             Text(
-              'Selected',
+              'Đã chọn',
               style: AppTypography.label.copyWith(
                 color: AppColors.actionPrimary,
               ),
@@ -665,13 +665,16 @@ class _MealPlanCard extends StatelessWidget {
                       Text(recipe.name, style: AppTypography.labelStrong),
                       const SizedBox(height: AppSpacing.s4),
                       Text(
-                        primary ? 'Lunch • 12:30 PM' : 'Dinner • 6:45 PM',
+                        primary ? 'Bữa trưa • 12:30' : 'Bữa tối • 18:45',
                         style: AppTypography.supporting,
                       ),
                     ],
                   ),
                 ),
-                Text(primary ? '' : 'Pending', style: AppTypography.supporting),
+                Text(
+                  primary ? '' : 'Đang chờ',
+                  style: AppTypography.supporting,
+                ),
               ],
             ),
             if (primary) ...[
@@ -688,9 +691,9 @@ class _MealPlanCard extends StatelessWidget {
                       color: AppColors.bgSelected,
                       borderRadius: AppRadius.roundedFull,
                     ),
-                    child: const Text('From Book', style: AppTypography.label),
+                    child: const Text('Từ sách', style: AppTypography.label),
                   ),
-                  const Text('Pending', style: AppTypography.supporting),
+                  const Text('Đang chờ', style: AppTypography.supporting),
                 ],
               ),
             ],
@@ -726,7 +729,7 @@ class _SavedPlanCard extends StatelessWidget {
         style: AppTypography.supporting,
       ),
       trailing: Text(
-        current ? 'Current' : 'Saved',
+        current ? 'Hiện tại' : 'Đã lưu',
         style: AppTypography.label.copyWith(color: AppColors.actionPrimary),
       ),
       onTap: onTap,

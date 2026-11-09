@@ -9,7 +9,6 @@ import '../models/recipe_model.dart';
 import '../models/view_state.dart';
 import '../services/secure_recipe_image.dart';
 import '../theme/app_colors.dart';
-import '../theme/app_icons.dart';
 import '../theme/app_spacing.dart';
 import '../theme/app_typography.dart';
 import '../widgets/app_badge.dart';
@@ -269,7 +268,7 @@ class _RecipeDetailsScreenState extends State<RecipeDetailsScreen> {
           onPressed: () => Navigator.of(context).maybePop(),
         ),
         title: const Text(
-          'Recipe details',
+          'Chi tiết công thức',
           style: TextStyle(
             fontFamily: AppTypography.newsreader,
             fontSize: 24,
@@ -311,7 +310,8 @@ class _RecipeDetailsScreenState extends State<RecipeDetailsScreen> {
                   const SizedBox(height: 8),
                   Row(
                     children: [
-                      if (recipe.isBookCitation || recipe.sourceNote.isNotEmpty) ...[
+                      if (recipe.isBookCitation ||
+                          recipe.sourceNote.isNotEmpty) ...[
                         const AppBadge(kind: AppBadgeKind.fromBook),
                         const SizedBox(width: 8),
                       ],
@@ -454,7 +454,7 @@ class _RecipeDetailsScreenState extends State<RecipeDetailsScreen> {
                   const SizedBox(height: 24),
                   // Button Replace Meal (Design System AppButton)
                   AppButton(
-                    text: 'Replace Meal',
+                    text: 'Đổi món',
                     variant: AppButtonVariant.secondary,
                     onPressed: () {
                       final targetIndex = widget.dayIndex ?? 0;
@@ -623,7 +623,7 @@ class _MealAlternativesScreenState extends State<MealAlternativesScreen> {
                         ),
                         const SizedBox(height: 4),
                         const Text(
-                          'Kept if you cancel or an update fails.',
+                          'Món gốc được giữ lại nếu bạn hủy hoặc cập nhật thất bại.',
                           style: TextStyle(
                             fontFamily: AppTypography.quicksand,
                             fontSize: 13,
@@ -671,7 +671,7 @@ class _MealAlternativesScreenState extends State<MealAlternativesScreen> {
                           const SizedBox(height: 8),
                           if (_selected != null) ...[
                             AppButton(
-                              text: 'Confirm: ${_selected!.name}',
+                              text: 'Xác nhận: ${_selected!.name}',
                               variant: AppButtonVariant.primary,
                               isLoading:
                                   vm.replaceState is ViewStateLoading<bool>,
@@ -682,7 +682,7 @@ class _MealAlternativesScreenState extends State<MealAlternativesScreen> {
                           ],
                           // Keep Original Button (Outlined Design System)
                           AppButton(
-                            text: 'Keep Original',
+                            text: 'Giữ món gốc',
                             variant: AppButtonVariant.secondary,
                             onPressed: () => Navigator.of(context).pop(),
                           ),
@@ -789,7 +789,7 @@ class _MealAlternativesScreenState extends State<MealAlternativesScreen> {
                         ),
                       ),
                       child: Text(
-                        isSelected ? 'Selected' : 'Select',
+                        isSelected ? 'Đã chọn' : 'Chọn',
                         style: TextStyle(
                           fontFamily: AppTypography.quicksand,
                           fontSize: 13,
@@ -837,28 +837,19 @@ class BookKnowledgeScreen extends StatelessWidget {
 
   static const _principles = [
     (
-      'Plant-forward foundation',
-      'Center vegetables, legumes and whole grains.',
+      'Nền tảng giàu thực vật',
+      'Ưu tiên rau củ, các loại đậu và ngũ cốc nguyên hạt.',
     ),
-    (
-      'Protein balance',
-      'Use your calculated target as guidance.',
-    ),
-    (
-      'Healthy fats',
-      'Prefer olive oil, nuts and omega-3 sources.',
-    ),
-    (
-      'Low-mercury fish',
-      'Keep fish within the weekly quota.',
-    ),
+    ('Cân bằng protein', 'Dùng mục tiêu đã tính toán để tham khảo.'),
+    ('Chất béo lành mạnh', 'Ưu tiên dầu ô liu, các loại hạt và nguồn omega-3.'),
+    ('Cá ít thủy ngân', 'Giữ lượng cá trong giới hạn khuyến nghị mỗi tuần.'),
   ];
 
   @override
   Widget build(BuildContext context) {
     final sourceText = recipe != null && recipe!.sourceNote.trim().isNotEmpty
         ? recipe!.sourceNote
-        : 'The Longevity Diet · Appendix A and nutrition principles used by Longvita.';
+        : 'The Longevity Diet · Phụ lục A và các nguyên tắc dinh dưỡng Longvita sử dụng.';
 
     return Scaffold(
       backgroundColor: AppColors.bgCanvas,
@@ -896,7 +887,7 @@ class BookKnowledgeScreen extends StatelessWidget {
                     child: Text('S09 • Kiến thức sách'),
                   ),
                   const Text(
-                    'Why this plan works',
+                    'Vì sao thực đơn này phù hợp',
                     style: TextStyle(
                       fontFamily: AppTypography.newsreader,
                       fontSize: 24,
@@ -906,7 +897,7 @@ class BookKnowledgeScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: 4),
                   const Text(
-                    'Short principles from the source, connected to real meals.',
+                    'Các nguyên tắc ngắn gọn từ nguồn, gắn với bữa ăn thực tế.',
                     style: TextStyle(
                       fontFamily: AppTypography.quicksand,
                       fontSize: 14,
@@ -992,7 +983,7 @@ class BookKnowledgeScreen extends StatelessWidget {
                   const SizedBox(height: 20),
                   // Back to Recipe Button (Design System AppButton)
                   AppButton(
-                    text: 'Back to Recipe',
+                    text: 'Quay lại công thức',
                     variant: AppButtonVariant.secondary,
                     onPressed: () => Navigator.of(context).maybePop(),
                   ),
