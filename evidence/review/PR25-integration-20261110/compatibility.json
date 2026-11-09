@@ -1,0 +1,62 @@
+[
+  {
+    "path": "firebase/firestore.rules",
+    "mainBlob": "2c382be45b9ed55e0df40f6d01ba1b07230d00c1",
+    "reviewBlob": "2c382be45b9ed55e0df40f6d01ba1b07230d00c1",
+    "unchanged": true
+  },
+  {
+    "path": "lib/screens/shopping_flow_screens.dart",
+    "mainBlob": "8eb9e91baed93fb57d48250bdd7f34cd324f0126",
+    "reviewBlob": "8eb9e91baed93fb57d48250bdd7f34cd324f0126",
+    "unchanged": true
+  },
+  {
+    "path": "lib/screens/profile_screen.dart",
+    "mainBlob": "8e603058e440c8fda7567d9e2cd42b67ca174da0",
+    "reviewBlob": "8e603058e440c8fda7567d9e2cd42b67ca174da0",
+    "unchanged": true
+  },
+  {
+    "path": "lib/viewmodels/profile_viewmodel.dart",
+    "mainBlob": "b14ef8bf34833f54a684546722cbaa120f6044c5",
+    "reviewBlob": "b14ef8bf34833f54a684546722cbaa120f6044c5",
+    "unchanged": true
+  },
+  {
+    "path": "lib/services/local_report_store.dart",
+    "mainBlob": "c15efdafe683ccfdd45685a806d8dcda2dade4fd",
+    "reviewBlob": "c15efdafe683ccfdd45685a806d8dcda2dade4fd",
+    "unchanged": true
+  },
+  {
+    "path": "lib/services/firestore_report_metadata_repository.dart",
+    "mainBlob": "e52183fc60c66898ffeece5690bfacadec5bc241",
+    "reviewBlob": "e52183fc60c66898ffeece5690bfacadec5bc241",
+    "unchanged": true
+  },
+  {
+    "path": "lib/services/report_service.dart",
+    "mainBlob": "de07b6ceea526324681d2e4c40d448976e26bfa6",
+    "reviewBlob": "de07b6ceea526324681d2e4c40d448976e26bfa6",
+    "unchanged": true
+  },
+  {
+    "path": "lib/models/report_metadata.dart",
+    "mainBlob": "5ea490ffa86d29b873c83f99c2e6d82aba8d18c4",
+    "reviewBlob": "5ea490ffa86d29b873c83f99c2e6d82aba8d18c4",
+    "unchanged": true
+  },
+  {
+    "path": "pubspec.yaml",
+    "mainBlob": "94aa5f5c9b03e79aa4f7212a8544db16c4780380",
+    "reviewBlob": "94aa5f5c9b03e79aa4f7212a8544db16c4780380",
+    "unchanged": true
+  },
+  {
+    "path": "pubspec.lock",
+    "mainBlob": "dd2e3a7eb3c75707364ed3c8c5f8fc1e4c017088",
+    "reviewBlob": "dd2e3a7eb3c75707364ed3c8c5f8fc1e4c017088",
+    "unchanged": true
+  }
+]
