@@ -51,3 +51,10 @@ Nhánh `feature/charlie-pdf-03`, tạo từ main `eb0d0de`.
 - Số dinh dưỡng là ước tính từ nguyên liệu. Các giả định (spelt cân khô, món đậu lăng chỉ là phần chính, Grana Padano tính theo số của parmesan bào, chicory là phần lá) đã được duyệt cùng batch.
 - Upload dùng Storage Emulator. Upload thật thuộc S4-11/DEC-01.
 - Chưa chạy trên máy thật.
+
+
+## Nghiệm thu S4-10 — 09/11/2026
+
+Charlie đã xác nhận “Chốt hoàn thành S4-10” sau PM review head `bd0a60e`: đủ 5/5 điều kiện. PM chạy lại 400/400 Flutter tests, 31/31 Node recipe checks, 2/2 regression riêng; analyzer lib/test sạch và diff check sạch. PM kiểm phê duyệt đúng batch SHA, đọc lại Firestore chỉ GET và đối chiếu 3 PDF gốc cùng toàn bộ 5 trang render. Không có thay đổi code app hoặc lượt chạy native mới trong lần ghi nhận nghiệm thu.
+
+S4-10 hoàn tất 100% trong phạm vi xuất PDF đúng plan. Bằng chứng Storage vẫn từ Emulator; upload production và danh sách file Storage Console thuộc S4-11/S4-15. Hai recipes đã duyệt và hai plan nháp kiểm được giữ nguyên; không có thao tác dọn dữ liệu production trong bước bàn giao này.
