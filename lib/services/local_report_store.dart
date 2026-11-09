@@ -18,22 +18,34 @@ class LocalReportStore {
   final Map<String, Future<void>> _queues = {};
 
   LocalReportStore({Future<Directory> Function()? baseDirectory})
-      : _baseDirectory = baseDirectory ?? getApplicationDocumentsDirectory;
+    : _baseDirectory = baseDirectory ?? getApplicationDocumentsDirectory;
 
   /// Writes through a temporary file: an interrupted write never leaves a
-  /// partial PDF under the final name. Saving the same id replaces the file.
+  /// partial PDF under the final name. Existing IDs are never overwritten.
+  /// The existence check and rename share the per-UID queue with sign-out.
   Future<File> save({
     required String uid,
     required String exportId,
     required Uint8List bytes,
-  }) =>
-      _queued(uid, () async {
-        final file = await _fileFor(uid, exportId);
-        await file.parent.create(recursive: true);
-        final temp = File('${file.path}.tmp');
-        await temp.writeAsBytes(bytes, flush: true);
-        return temp.rename(file.path);
-      });
+  }) => _queued(uid, () async {
+    final file = await _fileFor(uid, exportId);
+    await file.parent.create(recursive: true);
+    final temp = File('${file.path}.tmp');
+    // Exclusive staging also prevents two store instances from racing the
+    // exists/rename pair for the same ID. Check the destination AFTER taking
+    // that reservation; rename removes the staging name atomically.
+    await temp.create(exclusive: true);
+    try {
+      if (await file.exists()) {
+        throw FileSystemException('PDF export ID already exists', file.path);
+      }
+      await temp.writeAsBytes(bytes, flush: true);
+      return await temp.rename(file.path);
+    } catch (_) {
+      await temp.delete();
+      rethrow;
+    }
+  });
 
   /// Returns the saved file, or null when it does not exist.
   Future<File?> find({required String uid, required String exportId}) =>
@@ -55,10 +67,10 @@ class LocalReportStore {
 
   /// Removes every file of [uid] from this device. Cloud copies stay.
   Future<void> deleteAll({required String uid}) => _queued(uid, () async {
-        final base = await _baseDirectory();
-        final folder = Directory('${base.path}/reports/$uid');
-        if (await folder.exists()) await folder.delete(recursive: true);
-      });
+    final base = await _baseDirectory();
+    final folder = Directory('${base.path}/reports/$uid');
+    if (await folder.exists()) await folder.delete(recursive: true);
+  });
 
   /// Runs [operation] after every earlier operation on [uid] has finished.
   Future<T> _queued<T>(String uid, Future<T> Function() operation) {

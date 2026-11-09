@@ -1,3 +1,4 @@
+import 'package:longvita/config/pdf_export_mode.dart';
 // User A signs out, user B signs in: B must not see A's local data.
 // Uses the real ViewModels wired like main.dart, with fake services.
 import 'package:flutter_test/flutter_test.dart';
@@ -82,6 +83,8 @@ void main() {
     final ingredients =
         IngredientViewModel(analytics: analytics, crashlytics: crashlytics);
     final profile = ProfileViewModel(
+      metadataRepository: FakeReportMetadataRepository(),
+      exportMode: PdfExportMode.storageEmulatorDemo,
       authService: auth,
       storageService: FakeStorageService(),
       notificationService: notifications,

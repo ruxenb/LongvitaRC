@@ -21,10 +21,20 @@ class AppNavigationDestination {
 /// Routing stays with the caller: pass [selectedIndex] and handle
 /// [onDestinationSelected].
 class AppNavigationBar extends StatelessWidget {
-  /// Figma keeps the labels Home / Plan / Nutrition / Profile.
+  /// Legacy English Figma labels for callers not yet migrated.
+  /// New Vietnamese flows use [vietnameseDestinations].
   static const List<AppNavigationDestination> longvitaDestinations = [
     AppNavigationDestination(icon: AppIcons.home, label: 'Trang chủ'),
     AppNavigationDestination(icon: AppIcons.calendarToday, label: 'Thực đơn'),
+    AppNavigationDestination(icon: AppIcons.spa, label: 'Dinh dưỡng'),
+    AppNavigationDestination(icon: AppIcons.accountCircle, label: 'Hồ sơ'),
+  ];
+
+  /// Vietnamese labels agreed by the team on 09/11/2026. Flows opt in
+  /// during migration so labels and their navigation tests change together.
+  static const List<AppNavigationDestination> vietnameseDestinations = [
+    AppNavigationDestination(icon: AppIcons.home, label: 'Trang chủ'),
+    AppNavigationDestination(icon: AppIcons.calendarToday, label: 'Kế hoạch'),
     AppNavigationDestination(icon: AppIcons.spa, label: 'Dinh dưỡng'),
     AppNavigationDestination(icon: AppIcons.accountCircle, label: 'Hồ sơ'),
   ];

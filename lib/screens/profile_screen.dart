@@ -1,3 +1,5 @@
+import '../models/report_metadata_state.dart';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -98,7 +100,8 @@ class _IdentityCard extends StatelessWidget {
         title: 'Đăng xuất?',
         message:
             'PDF đã lưu trên máy này sẽ bị xóa. '
-            'Bản đã tải lên và thực đơn đã lưu vẫn còn.',
+            'Ứng dụng không lưu bản sao PDF trên đám mây. '
+            'Thực đơn đã lưu vẫn còn.',
         primaryLabel: 'Đồng ý',
         onPrimary: () => Navigator.of(dialogContext).pop(true),
         secondaryLabel: 'Hủy',
@@ -164,7 +167,7 @@ class _IdentityCard extends StatelessWidget {
                     const SizedBox(height: AppSpacing.s8),
                     AppBadge(
                       kind: AppBadgeKind.pending,
-                      label: 'Vai trò: ${_roleLabel(user.role)}',
+                      label: 'Vai trò: ${user.role}',
                     ),
                   ],
                 ),
@@ -182,12 +185,6 @@ class _IdentityCard extends StatelessWidget {
       ),
     );
   }
-
-  String _roleLabel(String role) => switch (role) {
-    'admin' => 'Quản trị viên',
-    'staff' => 'Nhân viên',
-    _ => 'Người dùng',
-  };
 }
 
 /// Title and one line of explanation shared by the demo cards.
@@ -281,7 +278,8 @@ class _ExportCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final profile = context.watch<ProfileViewModel>();
     final plan = context.watch<MealPlanViewModel>().activePlan;
-    final state = profile.exportState;
+    final localState = profile.exportState;
+    final uploadState = profile.uploadState;
 
     return AppCard(
       child: Column(
@@ -291,8 +289,9 @@ class _ExportCard extends StatelessWidget {
             title: 'Báo cáo PDF',
             description: plan == null
                 ? 'Chưa có thực đơn để xuất. Hãy tạo thực đơn trước.'
-                : 'Xuất thực đơn đang có, lưu trên máy rồi tải lên '
-                      'Cloud Storage.',
+                : profile.isStorageDemo
+                ? 'Demo: lưu PDF trên máy rồi tải lên Storage Emulator.'
+                : 'Xuất thực đơn đang có và lưu PDF trên máy.',
           ),
           const SizedBox(height: AppSpacing.s16),
           AppButton(
@@ -300,14 +299,27 @@ class _ExportCard extends StatelessWidget {
             text: 'Xuất báo cáo PDF',
             loadingText: 'Đang xuất PDF…',
             isLoading: profile.isExporting,
-            onPressed: plan == null
-                ? null
-                : () => profile.exportAndUploadPdf(plan),
+            onPressed: plan == null ? null : () => profile.exportPdf(plan),
           ),
-          if (state is ViewStateLoading<String>) ...[
+          if (localState is ViewStateLoading<String>) ...[
+            const SizedBox(height: AppSpacing.s16),
+            _Notice(message: localState.message ?? 'Đang xuất PDF…'),
+          ],
+          if (localState is ViewStateError<String>) ...[
+            const SizedBox(height: AppSpacing.s16),
+            _Notice(message: localState.message, isError: true),
+          ],
+          if (profile.lastExport != null) ...[
+            const SizedBox(height: AppSpacing.s16),
+            const _Notice(message: 'Đã lưu PDF trên máy.'),
+            const _ReportMetadataStatus(),
+          ],
+          if (profile.isStorageDemo &&
+              uploadState is ViewStateLoading<String>) ...[
             const SizedBox(height: AppSpacing.s16),
             _ExportProgress(
-              message: state.message ?? 'Đang xuất PDF…',
+              message:
+                  uploadState.message ?? 'Đang tải PDF lên Storage Emulator…',
               progress: profile.uploadProgress,
             ),
           ],
@@ -320,24 +332,25 @@ class _ExportCard extends StatelessWidget {
               onPressed: profile.cancelUpload,
             ),
           ],
-          if (state is ViewStateEmpty<String>) ...[
+          if (profile.isStorageDemo &&
+              uploadState is ViewStateEmpty<String>) ...[
             const SizedBox(height: AppSpacing.s16),
-            _Notice(message: state.message),
+            _Notice(message: uploadState.message),
           ],
-          if (state is ViewStateError<String>) ...[
+          if (profile.isStorageDemo &&
+              uploadState is ViewStateError<String>) ...[
             const SizedBox(height: AppSpacing.s16),
-            _Notice(message: state.message, isError: true),
+            _Notice(message: uploadState.message, isError: true),
           ],
-          if (state is ViewStateSuccess<String>) ...[
+          if (profile.isStorageDemo &&
+              uploadState is ViewStateSuccess<String>) ...[
             const SizedBox(height: AppSpacing.s16),
-            const _Notice(message: 'Đã tải PDF lên Cloud Storage.'),
+            const _Notice(message: 'Đã tải PDF lên Storage Emulator.'),
             const SizedBox(height: AppSpacing.s8),
-            // Without its own node the read-only field merges into the card,
-            // making the whole card a text field read before its actions.
             Semantics(
               container: true,
               child: SelectableText(
-                state.data,
+                uploadState.data,
                 style: AppTypography.supporting,
               ),
             ),
@@ -370,6 +383,45 @@ class _ExportCard extends StatelessWidget {
           ],
         ],
       ),
+    );
+  }
+}
+
+/// Information about the export, never a claim that Firestore stores the PDF.
+/// State changes create one live-region announcement, not a changing counter.
+class _ReportMetadataStatus extends StatelessWidget {
+  const _ReportMetadataStatus();
+
+  @override
+  Widget build(BuildContext context) {
+    final profile = context.watch<ProfileViewModel>();
+    final state = profile.metadataState;
+    if (state == ReportMetadataState.idle) return const SizedBox.shrink();
+    final message = switch (state) {
+      ReportMetadataState.saving => 'Đang đồng bộ thông tin báo cáo…',
+      ReportMetadataState.pending =>
+        'Thông tin báo cáo đang chờ đồng bộ. Bạn vẫn có thể mở và chia sẻ PDF.',
+      ReportMetadataState.confirmed => 'Đã đồng bộ thông tin báo cáo.',
+      ReportMetadataState.error =>
+        'Chưa đồng bộ được thông tin báo cáo. PDF vẫn có trên máy.',
+      ReportMetadataState.idle => '',
+    };
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        const SizedBox(height: AppSpacing.s8),
+        _Notice(message: message, isError: state == ReportMetadataState.error),
+        if (profile.canRetryMetadata) ...[
+          const SizedBox(height: AppSpacing.s8),
+          AppButton(
+            key: const Key('profile-retry-metadata'),
+            text: 'Thử đồng bộ lại',
+            variant: AppButtonVariant.secondary,
+            icon: AppIcons.refresh,
+            onPressed: profile.retryMetadata,
+          ),
+        ],
+      ],
     );
   }
 }
@@ -514,7 +566,7 @@ class _RemoteConfigCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           const _CardHeader(
-            title: 'Cấu hình từ xa',
+            title: 'Remote Config',
             description: 'Giá trị đang áp dụng trong ứng dụng.',
           ),
           const SizedBox(height: AppSpacing.s16),
@@ -527,13 +579,13 @@ class _RemoteConfigCard extends StatelessWidget {
             value: profile.enableScore ? 'Bật' : 'Tắt',
           ),
           _ConfigRow(
-            label: 'Biểu ngữ',
+            label: 'Banner',
             value: profile.bannerText.isEmpty ? 'Trống' : profile.bannerText,
           ),
           const SizedBox(height: AppSpacing.s8),
           AppButton(
             key: const Key('profile-refresh-config'),
-            text: 'Cập nhật cấu hình từ xa',
+            text: 'Cập nhật Remote Config',
             loadingText: 'Đang cập nhật…',
             variant: AppButtonVariant.secondary,
             isLoading: profile.isRefreshingConfig,
@@ -586,11 +638,11 @@ class _CrashlyticsCard extends StatelessWidget {
       context: context,
       barrierLabel: AppDialog.barrierLabel,
       builder: (dialogContext) => AppDialog.error(
-        title: 'Tạo lỗi thử nghiệm?',
+        title: 'Gây crash thử?',
         message:
             'Ứng dụng sẽ đóng ngay để gửi báo cáo lên Crashlytics. '
             'Chỉ dùng để kiểm thử.',
-        primaryLabel: 'Tạo lỗi',
+        primaryLabel: 'Gây crash',
         onPrimary: () => Navigator.of(dialogContext).pop(true),
         secondaryLabel: 'Hủy',
         onSecondary: () => Navigator.of(dialogContext).pop(false),
@@ -606,13 +658,13 @@ class _CrashlyticsCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           const _CardHeader(
-            title: 'Theo dõi lỗi',
+            title: 'Crashlytics',
             description: 'Gây một lỗi thử để kiểm tra báo cáo trên Console.',
           ),
           const SizedBox(height: AppSpacing.s16),
           AppButton(
             key: const Key('profile-test-crash'),
-            text: 'Tạo lỗi thử nghiệm',
+            text: 'Gây crash thử',
             variant: AppButtonVariant.destructive,
             onPressed: () => _confirmCrash(context),
           ),

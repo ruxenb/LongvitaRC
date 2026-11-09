@@ -1,3 +1,7 @@
+import 'config/pdf_export_mode.dart';
+import 'services/i_report_metadata_repository.dart';
+import 'services/firestore_report_metadata_repository.dart';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -49,7 +53,11 @@ Future<Widget> buildAppScope() async {
   final analytics = AnalyticsService();
   final crashlytics = CrashlyticsService();
   final remoteConfig = RemoteConfigService();
-  final storage = StorageService();
+  final exportMode = resolvePdfExportMode();
+  final storage = exportMode == PdfExportMode.storageEmulatorDemo
+      ? StorageService(emulatorHost: storageEmulatorHost)
+      : null;
+  final metadataRepository = FirestoreReportMetadataRepository();
   final notification = NotificationService();
 
   // Remote Config falls back to in-app defaults internally. FCM permission
@@ -77,6 +85,8 @@ Future<Widget> buildAppScope() async {
   final profileViewModel = ProfileViewModel(
     authService: authService,
     storageService: storage,
+    exportMode: exportMode,
+    metadataRepository: metadataRepository,
     notificationService: notification,
     reportService: reportService,
     reportStore: LocalReportStore(),
@@ -103,7 +113,8 @@ Future<Widget> buildAppScope() async {
       Provider<AnalyticsService>.value(value: analytics),
       Provider<CrashlyticsService>.value(value: crashlytics),
       Provider<RemoteConfigService>.value(value: remoteConfig),
-      Provider<StorageService>.value(value: storage),
+      Provider<IReportMetadataRepository>.value(value: metadataRepository),
+      if (storage != null) Provider<StorageService>.value(value: storage),
       Provider<NotificationService>.value(value: notification),
 
       // MVVM ViewModels

@@ -1,3 +1,4 @@
+import 'package:longvita/config/pdf_export_mode.dart';
 // PM-PDF-01: one export or retry runs at a time, and everything the app shows
 // (local file, URL, state, progress, event) belongs to that one operation.
 import 'dart:async';
@@ -63,7 +64,7 @@ void main() {
     expect(session.currentUser?.uid, uid);
   }
 
-  MealPlanModel plan(String id) => planFor('uid-a').copyWith(id: id);
+  MealPlanModel plan(String id) => planFor(auth.currentUser!.uid).copyWith(id: id);
 
   /// Starts an export; `await settle()` then waits until its upload is held.
   Future<void> startExport(String planId) =>
@@ -73,7 +74,7 @@ void main() {
   void expectConsistent() {
     final url = profile.lastUploadedUrl;
     if (url != null) expect(url, endsWith(profile.lastExport!.fileName));
-    final state = profile.exportState;
+    final state = profile.uploadState;
     if (state is ViewStateSuccess<String>) expect(state.data, url);
   }
 
@@ -84,6 +85,8 @@ void main() {
     storage = HeldStorage();
     store = FakeLocalReportStore();
     profile = ProfileViewModel(
+      metadataRepository: FakeReportMetadataRepository(),
+      exportMode: PdfExportMode.storageEmulatorDemo,
       authService: auth,
       storageService: storage,
       notificationService: FakeNotificationService(),
@@ -115,14 +118,15 @@ void main() {
       expect(storage.uploads, hasLength(1));
       expect(store.files, hasLength(1));
       expect(profile.lastExport, same(fileBefore));
-      expect(profile.exportState, isA<ViewStateLoading<String>>(),
+      expect(profile.uploadState, isA<ViewStateLoading<String>>(),
           reason: 'the ignored call must not read as a result');
-      expect(analytics.events.where((e) => e.startsWith('export_report')), isEmpty);
+      expect(analytics.events.where((e) => e.startsWith('export_report')), ['export_report:1:0']);
 
       storage.uploads.single.succeed();
       await first;
       expectConsistent();
-      expect(profile.lastExport!.fileName, startsWith('first_'));
+      expect(profile.lastExport!.planId, 'first');
+      expect(profile.lastExport!.fileName, startsWith('pdf_'));
       expect(analytics.events.where((e) => e.startsWith('export_report')),
           ['export_report:1:0']);
     });
@@ -156,7 +160,8 @@ void main() {
       storage.uploads.last.succeed();
       await retry;
       expectConsistent();
-      expect(profile.lastExport!.fileName, startsWith('first_'));
+      expect(profile.lastExport!.planId, 'first');
+      expect(profile.lastExport!.fileName, startsWith('pdf_'));
     });
 
     test('a new export can start after the previous one ends', () async {
@@ -174,7 +179,8 @@ void main() {
       await second;
 
       expectConsistent();
-      expect(profile.lastExport!.fileName, startsWith('second_'));
+      expect(profile.lastExport!.planId, 'second');
+      expect(profile.lastExport!.fileName, startsWith('pdf_'));
       expect(store.files, hasLength(2));
     });
 
@@ -266,15 +272,16 @@ void main() {
 
       expect(profile.isExporting, isTrue, reason: 'B is still uploading');
       expect(profile.lastUploadedUrl, isNull);
-      expect(analytics.events.where((e) => e.startsWith('export_report')), isEmpty);
+      expect(analytics.events.where((e) => e.startsWith('export_report')), ['export_report:1:0', 'export_report:1:0']);
 
       storage.uploads.last.succeed();
       await second;
       expectConsistent();
-      expect(profile.lastExport!.fileName, startsWith('second_'));
+      expect(profile.lastExport!.planId, 'second');
+      expect(profile.lastExport!.fileName, startsWith('pdf_'));
       expect(profile.isExporting, isFalse);
       expect(analytics.events.where((e) => e.startsWith('export_report')),
-          ['export_report:1:0']);
+          ['export_report:1:0', 'export_report:1:0']);
     });
 
     test('A signing back in is not blocked or overwritten by the old upload',
@@ -296,7 +303,8 @@ void main() {
       storage.uploads.last.succeed();
       await second;
       expectConsistent();
-      expect(profile.lastExport!.fileName, startsWith('second_'));
+      expect(profile.lastExport!.planId, 'second');
+      expect(profile.lastExport!.fileName, startsWith('pdf_'));
     });
   });
 
@@ -312,13 +320,13 @@ void main() {
       expect(storage.cancelCalls, 1);
       expect(profile.canCancelUpload, isFalse, reason: 'reported at once');
       expect(profile.isExporting, isFalse);
-      expect(profile.exportState, isA<ViewStateEmpty<String>>());
+      expect(profile.uploadState, isA<ViewStateEmpty<String>>());
       expect(profile.canRetryUpload, isTrue);
       expect(store.files, hasLength(1));
 
       storage.uploads.single.fail(UploadFailureKind.cancelled);
       await first;
-      expect(profile.exportState, isA<ViewStateEmpty<String>>());
+      expect(profile.uploadState, isA<ViewStateEmpty<String>>());
       expect(crashlytics.errors, isEmpty);
     });
 
@@ -333,7 +341,7 @@ void main() {
 
       expect(profile.lastUploadedUrl, isNull);
       expect(profile.canRetryUpload, isTrue);
-      expect(analytics.events.where((e) => e.startsWith('export_report')), isEmpty);
+      expect(analytics.events.where((e) => e.startsWith('export_report')), ['export_report:1:0']);
     });
 
     test('a retry can start right after cancel', () async {

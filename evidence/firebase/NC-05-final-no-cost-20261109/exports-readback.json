@@ -1,0 +1,87 @@
+[
+  {
+    "case": "P1-online",
+    "metadata": {
+      "fileName": "pdf_20261109T071233Z_1db17686b9a4e922.pdf",
+      "exportId": "pdf_20261109T071233Z_1db17686b9a4e922",
+      "sizeBytes": 20768,
+      "createdAt": "2026-11-09T07:12:33.447290Z",
+      "planId": "<plan-A>",
+      "schemaVersion": 1
+    },
+    "planIdAliasedForPrivacy": true,
+    "localSha256": "c5237c4c9fd8c8421adb3226a79de0ed542920a565daf36ed26c3659b69ebb62",
+    "serverDocumentMatchesLocalFile": true,
+    "planOwnerMatches": true,
+    "nativeConfirmedObserved": true,
+    "harnessNote": "first wait did not scroll because its swipe coordinates exceeded 320x640 viewport; recovered the original export, no second tap"
+  },
+  {
+    "case": "P1-offline-first-attempt",
+    "metadata": {
+      "sizeBytes": 20768,
+      "schemaVersion": 1,
+      "exportId": "pdf_20261109T071628Z_b46a531efecd8d94",
+      "fileName": "pdf_20261109T071628Z_b46a531efecd8d94.pdf",
+      "planId": "<plan-A>",
+      "createdAt": "2026-11-09T07:16:28.086467Z"
+    },
+    "planIdAliasedForPrivacy": true,
+    "localSha256": "f72c3389f48e9967f4cc19e60d81e5cad6bcbeda6722f95c7635660c5e8d272a",
+    "serverDocumentMatchesLocalFile": true,
+    "planOwnerMatches": true,
+    "nativeConfirmedObserved": false,
+    "harnessNote": "device network disabled, but observer scrolled past metadata and missed pending; network restored by finally. Not counted as native pending proof."
+  },
+  {
+    "case": "P1-offline",
+    "metadata": {
+      "schemaVersion": 1,
+      "planId": "<plan-A>",
+      "sizeBytes": 20768,
+      "createdAt": "2026-11-09T07:19:39.593791Z",
+      "exportId": "pdf_20261109T071939Z_90f3962763149023",
+      "fileName": "pdf_20261109T071939Z_90f3962763149023.pdf"
+    },
+    "planIdAliasedForPrivacy": true,
+    "localSha256": "7a57dc6270aede75093ba30ac92aa7da948663d6bd02982e42572087af109263",
+    "serverDocumentMatchesLocalFile": true,
+    "planOwnerMatches": true,
+    "nativeConfirmedObserved": true,
+    "harnessNote": null
+  },
+  {
+    "case": "P2-online",
+    "metadata": {
+      "fileName": "pdf_20261109T072158Z_0bbac4b77165df48.pdf",
+      "createdAt": "2026-11-09T07:21:58.590333Z",
+      "schemaVersion": 1,
+      "sizeBytes": 19247,
+      "exportId": "pdf_20261109T072158Z_0bbac4b77165df48",
+      "planId": "<plan-B>"
+    },
+    "planIdAliasedForPrivacy": true,
+    "localSha256": "fed74180fb15d59f97849f6cd7fc40eb3721af9d08192061bed5bf0fb89601e3",
+    "serverDocumentMatchesLocalFile": true,
+    "planOwnerMatches": true,
+    "nativeConfirmedObserved": true,
+    "harnessNote": null
+  },
+  {
+    "case": "P2-demo-emulator",
+    "metadata": {
+      "schemaVersion": 1,
+      "planId": "<plan-B>",
+      "fileName": "pdf_20261109T072754Z_b20577b2e1946c90.pdf",
+      "createdAt": "2026-11-09T07:27:54.715742Z",
+      "exportId": "pdf_20261109T072754Z_b20577b2e1946c90",
+      "sizeBytes": 19247
+    },
+    "planIdAliasedForPrivacy": true,
+    "localSha256": "217b682bcd9aae55e34a29b529f0745ec88e62ed099da498c1a3b253b739f36d",
+    "serverDocumentMatchesLocalFile": true,
+    "planOwnerMatches": true,
+    "nativeConfirmedObserved": true,
+    "harnessNote": null
+  }
+]

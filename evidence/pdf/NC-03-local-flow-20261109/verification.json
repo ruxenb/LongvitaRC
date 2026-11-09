@@ -1,0 +1,107 @@
+{
+  "stage": "NC-03",
+  "status": "Ready for PM flow review",
+  "createdAt": "2026-11-09T05:26:55.829306+00:00",
+  "codeCommit": "13a188ce0c638733b60cf265437a873607470598",
+  "parentNC02": "96713e7b26e03cf4462c82ab9cffc11325690efb",
+  "baseMain": "92bac93e60f3bdf2eddf387634f2acd8df7a25c3",
+  "observedOriginMain": "134910da1004baae782764a001f4332511da612b",
+  "originMainIntegrated": false,
+  "flutterTests": {
+    "passed": 440,
+    "failed": 0,
+    "baselineNC02": 411,
+    "newCases": 29
+  },
+  "analyze": {
+    "scope": [
+      "lib",
+      "test"
+    ],
+    "issues": 0
+  },
+  "build": {
+    "target": "Android debug",
+    "mode": "default Final",
+    "sha256": "3c1c7ce0984f48825439277065f1ea874dcd3327a167267106b527970e2dab3c",
+    "bytes": 194373274,
+    "installedOrLaunched": false
+  },
+  "mutationChecks": [
+    {
+      "id": "M1",
+      "guard": "late metadata callback guard",
+      "caught": true,
+      "exitCode": 1
+    },
+    {
+      "id": "M2",
+      "guard": "pending is not an error",
+      "caught": true,
+      "exitCode": 1
+    },
+    {
+      "id": "M3",
+      "guard": "metadata retry must not log another export",
+      "caught": true,
+      "exitCode": 1
+    },
+    {
+      "id": "M4",
+      "guard": "local save must emit the event",
+      "caught": true,
+      "exitCode": 1
+    },
+    {
+      "id": "M5",
+      "guard": "collision preserves existing bytes",
+      "caught": true,
+      "exitCode": 1
+    },
+    {
+      "id": "M6",
+      "guard": "await emulator initialization before upload",
+      "caught": true,
+      "exitCode": 1
+    },
+    {
+      "id": "M7",
+      "guard": "reject remote demo host",
+      "caught": true,
+      "exitCode": 1
+    }
+  ],
+  "sourceSha256": {
+    "lib/config/pdf_export_mode.dart": "c2f81d5bfaefcc8cb565ef20990721d03f64ce31e811716161f7f0122350db74",
+    "lib/models/report_export.dart": "8ed362964fe47322e4e4fda8bab353fe8afc92eeb63613e0cca50bf5328a846c",
+    "lib/models/report_metadata_state.dart": "ff86cb4e51a31f90431801995ec31a5433f5f2e710cb809b1757127770c4daa3",
+    "lib/viewmodels/profile_viewmodel.dart": "574fe463542f5f461028b8529b3b61ad054f333ad5d4168bdd768b8ab0acbcf4",
+    "lib/services/local_report_store.dart": "83ae896071199c9c5ae93565fddfd740f323be0b020acf58d5191d6bb11778e4",
+    "lib/firebase/storage_service.dart": "bd2e1f5754f199a46ae6ae0a27b54c8c4f3d488c9d577b4aa6b3d91948328365",
+    "lib/main.dart": "ffb72cf6d675ee281baf8ef4a4365ad8f12369531394fa2d8213ef6d9ba95382",
+    "lib/screens/profile_screen.dart": "2782230514f21dd9d05057d19b564797ced3e9062f1d5346501a318a5ea53daf",
+    "test/report/local_export_flow_test.dart": "f93d7acfe7b9197f831871929e8e18b15c361430f7b2d5d582038723adaa174a",
+    "test/report/storage_service_test.dart": "c9edaebd5171364ff689116302a5735cb8501b1b029cd87fb1ac2eae532aec89",
+    "test/report/export_plan_selection_test.dart": "108f966d94ace290152e48c961df09c87bc36f3cf17ed8ebcb976d6c985862a4",
+    "test/report/session_cleanup_test.dart": "4236bb51d69195d9325946cdb033e536f237475fe62ed3c54333389c3760a1c0",
+    "test/profile/profile_screen_test.dart": "6036f1762a1b9b9e292cc1ba976c9e4f6de9465613291e8bc746c4b2bac50258",
+    "pubspec.lock": "f70ebc5105226ababee937de07577cd6ce9ce019d8c8ed4d3408c39944cfed6a",
+    "firebase/firestore.rules": "ef05fbfe0a61c3311acdff7d2f2d0c0852d717271e8dd146c1452fec9701d4d9"
+  },
+  "production": {
+    "firestoreWrites": false,
+    "rulesDeployment": false,
+    "billingChanges": false,
+    "storageCloudUploads": false
+  },
+  "nativeNC03Run": false,
+  "NC04Started": false,
+  "NC05Started": false,
+  "unchanged": [
+    "pubspec.yaml",
+    "pubspec.lock",
+    "firebase/firestore.rules",
+    "firebase/storage.rules",
+    "lib/firebase/analytics_service.dart"
+  ]
+}
