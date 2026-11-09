@@ -34,6 +34,9 @@ class AppColors {
   /// `color/bg/soft` — App Suggestion badge.
   static const Color bgSoft = Color(0xFFEAF8DF);
 
+  /// `color/bg/peach` — Original meal banner & Source card in S06/S09.
+  static const Color bgPeach = Color(0xFFF2DFCE);
+
   // Text
   /// `color/text/primary` — 10.48:1 on canvas.
   static const Color textPrimary = Color(0xFF2F3B2A);
