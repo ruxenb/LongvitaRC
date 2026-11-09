@@ -1,6 +1,6 @@
 # Contract xuất PDF Final: PDF trên máy + metadata Firestore
 
-Bản đề xuất NC-01, 09/11/2026. Trạng thái: **chờ PM review contract**. Chưa có code, rules, deploy hay dữ liệu Firestore nào theo contract này.
+NC-01, 09/11/2026. Trạng thái: **PM chốt contract sau review 9d460d3**, với các quyết định tại mục14. Cho phép tiếp tục DUY NHẤT NC-02; chưa nghiệm thu gói app Final. Chưa có code, rules deploy hoặc dữ liệu Firestore nào theo contract này.
 
 Baseline: `main` `92bac93`. SDK theo `pubspec.lock`: `cloud_firestore` 5.6.12, `firebase_core` 3.15.2. Không nâng package.
 
@@ -49,7 +49,7 @@ Model Dart dự kiến (NC-02): `ReportMetadata` với `toMap()` trả đúng 6 
 
 - **Dạng:** `pdf_{yyyyMMdd'T'HHmmss'Z'}_{16 hex ngẫu nhiên}`, ví dụ `pdf_20261109T024242Z_9f3c1a2b4d5e6f70`.
   - Phần thời gian lấy từ `createdAt` để file dễ sắp xếp.
-  - 64 bit lấy từ `Random.secure()`, nên hai lần xuất trong cùng mili giây vẫn khác ID.
+  - 64 bit lấy từ `Random.secure()`, không phụ thuộc riêng vào clock. Xác suất trùng rất thấp nhưng không bằng0; cần bảo vệ collision ở cả file local và metadata.
   - Regex: `^pdf_[0-9]{8}T[0-9]{6}Z_[0-9a-f]{16}$`.
   - Không chứa plan ID hay UID, nên tên file khi chia sẻ không lộ UID.
 - **Mỗi lần người dùng bấm "Xuất":** luôn tạo ID mới, file mới và metadata mới.
@@ -58,12 +58,13 @@ Model Dart dự kiến (NC-02): `ReportMetadata` với `toMap()` trả đúng 6 
   - `create` khi document chưa tồn tại và payload hợp lệ;
   - `update` chỉ khi payload mới **bằng hệt** payload đã có, tức retry idempotent;
   - mọi khác biệt là trùng ID (collision): bị từ chối, không ghi đè.
-- Collision thật chỉ xảy ra khi trùng 64 bit ngẫu nhiên, nên coi là lỗi, không tự tạo ID khác.
+- Khi một lần xuất mới trùng ID với file local có sẵn hoặc metadata khác nội dung: báo collision, không ghi đè file/document cũ và không tự đổi ID trong retry. `LocalReportStore.save` hiện có semantics replace; NC-03 cần đường save-new kiểm tra tồn tại và ghi trong cùng hàng đợi UID hoặc cơ chế tương đương bảo đảm không clobber. Kiểm trước ở ViewModel rồi gọi save ở hai thao tác tách rời không là bảo đảm nguyên tử. Test ép RNG trả cùng giá trị phải giữ nguyên bytes file cũ.
 
 ## 5. Plan chưa lưu và tham chiếu plan
 
 - Vẫn cho xuất PDF từ `activePlan` chưa lưu, đúng hành vi hiện tại; không ép người dùng lưu plan. Khi đó metadata có `planId: null`.
-- Với plan đã lưu, rules kiểm `get(/meal_plans/{planId}).data.uid == uid`, nên không thể gắn metadata vào plan của người khác. Metadata không cấp thêm quyền đọc plan.
+- Khi tạo metadata mới cho plan đã lưu, rules kiểm planId là document segment hợp lệ và `get(/meal_plans/{planId}).data.uid == uid`; plan không tồn tại hoặc khác owner thì từ chối. Không tự tạo/lưu plan để vượt lỗi này. Metadata không cấp thêm quyền đọc plan.
+- Retry với payload giống hệt record đã tồn tại chỉ kiểm owner + shape + equality, không đọc lại plan. Vì vậy metadata vẫn đọc được và retry no-op vẫn hợp lệ sau khi plan gốc đã bị xóa; lịch sử không phụ thuộc plan phải còn sống mãi. get() là kiểm create và có thể tiêu thụ document reads/quota kể cả khi bị từ chối, không cam kết đúng1 lượt tính phí ở mọi retry.
 - Không đổi trạng thái `submitted` hiện dùng. Sự khác nhau giữa `pending` (bảng Final) và `submitted` thuộc CM-01, không xử lý trong gói này.
 - Snapshot plan: lấy `activePlan` **một lần** khi bấm Xuất, và dùng đúng bản đó cho cả PDF lẫn `planId`, kể cả khi người dùng đổi plan lúc PDF đang tạo.
 
@@ -72,7 +73,7 @@ Model Dart dự kiến (NC-02): `ReportMetadata` với `toMap()` trả đúng 6 
 | State | Giá trị | Chuyển trạng thái |
 |---|---|---|
 | **PDF trên máy** | `idle` → `generating` → `saved` hoặc `error` | `saved` khi `LocalReportStore.save` xong và phiên còn hợp lệ. `error` khi tạo hoặc lưu thất bại; khi đó không ghi metadata |
-| **Metadata** | `idle` → `saving` → `confirmed`, hoặc `saving` → `pending` → `confirmed`, hoặc `error` | Bắt đầu ngay sau `saved`. `confirmed` khi Future của `set()` hoàn tất. `pending` khi quá ngưỡng chờ (`DataService.writeTimeout` = 15 s, dùng chung hằng số) mà Future chưa xong. `error` khi Future báo lỗi |
+| **Metadata** | `idle` → `saving` → `confirmed`, hoặc `saving` → `pending` → `confirmed`, hoặc `error` | Bắt đầu ngay sau `saved`. `confirmed` khi Future của `set()` hoàn tất. `pending` khi quá ngưỡng chờ (`reportMetadataPendingAfter` = 15 s, hằng số riêng được inject cho test, không phụ thuộc DataService) mà Future chưa xong. `error` khi Future báo lỗi |
 
 **Ngữ nghĩa xác nhận từ server:**
 - Theo tài liệu Firebase, lệnh ghi không hoàn tất cho tới khi backend nhận dữ liệu: "the returned `Promise` does *not* resolve until the data is successfully written to the remote Firestore backend" (JS reference, `setDoc`). Snapshot giữ `metadata.hasPendingWrites = true` cho tới khi backend ghi xong.
@@ -93,7 +94,7 @@ Model Dart dự kiến (NC-02): `ReportMetadata` với `toMap()` trả đúng 6 
   - A → B: B không nhận state, lỗi hay log của lần xuất của A.
   - A → logout → A: cũng không nhận, vì đã là phiên mới.
 - Logout vẫn xóa PDF local của UID cũ như hiện tại (S3-5). Metadata đã gửi trước logout có thể vẫn tới server sau đó: không hứa xóa hay hủy, không coi metadata là bằng chứng file còn trên máy.
-- Lệnh ghi đang xếp hàng của A không được gửi bằng phiên B. Firestore SDK giữ hàng ghi theo user. Tài liệu offline đã đọc chưa nói rõ điểm này, nên NC-02 kiểm bằng Emulator (A ghi offline → logout → B đăng nhập → bật mạng: document vẫn thuộc A hoặc bị rules từ chối, không bao giờ ghi vào path của B). Nếu SDK không đảm bảo, phải báo PM trước khi tiếp tục.
+- Chưa tuyên bố đã kiểm chứng FlutterFire giữ hàng ghi đúng user. NC-02 phải dùng chính FlutterFire5.6.12 trên Android QA host + Auth/Firestore Emulator để quan sát: A ghi offline → logout → B đăng nhập → online. Ghi trạng thái Future gốc và server state của cả path A/B, không chỉ assert “không có doc ở B” vì request vốn cố định path A. Sau đó đăng nhập lại A để quan sát queued write phục hồi hoặc bị từ chối theo SDK thực. Không tạo write mới dưới B/A để làm probe pass. Unit fake/Node hoặc JS SDK chỉ kiểm rules, không thay bằng chứng này. Nếu không chạy được/khác giả định, báo đúng giới hạn cho PM trước NC-03; chưa kết luận an toàn offline đa tài khoản từ rules đơn thuần.
 - Rules tự chặn mọi ghi sai owner, vì path chứa UID và rules yêu cầu `request.auth.uid == uid`.
 
 ## 8. Chế độ Final và demo Storage
@@ -102,7 +103,7 @@ Model Dart dự kiến (NC-02): `ReportMetadata` với `toMap()` trả đúng 6 
   - `final`: không tạo `StorageService`, không gọi upload.
   - `storage_emulator_demo`: chỉ bật upload khi `STORAGE_EMULATOR_HOST` thuộc `{10.0.2.2, 127.0.0.1, localhost}`.
 - Đặt demo mà host thiếu hoặc sai thì **fail closed**: chạy như Final và ghi cảnh báo debug. Không có đường nào upload lên Storage production.
-- `StorageService` chỉ được tạo (lazy) trong demo hợp lệ.
+- `StorageService` chỉ được tạo (lazy) trong demo hợp lệ. Upload chỉ được phép sau khi Future cấu hình Emulator hoàn tất thành công; lỗi cấu hình thì zero upload và không fallback production. Constructor hiện gọi `useStorageEmulator` bằng unawaited, nên NC-03 được sửa tối thiểu initialization readiness để thực thi yêu cầu này; đây là điều kiện cấu hình, chưa khẳng định đã tái hiện upload production.
 - Ở demo, upload là bước phụ sau `saved`. Kết quả upload không đổi state PDF hay metadata, và metadata không chứa URL.
 - Giữ nguyên `storage.rules`, `storage.rules.test.js` và evidence Emulator cũ.
 
@@ -148,17 +149,10 @@ PdfExportMode resolvePdfExportMode({String mode, String emulatorHost});
 - `ProfileViewModel` nhận `IReportMetadataRepository`, `PdfExportMode` và một `StorageService?` (chỉ có ở demo) qua constructor.
 - `ReportExport` mở rộng thêm `createdAt` và `sizeBytes`; `planId` thành `String?`.
 
-## 11. Rules dự kiến (NC-02)
+## 11. Rules dự kiến theo quyết định PM (NC-02 phải compile/test Emulator)
 
 ```text
-match /users/{uid}/report_exports/{exportId} {
-  allow read: if isOwner(uid);
-  allow create: if isOwner(uid) && isValidReportExport(request.resource.data, uid, exportId);
-  allow update: if isOwner(uid) && request.resource.data == resource.data;   // idempotent retry only
-  allow delete: if false;
-}
-
-function isValidReportExport(data, uid, exportId) {
+function isValidReportExportShape(data, exportId) {
   return data.keys().hasOnly(['exportId','planId','createdAt','fileName','sizeBytes','schemaVersion'])
       && data.keys().hasAll(['exportId','planId','createdAt','fileName','sizeBytes','schemaVersion'])
       && data.exportId == exportId
@@ -167,10 +161,23 @@ function isValidReportExport(data, uid, exportId) {
       && data.createdAt is string
       && data.createdAt.matches('^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\\.[0-9]{1,6})?Z$')
       && data.sizeBytes is int && data.sizeBytes > 0 && data.sizeBytes <= 10485760
-      && data.schemaVersion == 1
-      && (data.planId == null
-          || (data.planId is string
-              && get(/databases/$(database)/documents/meal_plans/$(data.planId)).data.uid == uid));
+      && data.schemaVersion is int && data.schemaVersion == 1
+      && (data.planId == null || (data.planId is string
+          && data.planId.size() > 0 && !data.planId.matches('.*[/].*')));
+}
+function referencesOwnedPlan(planId, uid) {
+  return planId == null
+      || get(/databases/$(database)/documents/meal_plans/$(planId)).data.uid == uid;
+}
+match /users/{uid}/report_exports/{exportId} {
+  allow read: if isOwner(uid);
+  allow create: if isOwner(uid)
+      && isValidReportExportShape(request.resource.data, exportId)
+      && referencesOwnedPlan(request.resource.data.planId, uid);
+  allow update: if isOwner(uid)
+      && isValidReportExportShape(request.resource.data, exportId)
+      && request.resource.data == resource.data;
+  allow delete: if false;
 }
 ```
 
@@ -181,9 +188,9 @@ Ghi chú: `isOwner` đã có. Không dùng `isStaffOrAdmin`, nên staff/admin c�
 | Gói | File |
 |---|---|
 | NC-02 | mới: `lib/models/report_metadata.dart`, `lib/services/i_report_metadata_repository.dart`, `lib/services/firestore_report_metadata_repository.dart`, `test/report/report_metadata_test.dart`; sửa: `firebase/firestore.rules`, `firebase/tests/firestore.rules.test.js` |
-| NC-03 | mới: `lib/config/pdf_export_mode.dart`, test mode/flow; sửa: `lib/models/report_export.dart`, `lib/viewmodels/profile_viewmodel.dart`, `lib/main.dart` (wiring tối thiểu), `test/auth/auth_fakes.dart`, `test/report/profile_export_test.dart`, `export_overlap_test.dart`, `session_cleanup_test.dart`, `export_plan_selection_test.dart`, `test/analytics/analytics_service_test.dart` nếu cần |
+| NC-03 | mới: `lib/config/pdf_export_mode.dart`, test mode/flow; sửa: `lib/models/report_export.dart`, `lib/viewmodels/profile_viewmodel.dart`, `lib/main.dart` (wiring tối thiểu), `lib/services/local_report_store.dart` (save-new chống clobber), `lib/firebase/storage_service.dart` (readiness Emulator), `lib/services/report_viewer.dart` hoặc boundary tên chia sẻ nếu cần, `test/auth/auth_fakes.dart`, `test/report/profile_export_test.dart`, `export_overlap_test.dart`, `session_cleanup_test.dart`, `export_plan_selection_test.dart`, `test/analytics/analytics_service_test.dart` nếu cần |
 | NC-04 | sửa: `lib/screens/profile_screen.dart`, `test/profile/profile_screen_test.dart` |
-| Không đổi | `lib/firebase/storage_service.dart` (chỉ đổi cách khởi tạo), `firebase/storage.rules`, `firebase/tests/storage.rules.test.js`, `lib/services/data_service.dart`, `lib/services/i_data_service.dart`, `lib/services/local_report_store.dart` |
+| Không đổi nghiệp vụ | `firebase/storage.rules`, `firebase/tests/storage.rules.test.js`, `lib/services/data_service.dart`, `lib/services/i_data_service.dart`; các thay đổi LocalReportStore/StorageService chỉ đúng guard đã chốt, không rewrite toàn bộ |
 
 ## 13. Ma trận kiểm thử
 
@@ -212,15 +219,34 @@ Ghi chú: `isOwner` đã có. Không dùng `isStaffOrAdmin`, nên staff/admin c�
 | R6 | `planId` là plan của người khác hoặc không tồn tại | deny | rules |
 | R7 | Owner xóa document | deny | rules |
 | R8 | Các suite rules hiện có: `firebase/tests/firestore.rules.test.js` (`users`, `recipes`, `meal_plans`, `shopping_lists`, `announcements`) và `test/firestore/hoang_rules.test.cjs` | vẫn pass | rules |
-| S1 | Ghi offline rồi bật mạng (Emulator) | Future treo khi offline, hoàn tất khi online; đúng 1 document | Emulator, NC-02 |
-| S2 | Lệnh ghi xếp hàng của A, logout, B đăng nhập, bật mạng | Không có document nào trong path của B | Emulator, NC-02 |
+| S1 | FlutterFire5.6.12 Android: ghi offline rồi bật mạng | Quan sát Future gốc pending khi offline, hoàn tất khi backend ack; một document đúng payload; cached snapshot không thay ack | Firestore Emulator + QA host, NC-02 |
+| S2 | FlutterFire Android: A ghi offline, logout→B→online, sau đó A đăng nhập lại | Ghi trạng thái Future gốc và server doc A/B từng mốc, không tạo write bù; chứng minh request không bị gán cho phiên B, báo khác giả định | Auth/Firestore Emulator + QA host, NC-02 |
+| R9 | Tạo khi plan thiếu/khác owner và retry bằng hệt metadata hợp lệ sau khi plan bị xóa | Create bị từ chối; retry no-op và owner read metadata cũ vẫn allowed | rules |
+| T16 | Ép RNG trùng ID/file đã có | Không overwrite PDF cũ; không metadata/event success mới | unit/filesystem, NC-03 |
+| T17 | Preview/share một export legacy có UID trong filename | Tên hiển thị an toàn, không chứa UID; file gốc giữ nguyên | unit + native khi có file, NC-03/04 |
+| T18 | Demo host hợp lệ nhưng cấu hình Emulator chậm/thất bại | Không upload trước khi ready; fail thì zero upload | unit, NC-03 |
 | N1–N4 | Native Spark ở NC-05: xuất → mở/chia sẻ; đổi plan; offline rồi reconnect; đọc lại metadata độc lập | Theo mục 9 của kế hoạch NC | AVD |
 
-## 14. Quyết định còn mở cho PM
+## 14. Quyết định PM đã chốt — 09/11/2026
 
-1. **Xóa metadata:** đề xuất `delete: false`, vì không có luồng xóa. Có cần cho owner tự xóa không?
-2. **Ngưỡng chuyển `pending`:** dùng lại `DataService.writeTimeout` (15 s), giống `saveMealPlan` và `saveShoppingItems`. Có cần ngưỡng riêng ngắn hơn cho Profile không?
-3. **Kiểm tham chiếu plan bằng `get()`:** mỗi lần ghi tốn thêm 1 lượt đọc (trong hạn mức Spark). Nếu plan bị xóa trước khi metadata tới server thì ghi bị từ chối và vào `error`. Chấp nhận, hay chỉ kiểm `planId` là chuỗi hợp lệ?
-4. **HD-06** trong bảng Final (Hoàng) có cùng nội dung "metadata lịch sử vào Firestore", và đầu ra ghi "update doc". Contract chọn subcollection riêng, không cập nhật `meal_plans`. PM cần thống nhất với owner HD-06 hoặc CM-01 để không có hai schema.
-5. **Tên file chia sẻ:** contract đổi sang ID không chứa UID. File PDF đã xuất trước đó giữ tên cũ; không đổi tên file cũ.
-6. **Nơi đặt mode:** `--dart-define` như trên, hay hằng số build flavor? Đề xuất `--dart-define`, cùng cách `STORAGE_EMULATOR_HOST` đang dùng.
+Các điểm này được Codex chốt theo ủy quyền kỹ thuật của Charlie/nhóm; không ghi có review trực tiếp của Hoàng hay nghiệm thu app Final.
+
+| Điểm | Quyết định |
+|---|---|
+| Owner xóa metadata | Không cấp delete trong gói này; chỉ lịch sử metadata, không có flow xóa. Không triển khai cơ chế admin cleanup mới. |
+| Pending | 15 giây mặc định, hằng số riêng reportMetadataPendingAfter inject được để test. Không import DataService.writeTimeout hoặc dùng timeout để hủy Future gốc. |
+| Plan ownership | get() khi create cho planId khác null; không chỉ kiểm format. Retry equality không get lại plan để giữ lịch sử sau khi plan bị xóa. Không tự tăng quyền hoặc tạo plan bù. |
+| HD-06/CM-01 | Một schema và repository duy nhất là contract này. “Update doc” trong HD-06 không quy định phải thêm field vào meal_plans. Map gói NC vào phần PDF/metadata của HD-06 và phần schema/rules liên quan CM-01/03/04; owners/tracker không đổi, chưa đánh các task đó Done. Public technical contract/PR sau này là nguồn handoff cho team, chưa gửi tin nhắn cho ai hoặc yêu cầu chờ Hoàng mới làm NC-02. |
+| Mode | --dart-define PDF_EXPORT_MODE, default/unknown mode về Final. Chỉ exact storage_emulator_demo + host allowlist + Emulator setup ready mới upload; không cần build flavor mới. Final + host có sẵn vẫn Final. |
+| Legacy files | Không rename/migrate/xóa file cũ. Khi mở/share qua app, filename đưa ra external viewer/share phải an toàn: ID mới nếu hợp lệ, còn legacy fallback tên trung tính như Longvita-report.pdf; không truyền nguyên tên có UID. Không đổi đường dẫn đọc file local. Không thể thu hồi bản file đã được chia sẻ trước đây. |
+
+### Các yêu cầu bổ sung đã chốt
+
+- Collision phải giữ bytes file cũ, không chỉ để Firestore từ chối sau khi LocalReportStore đã replace file. Random64 rất ít collision, không là chứng minh không thể trùng.
+- Chờ cấu hình Emulator thực sự xong trước upload, không freeze StorageService khi constructor hiện unawaited.
+- Statement về Future/set và user-bound queue là giả định triển khai cần S1/S2 trên đúng FlutterFire; không gọi JS reference là chứng minh Android đã pass.
+- Rules trong mục11 vẫn là draft để NC-02 compile/test. Validation schemaVersion phải là int; owner/no-op retry/plan-deleted và schema mismatch phải có tests. Dữ liệu confirmed do client ghi không là chứng nhận độc lập nội dung PDF hoặc thời gian máy chủ; createdAt là client timestamp.
+
+### Bước tiếp theo được giao
+
+**NC-01 hoàn tất review contract. Tiếp tục DUY NHẤT NC-02**, dùng toàn bộ các quyết định mục14. Chưa đổi default export/UI/Analytics (NC-03/04), chưa production deploy/write, chưa push/PR/merge. Nếu S1/S2 chưa chạy được, vẫn hoàn thành phần độc lập model/repository/rules/tests và báo rõ cổng SDK còn thiếu cho PM; không fake một SDK khác để gắn nhãn đã kiểm.
