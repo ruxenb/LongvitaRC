@@ -1,0 +1,40 @@
+{
+  "date": "2026-11-09",
+  "baseUiCommit": "780b175",
+  "languageDecision": "Vietnamese UI for Mobile and Web Admin; current implementation scope Flow2 only",
+  "targetedPassed": 34,
+  "fullPassed": 467,
+  "analyzerIssues": 0,
+  "apkBuilt": true,
+  "enforceLockfilePassed": true,
+  "dependencyChanges": [
+    "flutter_localizations: Flutter SDK",
+    "intl 0.19.0 -> pinned 0.20.3 required by installed Flutter3.47.6 SDK"
+  ],
+  "otherHostedPackagesChanged": false,
+  "native": {
+    "nativeFlow2Vietnamese": true,
+    "navigationVietnamese": true,
+    "editorCancelledNoWrite": true,
+    "nativeSelectionLabels": [
+      "Chọn tất cả"
+    ],
+    "rulesDeployedThisTurn": false,
+    "firebaseDataWrittenThisTurn": false,
+    "backToIngredientsAndHome": true,
+    "harnessNote": "First wait used offscreen heading after returning to a scrolled Ingredients page. AppBar observation confirms actual Back; no UI failure."
+  },
+  "sourceSha256": {
+    "lib/screens/shopping_flow_screens.dart": "1aca67b75739dccb9642dc829e94ed6fbffb52e74a04551c31ebea3d5f089c54",
+    "lib/l10n/vietnamese_ui.dart": "e4d9a241bfc7ca7f7d118e3fd4069c7f0963d167b8ecf7dcd933100b11d5e37c",
+    "lib/widgets/app_navigation_bar.dart": "61fe8f66f886c22be1fa87d13841895b3f3f31fed985e0b81c318c165d899336",
+    "test/flows/flow2_final_ui_test.dart": "d766ba438c83bea1a8d3c64d165dc170a3335ba890287374bc45352bb66d5a5d",
+    "test/flows/hoang_a11y_widgets_test.dart": "261c3f97a6680adf94efa909fff583310d0935c74e140deb7d6d932c0cf4e0b5",
+    "pubspec.yaml": "64b9ef4002dc7482fc3fde1d2e423511288b1a2c0d63857793666fd7f912415c",
+    "pubspec.lock": "c3339fd2f80d9b3df8b642f484d4e4b47d8c5598bc6cb620d1618a822cf7144a"
+  },
+  "apkSha256": "8efbef9bb3c384241f039bfb0179235a622aeb8ad66ae566a7b173cc15d35ad6",
+  "figmaModified": false,
+  "rulesDeployedThisTurn": false,
+  "pushed": false
+}

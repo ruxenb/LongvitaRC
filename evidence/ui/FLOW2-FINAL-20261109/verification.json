@@ -1,0 +1,45 @@
+{
+  "date": "2026-11-09",
+  "baseline": "8d52a6edcfe0f068867b23c05d6cce9cd6b1795a",
+  "initialUiCommit": "78efa5d",
+  "figmaFile": "73GTcipwH825N7l501or8D",
+  "figmaNodes": [
+    "106:189",
+    "106:235"
+  ],
+  "figmaModified": false,
+  "fullPassed": 465,
+  "analyzerIssues": 0,
+  "apkBuilt": true,
+  "native": {
+    "device": "LocalMate_API_35 AVD, Android15,320x640",
+    "realFirebase": true,
+    "realSavedPlan": true,
+    "itemCount": 7,
+    "editDialogCancel": true,
+    "tickTrueIndependentlyRead": true,
+    "tickSurvivedReinstall": true,
+    "originalUncheckedRestoredAndIndependentlyRead": true,
+    "backToIngredientsAndHome": true,
+    "talkBackRun": false,
+    "physicalDevice": false
+  },
+  "rules": {
+    "delta": "only shopping_lists owner-only block already in canonical repo",
+    "firestoreAndStorageTestsPassed": 64,
+    "hoangTestsPassed": 22,
+    "previousRuleset": "projects/longvita-8da7e/rulesets/a6f43839-e28e-410c-bb62-0f2e64137cee",
+    "deployedRuleset": "projects/longvita-8da7e/rulesets/d808e252-7484-459b-b504-81ff052f64e9",
+    "exactCandidateReadback": true,
+    "candidateSha256LF": "69ba785ccf74cd18e84f22465f3a1dc2b3e49908643e4f8e8244d5f43a79eb3b",
+    "metadataAndOtherRulesPreserved": true
+  },
+  "sourceSha256": {
+    "lib/screens/shopping_flow_screens.dart": "b2ac7a36a9fa3695737eb601304d754eb8cdf7077bca1366c093e3877366abba",
+    "test/flows/flow2_final_ui_test.dart": "d1b190f7adb86092f20e13ab1914e7dc9e2ac758d8a76220fb7ec4015a370213",
+    "test/flows/hoang_a11y_widgets_test.dart": "406eac9530fa98f2309e637468f2d4e81b00ff318ffed2f328cfa87ec6f1a594"
+  },
+  "apkSha256": "607cec1b7bd0c1d8a5df26ca1fd4ab81be4f08e81eddf71848cabd68933be84f",
+  "pushed": false,
+  "mainMerged": false
+}

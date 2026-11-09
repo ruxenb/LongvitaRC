@@ -1,0 +1,27 @@
+{
+  "pr": 26,
+  "reviewedBaseHead": "dc836f07cb5d0553a272b2e3a16c1a9be935e4d4",
+  "finding": "PR26-CR-01",
+  "decision": "Modified: accepted defect, lossless formatter instead of two-decimal cap",
+  "before": {
+    "regressionFailed": 5,
+    "controlPassed": 1
+  },
+  "after": {
+    "regressionPassed": 6,
+    "fullPassed": 473,
+    "analyzerIssues": 0,
+    "apkBuilt": true
+  },
+  "sourceSha256": {
+    "lib/screens/shopping_flow_screens.dart": "d2710dfd53c75e1f32d5431ff71263bb01ca7937cf52ede4b4516ce810fafd90",
+    "test/flows/flow2_final_ui_test.dart": "37567b00cca6d1cb9ec7219ca5389a8a9b22a68532f5e1de1918bfe3060b0eb5"
+  },
+  "apkSha256": "769ad9bd5ee3ed25963ba1325117e426a9b37d5b6426d9e3e0026d0b4e4ba7fa",
+  "newNativeRun": false,
+  "nativeEvidenceSource": [
+    "dc836f0",
+    "780b175"
+  ],
+  "rulesOrDependenciesChanged": false
+}
