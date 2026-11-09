@@ -7,7 +7,7 @@
     "docs/hoang-staged-usda-recipes-20261106.json (REVIEW_spelt_lentil_sesame_01)",
     "docs/hoang-recipe-research-ledger-20261106.json (FOUNDATION-LUNCH-01)"
   ],
-  "sourceCheckedAt": "2026-11-09T09:10:00+07:00",
+  "sourceCheckedAt": "2026-11-09T09:24:00+07:00",
   "recipes": [
     {
       "id": "lv-fvl-spelt-chicory-carrot-v1",
@@ -15,14 +15,14 @@
         "Reviewer chấp nhận giả định spelt 60 g là khối lượng khô (trang nguồn không ghi khô/chín).",
         "Reviewer chấp nhận dùng 'Cheese, parmesan, grated' (FDC 171247) làm số đại diện cho Grana Padano.",
         "Reviewer chấp nhận 'chicory' là rau diếp xoăn phần lá (FDC 169992, cân sống).",
-        "Kiểm lại số 171247 qua API USDA (giá trị hiện lấy từ trang FDC, đã làm tròn hiển thị).",
         "Nhóm duyệt nội dung tên/mô tả/các bước do nhóm tự viết và phạm vi tạo mới."
       ],
       "resolvedBlockers": [
         "Định lượng đủ cả bữa: nguồn liệt kê 5 thành phần với khối lượng g; không có món ăn kèm bị loại trừ.",
         "Số dinh dưỡng: mỗi thành phần có mã FDC, trạng thái, kcal và đạm/100 g; tổng tính lại được.",
         "Nội dung không sao chép: chỉ dùng tên và khối lượng thành phần; các bước do nhóm tự viết.",
-        "imageUrl=null; sourceNote ghi [web], không nhận là trang sách hay Phụ lục A."
+        "imageUrl=null; sourceNote ghi [web], không nhận là trang sách hay Phụ lục A.",
+        "Số FDC 171247 đọc lại qua API USDA 09/11 09:24: 420 kcal, 28,42 g đạm/100 g (trang FDC hiển thị 28,4 do làm tròn)."
       ],
       "allergens": [
         "gluten (spelt)",
@@ -33,7 +33,7 @@
         "name": "Farro (spelt) với rau diếp xoăn, cà rốt và Grana Padano",
         "description": "Bữa trưa mẫu của Quỹ Valter Longo cho người lớn: 60 g farro/spelt cân khô, 150 g rau diếp xoăn, 50 g cà rốt, 9 g dầu ô liu và 5 g Grana Padano bào. Dinh dưỡng ước tính từ USDA cho nguyên liệu sống.",
         "category": "ngu_coc",
-        "proteinGrams": 13.177,
+        "proteinGrams": 13.178,
         "calories": 358.36,
         "ingredients": [
           {
@@ -140,12 +140,11 @@
               "ingredientId": "grana-padano",
               "foodCode": "FDC:171247",
               "sourceName": "USDA FoodData Central SR Legacy (April 2018) — Cheese, parmesan, grated (proxy for Grana Padano)",
-              "sourceUrl": "https://fdc.nal.usda.gov/food-details/171247/nutrients",
+              "sourceUrl": "https://api.nal.usda.gov/fdc/v1/food/171247",
               "preparationState": "grated hard cheese",
               "edibleGrams": 5,
               "kcalPer100g": 420.0,
-              "proteinPer100g": 28.4,
-              "valueNote": "Read 2026-11-09 from the FDC record shown at the sourceUrl (portal value, display-rounded). The API amount could not be read that day (DEMO_KEY limit); recheck before import. Effect on 5 g is below 0.003 g protein."
+              "proteinPer100g": 28.42
             }
           ]
         },
