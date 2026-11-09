@@ -1,0 +1,21 @@
+{
+  "baseline": "8d52a6edcfe0f068867b23c05d6cce9cd6b1795a",
+  "figmaFile": "73GTcipwH825N7l501or8D",
+  "figmaNodes": [
+    "106:189",
+    "106:235"
+  ],
+  "figmaModified": false,
+  "targetedPassed": 31,
+  "fullPassed": 464,
+  "analyzerIssues": 0,
+  "apkBuilt": true,
+  "nativeRun": false,
+  "acceptance": "Ready for Charlie visual review",
+  "sourceSha256": {
+    "lib/screens/shopping_flow_screens.dart": "f168d3cce47b4867c7f1791a63ee0c741bd060eb2281b64b3b64af00946143c1",
+    "test/flows/flow2_final_ui_test.dart": "844eec1874e38cf095a8d308f6732ce27c8d131ee7d106f340482ca76803bac6",
+    "test/flows/hoang_a11y_widgets_test.dart": "406eac9530fa98f2309e637468f2d4e81b00ff318ffed2f328cfa87ec6f1a594"
+  },
+  "apkSha256": "8e932aa38f7a679b090b7c244b2163cddac263c6dd37ffda7837cd9f3789ae01"
+}

@@ -4,12 +4,22 @@ import 'package:provider/provider.dart';
 import '../models/ingredient_model.dart';
 import '../models/meal_plan_model.dart';
 import '../models/view_state.dart';
+import '../theme/app_colors.dart';
+import '../theme/app_icons.dart';
+import '../theme/app_spacing.dart';
+import '../theme/app_typography.dart';
 import '../viewmodels/ingredient_viewmodel.dart';
 import '../viewmodels/meal_plan_viewmodel.dart';
 import '../widgets/app_button.dart';
+import '../widgets/app_navigation_bar.dart';
+import '../widgets/app_supporting.dart';
+import '../widgets/app_top_bar.dart';
 import 'flow_ui.dart';
+import 'meal_flow_screens.dart';
+import 'profile_screen.dart';
 
-/// S07: aggregate from current plan, edit quantity, delete and Undo.
+/// Flow 2 Final UI: Figma 106:189 / 106:235. Data and persistence stay in
+/// IngredientViewModel; grouping only changes presentation, never stored data.
 class IngredientSummaryScreen extends StatefulWidget {
   const IngredientSummaryScreen({super.key});
 
@@ -23,9 +33,7 @@ class _IngredientSummaryScreenState extends State<IngredientSummaryScreen> {
 
   void _load() {
     final plan = _plan;
-    if (plan != null) {
-      context.read<IngredientViewModel>().loadForPlan(plan);
-    }
+    if (plan != null) context.read<IngredientViewModel>().loadForPlan(plan);
   }
 
   @override
@@ -37,13 +45,18 @@ class _IngredientSummaryScreenState extends State<IngredientSummaryScreen> {
   }
 
   Future<void> _edit(IngredientModel ingredient) async {
-    final amount = await showDialog<double>(
+    final result = await showDialog<Object>(
       context: context,
+      barrierLabel: 'Đóng',
       builder: (_) => _EditAmountDialog(item: ingredient),
     );
-    if (!mounted || amount == null) return;
+    if (!mounted || result == null) return;
+    if (result == _IngredientAction.delete) {
+      _delete(ingredient);
+      return;
+    }
     final vm = context.read<IngredientViewModel>();
-    if (!vm.updateAmount(ingredient.id, amount)) {
+    if (result is! double || !vm.updateAmount(ingredient.id, result)) {
       flowSnack(context, 'Số lượng phải lớn hơn 0.');
       return;
     }
@@ -76,106 +89,63 @@ class _IngredientSummaryScreenState extends State<IngredientSummaryScreen> {
   Widget build(BuildContext context) {
     final vm = context.watch<IngredientViewModel>();
     final plan = context.watch<MealPlanViewModel>().activePlan;
-    return FlowFrame(
-      title: 'S07 • Tổng hợp nguyên liệu',
-      actions: [
-        IconButton(
-          tooltip: 'Tải lại nguyên liệu',
-          onPressed: plan == null ? null : _load,
-          icon: const Icon(Icons.refresh),
-        ),
-      ],
-      child: plan == null
-          ? const Text('Chưa có thực đơn. Hãy tạo kế hoạch trước.')
-          : Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                const FlowSection(
-                  title: 'Nguyên liệu cho 7 ngày',
-                  child: Text(
-                    'Gộp nguyên liệu trùng tên và đơn vị. '
-                    'Có thể sửa số lượng, xóa và hoàn tác nếu xóa nhầm.',
-                  ),
-                ),
-                FlowStateView<List<IngredientModel>>(
-                  state: vm.state,
-                  emptyTitle: 'Danh sách trống',
-                  onRetry: _load,
-                  onBack: () => Navigator.of(context).pop(),
-                  onData: (items) => Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      for (final item in items)
-                        Card(
-                          child: ListTile(
-                            minTileHeight: 56,
-                            title: Text(item.name),
-                            subtitle: Text(
-                              '${item.amount.toStringAsFixed(item.amount % 1 == 0 ? 0 : 1)} ${item.unit}',
-                            ),
-                            leading: const Icon(Icons.eco_outlined),
-                            trailing: SizedBox(
-                              width: 104,
-                              child: Row(
-                                children: [
-                                  IconButton(
-                                    icon: const Icon(Icons.edit_outlined),
-                                    tooltip: 'Sửa số lượng ${item.name}',
-                                    onPressed: () => _edit(item),
-                                  ),
-                                  IconButton(
-                                    icon: const Icon(Icons.delete_outline),
-                                    tooltip: 'Xóa ${item.name}',
-                                    onPressed: () => _delete(item),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                    ],
-                  ),
-                ),
-                if (!vm.isSavedPlan) ...[
-                  const Padding(
-                    padding: EdgeInsets.symmetric(vertical: 12),
-                    child: Text(
-                      'Để lưu checklist bền vững trên Firestore, '
-                      'hãy quay lại S04 và lưu thực đơn trước khi đi chợ.',
-                    ),
-                  ),
-                ],
-                if (vm.persistenceState is ViewStateError<bool>)
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 12),
-                    child: Text(
-                      (vm.persistenceState as ViewStateError<bool>).message,
-                      style: const TextStyle(color: Colors.red),
-                    ),
-                  ),
-                const SizedBox(height: 12),
-                AppButton(
-                  text: 'Tạo danh sách mua sắm',
-                  icon: Icons.shopping_cart_outlined,
-                  onPressed: vm.isSavedPlan
-                      ? () => Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (_) => const ShoppingListScreen(),
-                          ),
-                        )
-                      : null,
-                ),
-                const SizedBox(height: 12),
-                AppButton(
-                  text: 'Quay lại thực đơn',
-                  variant: AppButtonVariant.secondary,
-                  onPressed: () => Navigator.of(context).pop(),
-                ),
-              ],
+    return _ShoppingFrame(
+      title: 'Ingredients',
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          const _FlowHeading('Ingredients for the week'),
+          const SizedBox(height: AppSpacing.s8),
+          Text(
+            'Grouped once so you do not add the same food twice.',
+            style: AppTypography.supporting,
+          ),
+          const SizedBox(height: AppSpacing.s8),
+          if (plan == null)
+            const Text('Chưa có thực đơn. Hãy tạo kế hoạch trước.')
+          else ...[
+            FlowStateView<List<IngredientModel>>(
+              state: vm.state,
+              emptyTitle: 'Danh sách trống',
+              onRetry: _load,
+              onBack: () => Navigator.of(context).maybePop(),
+              onData: (items) => _GroupedIngredients(
+                items: items,
+                itemBuilder: (item) =>
+                    _IngredientRow(item: item, onEdit: () => _edit(item)),
+              ),
             ),
+            _PersistenceFeedback(vm: vm),
+            if (!vm.isSavedPlan)
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: AppSpacing.s12),
+                child: Text(
+                  'Hãy lưu thực đơn trước khi tạo danh sách mua sắm.',
+                  style: AppTypography.supporting,
+                ),
+              ),
+            AppButton(
+              key: const Key('create-shopping-list'),
+              text: 'Create Shopping List',
+              icon: AppIcons.arrowForward,
+              onPressed:
+                  vm.isSavedPlan &&
+                      vm.state is ViewStateSuccess<List<IngredientModel>>
+                  ? () => Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (_) => const ShoppingListScreen(),
+                      ),
+                    )
+                  : null,
+            ),
+          ],
+        ],
+      ),
     );
   }
 }
+
+enum _IngredientAction { delete }
 
 /// Edit dialog with true Form validation, independent of parent build().
 class _EditAmountDialog extends StatefulWidget {
@@ -202,30 +172,43 @@ class _EditAmountDialogState extends State<_EditAmountDialog> {
 
   @override
   Widget build(BuildContext context) => AlertDialog(
-    title: const Text('Chỉnh số lượng'),
-    content: Form(
-      key: _formKey,
-      child: TextFormField(
-        key: const Key('edit-ingredient-amount'),
-        autofocus: true,
-        controller: _text,
-        keyboardType: const TextInputType.numberWithOptions(
-          decimal: true,
-          signed: true,
+    title: Semantics(
+      header: true,
+      headingLevel: 1,
+      child: Text('Chỉnh số lượng'),
+    ),
+    content: SingleChildScrollView(
+      child: Form(
+        key: _formKey,
+        child: TextFormField(
+          key: const Key('edit-ingredient-amount'),
+          autofocus: true,
+          controller: _text,
+          keyboardType: const TextInputType.numberWithOptions(
+            decimal: true,
+            signed: true,
+          ),
+          decoration: InputDecoration(
+            labelText: 'Số lượng (${widget.item.unit})',
+            border: const OutlineInputBorder(),
+          ),
+          validator: (value) {
+            final n = double.tryParse(
+              (value ?? '').trim().replaceAll(',', '.'),
+            );
+            return n == null || !n.isFinite || n <= 0
+                ? 'Số lượng phải lớn hơn 0'
+                : null;
+          },
         ),
-        decoration: InputDecoration(
-          labelText: 'Số lượng (${widget.item.unit})',
-          border: const OutlineInputBorder(),
-        ),
-        validator: (value) {
-          final n = double.tryParse((value ?? '').trim().replaceAll(',', '.'));
-          return n == null || !n.isFinite || n <= 0
-              ? 'Số lượng phải lớn hơn 0'
-              : null;
-        },
       ),
     ),
     actions: [
+      TextButton(
+        onPressed: () => Navigator.of(context).pop(_IngredientAction.delete),
+        style: TextButton.styleFrom(foregroundColor: AppColors.feedbackError),
+        child: const Text('Xóa nguyên liệu'),
+      ),
       TextButton(
         onPressed: () => Navigator.of(context).pop(),
         child: const Text('Hủy'),
@@ -242,7 +225,7 @@ class _EditAmountDialogState extends State<_EditAmountDialog> {
   );
 }
 
-/// S08: checked state is persisted in Firestore for this user and plan.
+/// Checked state remains the same owner/plan-scoped Firestore checklist.
 class ShoppingListScreen extends StatelessWidget {
   const ShoppingListScreen({super.key});
 
@@ -260,21 +243,40 @@ class ShoppingListScreen extends StatelessWidget {
     }
   }
 
+  void _navigate(BuildContext context, int index) {
+    final navigator = Navigator.of(context);
+    switch (index) {
+      case 0:
+        navigator.popUntil((route) => route.isFirst);
+      case 1:
+        navigator.push(
+          MaterialPageRoute(builder: (_) => const SavedPlansScreen()),
+        );
+      case 3:
+        navigator.pushNamed(ProfileScreen.routeName);
+      // Nutrition is this destination; tapping it must not stack another list.
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final vm = context.watch<IngredientViewModel>();
-    return FlowFrame(
-      title: 'S08 • Danh sách mua sắm',
+    return _ShoppingFrame(
+      title: 'Shopping list',
+      bottomNavigationBar: AppNavigationBar(
+        selectedIndex: 2,
+        onDestinationSelected: (index) => _navigate(context, index),
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          const FlowSection(
-            title: 'Đồ cần mua',
-            child: Text(
-              'Đánh dấu nguyên liệu đã mua. Các thay đổi được '
-              'đồng bộ theo tài khoản và thực đơn lên Firestore.',
-            ),
+          const _FlowHeading('Ready for the store'),
+          const SizedBox(height: AppSpacing.s8),
+          Text(
+            'Large check rows stay easy to tap with one hand.',
+            style: AppTypography.supporting,
           ),
+          const SizedBox(height: AppSpacing.s8),
           FlowStateView<List<IngredientModel>>(
             state: vm.state,
             emptyTitle: 'Không có nguyên liệu',
@@ -282,48 +284,228 @@ class ShoppingListScreen extends StatelessWidget {
               final plan = context.read<MealPlanViewModel>().activePlan;
               if (plan != null) vm.loadForPlan(plan);
             },
-            onBack: () => Navigator.of(context).pop(),
-            onData: (items) => Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Text(
-                  'Đã mua: ${items.where((item) => item.isPurchased).length}/${items.length}',
-                  style: Theme.of(context).textTheme.titleMedium,
-                ),
-                const SizedBox(height: 8),
-                for (final item in items)
-                  Card(
-                    child: CheckboxListTile(
-                      key: Key('shopping-${item.id}'),
-                      controlAffinity: ListTileControlAffinity.leading,
-                      title: Text(item.name),
-                      subtitle: Text(
-                        '${item.amount.toStringAsFixed(item.amount % 1 == 0 ? 0 : 1)} ${item.unit}',
-                      ),
-                      value: item.isPurchased,
-                      onChanged: (_) => _toggle(context, item),
-                    ),
-                  ),
-              ],
+            onBack: () => Navigator.of(context).maybePop(),
+            onData: (items) => _GroupedIngredients(
+              items: items,
+              itemBuilder: (item) => AppCheckboxRow(
+                key: Key('shopping-${item.id}'),
+                label: '${item.name} · ${_quantity(item)}',
+                checked: item.isPurchased,
+                onChanged: (_) => _toggle(context, item),
+              ),
             ),
           ),
-          if (vm.persistenceState is ViewStateLoading<bool>)
-            const Padding(
-              padding: EdgeInsets.all(12),
-              child: LinearProgressIndicator(
-                semanticsLabel: 'Đang đồng bộ checklist',
-              ),
-            ),
-          if (vm.persistenceState is ViewStateError<bool>)
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 12),
-              child: Text(
-                (vm.persistenceState as ViewStateError<bool>).message,
-                style: const TextStyle(color: Colors.red),
-              ),
-            ),
+          _PersistenceFeedback(vm: vm),
         ],
       ),
     );
   }
+}
+
+String _quantity(IngredientModel item) =>
+    '${item.amount.toStringAsFixed(item.amount % 1 == 0 ? 0 : 1)} ${item.unit}';
+
+/// Known category aliases reflect existing Vietnamese/English source data.
+/// Unknown categories are preserved, not guessed from ingredient names.
+String _category(String raw) => switch (raw.trim().toLowerCase()) {
+  'vegetables' || 'rau củ' || 'rau_cu' => 'Vegetables',
+  'legumes' || 'đậu' || 'các loại đậu' || 'dau' => 'Legumes',
+  'nuts and oils' || 'nuts' || 'oils' || 'hạt' || 'dầu hạt' => 'Nuts and oils',
+  'wholegrains' || 'whole grains' || 'ngũ cốc' || 'ngu_coc' => 'Whole grains',
+  'fish' || 'cá' || 'ca' => 'Fish',
+  'spices' || 'gia vị' => 'Seasonings',
+  '' || 'khác' || 'other' => 'Other',
+  _ => raw.trim(),
+};
+
+class _GroupedIngredients extends StatelessWidget {
+  final List<IngredientModel> items;
+  final Widget Function(IngredientModel) itemBuilder;
+  const _GroupedIngredients({required this.items, required this.itemBuilder});
+
+  @override
+  Widget build(BuildContext context) {
+    final groups = <String, List<IngredientModel>>{};
+    for (final item in items) {
+      groups.putIfAbsent(_category(item.category), () => []).add(item);
+    }
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        for (final entry in groups.entries) ...[
+          Semantics(
+            header: true,
+            headingLevel: 3,
+            child: Text(entry.key, style: AppTypography.labelStrong),
+          ),
+          const SizedBox(height: AppSpacing.s8),
+          for (final item in entry.value) ...[
+            itemBuilder(item),
+            const SizedBox(height: AppSpacing.s8),
+          ],
+        ],
+      ],
+    );
+  }
+}
+
+class _IngredientRow extends StatelessWidget {
+  final IngredientModel item;
+  final VoidCallback onEdit;
+  const _IngredientRow({required this.item, required this.onEdit});
+
+  @override
+  Widget build(BuildContext context) => ConstrainedBox(
+    constraints: const BoxConstraints(minHeight: 64),
+    child: Row(
+      children: [
+        Expanded(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 9),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(item.name, style: AppTypography.labelStrong),
+                const SizedBox(height: 6),
+                Text(
+                  _quantity(item),
+                  style: AppTypography.supporting.copyWith(height: 20 / 14),
+                ),
+              ],
+            ),
+          ),
+        ),
+        const SizedBox(width: AppSpacing.s16),
+        Tooltip(
+          message: 'Sửa số lượng ${item.name}',
+          child: Semantics(
+            button: true,
+            label: 'Edit ${item.name}',
+            onTap: onEdit,
+            child: ExcludeSemantics(
+              child: OutlinedButton(
+                onPressed: onEdit,
+                style: OutlinedButton.styleFrom(
+                  backgroundColor: Colors.transparent,
+                  minimumSize: const Size(48, 48),
+                  padding: const EdgeInsets.symmetric(horizontal: 4),
+                  foregroundColor: AppColors.actionPrimary,
+                  side: const BorderSide(color: AppColors.borderControl),
+                  shape: const RoundedRectangleBorder(
+                    borderRadius: AppRadius.rounded8,
+                  ),
+                  textStyle: AppTypography.labelStrong,
+                ),
+                child: const Text('Edit'),
+              ),
+            ),
+          ),
+        ),
+      ],
+    ),
+  );
+}
+
+class _FlowHeading extends StatelessWidget {
+  final String text;
+  const _FlowHeading(this.text);
+
+  @override
+  Widget build(BuildContext context) => Semantics(
+    header: true,
+    headingLevel: 2,
+    child: Text(
+      text,
+      style: AppTypography.headingL.copyWith(
+        fontSize: 26,
+        height: 34 / 26,
+        fontVariations: const [
+          FontVariation('wght', 700),
+          FontVariation('opsz', 26),
+        ],
+      ),
+    ),
+  );
+}
+
+class _PersistenceFeedback extends StatelessWidget {
+  final IngredientViewModel vm;
+  const _PersistenceFeedback({required this.vm});
+
+  @override
+  Widget build(BuildContext context) {
+    final state = vm.persistenceState;
+    if (state is ViewStateLoading<bool>) {
+      return const Padding(
+        padding: EdgeInsets.symmetric(vertical: AppSpacing.s12),
+        child: LinearProgressIndicator(
+          semanticsLabel: 'Đang đồng bộ checklist',
+        ),
+      );
+    }
+    if (state is ViewStateError<bool>) {
+      return Padding(
+        padding: const EdgeInsets.only(bottom: AppSpacing.s12),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Semantics(
+              liveRegion: true,
+              child: Text(
+                state.message,
+                style: AppTypography.supporting.copyWith(
+                  color: AppColors.feedbackError,
+                ),
+              ),
+            ),
+            TextButton(
+              onPressed: () => vm.persistChanges(),
+              child: const Text('Thử lại đồng bộ'),
+            ),
+          ],
+        ),
+      );
+    }
+    return const SizedBox.shrink();
+  }
+}
+
+class _ShoppingFrame extends StatelessWidget {
+  final String title;
+  final Widget child;
+  final Widget? bottomNavigationBar;
+  const _ShoppingFrame({
+    required this.title,
+    required this.child,
+    this.bottomNavigationBar,
+  });
+
+  @override
+  Widget build(BuildContext context) => Scaffold(
+    backgroundColor: AppColors.bgCanvas,
+    appBar: AppTopBar(
+      title: title,
+      onBack: () => Navigator.of(context).maybePop(),
+      backSemanticLabel: 'Quay lại',
+    ),
+    bottomNavigationBar: bottomNavigationBar,
+    body: SafeArea(
+      top: false,
+      child: Align(
+        alignment: Alignment.topCenter,
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 680),
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.fromLTRB(
+              AppSpacing.s16,
+              AppSpacing.s8,
+              AppSpacing.s16,
+              AppSpacing.s24,
+            ),
+            child: child,
+          ),
+        ),
+      ),
+    ),
+  );
 }
