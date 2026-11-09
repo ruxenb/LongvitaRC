@@ -6,10 +6,10 @@ Tooling: Firebase CLI 15.34.2, `@firebase/rules-unit-testing` 6, Node 26.7.0, JD
 
 | Run | Rules | Result | File |
 |---|---|---|---|
-| `npm run test:rules` (Firestore + Storage suites, Appendix B matrix) | candidate | **114/114 pass** | `rules-run.log` |
+| `npm run test:rules` (Firestore + Storage suites, Appendix B matrix) | candidate | **114/114 pass** | `rules-run.txt` |
 | Appendix B matrix, 42 cases + coverage check | candidate | **43/43 pass** | `matrix-results.json` |
-| Appendix B matrix on the old rules | `origin/main` (`baseline-origin-main-d374a09.rules`) | 38 pass / **5 fail** | `baseline-run.log` |
-| Hoàng suite `test/firestore` | candidate | **22/22 pass** | `hoang-run.log` |
+| Appendix B matrix on the old rules | `origin/main` (`baseline-origin-main-d374a09.rules`) | 38 pass / **5 fail** | `baseline-run.txt` |
+| Hoàng suite `test/firestore` | candidate | **22/22 pass** | `hoang-run.txt` |
 
 The 5 baseline failures are exactly the rule changes in this package, so the matrix detects them:
 

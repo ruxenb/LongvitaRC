@@ -1,0 +1,59 @@
+
+> longvita-hoang-firestore-rules-tests@1.0.0 test
+> firebase emulators:exec --project demo-longvita --config ../../firebase.emulator.json --only firestore "node hoang_rules.test.cjs"
+
+i  emulators: Starting emulators: firestore
+i  emulators: Detected demo project ID "demo-longvita", emulated services will use a demo configuration and attempts to access non-emulated services for this project will fail.
+i  firestore: Firestore Emulator logging to firestore-debug.log
++  firestore: Firestore Emulator was started in standard edition.
++  firestore: Firestore Emulator UI websocket is running on 9151.
+i  Running script: node hoang_rules.test.cjs
+PASS owner creates shopping list
+PASS owner reads shopping list
+PASS other account cannot read shopping list
+PASS anonymous account cannot read shopping list
+[2026-11-09T12:33:07.869Z]  @firebase/firestore: Firestore (13.2.0): GrpcConnection RPC 'Write' stream 0x580ec557 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'create' @ L7, false for 'create' @ L179, false for 'update' @ L7, false for 'update' @ L179
+PASS other account cannot alter shopping list
+[2026-11-09T12:33:07.890Z]  @firebase/firestore: Firestore (13.2.0): GrpcConnection RPC 'Write' stream 0x580ec553 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'create' @ L7, false for 'create' @ L179, false for 'update' @ L7, false for 'update' @ L179
+PASS owner cannot spoof path uid
+[2026-11-09T12:33:07.910Z]  @firebase/firestore: Firestore (13.2.0): GrpcConnection RPC 'Write' stream 0x580ec558 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'create' @ L7, false for 'create' @ L179, false for 'update' @ L7, false for 'update' @ L179
+PASS owner cannot spoof path plan id
+[2026-11-09T12:33:07.926Z]  @firebase/firestore: Firestore (13.2.0): GrpcConnection RPC 'Write' stream 0x580ec559 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'create' @ L7, false for 'create' @ L179, false for 'update' @ L7, false for 'update' @ L179
+PASS owner cannot omit items
+[2026-11-09T12:33:08.017Z]  @firebase/firestore: Firestore (13.2.0): GrpcConnection RPC 'Write' stream 0x580ec55a error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'create' @ L7, false for 'create' @ L179, false for 'update' @ L7, false for 'update' @ L179
+PASS owner cannot exceed 500 shopping rows
+PASS owner updates valid shopping list
+[2026-11-09T12:33:08.102Z]  @firebase/firestore: Firestore (13.2.0): GrpcConnection RPC 'Write' stream 0x580ec55c error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'delete' @ L7, false for 'delete' @ L187
+PASS other account cannot delete shopping list
+PASS owner deletes shopping list
+PASS owner creates draft
+PASS owner reads own meal plan
+PASS other account cannot read meal plan
+PASS staff reads plan when staff role exists
+[2026-11-09T12:33:08.290Z]  @firebase/firestore: Firestore (13.2.0): GrpcConnection RPC 'Write' stream 0x580ec55b error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'create' @ L7, false for 'create' @ L145, false for 'update' @ L7, evaluation error at L169:24 for 'update' @ L169, false for 'create' @ L7, false for 'create' @ L145
+PASS owner cannot create already approved plan
+[2026-11-09T12:33:08.339Z]  @firebase/firestore: Firestore (13.2.0): GrpcConnection RPC 'Write' stream 0x580ec55e error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'update' @ L7, evaluation error at L169:24 for 'update' @ L169, false for 'update' @ L7, false for 'update' @ L169
+PASS owner cannot rewrite uid
+PASS owner can submit draft
+[2026-11-09T12:33:08.385Z]  @firebase/firestore: Firestore (13.2.0): GrpcConnection RPC 'Write' stream 0x580ec55f error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'update' @ L7, evaluation error at L169:24 for 'update' @ L169, false for 'update' @ L7, Null value error. for 'update' @ L169
+PASS owner cannot approve own submitted plan
+PASS staff can approve submitted plan
+[2026-11-09T12:33:08.424Z]  @firebase/firestore: Firestore (13.2.0): GrpcConnection RPC 'Write' stream 0x580ec561 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'delete' @ L7, evaluation error at L172:24 for 'delete' @ L172, false for 'delete' @ L7, false for 'delete' @ L172
+PASS owner cannot delete approved plan
+Firestore rules: 22 pass, 0 fail
++  Script exited successfully (code 0)
+i  emulators: Shutting down emulators.
+i  firestore: Stopping Firestore Emulator
+!  Firestore Emulator has exited upon receiving signal: SIGINT
+i  hub: Stopping emulator hub
+i  logging: Stopping Logging Emulator
