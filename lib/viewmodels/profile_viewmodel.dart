@@ -537,7 +537,17 @@ class ProfileViewModel extends BaseViewModel implements SessionScoped {
         uid: currentUser.uid,
         exportId: export.exportId,
       );
-      if (bytes == null || !_ownsExport(export, epoch)) return false;
+      if (!_ownsExport(export, epoch)) return false;
+      if (bytes == null) {
+        _lastExport = null;
+        _lastUploadedUrl = null;
+        _resetMetadata();
+        _exportState = const ViewStateError(
+          'Không còn file PDF đã lưu trên máy. Vui lòng xuất lại.',
+        );
+        notifyListeners();
+        return false;
+      }
       return await open(bytes, export.externalFileName);
     } catch (e, s) {
       if (_epoch.isStale(epoch)) return false;

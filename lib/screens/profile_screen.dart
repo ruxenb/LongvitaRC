@@ -1,3 +1,5 @@
+import '../models/report_metadata_state.dart';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -276,9 +278,7 @@ class _ExportCard extends StatelessWidget {
     final profile = context.watch<ProfileViewModel>();
     final plan = context.watch<MealPlanViewModel>().activePlan;
     final localState = profile.exportState;
-    final state = profile.isStorageDemo && localState is! ViewStateError<String>
-        ? profile.uploadState
-        : localState;
+    final uploadState = profile.uploadState;
 
     return AppCard(
       child: Column(
@@ -300,10 +300,25 @@ class _ExportCard extends StatelessWidget {
             isLoading: profile.isExporting,
             onPressed: plan == null ? null : () => profile.exportPdf(plan),
           ),
-          if (state is ViewStateLoading<String>) ...[
+          if (localState is ViewStateLoading<String>) ...[
+            const SizedBox(height: AppSpacing.s16),
+            _Notice(message: localState.message ?? 'Đang xuất PDF…'),
+          ],
+          if (localState is ViewStateError<String>) ...[
+            const SizedBox(height: AppSpacing.s16),
+            _Notice(message: localState.message, isError: true),
+          ],
+          if (profile.lastExport != null) ...[
+            const SizedBox(height: AppSpacing.s16),
+            const _Notice(message: 'Đã lưu PDF trên máy.'),
+            const _ReportMetadataStatus(),
+          ],
+          if (profile.isStorageDemo &&
+              uploadState is ViewStateLoading<String>) ...[
             const SizedBox(height: AppSpacing.s16),
             _ExportProgress(
-              message: state.message ?? 'Đang xuất PDF…',
+              message:
+                  uploadState.message ?? 'Đang tải PDF lên Storage Emulator…',
               progress: profile.uploadProgress,
             ),
           ],
@@ -316,32 +331,28 @@ class _ExportCard extends StatelessWidget {
               onPressed: profile.cancelUpload,
             ),
           ],
-          if (state is ViewStateEmpty<String>) ...[
+          if (profile.isStorageDemo &&
+              uploadState is ViewStateEmpty<String>) ...[
             const SizedBox(height: AppSpacing.s16),
-            _Notice(message: state.message),
+            _Notice(message: uploadState.message),
           ],
-          if (state is ViewStateError<String>) ...[
+          if (profile.isStorageDemo &&
+              uploadState is ViewStateError<String>) ...[
             const SizedBox(height: AppSpacing.s16),
-            _Notice(message: state.message, isError: true),
+            _Notice(message: uploadState.message, isError: true),
           ],
-          if (state is ViewStateSuccess<String>) ...[
+          if (profile.isStorageDemo &&
+              uploadState is ViewStateSuccess<String>) ...[
             const SizedBox(height: AppSpacing.s16),
-            _Notice(
-              message: profile.isStorageDemo
-                  ? 'Đã tải PDF lên Storage Emulator.'
-                  : 'Đã lưu PDF trên máy.',
-            ),
+            const _Notice(message: 'Đã tải PDF lên Storage Emulator.'),
             const SizedBox(height: AppSpacing.s8),
-            // Without its own node the read-only field merges into the card,
-            // making the whole card a text field read before its actions.
-            if (profile.isStorageDemo)
-              Semantics(
-                container: true,
-                child: SelectableText(
-                  state.data,
-                  style: AppTypography.supporting,
-                ),
+            Semantics(
+              container: true,
+              child: SelectableText(
+                uploadState.data,
+                style: AppTypography.supporting,
               ),
+            ),
           ],
           if (profile.canRetryUpload) ...[
             const SizedBox(height: AppSpacing.s16),
@@ -371,6 +382,45 @@ class _ExportCard extends StatelessWidget {
           ],
         ],
       ),
+    );
+  }
+}
+
+/// Information about the export, never a claim that Firestore stores the PDF.
+/// State changes create one live-region announcement, not a changing counter.
+class _ReportMetadataStatus extends StatelessWidget {
+  const _ReportMetadataStatus();
+
+  @override
+  Widget build(BuildContext context) {
+    final profile = context.watch<ProfileViewModel>();
+    final state = profile.metadataState;
+    if (state == ReportMetadataState.idle) return const SizedBox.shrink();
+    final message = switch (state) {
+      ReportMetadataState.saving => 'Đang đồng bộ thông tin báo cáo…',
+      ReportMetadataState.pending =>
+        'Thông tin báo cáo đang chờ đồng bộ. Bạn vẫn có thể mở và chia sẻ PDF.',
+      ReportMetadataState.confirmed => 'Đã đồng bộ thông tin báo cáo.',
+      ReportMetadataState.error =>
+        'Chưa đồng bộ được thông tin báo cáo. PDF vẫn có trên máy.',
+      ReportMetadataState.idle => '',
+    };
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        const SizedBox(height: AppSpacing.s8),
+        _Notice(message: message, isError: state == ReportMetadataState.error),
+        if (profile.canRetryMetadata) ...[
+          const SizedBox(height: AppSpacing.s8),
+          AppButton(
+            key: const Key('profile-retry-metadata'),
+            text: 'Thử đồng bộ lại',
+            variant: AppButtonVariant.secondary,
+            icon: AppIcons.refresh,
+            onPressed: profile.retryMetadata,
+          ),
+        ],
+      ],
     );
   }
 }

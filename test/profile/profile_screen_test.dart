@@ -1,3 +1,5 @@
+import 'package:longvita/services/i_report_service.dart';
+import 'package:longvita/services/i_report_metadata_repository.dart';
 import 'package:longvita/config/pdf_export_mode.dart';
 // S4-13: Profile and Firebase Demo Area against fake services. Upload success
 // and push here use fakes; a live upload and a real push are not covered.
@@ -114,7 +116,12 @@ class CountingCrashlytics extends FakeCrashlytics {
 
 class Harness {
   final PdfExportMode exportMode;
-  Harness({this.exportMode = PdfExportMode.storageEmulatorDemo});
+  final IReportMetadataRepository metadataRepository;
+  final IReportService reportService;
+  Harness({this.exportMode = PdfExportMode.storageEmulatorDemo,
+      IReportMetadataRepository? metadataRepository, IReportService? reportService})
+      : metadataRepository = metadataRepository ?? FakeReportMetadataRepository(),
+        reportService = reportService ?? FakeReportService();
   final auth = FakeAuthService();
   final analytics = FakeAnalytics();
   final crashlytics = CountingCrashlytics();
@@ -132,12 +139,12 @@ class Harness {
     remoteConfig: FakeRemoteConfig(),
   );
   late final profile = ProfileViewModel(
-      metadataRepository: FakeReportMetadataRepository(),
+      metadataRepository: metadataRepository,
       exportMode: exportMode,
     authService: auth,
     storageService: storage,
     notificationService: notifications,
-    reportService: FakeReportService(),
+    reportService: reportService,
     reportStore: FakeLocalReportStore(),
     reportViewer: viewer,
     remoteConfigService: remoteConfig,
