@@ -2,75 +2,75 @@ i  emulators: Starting emulators: firestore
 i  emulators: Detected demo project ID "demo-longvita", emulated services will use a demo configuration and attempts to access non-emulated services for this project will fail.
 i  firestore: Firestore Emulator logging to firestore-debug.log
 +  firestore: Firestore Emulator was started in standard edition.
-+  firestore: Firestore Emulator UI websocket is running on 9151.
++  firestore: Firestore Emulator UI websocket is running on 9152.
 i  Running script: node --test "<repo>\firebase\tests\firestore.rules.matrix.test.js"
 ▶ Appendix B rules matrix
-  ✔ every role has an allowed and a denied case on every collection (610.1423ms)
-  ✔ R-01 users anonymous: read a profile → Denied (570.2297ms)
-  ✔ R-02 users user: first sign-in creates own profile with role = user → Allowed (773.6101ms)
-[2026-11-09T12:34:01.422Z]  @firebase/firestore: Firestore (13.1.0): GrpcConnection RPC 'Write' stream 0x74168ccd error. Code: 7 Message: 7 PERMISSION_DENIED: 
+  ✔ every role has an allowed and a denied case on every collection (787.0943ms)
+  ✔ R-01 users anonymous: read a profile → Denied (673.0866ms)
+  ✔ R-02 users user: first sign-in creates own profile with role = user → Allowed (1130.548ms)
+[2026-11-09T12:46:48.589Z]  @firebase/firestore: Firestore (13.1.0): GrpcConnection RPC 'Write' stream 0x5c4c2e3c error. Code: 7 Message: 7 PERMISSION_DENIED: 
 false for 'update' @ L7, evaluation error at L105:24 for 'update' @ L105, false for 'update' @ L7, false for 'update' @ L105
-  ✔ R-03 users user: update own role to admin → Denied (306.3043ms)
-  ✔ R-04 users staff: read own profile (role gate) → Allowed (280.8983ms)
-  ✖ R-05 users staff: read another user profile → Denied (277.947ms)
-  ✔ R-06 users admin: change another user role to staff → Allowed (266.2608ms)
-[2026-11-09T12:34:02.508Z]  @firebase/firestore: Firestore (13.1.0): GrpcConnection RPC 'Write' stream 0x74168cfd error. Code: 7 Message: 7 PERMISSION_DENIED: 
+  ✔ R-03 users user: update own role to admin → Denied (381.5009ms)
+  ✔ R-04 users staff: read own profile (role gate) → Allowed (350.8382ms)
+  ✖ R-05 users staff: read another user profile → Denied (348.9919ms)
+  ✔ R-06 users admin: change another user role to staff → Allowed (337.3403ms)
+[2026-11-09T12:46:49.983Z]  @firebase/firestore: Firestore (13.1.0): GrpcConnection RPC 'Write' stream 0x5c4c2e6c error. Code: 7 Message: 7 PERMISSION_DENIED: 
 false for 'update' @ L7, evaluation error at L105:24 for 'update' @ L105, false for 'update' @ L7, false for 'update' @ L105
-  ✔ R-07 users admin: change own role → Denied (260.0877ms)
-  ✔ R-08 recipes anonymous: read a recipe → Denied (254.2018ms)
-  ✔ R-09 recipes user: read a recipe → Allowed (313.7177ms)
-[2026-11-09T12:34:03.328Z]  @firebase/firestore: Firestore (13.1.0): GrpcConnection RPC 'Write' stream 0x74168d21 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+  ✔ R-07 users admin: change own role → Denied (354.3879ms)
+  ✔ R-08 recipes anonymous: read a recipe → Denied (376.9238ms)
+  ✔ R-09 recipes user: read a recipe → Allowed (497.9482ms)
+[2026-11-09T12:46:51.218Z]  @firebase/firestore: Firestore (13.1.0): GrpcConnection RPC 'Write' stream 0x5c4c2e90 error. Code: 7 Message: 7 PERMISSION_DENIED: 
 false for 'create' @ L7, evaluation error at L118:32 for 'create' @ L118, false for 'update' @ L7, evaluation error at L118:32 for 'update' @ L118, false for 'create' @ L7, false for 'create' @ L118
-  ✔ R-10 recipes user: create a recipe → Denied (251.2478ms)
-[2026-11-09T12:34:03.651Z]  @firebase/firestore: Firestore (13.1.0): GrpcConnection RPC 'Write' stream 0x74168d2d error. Code: 7 Message: 7 PERMISSION_DENIED: 
+  ✔ R-10 recipes user: create a recipe → Denied (359.7446ms)
+[2026-11-09T12:46:51.535Z]  @firebase/firestore: Firestore (13.1.0): GrpcConnection RPC 'Write' stream 0x5c4c2e9c error. Code: 7 Message: 7 PERMISSION_DENIED: 
 false for 'update' @ L7, evaluation error at L118:32 for 'update' @ L118, false for 'update' @ L7, false for 'update' @ L118
-  ✖ R-11 recipes staff: archive a recipe (isArchived = true) → Allowed (323.4697ms)
-  ✖ R-12 recipes staff: hard delete a recipe → Denied (234.4757ms)
-  ✔ R-13 recipes admin: create a valid recipe → Allowed (256.7855ms)
-  ✖ R-14 recipes admin: create a recipe with name over 120 chars → Denied (297.2153ms)
-  ✔ R-15 meal_plans anonymous: read a plan → Denied (240.9757ms)
-  ✔ R-16 meal_plans user: owner submits draft (draft → submitted) → Allowed (425.8752ms)
-[2026-11-09T12:34:05.385Z]  @firebase/firestore: Firestore (13.1.0): GrpcConnection RPC 'Write' stream 0x74168d75 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+  ✖ R-11 recipes staff: archive a recipe (isArchived = true) → Allowed (317.1606ms)
+  ✖ R-12 recipes staff: hard delete a recipe → Denied (278.3347ms)
+  ✔ R-13 recipes admin: create a valid recipe → Allowed (286.0385ms)
+  ✖ R-14 recipes admin: create a recipe with name over 120 chars → Denied (316.2311ms)
+  ✔ R-15 meal_plans anonymous: read a plan → Denied (241.3228ms)
+  ✔ R-16 meal_plans user: owner submits draft (draft → submitted) → Allowed (514.0827ms)
+[2026-11-09T12:46:53.461Z]  @firebase/firestore: Firestore (13.1.0): GrpcConnection RPC 'Write' stream 0x5c4c2ee4 error. Code: 7 Message: 7 PERMISSION_DENIED: 
 false for 'update' @ L7, evaluation error at L152:24 for 'update' @ L152, false for 'update' @ L7, false for 'update' @ L152
-  ✔ R-17 meal_plans user: owner self-approves (submitted → approved) → Denied (277.668ms)
-  ✔ R-18 meal_plans staff: approve a plan (submitted → approved) → Allowed (286.4127ms)
-[2026-11-09T12:34:05.914Z]  @firebase/firestore: Firestore (13.1.0): GrpcConnection RPC 'Write' stream 0x74168d8d error. Code: 7 Message: 7 PERMISSION_DENIED: 
+  ✔ R-17 meal_plans user: owner self-approves (submitted → approved) → Denied (289.3619ms)
+  ✔ R-18 meal_plans staff: approve a plan (submitted → approved) → Allowed (242.6309ms)
+[2026-11-09T12:46:53.939Z]  @firebase/firestore: Firestore (13.1.0): GrpcConnection RPC 'Write' stream 0x5c4c2efc error. Code: 7 Message: 7 PERMISSION_DENIED: 
 false for 'update' @ L7, evaluation error at L152:24 for 'update' @ L152, false for 'update' @ L7, false for 'update' @ L152
-  ✔ R-19 meal_plans staff: reject a plan without a reason → Denied (241.7761ms)
-  ✔ R-20 meal_plans admin: reject a plan with a reason → Allowed (254.0838ms)
-[2026-11-09T12:34:06.438Z]  @firebase/firestore: Firestore (13.1.0): GrpcConnection RPC 'Write' stream 0x74168da5 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+  ✔ R-19 meal_plans staff: reject a plan without a reason → Denied (234.592ms)
+  ✔ R-20 meal_plans admin: reject a plan with a reason → Allowed (263.8863ms)
+[2026-11-09T12:46:54.481Z]  @firebase/firestore: Firestore (13.1.0): GrpcConnection RPC 'Write' stream 0x5c4c2f14 error. Code: 7 Message: 7 PERMISSION_DENIED: 
 false for 'update' @ L7, evaluation error at L152:24 for 'update' @ L152, false for 'update' @ L7, false for 'update' @ L152
-  ✔ R-21 meal_plans admin: review an already approved plan (approved → rejected) → Denied (270.4317ms)
-  ✔ R-22 shopping_lists anonymous: read a shopping list → Denied (250.858ms)
-  ✔ R-23 shopping_lists user: owner saves own checklist → Allowed (475.9452ms)
-[2026-11-09T12:34:07.397Z]  @firebase/firestore: Firestore (13.1.0): GrpcConnection RPC 'Write' stream 0x74168dc9 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+  ✔ R-21 meal_plans admin: review an already approved plan (approved → rejected) → Denied (278.7768ms)
+  ✔ R-22 shopping_lists anonymous: read a shopping list → Denied (236.4194ms)
+  ✔ R-23 shopping_lists user: owner saves own checklist → Allowed (463.93ms)
+[2026-11-09T12:46:55.394Z]  @firebase/firestore: Firestore (13.1.0): GrpcConnection RPC 'Write' stream 0x5c4c2f38 error. Code: 7 Message: 7 PERMISSION_DENIED: 
 false for 'create' @ L7, false for 'create' @ L162, false for 'update' @ L7, false for 'update' @ L162
-  ✔ R-24 shopping_lists user: write another user checklist → Denied (231.8655ms)
-  ✔ R-25 shopping_lists staff: save own checklist → Allowed (222.808ms)
-  ✔ R-26 shopping_lists staff: read a user checklist → Denied (200.1043ms)
-  ✔ R-27 shopping_lists admin: save own checklist → Allowed (366.3974ms)
-  ✔ R-28 shopping_lists admin: read a user checklist → Denied (228.3436ms)
-  ✔ R-29 report_exports anonymous: read export metadata → Denied (272.8765ms)
-  ✔ R-30 report_exports user: owner records PDF metadata of own plan → Allowed (536.213ms)
-[2026-11-09T12:34:09.462Z]  @firebase/firestore: Firestore (13.1.0): GrpcConnection RPC 'Write' stream 0x74168e1e error. Code: 7 Message: 7 PERMISSION_DENIED: 
+  ✔ R-24 shopping_lists user: write another user checklist → Denied (212.0531ms)
+  ✔ R-25 shopping_lists staff: save own checklist → Allowed (243.0665ms)
+  ✔ R-26 shopping_lists staff: read a user checklist → Denied (232.3806ms)
+  ✔ R-27 shopping_lists admin: save own checklist → Allowed (338.808ms)
+  ✔ R-28 shopping_lists admin: read a user checklist → Denied (206.5663ms)
+  ✔ R-29 report_exports anonymous: read export metadata → Denied (556.4732ms)
+  ✔ R-30 report_exports user: owner records PDF metadata of own plan → Allowed (358.5857ms)
+[2026-11-09T12:46:57.692Z]  @firebase/firestore: Firestore (13.1.0): GrpcConnection RPC 'Write' stream 0x5c4c2f8d error. Code: 7 Message: 7 PERMISSION_DENIED: 
 false for 'delete' @ L7, false for 'delete' @ L210
-  ✔ R-31 report_exports user: owner deletes export history → Denied (237.6773ms)
-  ✔ R-32 report_exports staff: record metadata of an unsaved plan (planId = null) → Allowed (240.6499ms)
-  ✔ R-33 report_exports staff: read a user export history → Denied (276.5008ms)
-  ✔ R-34 report_exports admin: record metadata of an unsaved plan (planId = null) → Allowed (257.3383ms)
-  ✔ R-35 report_exports admin: read a user export metadata → Denied (246.5905ms)
-  ✔ R-36 announcements anonymous: read announcements → Denied (486.757ms)
-  ✔ R-37 announcements user: stream newest announcements (Inbox) → Allowed (331.8304ms)
-[2026-11-09T12:34:11.531Z]  @firebase/firestore: Firestore (13.1.0): GrpcConnection RPC 'Write' stream 0x74168e72 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+  ✔ R-31 report_exports user: owner deletes export history → Denied (361.5957ms)
+  ✔ R-32 report_exports staff: record metadata of an unsaved plan (planId = null) → Allowed (328.7664ms)
+  ✔ R-33 report_exports staff: read a user export history → Denied (287.2563ms)
+  ✔ R-34 report_exports admin: record metadata of an unsaved plan (planId = null) → Allowed (445.5557ms)
+  ✔ R-35 report_exports admin: read a user export metadata → Denied (221.1804ms)
+  ✔ R-36 announcements anonymous: read announcements → Denied (309.383ms)
+  ✔ R-37 announcements user: stream newest announcements (Inbox) → Allowed (527.6104ms)
+[2026-11-09T12:47:00.022Z]  @firebase/firestore: Firestore (13.1.0): GrpcConnection RPC 'Write' stream 0x5c4c2fe1 error. Code: 7 Message: 7 PERMISSION_DENIED: 
 false for 'create' @ L7, evaluation error at L219:24 for 'create' @ L219, false for 'update' @ L7, evaluation error at L220:24 for 'update' @ L220, false for 'create' @ L7, false for 'create' @ L219
-  ✔ R-38 announcements user: publish an announcement → Denied (228.5457ms)
-  ✔ R-39 announcements staff: publish an announcement as staff → Allowed (220.4406ms)
-[2026-11-09T12:34:11.961Z]  @firebase/firestore: Firestore (13.1.0): GrpcConnection RPC 'Write' stream 0x74168e8a error. Code: 7 Message: 7 PERMISSION_DENIED: 
+  ✔ R-38 announcements user: publish an announcement → Denied (209.2057ms)
+  ✔ R-39 announcements staff: publish an announcement as staff → Allowed (214.0595ms)
+[2026-11-09T12:47:00.441Z]  @firebase/firestore: Firestore (13.1.0): GrpcConnection RPC 'Write' stream 0x5c4c2ff9 error. Code: 7 Message: 7 PERMISSION_DENIED: 
 false for 'create' @ L7, evaluation error at L219:24 for 'create' @ L219, false for 'update' @ L7, evaluation error at L220:24 for 'update' @ L220, false for 'create' @ L7, false for 'create' @ L219
-  ✔ R-40 announcements staff: publish posing as admin → Denied (209.0912ms)
-  ✔ R-41 announcements admin: publish an announcement as admin → Allowed (246.5542ms)
-  ✖ R-42 announcements admin: publish with content over 2000 chars → Denied (247.1281ms)
-✖ Appendix B rules matrix (14699.7914ms)
+  ✔ R-40 announcements staff: publish posing as admin → Denied (204.7504ms)
+  ✔ R-41 announcements admin: publish an announcement as admin → Allowed (238.0489ms)
+  ✖ R-42 announcements admin: publish with content over 2000 chars → Denied (210.7116ms)
+✖ Appendix B rules matrix (16929.3763ms)
 ℹ tests 43
 ℹ suites 1
 ℹ pass 38
@@ -78,28 +78,28 @@ false for 'create' @ L7, evaluation error at L219:24 for 'create' @ L219, false 
 ℹ cancelled 0
 ℹ skipped 0
 ℹ todo 0
-ℹ duration_ms 15094.5397
+ℹ duration_ms 17335.3414
 
 ✖ failing tests:
 
-test at tests\firestore.rules.matrix.test.js:231:5
-✖ R-05 users staff: read another user profile → Denied (277.947ms)
+test at tests\firestore.rules.matrix.test.js:237:5
+✖ R-05 users staff: read another user profile → Denied (348.9919ms)
   Error: Expected request to fail, but it succeeded.
       at <repo>\firebase\node_modules\@firebase\rules-unit-testing\dist\index.cjs.js:576:31
       at async TestContext.<anonymous> (<repo>\firebase\tests\firestore.rules.matrix.test.js:240:12)
       at async Test.run (node:internal/test_runner/test:1404:7)
       at async Suite.processPendingSubtests (node:internal/test_runner/test:969:7)
 
-test at tests\firestore.rules.matrix.test.js:231:5
-✖ R-11 recipes staff: archive a recipe (isArchived = true) → Allowed (323.4697ms)
+test at tests\firestore.rules.matrix.test.js:237:5
+✖ R-11 recipes staff: archive a recipe (isArchived = true) → Allowed (317.1606ms)
   [Error [FirebaseError]: 7 PERMISSION_DENIED: 
   false for 'update' @ L7, evaluation error at L118:32 for 'update' @ L118, false for 'update' @ L7, false for 'update' @ L118] {
     code: 'permission-denied',
     customData: undefined
   }
 
-test at tests\firestore.rules.matrix.test.js:231:5
-✖ R-12 recipes staff: hard delete a recipe → Denied (234.4757ms)
+test at tests\firestore.rules.matrix.test.js:237:5
+✖ R-12 recipes staff: hard delete a recipe → Denied (278.3347ms)
   Error: Expected request to fail, but it succeeded.
       at <repo>\firebase\node_modules\@firebase\rules-unit-testing\dist\index.cjs.js:576:31
       at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
@@ -107,8 +107,8 @@ test at tests\firestore.rules.matrix.test.js:231:5
       at async Test.run (node:internal/test_runner/test:1404:7)
       at async Suite.processPendingSubtests (node:internal/test_runner/test:969:7)
 
-test at tests\firestore.rules.matrix.test.js:231:5
-✖ R-14 recipes admin: create a recipe with name over 120 chars → Denied (297.2153ms)
+test at tests\firestore.rules.matrix.test.js:237:5
+✖ R-14 recipes admin: create a recipe with name over 120 chars → Denied (316.2311ms)
   Error: Expected request to fail, but it succeeded.
       at <repo>\firebase\node_modules\@firebase\rules-unit-testing\dist\index.cjs.js:576:31
       at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
@@ -116,8 +116,8 @@ test at tests\firestore.rules.matrix.test.js:231:5
       at async Test.run (node:internal/test_runner/test:1404:7)
       at async Suite.processPendingSubtests (node:internal/test_runner/test:969:7)
 
-test at tests\firestore.rules.matrix.test.js:231:5
-✖ R-42 announcements admin: publish with content over 2000 chars → Denied (247.1281ms)
+test at tests\firestore.rules.matrix.test.js:237:5
+✖ R-42 announcements admin: publish with content over 2000 chars → Denied (210.7116ms)
   Error: Expected request to fail, but it succeeded.
       at <repo>\firebase\node_modules\@firebase\rules-unit-testing\dist\index.cjs.js:576:31
       at process.processTicksAndRejections (node:internal/process/task_queues:104:5)

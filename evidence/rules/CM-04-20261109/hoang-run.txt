@@ -12,43 +12,43 @@ PASS owner creates shopping list
 PASS owner reads shopping list
 PASS other account cannot read shopping list
 PASS anonymous account cannot read shopping list
-[2026-11-09T12:33:07.869Z]  @firebase/firestore: Firestore (13.2.0): GrpcConnection RPC 'Write' stream 0x580ec557 error. Code: 7 Message: 7 PERMISSION_DENIED: 
-false for 'create' @ L7, false for 'create' @ L179, false for 'update' @ L7, false for 'update' @ L179
+[2026-11-09T12:46:34.901Z]  @firebase/firestore: Firestore (13.2.0): GrpcConnection RPC 'Write' stream 0x8710d962 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'create' @ L7, false for 'create' @ L181, false for 'update' @ L7, false for 'update' @ L181
 PASS other account cannot alter shopping list
-[2026-11-09T12:33:07.890Z]  @firebase/firestore: Firestore (13.2.0): GrpcConnection RPC 'Write' stream 0x580ec553 error. Code: 7 Message: 7 PERMISSION_DENIED: 
-false for 'create' @ L7, false for 'create' @ L179, false for 'update' @ L7, false for 'update' @ L179
+[2026-11-09T12:46:34.931Z]  @firebase/firestore: Firestore (13.2.0): GrpcConnection RPC 'Write' stream 0x8710d95e error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'create' @ L7, false for 'create' @ L181, false for 'update' @ L7, false for 'update' @ L181
 PASS owner cannot spoof path uid
-[2026-11-09T12:33:07.910Z]  @firebase/firestore: Firestore (13.2.0): GrpcConnection RPC 'Write' stream 0x580ec558 error. Code: 7 Message: 7 PERMISSION_DENIED: 
-false for 'create' @ L7, false for 'create' @ L179, false for 'update' @ L7, false for 'update' @ L179
+[2026-11-09T12:46:34.962Z]  @firebase/firestore: Firestore (13.2.0): GrpcConnection RPC 'Write' stream 0x8710d963 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'create' @ L7, false for 'create' @ L181, false for 'update' @ L7, false for 'update' @ L181
 PASS owner cannot spoof path plan id
-[2026-11-09T12:33:07.926Z]  @firebase/firestore: Firestore (13.2.0): GrpcConnection RPC 'Write' stream 0x580ec559 error. Code: 7 Message: 7 PERMISSION_DENIED: 
-false for 'create' @ L7, false for 'create' @ L179, false for 'update' @ L7, false for 'update' @ L179
+[2026-11-09T12:46:34.989Z]  @firebase/firestore: Firestore (13.2.0): GrpcConnection RPC 'Write' stream 0x8710d964 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'create' @ L7, false for 'create' @ L181, false for 'update' @ L7, false for 'update' @ L181
 PASS owner cannot omit items
-[2026-11-09T12:33:08.017Z]  @firebase/firestore: Firestore (13.2.0): GrpcConnection RPC 'Write' stream 0x580ec55a error. Code: 7 Message: 7 PERMISSION_DENIED: 
-false for 'create' @ L7, false for 'create' @ L179, false for 'update' @ L7, false for 'update' @ L179
+[2026-11-09T12:46:35.118Z]  @firebase/firestore: Firestore (13.2.0): GrpcConnection RPC 'Write' stream 0x8710d965 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'create' @ L7, false for 'create' @ L181, false for 'update' @ L7, false for 'update' @ L181
 PASS owner cannot exceed 500 shopping rows
 PASS owner updates valid shopping list
-[2026-11-09T12:33:08.102Z]  @firebase/firestore: Firestore (13.2.0): GrpcConnection RPC 'Write' stream 0x580ec55c error. Code: 7 Message: 7 PERMISSION_DENIED: 
-false for 'delete' @ L7, false for 'delete' @ L187
+[2026-11-09T12:46:35.217Z]  @firebase/firestore: Firestore (13.2.0): GrpcConnection RPC 'Write' stream 0x8710d967 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'delete' @ L7, false for 'delete' @ L189
 PASS other account cannot delete shopping list
 PASS owner deletes shopping list
 PASS owner creates draft
 PASS owner reads own meal plan
 PASS other account cannot read meal plan
 PASS staff reads plan when staff role exists
-[2026-11-09T12:33:08.290Z]  @firebase/firestore: Firestore (13.2.0): GrpcConnection RPC 'Write' stream 0x580ec55b error. Code: 7 Message: 7 PERMISSION_DENIED: 
-false for 'create' @ L7, false for 'create' @ L145, false for 'update' @ L7, evaluation error at L169:24 for 'update' @ L169, false for 'create' @ L7, false for 'create' @ L145
+[2026-11-09T12:46:35.465Z]  @firebase/firestore: Firestore (13.2.0): GrpcConnection RPC 'Write' stream 0x8710d966 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'create' @ L7, false for 'create' @ L147, false for 'update' @ L7, evaluation error at L171:24 for 'update' @ L171, false for 'create' @ L7, false for 'create' @ L147
 PASS owner cannot create already approved plan
-[2026-11-09T12:33:08.339Z]  @firebase/firestore: Firestore (13.2.0): GrpcConnection RPC 'Write' stream 0x580ec55e error. Code: 7 Message: 7 PERMISSION_DENIED: 
-false for 'update' @ L7, evaluation error at L169:24 for 'update' @ L169, false for 'update' @ L7, false for 'update' @ L169
+[2026-11-09T12:46:35.529Z]  @firebase/firestore: Firestore (13.2.0): GrpcConnection RPC 'Write' stream 0x8710d969 error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'update' @ L7, evaluation error at L171:24 for 'update' @ L171, false for 'update' @ L7, false for 'update' @ L171
 PASS owner cannot rewrite uid
 PASS owner can submit draft
-[2026-11-09T12:33:08.385Z]  @firebase/firestore: Firestore (13.2.0): GrpcConnection RPC 'Write' stream 0x580ec55f error. Code: 7 Message: 7 PERMISSION_DENIED: 
-false for 'update' @ L7, evaluation error at L169:24 for 'update' @ L169, false for 'update' @ L7, Null value error. for 'update' @ L169
+[2026-11-09T12:46:35.598Z]  @firebase/firestore: Firestore (13.2.0): GrpcConnection RPC 'Write' stream 0x8710d96a error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'update' @ L7, evaluation error at L171:24 for 'update' @ L171, false for 'update' @ L7, Null value error. for 'update' @ L171
 PASS owner cannot approve own submitted plan
 PASS staff can approve submitted plan
-[2026-11-09T12:33:08.424Z]  @firebase/firestore: Firestore (13.2.0): GrpcConnection RPC 'Write' stream 0x580ec561 error. Code: 7 Message: 7 PERMISSION_DENIED: 
-false for 'delete' @ L7, evaluation error at L172:24 for 'delete' @ L172, false for 'delete' @ L7, false for 'delete' @ L172
+[2026-11-09T12:46:35.668Z]  @firebase/firestore: Firestore (13.2.0): GrpcConnection RPC 'Write' stream 0x8710d96c error. Code: 7 Message: 7 PERMISSION_DENIED: 
+false for 'delete' @ L7, evaluation error at L174:24 for 'delete' @ L174, false for 'delete' @ L7, false for 'delete' @ L174
 PASS owner cannot delete approved plan
 Firestore rules: 22 pass, 0 fail
 +  Script exited successfully (code 0)

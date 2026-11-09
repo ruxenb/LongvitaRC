@@ -94,6 +94,8 @@ service cloud.firestore {
           && (data.get('reviewerReason', null) == null || isBoundedString(data.reviewerReason, 500))
           // A weekly plan; DataService requires exactly 7 days before saving.
           && data.days is list && data.days.size() <= 7
+          // Drafts may be partial; a plan sent for review (or reviewed) has all 7 days.
+          && (data.status == 'draft' || data.days.size() == 7)
           && data.createdAt is string;
     }
 

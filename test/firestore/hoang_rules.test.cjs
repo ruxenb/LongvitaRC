@@ -83,7 +83,7 @@ async function main() {
     const planData = {
       uid: 'alice', title: 'Test plan', targetCalories: 1800,
       targetProteinGrams: 50, status: 'draft',
-      reviewerReason: null, days: [],
+      reviewerReason: null, days: Array.from({length: 7}, (_, dayIndex) => ({dayIndex})),
       createdAt: '2026-11-04T00:00:00.000Z',
     };
     const ownPlan = doc(user, 'meal_plans', 'p1');

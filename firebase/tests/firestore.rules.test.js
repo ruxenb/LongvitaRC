@@ -37,6 +37,8 @@ const recipe = (overrides = {}) => ({
   ...overrides,
 });
 
+const SEVEN_DAYS = Array.from({ length: 7 }, (_, dayIndex) => ({ dayIndex }));
+
 const mealPlan = (overrides = {}) => ({
   uid: 'alice',
   title: 'Thực đơn 7 ngày',
@@ -44,7 +46,7 @@ const mealPlan = (overrides = {}) => ({
   targetProteinGrams: 55.5,
   status: 'draft',
   reviewerReason: null,
-  days: [],
+  days: SEVEN_DAYS,
   createdAt: CREATED_AT,
   ...overrides,
 });
@@ -309,6 +311,15 @@ describe('meal_plans', () => {
       await assertSucceeds(alice().doc('meal_plans/draft1').update({ days: Array(7).fill({}) }));
     });
 
+    test('allowed: partial draft; denied: submitting fewer than 7 days', async () => {
+      await assertSucceeds(alice().doc('meal_plans/partial').set(mealPlan({ days: [] })));
+      await assertSucceeds(alice().doc('meal_plans/partial').update({ days: SEVEN_DAYS.slice(0, 3) }));
+      await assertFails(alice().doc('meal_plans/partial').update({ status: 'submitted' }));
+      await assertSucceeds(
+        alice().doc('meal_plans/partial').update({ days: SEVEN_DAYS, status: 'submitted' }),
+      );
+    });
+
     test('denied: editing, resetting or deleting after submit', async () => {
       await assertFails(alice().doc('meal_plans/sub1').update({ title: 'Sửa sau khi gửi' }));
       await assertFails(alice().doc('meal_plans/sub1').update({ status: 'draft' }));
@@ -351,6 +362,11 @@ describe('meal_plans', () => {
             .doc('meal_plans/sub1')
             .update({ status: 'rejected', reviewerReason: 'x'.repeat(501) }),
         );
+      });
+
+      test('denied: approving a submitted plan with fewer than 7 days', async () => {
+        await seed('meal_plans/short', mealPlan({ status: 'submitted', days: SEVEN_DAYS.slice(0, 6) }));
+        await assertFails(reviewer().doc('meal_plans/short').update({ status: 'approved' }));
       });
 
       test('allowed: review queue query of submitted plans (Web TV-02)', async () => {

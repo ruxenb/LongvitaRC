@@ -49,7 +49,7 @@ const mealPlan = (overrides = {}) => ({
   targetProteinGrams: 60,
   status: 'draft',
   reviewerReason: null,
-  days: [],
+  days: Array.from({ length: 7 }, (_, dayIndex) => ({ dayIndex })),
   createdAt: CREATED_AT,
   ...overrides,
 });
@@ -152,7 +152,13 @@ const CASES = [
   ['R-29', 'report_exports', 'anonymous', 'read export metadata', 'Denied',
     (db) => db.doc(`users/user1/report_exports/${EXPORT_ID}`).get()],
   ['R-30', 'report_exports', 'user', 'owner records PDF metadata of own plan', 'Allowed',
-    (db) => db.doc(`users/user1/report_exports/${EXPORT_ID}`).set(exportMeta('draft1'))],
+    async (db) => {
+      // The seeded record has the same ID; the owner exports a fresh one.
+      await env.withSecurityRulesDisabled((ctx) =>
+        ctx.firestore().doc(`users/user1/report_exports/${EXPORT_ID}`).delete(),
+      );
+      return db.doc(`users/user1/report_exports/${EXPORT_ID}`).set(exportMeta('draft1'));
+    }],
   ['R-31', 'report_exports', 'user', 'owner deletes export history', 'Denied',
     (db) => db.doc(`users/user1/report_exports/${EXPORT_ID}`).delete()],
   ['R-32', 'report_exports', 'staff', 'record metadata of an unsaved plan (planId = null)', 'Allowed',
@@ -230,12 +236,6 @@ describe('Appendix B rules matrix', () => {
   for (const [id, collection, role, operation, expected, op] of CASES) {
     test(`${id} ${collection} ${role}: ${operation} → ${expected}`, async () => {
       const db = as(ACTORS[role]);
-      if (role === 'user' && id === 'R-30') {
-        // Owner exports a fresh ID; the seeded one already exists.
-        await env.withSecurityRulesDisabled((ctx) =>
-          ctx.firestore().doc(`users/user1/report_exports/${EXPORT_ID}`).delete(),
-        );
-      }
       if (expected === 'Allowed') await assertSucceeds(op(db));
       else await assertFails(op(db));
       results.push({ id, collection, role, operation, expected, result: 'Pass' });

@@ -69,7 +69,7 @@ Không trường nào khác được ghi (`hasOnly`). Staff không đọc đư�
 | `targetCalories`, `targetProteinGrams` | number | có | ≥ 0 |
 | `status` | string | có | `draft`, `submitted`, `approved`, `rejected` |
 | `reviewerReason` | string \| null | không | ≤ 500; bắt buộc khi `rejected`; chỉ staff/admin ghi |
-| `days` | list | có | ≤ 7; `DataService` đòi đủ 7 ngày trước khi lưu |
+| `days` | list | có | ≤ 7; bản `draft` có thể thiếu ngày, mọi trạng thái khác phải đủ đúng 7 ngày |
 | `createdAt` | string | có | không đổi |
 
 ### 3.4 `shopping_lists/{uid}/plans/{planId}`
@@ -99,8 +99,8 @@ stateDiagram-v2
 | Từ | Sang | Ai | Điều kiện trong rules |
 |---|---|---|---|
 | (mới) | `draft` | user (owner) | `uid == auth.uid`, chưa có `reviewerReason` |
-| `draft` | `draft` / `submitted` | owner | chỉ đổi `title`, `targetCalories`, `targetProteinGrams`, `status`, `days` |
-| `submitted` | `approved` | staff, admin | chỉ đổi `status`, `reviewerReason` |
+| `draft` | `draft` / `submitted` | owner | chỉ đổi `title`, `targetCalories`, `targetProteinGrams`, `status`, `days`; gửi duyệt cần đủ 7 ngày |
+| `submitted` | `approved` | staff, admin | chỉ đổi `status`, `reviewerReason`; thực đơn phải đủ 7 ngày |
 | `submitted` | `rejected` | staff, admin | như trên, `reviewerReason` không rỗng, ≤ 500 |
 | `approved`, `rejected` | — | không ai | trạng thái cuối; owner tạo thực đơn mới nếu muốn gửi lại |
 
