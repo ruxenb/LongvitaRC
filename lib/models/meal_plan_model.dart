@@ -1,5 +1,8 @@
 import 'recipe_model.dart';
 
+double calculateProteinTarget(double weightKg, int age) =>
+    (weightKg * (age >= 65 ? 1.0 : 0.8)).clamp(40.0, 95.0).toDouble();
+
 class DailyMeal {
   final int dayIndex; // 0 to 6
   final String dayName; // 'Thứ Hai'..'Chủ Nhật'
@@ -11,18 +14,21 @@ class DailyMeal {
     required this.meals,
   });
 
-  double get totalProtein =>
-      meals.fold(0.0, (acc, r) => acc + r.proteinGrams);
-  double get totalCalories =>
-      meals.fold(0.0, (acc, r) => acc + r.calories);
+  double get totalProtein => meals.fold(0.0, (acc, r) => acc + r.proteinGrams);
+  double get totalCalories => meals.fold(0.0, (acc, r) => acc + r.calories);
 
   factory DailyMeal.fromMap(Map<String, dynamic> map) {
     return DailyMeal(
       dayIndex: map['dayIndex'] as int? ?? 0,
       dayName: map['dayName'] as String? ?? '',
-      meals: (map['meals'] as List<dynamic>?)
-              ?.map((e) => RecipeModel.fromMap(
-                  e as Map<String, dynamic>, e['id'] as String? ?? ''))
+      meals:
+          (map['meals'] as List<dynamic>?)
+              ?.map(
+                (e) => RecipeModel.fromMap(
+                  e as Map<String, dynamic>,
+                  e['id'] as String? ?? '',
+                ),
+              )
               .toList() ??
           const [],
     );
@@ -47,6 +53,7 @@ class MealPlanModel {
   final String title;
   final double targetCalories;
   final double targetProteinGrams;
+
   /// Status for Lab 3 and Cross-role Flow:
   /// 'draft' (default) -> 'submitted' -> 'approved' / 'rejected'
   final String status;
@@ -81,14 +88,16 @@ class MealPlanModel {
           (map['targetProteinGrams'] as num?)?.toDouble() ?? 55.0,
       status: map['status'] as String? ?? 'draft',
       reviewerReason: map['reviewerReason'] as String?,
-      days: (map['days'] as List<dynamic>?)
+      days:
+          (map['days'] as List<dynamic>?)
               ?.map((d) => DailyMeal.fromMap(d as Map<String, dynamic>))
               .toList() ??
           const [],
       createdAt: map['createdAt'] != null
           ? (map['createdAt'] is DateTime
-              ? map['createdAt'] as DateTime
-              : DateTime.tryParse(map['createdAt'].toString()) ?? DateTime.now())
+                ? map['createdAt'] as DateTime
+                : DateTime.tryParse(map['createdAt'].toString()) ??
+                      DateTime.now())
           : DateTime.now(),
     );
   }

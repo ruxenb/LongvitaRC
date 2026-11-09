@@ -139,7 +139,13 @@ class DashboardViewModel extends ChangeNotifier {
     notifyListeners();
     try {
       metrics = await service.loadMetrics();
-      state = AdminLoadState.ready;
+      final value = metrics!;
+      state =
+          value.activeRecipes == 0 &&
+              value.submittedPlans == 0 &&
+              value.approvedPlans == 0
+          ? AdminLoadState.empty
+          : AdminLoadState.ready;
     } catch (value) {
       state = AdminLoadState.error;
       error = value.toString();

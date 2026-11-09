@@ -92,7 +92,24 @@ class _PlanCard extends StatelessWidget {
         ],
       ),
     );
-    if (reason != null) await vm.review(plan, 'rejected', reason: reason);
+    if (reason != null && context.mounted) {
+      await _review(context, 'rejected', reason: reason);
+    }
+  }
+
+  Future<void> _review(
+    BuildContext context,
+    String status, {
+    String? reason,
+  }) async {
+    final messenger = ScaffoldMessenger.of(context);
+    try {
+      await vm.review(plan, status, reason: reason);
+    } catch (error) {
+      messenger.showSnackBar(
+        SnackBar(content: Text('Không thể cập nhật xét duyệt: $error')),
+      );
+    }
   }
 
   @override
@@ -141,7 +158,7 @@ class _PlanCard extends StatelessWidget {
               ),
               const SizedBox(width: 10),
               FilledButton.icon(
-                onPressed: () => vm.review(plan, 'approved'),
+                onPressed: () => _review(context, 'approved'),
                 icon: const Icon(Icons.check),
                 label: const Text('Duyệt'),
               ),

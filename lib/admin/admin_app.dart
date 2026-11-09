@@ -39,31 +39,51 @@ class AdminAccessGate extends StatelessWidget {
       }
       final user = auth.data;
       if (user == null) return const _AdminSignIn();
-      return FutureBuilder<String?>(
-        future: _role(user),
-        builder: (context, role) {
-          if (role.connectionState != ConnectionState.done) {
-            return const _CenteredProgress();
-          }
-          if (role.hasError) {
-            return _AccessMessage(
-              icon: Icons.cloud_off_outlined,
-              title: 'Không thể kiểm tra quyền truy cập',
-              message: role.error.toString(),
-              action: () => FirebaseAuth.instance.signOut(),
-            );
-          }
-          if (role.data == null) {
-            return _AccessMessage(
-              icon: Icons.lock_outline,
-              title: 'Tài khoản không có quyền',
-              message: 'Trang quản trị chỉ dành cho tài khoản nhân viên hoặc quản trị viên.',
-              action: () => FirebaseAuth.instance.signOut(),
-            );
-          }
-          return AdminShell(user: user, role: role.data!);
-        },
+      return AdminRoleGate(
+        role: _role(user),
+        onDenied: () => FirebaseAuth.instance.signOut(),
+        authorizedBuilder: (role) => AdminShell(user: user, role: role),
       );
+    },
+  );
+}
+
+class AdminRoleGate extends StatelessWidget {
+  final Future<String?> role;
+  final VoidCallback onDenied;
+  final Widget Function(String role) authorizedBuilder;
+
+  const AdminRoleGate({
+    super.key,
+    required this.role,
+    required this.onDenied,
+    required this.authorizedBuilder,
+  });
+
+  @override
+  Widget build(BuildContext context) => FutureBuilder<String?>(
+    future: role,
+    builder: (context, role) {
+      if (role.connectionState != ConnectionState.done) {
+        return const _CenteredProgress();
+      }
+      if (role.hasError) {
+        return _AccessMessage(
+          icon: Icons.cloud_off_outlined,
+          title: 'Không thể kiểm tra quyền truy cập',
+          message: role.error.toString(),
+          action: onDenied,
+        );
+      }
+      if (role.data == null) {
+        return _AccessMessage(
+          icon: Icons.lock_outline,
+          title: 'Tài khoản không có quyền',
+          message: 'Trang quản trị chỉ dành cho tài khoản nhân viên hoặc quản trị viên.',
+          action: onDenied,
+        );
+      }
+      return authorizedBuilder(role.data!);
     },
   );
 }

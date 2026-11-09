@@ -37,3 +37,17 @@ and stored documents already use the audited `submitted` transition.
 `recipes.isArchived` is optional and defaults to `false` in the model and
 security rules. Existing recipe documents remain active without a migration.
 The dashboard counts all recipes and subtracts explicitly archived documents.
+
+## Verification — 09/11/2026
+
+- `flutter analyze`: no issues.
+- `flutter test test/admin/admin_web_test.dart`: 5/5 passed, covering the role
+  gate, recipe create/edit/archive, approve/reject, and dashboard states.
+- `flutter test`: 483/483 passed.
+- `flutter build web --target lib/admin_main.dart`: succeeded; output is
+  `build/web`.
+- `firebase.json` explicitly maps Firestore rules to
+  `firebase/firestore.rules`; deployment was not performed by this verification.
+
+Detailed evidence and review decisions are recorded in
+`evidence/web/TV-00-TV-03-20261109/`.

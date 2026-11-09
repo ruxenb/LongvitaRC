@@ -1,0 +1,16 @@
+{
+  "date": "2026-11-09",
+  "branch": "Web",
+  "baseMain": "3297ed6",
+  "analyzerIssues": 0,
+  "adminTestsPassed": 5,
+  "fullTestsPassed": 483,
+  "webBuildPassed": true,
+  "entryPoint": "lib/admin_main.dart",
+  "output": "build/web",
+  "mainDartJsSha256": "17b325dbd0f520b5eae95328dac0e1db45c2ed31aa660a4f2a8ca2bbf8441a8f",
+  "wasmDryRunPassed": true,
+  "firestoreRulesMapping": "firebase/firestore.rules",
+  "firebaseDeployPerformed": false,
+  "productionWritePerformed": false
+}

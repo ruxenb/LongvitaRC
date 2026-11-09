@@ -88,11 +88,21 @@ class _PreferencesScreenState extends State<PreferencesScreen> {
             },
           ),
           const SizedBox(height: AppSpacing.s8),
-          _ReadOnlyResult(
-            title: 'Mục tiêu được tính toán',
-            value: _isOlderAdult
-                ? '55 g protein/ngày • 1,0 g/kg'
-                : '44 g protein/ngày • 0,8 g/kg',
+          ListenableBuilder(
+            listenable: _weight,
+            builder: (context, _) {
+              final kg = double.tryParse(
+                _weight.text.trim().replaceAll(',', '.'),
+              );
+              final age = _isOlderAdult ? 70 : 55;
+              final factor = _isOlderAdult ? 1.0 : 0.8;
+              return _ReadOnlyResult(
+                title: 'Mục tiêu được tính toán',
+                value: kg == null || !kg.isFinite || kg < 25 || kg > 300
+                    ? 'Nhập cân nặng hợp lệ để xem mục tiêu'
+                    : '${calculateProteinTarget(kg, age).round()} g protein/ngày • ${factor.toStringAsFixed(1).replaceAll('.', ',')} g/kg',
+              );
+            },
           ),
           const SizedBox(height: AppSpacing.s24),
           const _FieldLabel('Số bữa mỗi ngày'),
@@ -228,13 +238,7 @@ class _CreatePlanScreenState extends State<CreatePlanScreen> {
             _ReadOnlyResult(
               title: 'Mục tiêu protein',
               value:
-                  '${widget.weightKg.toStringAsFixed(0)} kg • tính từ hồ sơ của bạn',
-            ),
-            const SizedBox(height: AppSpacing.s8),
-            const _ChoiceCard(
-              title: 'Cá ít thủy ngân',
-              subtitle: '2 bữa trong tuần này',
-              selected: false,
+                  '${calculateProteinTarget(widget.weightKg, widget.age).round()} g protein/ngày',
             ),
             const SizedBox(height: AppSpacing.s8),
             const _ReadOnlyResult(
@@ -318,7 +322,7 @@ class _WeeklyPlanScreenState extends State<WeeklyPlanScreen> {
                     ),
                     const SizedBox(height: AppSpacing.s12),
                     SizedBox(
-                      height: 58,
+                      height: 72,
                       child: ListView.separated(
                         scrollDirection: Axis.horizontal,
                         itemCount: plan.days.length,
@@ -327,26 +331,38 @@ class _WeeklyPlanScreenState extends State<WeeklyPlanScreen> {
                         itemBuilder: (context, index) {
                           final day = plan.days[index];
                           final selectedDay = index == _selectedDay;
-                          return InkWell(
-                            key: Key('weekly-day-${day.dayIndex}'),
-                            borderRadius: AppRadius.roundedFull,
-                            onTap: () => setState(() => _selectedDay = index),
-                            child: Container(
-                              width: 42,
-                              decoration: BoxDecoration(
-                                color: selectedDay
-                                    ? AppColors.actionPrimary
-                                    : Colors.transparent,
-                                borderRadius: AppRadius.roundedFull,
-                              ),
-                              alignment: Alignment.center,
-                              child: Text(
-                                '${_shortDay(day.dayName)}\n${19 + index}',
-                                textAlign: TextAlign.center,
-                                style: AppTypography.label.copyWith(
+                          final date = plan.createdAt.add(
+                            Duration(days: index),
+                          );
+                          return Semantics(
+                            button: true,
+                            selected: selectedDay,
+                            label:
+                                '${day.dayName}, ngày ${date.day} tháng ${date.month}',
+                            child: InkWell(
+                              key: Key('weekly-day-${day.dayIndex}'),
+                              borderRadius: AppRadius.roundedFull,
+                              onTap: () => setState(() => _selectedDay = index),
+                              child: Container(
+                                constraints: const BoxConstraints(minWidth: 52),
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 8,
+                                ),
+                                decoration: BoxDecoration(
                                   color: selectedDay
-                                      ? AppColors.actionOnPrimary
-                                      : AppColors.textPrimary,
+                                      ? AppColors.actionPrimary
+                                      : Colors.transparent,
+                                  borderRadius: AppRadius.roundedFull,
+                                ),
+                                alignment: Alignment.center,
+                                child: Text(
+                                  '${_shortDay(day.dayIndex)}\n${date.day}',
+                                  textAlign: TextAlign.center,
+                                  style: AppTypography.label.copyWith(
+                                    color: selectedDay
+                                        ? AppColors.actionOnPrimary
+                                        : AppColors.textPrimary,
+                                  ),
                                 ),
                               ),
                             ),
@@ -357,7 +373,7 @@ class _WeeklyPlanScreenState extends State<WeeklyPlanScreen> {
                     const SizedBox(height: AppSpacing.s12),
                     if (selected != null) ...[
                       Text(
-                        '${selected.dayName} • ${19 + _selectedDay} tháng 10',
+                        '${selected.dayName} • ${plan.createdAt.add(Duration(days: _selectedDay)).day} tháng ${plan.createdAt.add(Duration(days: _selectedDay)).month}',
                         style: AppTypography.labelStrong,
                       ),
                       const SizedBox(height: AppSpacing.s8),
@@ -435,16 +451,8 @@ class _WeeklyPlanScreenState extends State<WeeklyPlanScreen> {
     );
   }
 
-  String _shortDay(String value) {
-    final normalized = value.toLowerCase();
-    if (normalized.contains('hai')) return 'T2';
-    if (normalized.contains('ba')) return 'T3';
-    if (normalized.contains('tư')) return 'T4';
-    if (normalized.contains('năm')) return 'T5';
-    if (normalized.contains('sáu')) return 'T6';
-    if (normalized.contains('bảy')) return 'T7';
-    return 'CN';
-  }
+  String _shortDay(int dayIndex) =>
+      const ['T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'CN'][dayIndex.clamp(0, 6)];
 }
 
 /// S10: Firestore-backed saved plans; open plan with stable state.
@@ -664,10 +672,11 @@ class _MealPlanCard extends StatelessWidget {
                     children: [
                       Text(recipe.name, style: AppTypography.labelStrong),
                       const SizedBox(height: AppSpacing.s4),
-                      Text(
-                        primary ? 'Bữa trưa • 12:30' : 'Bữa tối • 18:45',
-                        style: AppTypography.supporting,
-                      ),
+                      if (recipe.sourceNote.isNotEmpty)
+                        Text(
+                          recipe.sourceNote,
+                          style: AppTypography.supporting,
+                        ),
                     ],
                   ),
                 ),
@@ -677,7 +686,7 @@ class _MealPlanCard extends StatelessWidget {
                 ),
               ],
             ),
-            if (primary) ...[
+            if (recipe.isBookCitation) ...[
               const SizedBox(height: AppSpacing.s8),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,

@@ -303,8 +303,7 @@ class _RecipeDetailsScreenState extends State<RecipeDetailsScreen> {
                     runSpacing: 8,
                     crossAxisAlignment: WrapCrossAlignment.center,
                     children: [
-                      if (recipe.isBookCitation ||
-                          recipe.sourceNote.isNotEmpty) ...[
+                      if (recipe.isBookCitation) ...[
                         const AppBadge(kind: AppBadgeKind.fromBook),
                       ],
                       Text(

@@ -99,15 +99,21 @@ RecipeModel editableRecipe({
   required String instructions,
   String sourceNote = '',
   bool isArchived = false,
+  String? imageUrl,
+  List<IngredientModel> existingIngredients = const [],
 }) {
   final ingredientRows = ingredients
       .split(',')
       .map((value) => value.trim())
       .where((value) => value.isNotEmpty)
-      .map(
-        (value) =>
-            IngredientModel(id: '', name: value, amount: 1, unit: 'phần'),
-      )
+      .map((value) {
+        for (final existing in existingIngredients) {
+          if (existing.name.trim().toLowerCase() == value.toLowerCase()) {
+            return existing;
+          }
+        }
+        return IngredientModel(id: '', name: value, amount: 1, unit: 'phần');
+      })
       .toList();
   final instructionRows = instructions
       .split('\n')
@@ -125,5 +131,6 @@ RecipeModel editableRecipe({
     instructions: instructionRows,
     sourceNote: sourceNote.trim(),
     isArchived: isArchived,
+    imageUrl: imageUrl,
   );
 }

@@ -77,7 +77,7 @@ void main() {
 
         await tester.pumpWidget(app(const RecipeDetailsScreen(recipe: beans)));
         await tester.pump();
-        expect(find.text('Recipe details'), findsOneWidget);
+        expect(find.text('Chi tiết công thức'), findsOneWidget);
         expect(find.text(beans.name), findsOneWidget);
         expect(tester.takeException(), isNull);
 

@@ -8,6 +8,7 @@ import '../theme/app_spacing.dart';
 import '../theme/app_typography.dart';
 import '../viewmodels/auth_viewmodel.dart';
 import '../viewmodels/profile_viewmodel.dart';
+import '../viewmodels/meal_plan_viewmodel.dart';
 import '../widgets/app_button.dart';
 import '../widgets/app_card.dart';
 import '../widgets/app_navigation_bar.dart';
@@ -15,6 +16,7 @@ import '../widgets/state_views.dart';
 import 'meal_flow_screens.dart';
 import 'profile_screen.dart';
 import 'recipe_flow_screens.dart';
+import 'shopping_flow_screens.dart';
 
 /// S01: Firebase-backed entry point for all three business flows.
 class HomeScreen extends StatefulWidget {
@@ -75,6 +77,11 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     final user = context.watch<AuthViewModel>().currentUser;
     final profile = context.watch<ProfileViewModel>();
+    final plan = context.watch<MealPlanViewModel>().activePlan;
+    final todayMeal =
+        plan?.days.isNotEmpty == true && plan!.days.first.meals.isNotEmpty
+        ? plan.days.first.meals.first
+        : null;
     return Scaffold(
       appBar: AppBar(
         title: const Text('Longvita'),
@@ -112,7 +119,7 @@ class _HomeScreenState extends State<HomeScreen> {
               padding: const EdgeInsets.all(AppSpacing.pageMargin),
               children: [
                 Text(
-                  'Chào buổi sáng, ${user?.displayName.split(' ').first ?? 'Minh Anh'}',
+                  'Xin chào, ${user?.displayName.split(' ').first ?? 'bạn'}',
                   style: AppTypography.headingM,
                 ),
                 const SizedBox(height: AppSpacing.s16),
@@ -187,48 +194,64 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      const Row(
-                        children: [
-                          CircleAvatar(
-                            radius: 34,
-                            backgroundColor: AppColors.bgSelected,
-                            child: Icon(
-                              Icons.soup_kitchen_outlined,
-                              color: AppColors.actionPrimary,
+                      if (todayMeal == null)
+                        const Text(
+                          'Chưa có thực đơn. Hãy tạo thực đơn tuần để xem món hôm nay.',
+                          style: AppTypography.supporting,
+                        )
+                      else
+                        Row(
+                          children: [
+                            const CircleAvatar(
+                              radius: 34,
+                              backgroundColor: AppColors.bgSelected,
+                              child: Icon(
+                                Icons.soup_kitchen_outlined,
+                                color: AppColors.actionPrimary,
+                              ),
                             ),
-                          ),
-                          SizedBox(width: AppSpacing.s12),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'Đậu lăng ấm và bí đỏ nướng',
-                                  style: AppTypography.labelStrong,
-                                ),
-                                SizedBox(height: AppSpacing.s4),
-                                Text(
-                                  'Bữa trưa • 12:30',
-                                  style: AppTypography.supporting,
-                                ),
-                              ],
+                            const SizedBox(width: AppSpacing.s12),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    todayMeal.name,
+                                    style: AppTypography.labelStrong,
+                                  ),
+                                  if (todayMeal.sourceNote.isNotEmpty) ...[
+                                    const SizedBox(height: AppSpacing.s4),
+                                    Text(
+                                      todayMeal.sourceNote,
+                                      style: AppTypography.supporting,
+                                    ),
+                                  ],
+                                ],
+                              ),
                             ),
-                          ),
-                        ],
-                      ),
+                          ],
+                        ),
                       const SizedBox(height: AppSpacing.s12),
-                      const Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text('Từ sách', style: AppTypography.label),
-                          Text('Đang chờ', style: AppTypography.supporting),
-                        ],
-                      ),
+                      if (todayMeal?.isBookCitation == true)
+                        const Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text('Từ sách', style: AppTypography.label),
+                            Text('Đang chờ', style: AppTypography.supporting),
+                          ],
+                        ),
                       const SizedBox(height: AppSpacing.s16),
                       AppButton(
                         text: 'Thực đơn đã lưu',
                         variant: AppButtonVariant.secondary,
-                        onPressed: () => _navigateTo(1),
+                        onPressed: plan == null
+                            ? null
+                            : () => Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (_) =>
+                                      const IngredientSummaryScreen(),
+                                ),
+                              ),
                       ),
                       const SizedBox(height: AppSpacing.s8),
                       AppButton(
