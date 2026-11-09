@@ -1,47 +1,79 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../theme/app_colors.dart';
 import '../theme/app_theme.dart';
+import 'admin_auth.dart';
 import 'admin_shell.dart';
 
 class LongvitaAdminApp extends StatelessWidget {
-  const LongvitaAdminApp({super.key});
+  final IAdminAuthGateway auth;
+
+  const LongvitaAdminApp({super.key, required this.auth});
 
   @override
   Widget build(BuildContext context) => MaterialApp(
     title: 'Trang quản trị Longvita',
     debugShowCheckedModeBanner: false,
     theme: AppTheme.lightTheme,
-    home: const AdminAccessGate(),
+    home: AdminAccessGate(auth: auth),
   );
 }
 
-class AdminAccessGate extends StatelessWidget {
-  const AdminAccessGate({super.key});
+class AdminAccessGate extends StatefulWidget {
+  final IAdminAuthGateway auth;
 
-  Future<String?> _role(User user) async {
-    final snapshot = await FirebaseFirestore.instance
-        .collection('users')
-        .doc(user.uid)
-        .get();
-    final role = snapshot.data()?['role'] as String?;
-    return role == 'staff' || role == 'admin' ? role : null;
+  const AdminAccessGate({super.key, required this.auth});
+
+  @override
+  State<AdminAccessGate> createState() => _AdminAccessGateState();
+}
+
+class _AdminAccessGateState extends State<AdminAccessGate> {
+  int _sessionGeneration = 0;
+  String? _activeUid;
+  Future<String?>? _roleFuture;
+
+  Future<String?> _roleFor(User user) {
+    if (_activeUid == user.uid && _roleFuture != null) return _roleFuture!;
+    if (_activeUid != user.uid) {
+      _activeUid = user.uid;
+      _sessionGeneration++;
+    }
+    final requestGeneration = _sessionGeneration;
+    return _roleFuture = _guardRole(user, requestGeneration);
+  }
+
+  Future<String?> _guardRole(User user, int requestGeneration) async {
+    final role = await widget.auth.loadAuthorizedRole(user);
+    if (!mounted ||
+        requestGeneration != _sessionGeneration ||
+        _activeUid != user.uid) {
+      throw const _StaleAdminSession();
+    }
+    return role;
   }
 
   @override
   Widget build(BuildContext context) => StreamBuilder<User?>(
-    stream: FirebaseAuth.instance.authStateChanges(),
+    stream: widget.auth.authStateChanges(),
     builder: (context, auth) {
       if (auth.connectionState == ConnectionState.waiting) {
         return const _CenteredProgress();
       }
       final user = auth.data;
-      if (user == null) return const _AdminSignIn();
+      if (user == null) {
+        if (_activeUid != null) {
+          _activeUid = null;
+          _roleFuture = null;
+          _sessionGeneration++;
+        }
+        return _AdminSignIn(auth: widget.auth);
+      }
       return AdminRoleGate(
-        role: _role(user),
-        onDenied: () => FirebaseAuth.instance.signOut(),
+        key: ValueKey(user.uid),
+        role: _roleFor(user),
+        onDenied: widget.auth.signOut,
         authorizedBuilder: (role) => AdminShell(user: user, role: role),
       );
     },
@@ -67,6 +99,9 @@ class AdminRoleGate extends StatelessWidget {
       if (role.connectionState != ConnectionState.done) {
         return const _CenteredProgress();
       }
+      if (role.error is _StaleAdminSession) {
+        return const _CenteredProgress();
+      }
       if (role.hasError) {
         return _AccessMessage(
           icon: Icons.cloud_off_outlined,
@@ -89,7 +124,8 @@ class AdminRoleGate extends StatelessWidget {
 }
 
 class _AdminSignIn extends StatefulWidget {
-  const _AdminSignIn();
+  final IAdminAuthGateway auth;
+  const _AdminSignIn({required this.auth});
 
   @override
   State<_AdminSignIn> createState() => _AdminSignInState();
@@ -105,9 +141,9 @@ class _AdminSignInState extends State<_AdminSignIn> {
       error = null;
     });
     try {
-      await FirebaseAuth.instance.signInWithPopup(GoogleAuthProvider());
+      await widget.auth.signInWithGoogle();
     } catch (value) {
-      if (mounted) setState(() => error = value.toString());
+      if (mounted) setState(() => error = friendlyAdminAuthError(value));
     } finally {
       if (mounted) setState(() => busy = false);
     }
@@ -164,6 +200,10 @@ class _AdminSignInState extends State<_AdminSignIn> {
       ),
     ),
   );
+}
+
+class _StaleAdminSession implements Exception {
+  const _StaleAdminSession();
 }
 
 class _CenteredProgress extends StatelessWidget {

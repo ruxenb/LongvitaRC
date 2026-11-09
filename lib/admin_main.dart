@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'admin/admin_app.dart';
+import 'admin/admin_auth.dart';
 import 'admin/admin_service.dart';
 import 'admin/admin_viewmodels.dart';
 import 'firebase_options.dart';
@@ -21,7 +22,7 @@ Future<void> main() async {
         ChangeNotifierProvider(create: (_) => ReviewQueueViewModel(service)),
         ChangeNotifierProvider(create: (_) => DashboardViewModel(service)),
       ],
-      child: const LongvitaAdminApp(),
+      child: LongvitaAdminApp(auth: FirebaseAdminAuthGateway()),
     ),
   );
 }

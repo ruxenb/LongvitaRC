@@ -51,3 +51,17 @@ The dashboard counts all recipes and subtracts explicitly archived documents.
 
 Detailed evidence and review decisions are recorded in
 `evidence/web/TV-00-TV-03-20261109/`.
+
+The 10/11 authentication, Rules and ARTEMIS follow-up is recorded in
+`evidence/review/PR25-followup-20261110/README.md`.
+
+## Browser regression command
+
+Pass each test file separately. On the pinned Flutter toolchain, passing the
+directory `test/admin` to the Chrome runner can generate an invalid joined path.
+
+```powershell
+flutter precache --web
+flutter test --platform chrome test/admin/admin_web_test.dart
+flutter test --platform chrome test/admin/pr25_integration_test.dart
+```

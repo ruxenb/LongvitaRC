@@ -1,8 +1,10 @@
 import 'dart:async';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:longvita/admin/admin_app.dart';
+import 'package:longvita/admin/admin_auth.dart';
 import 'package:longvita/admin/admin_service.dart';
 import 'package:longvita/admin/admin_viewmodels.dart';
 import 'package:longvita/admin/dashboard_screen.dart';
@@ -92,6 +94,46 @@ MealPlanModel plan() => MealPlanModel(
 Widget app(Widget child) => MaterialApp(home: Scaffold(body: child));
 
 void main() {
+  test('admin role lookup is shared and cached until sign-out', () async {
+    final cache = AdminRoleCache();
+    final response = Completer<String?>();
+    var loads = 0;
+    Future<String?> loader() {
+      loads++;
+      return response.future;
+    }
+
+    final first = cache.load('u1', loader);
+    final duplicate = cache.load('u1', loader);
+    expect(loads, 1);
+    response.complete('staff');
+    expect(await first, 'staff');
+    expect(await duplicate, 'staff');
+    expect(await cache.load('u1', () async => 'admin'), 'staff');
+
+    cache.clear();
+    expect(await cache.load('u1', () async => 'admin'), 'admin');
+  });
+
+  test('admin auth errors are safe and friendly', () {
+    expect(
+      friendlyAdminAuthError(
+        FirebaseAuthException(code: 'popup-closed-by-user'),
+      ),
+      contains('hủy đăng nhập'),
+    );
+    expect(
+      friendlyAdminAuthError(
+        FirebaseAuthException(code: 'network-request-failed'),
+      ),
+      contains('kiểm tra mạng'),
+    );
+    expect(
+      friendlyAdminAuthError(Exception('secret')),
+      isNot(contains('secret')),
+    );
+  });
+
   testWidgets('role gate covers loading, denied and authorized', (
     tester,
   ) async {
