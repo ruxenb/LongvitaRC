@@ -1,7 +1,7 @@
 // PM-S3-5-04: the PDFs of an ended session are removed without waiting. When
 // the same user signs back in and exports before that removal finishes, the
 // old files must go and the new one must stay usable. Real LocalReportStore in
-// a temporary folder; auth, upload and viewer are fakes.
+// a temporary folder; auth, metadata and viewer are fakes; the default Final flow is used.
 import 'dart:async';
 import 'dart:io';
 import 'dart:typed_data';
@@ -81,8 +81,8 @@ void main() {
       },
     );
     profile = ProfileViewModel(
+      metadataRepository: FakeReportMetadataRepository(),
       authService: auth,
-      storageService: FakeStorageService(),
       notificationService: FakeNotificationService(),
       reportService: FakeReportService(),
       reportStore: store,

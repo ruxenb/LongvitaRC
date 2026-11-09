@@ -1,3 +1,4 @@
+import 'package:longvita/config/pdf_export_mode.dart';
 // S4-13: Profile and Firebase Demo Area against fake services. Upload success
 // and push here use fakes; a live upload and a real push are not covered.
 import 'dart:async';
@@ -112,6 +113,8 @@ class CountingCrashlytics extends FakeCrashlytics {
 }
 
 class Harness {
+  final PdfExportMode exportMode;
+  Harness({this.exportMode = PdfExportMode.storageEmulatorDemo});
   final auth = FakeAuthService();
   final analytics = FakeAnalytics();
   final crashlytics = CountingCrashlytics();
@@ -129,6 +132,8 @@ class Harness {
     remoteConfig: FakeRemoteConfig(),
   );
   late final profile = ProfileViewModel(
+      metadataRepository: FakeReportMetadataRepository(),
+      exportMode: exportMode,
     authService: auth,
     storageService: storage,
     notificationService: notifications,
@@ -178,6 +183,7 @@ void main() {
   Future<Harness> pumpProfile(
     WidgetTester tester, {
     bool withPlan = true,
+    PdfExportMode exportMode = PdfExportMode.storageEmulatorDemo,
     Size size = const Size(360, 800),
     double textScale = 1,
     void Function(Harness)? arrange,
@@ -186,7 +192,7 @@ void main() {
     tester.view.devicePixelRatio = 1;
     addTearDown(tester.view.reset);
 
-    final h = Harness();
+    final h = Harness(exportMode: exportMode);
     arrange?.call(h);
     h.session; // subscribes to the auth stream
     await tester.pumpWidget(h.app(textScale: textScale));
@@ -223,6 +229,20 @@ void main() {
           'recipient_uid': ?recipient,
         },
       );
+
+  testWidgets('Final Profile reports local success with no upload URL or retry', (tester) async {
+    final h = await pumpProfile(tester, exportMode: PdfExportMode.finalLocal);
+    await tapKey(tester, 'profile-export');
+    expect(find.text('Đã lưu PDF trên máy.'), findsOneWidget);
+    expect(find.text('Đã tải PDF lên Storage Emulator.'), findsNothing);
+    expect(find.byKey(const Key('profile-retry')), findsNothing);
+    expect(find.byKey(const Key('profile-cancel-upload')), findsNothing);
+    expect(h.storage.uploads, 0);
+    expect(h.profile.lastUploadedUrl, isNull);
+    expect(find.byKey(const Key('profile-open')), findsOneWidget);
+    expect(find.byKey(const Key('profile-share')), findsOneWidget);
+    expect(tester.takeException(), isNull);
+  });
 
   testWidgets('shows who is signed in', (tester) async {
     await pumpProfile(tester);
@@ -751,7 +771,7 @@ void main() {
 
       await tapKey(tester, 'profile-export');
 
-      expect(find.text('Đã tải PDF lên Cloud Storage.'), findsOneWidget);
+      expect(find.text('Đã tải PDF lên Storage Emulator.'), findsOneWidget);
       expect(find.text('https://storage.test/report.pdf'), findsOneWidget);
       expect(find.byKey(const Key('profile-retry')), findsNothing);
     });

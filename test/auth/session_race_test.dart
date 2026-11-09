@@ -1,3 +1,4 @@
+import 'package:longvita/config/pdf_export_mode.dart';
 // PM-S3-5-01 / PM-S3-5-02: async work started in one session must not touch
 // the state of the next session, including when the same uid signs back in.
 // Uses the real ViewModels with fake services that hold their responses open.
@@ -123,6 +124,8 @@ void main() {
     FakeReportService? report,
   }) {
     final profile = ProfileViewModel(
+      metadataRepository: FakeReportMetadataRepository(),
+      exportMode: PdfExportMode.storageEmulatorDemo,
       authService: session.auth,
       storageService: storage ?? FakeStorageService(),
       notificationService: FakeNotificationService(),

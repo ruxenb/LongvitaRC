@@ -1,3 +1,6 @@
+import 'package:longvita/models/report_metadata.dart';
+import 'package:longvita/services/i_report_metadata_repository.dart';
+
 // Test-only fakes for CHARLIE-AUTH-01. They implement the app interfaces
 // (and the concrete service classes' interfaces via `implements`) so no
 // Firebase SDK is touched.
@@ -22,12 +25,12 @@ import 'package:longvita/services/report_viewer.dart';
 import 'package:longvita/viewmodels/session_scoped.dart';
 
 UserModel testUser(String uid, {String role = 'user'}) => UserModel(
-      uid: uid,
-      email: '$uid@example.test',
-      displayName: 'User $uid',
-      role: role,
-      createdAt: DateTime(2026, 11, 2),
-    );
+  uid: uid,
+  email: '$uid@example.test',
+  displayName: 'User $uid',
+  role: role,
+  createdAt: DateTime(2026, 11, 2),
+);
 
 /// Scriptable [IAuthService]. The auth stream behaves like Firebase: it
 /// emits the current uid on listen and on every change.
@@ -72,8 +75,9 @@ class FakeAuthService implements IAuthService {
   @override
   Future<AuthSignInResult> signInWithGoogle() async {
     signInCalls++;
-    final result =
-        pendingSignIn != null ? await pendingSignIn!.future : nextSignIn;
+    final result = pendingSignIn != null
+        ? await pendingSignIn!.future
+        : nextSignIn;
     if (result is AuthSignInSucceeded) emitUid(result.uid);
     return result;
   }
@@ -82,8 +86,9 @@ class FakeAuthService implements IAuthService {
   Future<UserModel> loadProfile(String uid) async {
     loadProfileCalls++;
     await Future<void>.delayed(Duration.zero);
-    final outcome =
-        profileResults.isEmpty ? testUser(uid) : profileResults.removeAt(0);
+    final outcome = profileResults.isEmpty
+        ? testUser(uid)
+        : profileResults.removeAt(0);
     if (outcome is AuthFailure) throw outcome;
     return _cached = outcome as UserModel;
   }
@@ -120,8 +125,7 @@ class FakeAnalytics implements AnalyticsService {
     String topic = 'longevity_meal_plan',
     required int fileSizeKb,
     required int hasShoppingList,
-  }) async =>
-      events.add('export_report:$fileSizeKb:$hasShoppingList');
+  }) async => events.add('export_report:$fileSizeKb:$hasShoppingList');
 
   @override
   Future<void> logGenerateMealPlan({
@@ -129,9 +133,10 @@ class FakeAnalytics implements AnalyticsService {
     required int mealsPerDay,
     required int eatingWindowHours,
     required int fishMealsCount,
-  }) async =>
-      events.add('generate_meal_plan:$targetAgeGroup:$mealsPerDay:'
-          '$eatingWindowHours:$fishMealsCount');
+  }) async => events.add(
+    'generate_meal_plan:$targetAgeGroup:$mealsPerDay:'
+    '$eatingWindowHours:$fishMealsCount',
+  );
 
   @override
   dynamic noSuchMethod(Invocation invocation) => Future<void>.value();
@@ -150,9 +155,12 @@ class FakeCrashlytics implements CrashlyticsService {
       keys[key] = value;
 
   @override
-  Future<void> recordError(dynamic exception, StackTrace? stack,
-          {dynamic reason, bool fatal = false}) async =>
-      errors.add(exception);
+  Future<void> recordError(
+    dynamic exception,
+    StackTrace? stack, {
+    dynamic reason,
+    bool fatal = false,
+  }) async => errors.add(exception);
 
   @override
   dynamic noSuchMethod(Invocation invocation) => null;
@@ -229,6 +237,9 @@ class FakeLocalReportStore implements LocalReportStore {
     required Uint8List bytes,
   }) async {
     if (saveError != null) throw saveError!;
+    if (files.containsKey('$uid/$exportId')) {
+      throw const FileSystemException('PDF export ID already exists');
+    }
     files['$uid/$exportId'] = bytes;
     return File('memory/reports/$uid/$exportId.pdf');
   }
@@ -237,14 +248,13 @@ class FakeLocalReportStore implements LocalReportStore {
   Future<Uint8List?> read({
     required String uid,
     required String exportId,
-  }) async =>
-      files['$uid/$exportId'];
+  }) async => files['$uid/$exportId'];
 
   @override
   Future<File?> find({required String uid, required String exportId}) async =>
       files.containsKey('$uid/$exportId')
-          ? File('memory/reports/$uid/$exportId.pdf')
-          : null;
+      ? File('memory/reports/$uid/$exportId.pdf')
+      : null;
 
   @override
   Future<void> delete({required String uid, required String exportId}) async =>
@@ -301,4 +311,12 @@ class FakeRemoteConfig implements RemoteConfigService {
 
   @override
   dynamic noSuchMethod(Invocation invocation) => null;
+}
+
+class FakeReportMetadataRepository implements IReportMetadataRepository {
+  final List<(String, ReportMetadata)> writes = [];
+  @override
+  Future<void> save(String uid, ReportMetadata metadata) async {
+    writes.add((uid, metadata));
+  }
 }

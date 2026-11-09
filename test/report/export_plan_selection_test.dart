@@ -106,8 +106,8 @@ void main() {
       remoteConfig: FakeRemoteConfig(),
     );
     final profile = ProfileViewModel(
+      metadataRepository: FakeReportMetadataRepository(),
       authService: auth,
-      storageService: FakeStorageService(),
       notificationService:
           NotificationService(gateway: FakeGateway(), history: MemoryHistory()),
       reportService: reports,
@@ -146,7 +146,7 @@ void main() {
     await tester.pump();
     await tester.tap(button);
     await settle(tester);
-    expect(find.text('Đã tải PDF lên Cloud Storage.'), findsOneWidget);
+    expect(find.text('Đã lưu PDF trên máy.'), findsOneWidget);
     return reports.plans.last;
   }
 
@@ -165,7 +165,8 @@ void main() {
     expect(second.title, 'Thực đơn B');
     expect(second.days.single.meals.map((r) => r.name),
         ['Cá hồi áp chảo', 'Salad cải xoăn']);
-    expect(store.files.keys.last, contains('plan-b'));
+    expect(store.files.keys.last, matches(RegExp(r'^uid-a/pdf_[0-9]{8}T[0-9]{6}Z_[0-9a-f]{16}$')));
+    expect(store.files.values.last, [2], reason: 'saved bytes belong to the second generated PDF');
   });
 
   testWidgets('after a meal change, the PDF has the new meal and totals',

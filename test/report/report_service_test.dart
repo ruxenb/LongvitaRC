@@ -162,12 +162,12 @@ void main() {
       expect(names, ['e1.pdf']);
     });
 
-    test('saving the same export id replaces the file', () async {
-      await store.save(uid: 'uid-a', exportId: 'e1', bytes: bytes);
-      final file = await store.save(
-          uid: 'uid-a', exportId: 'e1', bytes: Uint8List.fromList([9]));
-
-      expect(await file.readAsBytes(), [9]);
+    test('a colliding export id never overwrites the first file', () async {
+      final file = await store.save(uid: 'uid-a', exportId: 'e1', bytes: bytes);
+      await expectLater(store.save(
+          uid: 'uid-a', exportId: 'e1', bytes: Uint8List.fromList([9])),
+          throwsA(isA<FileSystemException>()));
+      expect(await file.readAsBytes(), bytes);
     });
 
     test('another user does not find the file', () async {
