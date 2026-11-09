@@ -1,0 +1,6 @@
+file final-candidate.json recipes SHA256 e07d7fe291c7068baa05f2f30bba1f31ef367dbce6417f27d62a70fe80f8db87
+structural review errors: 0
+PASS create-only into an empty collection, with readback — created lv-fvl-spelt-chicory-carrot-v1, lv-fvl-spelt-lentil-sesame-v1; calls 6
+PASS a second run is refused before any write — Document lv-fvl-spelt-chicory-carrot-v1 already exists. No overwrite allowed.
+PASS one ID already present: nothing is created — Document lv-fvl-spelt-lentil-sesame-v1 already exists. No overwrite allowed.
+PASS failure after the first create stops; state is readable for reconciliation — Firestore returned HTTP 503 for POST; state lv-fvl-spelt-chicory-carrot-v1=present, lv-fvl-spelt-lentil-sesame-v1=absent

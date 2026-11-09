@@ -1,0 +1,16 @@
+P1: <uid>_1794191845681071 status=draft updateTime=2026-11-09T02:38:02.063988Z title="Thực đơn 7 ngày (30 tuổi, 60.0 kg)"
+  Thứ Hai: lv-fvl-spelt-chicory-carrot-v1 + lv-fvl-spelt-lentil-sesame-v1 = 936.47 kcal, 38.3515 g
+  Thứ Ba: lv-fvl-spelt-chicory-carrot-v1 + lv-fvl-spelt-lentil-sesame-v1 = 936.47 kcal, 38.3515 g
+  Thứ Tư: lv-fvl-spelt-chicory-carrot-v1 + lv-fvl-spelt-lentil-sesame-v1 = 936.47 kcal, 38.3515 g
+  Thứ Năm: lv-fvl-spelt-chicory-carrot-v1 + lv-fvl-spelt-lentil-sesame-v1 = 936.47 kcal, 38.3515 g
+  Thứ Sáu: lv-fvl-spelt-chicory-carrot-v1 + lv-fvl-spelt-lentil-sesame-v1 = 936.47 kcal, 38.3515 g
+  Thứ Bảy: lv-fvl-spelt-chicory-carrot-v1 + lv-fvl-spelt-lentil-sesame-v1 = 936.47 kcal, 38.3515 g
+  Chủ Nhật: lv-fvl-spelt-chicory-carrot-v1 + lv-fvl-spelt-lentil-sesame-v1 = 936.47 kcal, 38.3515 g
+P2 (sau đổi món): <uid>_1794191974277930 status=draft updateTime=2026-11-09T02:42:11.968211Z title="Thực đơn 7 ngày (30 tuổi, 60.0 kg)"
+  Thứ Hai: lv-fvl-spelt-chicory-carrot-v1 + lv-fvl-spelt-chicory-carrot-v1 + lv-fvl-spelt-chicory-carrot-v1 = 1075.08 kcal, 39.5340 g
+  Thứ Ba: lv-fvl-spelt-lentil-sesame-v1 + lv-fvl-spelt-chicory-carrot-v1 + lv-fvl-spelt-lentil-sesame-v1 = 1514.58 kcal, 63.5250 g
+  Thứ Tư: lv-fvl-spelt-chicory-carrot-v1 + lv-fvl-spelt-lentil-sesame-v1 + lv-fvl-spelt-chicory-carrot-v1 = 1294.83 kcal, 51.5295 g
+  Thứ Năm: lv-fvl-spelt-lentil-sesame-v1 + lv-fvl-spelt-chicory-carrot-v1 + lv-fvl-spelt-lentil-sesame-v1 = 1514.58 kcal, 63.5250 g
+  Thứ Sáu: lv-fvl-spelt-chicory-carrot-v1 + lv-fvl-spelt-lentil-sesame-v1 + lv-fvl-spelt-chicory-carrot-v1 = 1294.83 kcal, 51.5295 g
+  Thứ Bảy: lv-fvl-spelt-lentil-sesame-v1 + lv-fvl-spelt-chicory-carrot-v1 + lv-fvl-spelt-lentil-sesame-v1 = 1514.58 kcal, 63.5250 g
+  Chủ Nhật: lv-fvl-spelt-chicory-carrot-v1 + lv-fvl-spelt-lentil-sesame-v1 + lv-fvl-spelt-chicory-carrot-v1 = 1294.83 kcal, 51.5295 g

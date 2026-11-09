@@ -1,0 +1,8 @@
+start 2026-11-09 09:26:56 +0700
+operator: Firebase CLI account of Charlie (token kept in memory)
+Project: longvita-8da7e / collection: recipes
+Candidate IDs: lv-fvl-spelt-chicory-carrot-v1, lv-fvl-spelt-lentil-sesame-v1
+Exact batch SHA256: e07d7fe291c7068baa05f2f30bba1f31ef367dbce6417f27d62a70fe80f8db87
+CREATE-ONLY SUCCESS: 2 documents verified by readback.
+result: {"dryRun":false,"created":["lv-fvl-spelt-chicory-carrot-v1","lv-fvl-spelt-lentil-sesame-v1"],"sha":"e07d7fe291c7068baa05f2f30bba1f31ef367dbce6417f27d62a70fe80f8db87"}
+end 2026-11-09 09:26:58 +0700

@@ -1,0 +1,4 @@
+2026-11-09 09:27:11 +0700
+recipes: 2 documents: lv-fvl-spelt-chicory-carrot-v1, lv-fvl-spelt-lentil-sesame-v1
+lv-fvl-spelt-chicory-carrot-v1: MATCHES manifest | createTime 2026-11-09T02:26:58.790884Z | 358.36 kcal, 13.178 g, 5 ingredients, category ngu_coc
+lv-fvl-spelt-lentil-sesame-v1: MATCHES manifest | createTime 2026-11-09T02:26:58.979071Z | 578.11 kcal, 25.1735 g, 4 ingredients, category ngu_coc
