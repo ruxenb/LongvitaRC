@@ -277,3 +277,10 @@ Charlie xác nhận NC-02 và giao Codex trực tiếp NC-03. Code `13a188c` chu
 ## 17. NC-04 implementation — 09/11/2026
 
 Code 5cab63b: Profile tách local file/metadata/demo, thêm trạng thái và retry metadata, xử lý file không còn. 452/452 Flutter, analyzer sạch, debug APK build được;12widgetcases mới gồm360/412dp và textScale1/2, Semantics/actions/liveRegion. Hai kiểm âm tính bị bắt. [Evidence NC-04](../evidence/pdf/NC-04-profile-20261109/README.md). Chưa native/deploy trong NC-04; NC-05 theo yêu cầu Charlie triển khai tiếp sau PM kiểm.
+
+
+## 18. NC-05 native/integration — 09/11/2026
+
+Final No-Cost kiểm trên Android35/Spark thật: local save/open/share, hai plan khác nội dung, offline pending rồi reconnect đúng document/file;5clientmetadata records đọc lại đúng schema/owner/size. 5local saves có5SDKexport_report vàHTTP204; chưa xem GA4 DebugView do Google identity của browser thiếu quyền, không yêu cầu quyền/settings mới. Demo opt-in StorageEmulator upload có byte-for-byte readback; FinalAPK đã cài lại và môi trường/log/network đã phục hồi rồi dừng.
+
+Rules deployed chỉ thêm block metadata vào live, giữ tình trạng Shopping chưa deploy có trước; candidate64/64 rồi deploy firestore:rules và GET readback đúng source. Canonical repo rules giữ nguyên cả Shopping+metadata; xem scope/rollback/limits trong [NC-05 evidence](../evidence/firebase/NC-05-final-no-cost-20261109/README.md). Không Storage cloud/billing/IAM/role/recipes/meal_plan writes hoặc xóa data QA. Native logs/raw PDFs/APKs chỉ local; public evidence lọc UID/token. Gói NC-01..05 đủ kiểm kỹ thuật theo phạm vi đã chốt, Ready for Charlie final acceptance, chưa PR/merge hoặc tự đóng task CM/HD/29task khác.

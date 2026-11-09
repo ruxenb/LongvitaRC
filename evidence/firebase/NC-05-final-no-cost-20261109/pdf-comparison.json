@@ -1,0 +1,37 @@
+[
+  {
+    "case": "P1-online",
+    "pages": 2,
+    "lines": 28,
+    "allPlanLinesMatch": true,
+    "metadataSizeMatchesFile": true
+  },
+  {
+    "case": "P1-offline-first-attempt",
+    "pages": 2,
+    "lines": 28,
+    "allPlanLinesMatch": true,
+    "metadataSizeMatchesFile": true
+  },
+  {
+    "case": "P1-offline",
+    "pages": 2,
+    "lines": 28,
+    "allPlanLinesMatch": true,
+    "metadataSizeMatchesFile": true
+  },
+  {
+    "case": "P2-online",
+    "pages": 1,
+    "lines": 21,
+    "allPlanLinesMatch": true,
+    "metadataSizeMatchesFile": true
+  },
+  {
+    "case": "P2-demo-emulator",
+    "pages": 1,
+    "lines": 21,
+    "allPlanLinesMatch": true,
+    "metadataSizeMatchesFile": true
+  }
+]
