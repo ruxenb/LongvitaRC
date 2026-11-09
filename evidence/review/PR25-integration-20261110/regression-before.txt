@@ -81,7 +81,7 @@ The test description was:
 00:01 +0 -1: editing an existing source category preserves its value [E]
   Test failed. See exception logs above.
   The test description was: editing an existing source category preserves its value
-  
+
 00:01 +0 -1: a save finishing after navigation does not notify a disposed VM
 00:01 +0 -2: a save finishing after navigation does not notify a disposed VM [E]
   A RecipeAdminViewModel was used after being disposed.
@@ -90,7 +90,7 @@ The test description was:
   package:flutter/src/foundation/change_notifier.dart 191:6   ChangeNotifier.debugAssertNotDisposed
   package:flutter/src/foundation/change_notifier.dart 414:27  ChangeNotifier.notifyListeners
   package:longvita/admin/admin_viewmodels.dart 64:7           RecipeAdminViewModel.save
-  
+
 00:01 +0 -2: a review finishing after logout does not notify a disposed VM
 00:01 +0 -3: a review finishing after logout does not notify a disposed VM [E]
   A ReviewQueueViewModel was used after being disposed.
@@ -99,7 +99,7 @@ The test description was:
   package:flutter/src/foundation/change_notifier.dart 191:6   ChangeNotifier.debugAssertNotDisposed
   package:flutter/src/foundation/change_notifier.dart 414:27  ChangeNotifier.notifyListeners
   package:longvita/admin/admin_viewmodels.dart 117:7          ReviewQueueViewModel.review
-  
+
 00:01 +0 -3: metrics finishing after logout do not notify a disposed VM
 00:01 +0 -4: metrics finishing after logout do not notify a disposed VM [E]
   A DashboardViewModel was used after being disposed.
@@ -108,7 +108,7 @@ The test description was:
   package:flutter/src/foundation/change_notifier.dart 191:6   ChangeNotifier.debugAssertNotDisposed
   package:flutter/src/foundation/change_notifier.dart 414:27  ChangeNotifier.notifyListeners
   package:longvita/admin/admin_viewmodels.dart 153:5          DashboardViewModel.load
-  
+
 00:01 +0 -4: Some tests failed.
 
 Failing tests:

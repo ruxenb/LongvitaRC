@@ -59,7 +59,7 @@ Try `flutter pub outdated` for more information.
   package:longvita/models/meal_plan_model.dart 99:16   new MealPlanModel.fromMap
   package:longvita/admin/review_queue_item.dart 24:36  new ReviewQueueItem.fromMap
   test\admin\pr25_integration_test.dart 138:25         main.<fn>
-  
+
 00:01 +4 -1: malformed non-map meal remains an isolated unapprovable row
 00:01 +4 -2: malformed non-map meal remains an isolated unapprovable row [E]
   type 'int' is not a subtype of type 'Map<String, dynamic>' in type cast
@@ -71,7 +71,7 @@ Try `flutter pub outdated` for more information.
   package:longvita/models/meal_plan_model.dart 99:16   new MealPlanModel.fromMap
   package:longvita/admin/review_queue_item.dart 24:36  new ReviewQueueItem.fromMap
   test\admin\pr25_integration_test.dart 138:25         main.<fn>
-  
+
 00:01 +4 -2: malformed non-map ingredient remains an isolated unapprovable row
 00:01 +4 -3: malformed non-map ingredient remains an isolated unapprovable row [E]
   type 'String' is not a subtype of type 'Map<String, dynamic>' in type cast
@@ -86,7 +86,7 @@ Try `flutter pub outdated` for more information.
   package:longvita/models/meal_plan_model.dart 99:16   new MealPlanModel.fromMap
   package:longvita/admin/review_queue_item.dart 24:36  new ReviewQueueItem.fromMap
   test\admin\pr25_integration_test.dart 138:25         main.<fn>
-  
+
 00:01 +4 -3: malformed duplicate day indices remains an isolated unapprovable row
 00:01 +5 -3: VM refuses approval of an invalid row but allows rejection
 00:01 +5 -4: VM refuses approval of an invalid row but allows rejection [E]
@@ -96,7 +96,7 @@ Try `flutter pub outdated` for more information.
   package:longvita/models/meal_plan_model.dart 99:16   new MealPlanModel.fromMap
   package:longvita/admin/review_queue_item.dart 24:36  new ReviewQueueItem.fromMap
   test\admin\pr25_integration_test.dart 153:33         main.<fn>
-  
+
 00:01 +5 -4: a bad submission stays visible without disabling valid reviews
 ══╡ EXCEPTION CAUGHT BY FLUTTER TEST FRAMEWORK ╞════════════════════════════════════════════════════
 The following _TypeError was thrown running a test:
@@ -127,7 +127,7 @@ The test description was:
 00:01 +5 -5: a bad submission stays visible without disabling valid reviews [E]
   Test failed. See exception logs above.
   The test description was: a bad submission stays visible without disabling valid reviews
-  
+
 00:01 +5 -5: Some tests failed.
 
 Failing tests:
