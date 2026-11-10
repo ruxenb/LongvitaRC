@@ -1,6 +1,16 @@
 # Longvita Web Admin
 
-Ở mốc CM-00, thư mục này vẫn chứa scaffold nền tảng Web của app gốc. CM-02 sẽ
-đưa client độc lập vào `web/lib/`, platform hiện có vào `web/web/` và chuyển
-Hosting output sang `web/build/web`. Không đăng ký Firebase app hoặc deploy
-Hosting khi chỉ di chuyển cấu trúc. Xem `../docs/monorepo-migration.md`.
+Flutter client độc lập, dùng `longvita_core` từ `../packages/core`.
+Từ root repo, chạy `flutter pub get --enforce-lockfile`, sau đó:
+
+```powershell
+cd web
+flutter run -d chrome
+# Kiểm và build trong client:
+flutter analyze --no-pub lib test
+flutter test --no-pub
+flutter build web --release
+```
+
+Xem [bản đồ kiến trúc](../docs/monorepo-migration.md) và README root cho
+Firebase/evidence. Firebase app ID và môi trường đã đăng ký được giữ nguyên.

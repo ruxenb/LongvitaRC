@@ -3,7 +3,7 @@
 > **Final Assignment:** hệ thống gồm Flutter Mobile, Flutter Web Admin và
 > Firebase dùng chung. Phân công chính thức nằm tại
 > [`docs/tasks/final-task-assignment.md`](docs/tasks/final-task-assignment.md).
-> Web Admin hiện được phát triển trên PR #25; Hosting production và bằng chứng
+> Web Admin đã tích hợp qua PR #25; Hosting production và bằng chứng
 > mở ẩn danh chưa hoàn tất nên README không công bố URL giả định.
 
 > **Cập nhật 08/11/2026:** **Lab 3 chính là Assignment** đang triển khai, kế thừa thiết kế Lab 2. Giữ 112 task IDs/owners; các phần mobile/web/shared-core là cùng sản phẩm. Sáu dịch vụ Firebase đã có failure-case evidence ở các mức cloud/emulator khác nhau; không suy Storage Emulator thành production. ARTEMIS có một batch 7/7 pass và TC-11 chạy lại thành công, nhưng chưa đủ chiến dịch chính thức tối thiểu ba lượt/test.
@@ -51,74 +51,48 @@ Tuân thủ yêu cầu bắt buộc của Handout Mục 3 & 9 về việc ghim p
 |:---|:---|:---|
 | **Flutter SDK** | `3.47.6` (channel stable) | `flutter --version`; bản đã build và chạy S3-1 trên máy Charlie |
 | **Dart SDK** | `3.13.5` | Đi kèm Flutter 3.47.6; `pubspec.yaml` yêu cầu `^3.13.2` |
-| **Android build** | AGP `9.1.0`, Kotlin `2.4.0`, Gradle wrapper `9.3.1`, Java target 17 | `android/settings.gradle.kts`, `gradle-wrapper.properties`; JDK 21 chạy Gradle |
-| **Firebase Gradle plugins** | google-services `4.5.0`, Crashlytics `3.0.6` | `android/settings.gradle.kts` |
+| **Android build** | AGP `9.1.0`, Kotlin `2.4.0`, Gradle wrapper `9.3.1`, Java target 17 | `mobile/android/settings.gradle.kts`, `gradle-wrapper.properties`; JDK 21 chạy Gradle |
+| **Firebase Gradle plugins** | google-services `4.5.0`, Crashlytics `3.0.6` | `mobile/android/settings.gradle.kts` |
 | **Android SDK** | compileSdk/targetSdk 36, minSdk 24 | Theo Flutter 3.47.6 (`flutter.*SdkVersion`), đọc từ APK bằng `aapt2` |
 | **FlutterFire / Firebase CLI** | FlutterFire CLI `1.4.1`, firebase-tools `15.34.2` | Dùng để sinh `lib/firebase_options.dart`; firebase-tools khóa ở `firebase/package-lock.json` (`npm ci` trong `firebase/`) |
 | **Python** | `3.12+` | Dành cho Google ARTEMIS Test Suite |
 | **Google ARTEMIS** | `351ca8422f7b5b54e80a9c1ce03a222e02415b6b` (Apache 2.0) | Pin tại `e2e_test/pyproject.toml` |
-| **Firebase Packages** | Core `3.15.2`, Auth `5.7.0`, Storage `12.4.10`, Messaging `15.2.10`, Analytics `11.6.0`, Crashlytics `4.3.10`, RemoteConfig `5.5.0`, Firestore `5.6.12`, google_sign_in `6.3.0` | Exact version trong `pubspec.yaml`, trùng `pubspec.lock` |
+| **Firebase Packages** | Core `3.15.2`, Auth `5.7.0`, Storage `12.4.10`, Messaging `15.2.10`, Analytics `11.6.0`, Crashlytics `4.3.10`, RemoteConfig `5.5.0`, Firestore `5.6.12`, google_sign_in `6.3.0` | Exact version trong pubspec của ba member, một `pubspec.lock` ở root |
 | **State Management** | `provider: 6.1.5+1` | MVVM Architecture Dependency Injection |
 
 **Quy tắc phiên bản:** mọi package hosted trong `pubspec.yaml` ghi đúng một version, trùng `pubspec.lock`; cả hai file đều được commit. Lấy dependencies bằng `flutter pub get --enforce-lockfile`, lệnh này báo lỗi thay vì tự đổi lockfile. Khi cần nâng một package, sửa version của package đó, chạy `flutter pub get`, kiểm tra rồi commit `pubspec.yaml` và `pubspec.lock` cùng nhau; không chạy `flutter pub upgrade` cho toàn bộ.
 
-**Firebase bootstrap:** `lib/firebase_options.dart` do `flutterfire configure --project=longvita-8da7e --platforms=android --android-package-name=vn.edu.fpt.longvita` sinh ra, khớp `android/app/google-services.json` (vẫn giữ cho Crashlytics và Google Sign-in). `FirebaseBootstrap` khởi tạo Firebase trước khi tạo service; nếu khởi động lỗi, `StartupGate` hiện màn lỗi kèm nút Thử lại thay vì chạy tiếp. Chỉ cấu hình Android.
+**Firebase bootstrap:** Mobile dùng `mobile/lib/firebase_options.dart` và `mobile/android/app/google-services.json`; Web dùng `web/lib/firebase_options.dart`. Hai cấu hình giữ nguyên các Firebase App ID đã đăng ký; `firebase.json` trỏ đúng từng client. Mobile giữ `FirebaseBootstrap`/`StartupGate` với nút Thử lại. Migration không chạy FlutterFire configure hoặc tạo Firebase app.
 
 
 ---
 
 ## 3. Bản Đồ Nơi Lưu Trữ Sản Phẩm Bàn Giao (Deliverable Map)
 
-Cấu trúc thư mục chuẩn theo Mục 9 của Handout PRM393 Lab 3:
+Cấu trúc Final sau CM-00/CM-02; [bản đồ migration và ranh giới package](docs/monorepo-migration.md):
 
 ```text
-PRM393_Lab03_<StudentID>/
-├── README.md                          # Tài liệu giới thiệu, hướng dẫn chạy, ghim version, link video
-├── pubspec.yaml                       # Quản lý dependencies và asset declarations
-├── analysis_options.yaml              # Cấu hình bộ linter tiêu chuẩn cho Flutter/Dart
-├── .gitignore                         # Loại bỏ secret, keystore, env; cho phép google-services.json
-├── lib/                               # Tầng kiến trúc MVVM (Core-Package-Ready đón đầu Assignment)
-│   ├── # --- Cụm Shared Core (sẵn sàng chuyển thành packages/core khi lên Assignment) ---
-│   ├── models/                        # Plain Dart data classes (User có role, MealPlan có status, Recipe, Ingredient...)
-│   ├── services/                      # Service interfaces & Cloud Firestore services (DataService, AuthService, ReportService)
-│   ├── firebase/                      # Wrappers dịch vụ Firebase (Crashlytics, Analytics, Remote Config)
-│   ├── theme/                         # Tokens: ColorScheme, TextTheme, AppSpacing, AppRadius
-│   ├── widgets/                       # 9 component dùng chung theo tokens Lab 2
-│   ├── # --- Cụm Mobile App (sẽ chuyển thành mobile/ khi lên Assignment) ---
-│   ├── viewmodels/                    # ViewModels quản lý explicit state model (ViewState)
-│   ├── screens/                       # 10 màn hình Lab 2 + SignInScreen + ProfileScreen
-│   ├── utils/                         # Hàm bổ trợ & tiện ích
-│   └── main.dart                      # Điểm vào chính của ứng dụng Flutter & MultiProvider setup
-├── e2e_test/                          # Bộ kiểm thử E2E Google ARTEMIS (Section 7)
-│   ├── conftest.py                    # Khởi tạo client, device serial, profile Flash/Pro
-│   ├── pyproject.toml                 # Cấu hình môi trường Python 3.12+ & pytest
-│   └── test_*.py                      # Kịch bản kiểm thử tự động theo từng module nghiệp vụ
-├── android/                           # Cấu hình nền tảng Android (chứa google-services.json)
-├── firebase/                          # Cấu hình dịch vụ Firebase
-│   ├── storage.rules                  # Security rules giới hạn reports/{uid}/...
-│   └── remote-config-defaults.json    # Giá trị mặc định in-app cho Remote Config
-├── docs/                              # Hồ sơ kỹ thuật của Lab 3
-│   ├── tasks/                         # Bảng phân chia 112 tasks và tiến độ nhóm 4 người
-│   ├── design-traceability.md         # Ma trận truy vết thiết kế Lab 2 -> Flutter & Deviation log
-│   ├── architecture.md                # Tài liệu kiến trúc MVVM, Mermaid layer diagram, sequence
-│   ├── analytics-plan.md              # Kế hoạch đo lường sự kiện Firebase Analytics (Appendix A)
-│   ├── test-plan.md                   # Kế hoạch kiểm thử tự động ARTEMIS (Appendix B)
-│   ├── code-review.md                 # Sổ ghi nhận kết quả AI Code Review (Appendix C)
-│   ├── service-contracts.md            # Baseline service interfaces/wrappers và ViewModel
-│   └── worklog-thang.md                # Tiến độ, bằng chứng, lỗi và blocker của Thắng
-├── evidence/                          # Toàn bộ bằng chứng nghiệm thu (Mục 11)
-│   ├── auth/                          # Ảnh chụp màn hình đăng nhập, tab Users trên Firebase console
-│   ├── storage/                       # Ảnh chụp console file list under reports/{uid}/...
-│   ├── fcm/                           # Bằng chứng nhận notification ở 3 trạng thái
-│   ├── analytics/                     # Ảnh chụp Firebase DebugView cho 8 sự kiện
-│   ├── crashlytics/                   # Ảnh chụp dashboard Crashlytics (non-fatal error + test crash)
-│   ├── remote-config/                 # Ảnh chụp màn hình trước/sau khi đổi giá trị trên console
-│   ├── artemis/                       # Traces, logs, pass-rate tables và video replay ARTEMIS
-│   └── review/                        # Output thô xuất từ các công cụ AI review (PR review log)
-├── report/
-│   └── Lab03_<StudentID>.pdf          # Báo cáo tổng kết hoàn chỉnh (8–12 trang)
-└── slides/
-    └── Lab03_<StudentID>_slides.pdf   # Slide thuyết trình bảo vệ dự án (12–15 trang)
+LongvitaRC/
+├── pubspec.yaml / pubspec.lock          # Pub workspace, một lockfile chung
+├── mobile/                            # Flutter Android, package longvita
+│   ├── lib/                           # screens, VM, auth/native/PDF/FCM
+│   ├── android/                       # vn.edu.fpt.longvita, cấu hình giữ nguyên
+│   ├── assets/                        # font PDF và assets riêng Mobile
+│   └── test/
+├── web/                               # Flutter Web, package longvita_admin
+│   ├── lib/                           # Admin screens/VM/auth/bootstrap
+│   ├── web/                           # platform index/manifest/icons
+│   └── test/
+├── packages/core/                     # longvita_core, hai client cùng import
+│   ├── lib/                           # models, Firestore, theme, 9 widget groups
+│   ├── assets/fonts/                  # UI fonts + OFL, một nguồn
+│   └── test/
+├── firebase/                          # rules/emulator tests chuẩn ở root
+├── e2e_test/ / test_support/           # ARTEMIS và offline regression
+├── assets/figma/ / assets/stitch/      # thiết kế tham chiếu, không vào app build
+├── evidence/                          # một nguồn bằng chứng chung
+├── docs/ / report/ / slides/
+└── scripts/                           # kiểm workspace và công cụ nhóm
 ```
 
 ---
@@ -159,30 +133,47 @@ flutter doctor
 flutter pub get --enforce-lockfile
 ```
 
+### Kiểm workspace
+
+```powershell
+# Tại root, sau khi Flutter/Python đã có trong PATH
+python scripts/check-monorepo.py
+.\scripts\check-workspace.ps1
+# Thêm APK debug và Web release:
+.\scripts\check-workspace.ps1 -Build
+```
+
+Dart Pub workspace giữ một lockfile chung; mỗi client tự bootstrap Firebase.
+Không deploy khi chạy các check này. Các số test/evidence Lab 3 phía dưới là
+lịch sử theo commit; bằng chứng migration có nguồn riêng.
+
 ### Bước 2: Chạy ứng dụng trên thiết bị Android
 ```bash
 # Xem danh sách thiết bị/máy ảo đang kết nối
 flutter devices
 
 # Chạy ứng dụng ở chế độ Debug
+cd mobile
 flutter run
 ```
 
-### Chạy Web Admin
+### Chạy Web Admin (mở terminal tại root repo)
 
 Web Admin dùng entrypoint riêng và chỉ cho phép role `staff`/`admin`:
 
 ```bash
-flutter run -d chrome -t lib/admin_main.dart
+cd web
+flutter run -d chrome
 ```
 
 Build release dùng cho Firebase Hosting:
 
 ```bash
-flutter build web --release -t lib/admin_main.dart
+# Tại thư mục web/
+flutter build web --release
 ```
 
-Output là `build/web`. Cấu hình SPA Hosting và Firestore rules mapping nằm ở
+Output tính từ root repo là `web/build/web`. Cấu hình SPA Hosting và Firestore rules mapping nằm ở
 `firebase.json`. Không chạy `firebase deploy` nếu tài khoản chưa có quyền trên
 project `longvita-8da7e`; deploy production phải được owner cho phép và phải lưu
 evidence URL mở ở cửa sổ ẩn danh.

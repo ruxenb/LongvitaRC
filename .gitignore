@@ -76,3 +76,10 @@ app.*.map.json
 
 # Isolated Firebase emulator test dependencies
 /test/firestore/node_modules/
+
+# CM-00/02 workspace member outputs
+**/build/
+**/coverage/
+/mobile/android/app/debug
+/mobile/android/app/profile
+/mobile/android/app/release

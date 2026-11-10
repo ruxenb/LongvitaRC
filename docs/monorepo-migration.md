@@ -10,7 +10,7 @@ CM-00 chuẩn bị `mobile/`, `web/`, `packages/core/` và evidence
 boundary, **chưa phải implementation hoàn tất**. Các entrypoint root vẫn hoạt
 động trong mốc chuẩn bị. Không chép logic sang hai client để tạo khung.
 
-## Đích CM-02
+## Cấu trúc CM-02 đã triển khai
 
 ```text
 pubspec.yaml / pubspec.lock   # workspace và một resolution chung
@@ -36,7 +36,7 @@ e2e_test/ / test_support/     # harness ARTEMIS và offline regression ở root
 evidence/                    # một thư mục bằng chứng chung
 ```
 
-Luồng phụ thuộc đích: Mobile → Core ← Web. Core không import client; Web không
+Luồng phụ thuộc: Mobile → Core ← Web. Core không import client; Web không
 import Mobile. PDF local, path_provider/printing, storage demo, FCM nền,
 Crashlytics và lifecycle riêng của client không kéo vào Core/Web. Domain
 models, serialization, Firestore collections/rules, role/status và nghiệp vụ
@@ -69,6 +69,23 @@ CM-02: core/member analysis, các test đã phân bổ, APK Mobile và Web relea
 build, dependency boundaries, UI/font/assets, Firebase ID/config/rules và
 hosted lock versions đều được kiểm. Kết quả phải ghi đúng fake/offline/native;
 không gọi việc build là đã deploy hay đã chạy live cross-role.
+
+## Làm việc sau migration
+
+- Từ root: `flutter pub get --enforce-lockfile`,
+  `python scripts/check-monorepo.py`; script `scripts/check-workspace.ps1`
+  chạy analysis/test cho từng member (thêm `-Build` để build hai client).
+- Chạy Android tại `mobile/`: `flutter run`; Web tại `web/`:
+  `flutter run -d chrome`. Không dùng entrypoint `lib/admin_main.dart` cũ.
+- Test của Mobile ở `mobile/test/`, Admin ở `web/test/`; Analytics và metadata
+  model tests ở `packages/core/test/`. ARTEMIS/rules/evidence vẫn ở root.
+- `firebase.json` Hosting trỏ `web/build/web`; chỉ đường dẫn output thay đổi,
+  không phải một lần deploy. Không chạy configure để tạo lại Firebase apps.
+- Các thành viên đang có branch cũ nên tích hợp migration trước khi sửa tiếp;
+  chuyển thay đổi sang đường dẫn tương ứng, không khôi phục root `lib/` hoặc
+  chép lại shared models vào client. Không bỏ thay đổi của đồng đội khi có
+  conflict. Evidence trước migration giữ nguyên đường dẫn/commit lịch sử.
+- Bằng chứng kiểm gói: `evidence/architecture/CM-00-CM-02-20261110/`.
 
 Nguồn kỹ thuật chính thức: [Dart Pub workspaces](https://dart.dev/tools/pub/workspaces),
 [Flutter package assets](https://docs.flutter.dev/ui/assets/assets-and-images),
