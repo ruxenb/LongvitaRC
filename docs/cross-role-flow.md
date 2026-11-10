@@ -1,7 +1,7 @@
 # TV-04 — Luồng liên vai trò Mobile ↔ Web Admin
 
-> **Cập nhật:** 10/11/2026  
-> **Owner:** Thắng VLQ; phối hợp Hoàng DV  
+> **Cập nhật:** 10/11/2026
+> **Owner:** Thắng VLQ; phối hợp Hoàng DV
 > **Trạng thái:** đặc tả và quy trình đo đã hoàn thành; ba lượt chạy live còn
 > chờ Mobile HD-05, Firebase Hosting TV-00 và tài khoản demo đúng role.
 

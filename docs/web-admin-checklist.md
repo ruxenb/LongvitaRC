@@ -1,8 +1,8 @@
 # TV-04B — Web Admin verification checklist
 
-> **Cập nhật:** 10/11/2026  
-> **Owner thực thi:** Thắng VLQ  
-> **Người tổng duyệt test report:** Thái An  
+> **Cập nhật:** 10/11/2026
+> **Owner thực thi:** Thắng VLQ
+> **Người tổng duyệt test report:** Thái An
 > **Trạng thái:** checklist và bằng chứng local đã chuẩn bị; production/live
 > screenshots còn chờ deploy và tài khoản demo đúng role.
 
