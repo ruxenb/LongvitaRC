@@ -5,6 +5,11 @@ log gốc giữ riêng local.
 
 Ngày kiểm: 10/11/2026. Baseline `ea7b888` (PR #25 đã merge).
 Code migration: `aadc1ff`, sau scaffold `2c52387`.
+Logs được tạo trên working tree từ `2c52387` trong lúc thực hiện migration;
+source đã kiểm sau đó được commit nguyên trạng tại `aadc1ff`. Commit
+`662373c` chỉ bổ sung evidence. Cả bốn SHA (gồm baseline `ea7b888`) đều có
+trong ancestry PR. Các lần kiểm dưới đây thuộc source `aadc1ff`, không phải
+một lượt chạy mới sau commit chỉ thêm evidence.
 Branch `feature/charlie-shared-core-01`. Yêu cầu gốc:
 [`final-task-assignment.md`](../../../docs/tasks/final-task-assignment.md).
 

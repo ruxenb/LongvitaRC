@@ -5,6 +5,40 @@ from pathlib import Path
 import re
 
 
+_DART_TOKEN = re.compile(
+    r"//[^\n]*|/\*|r?(?:\"\"\"[\s\S]*?\"\"\"|'''[\s\S]*?'''|"
+    r"\"(?:\\.|[^\"\\])*\"|'(?:\\.|[^'\\])*')|[A-Za-z_]\w*|[^\s]"
+)
+
+
+def dart_imports(content: str) -> list[str]:
+    """Read import/export URIs, skipping strings and nested Dart comments."""
+    uris = []
+    cursor = 0
+    expects_uri = False
+    while match := _DART_TOKEN.search(content, cursor):
+        token = match[0]
+        cursor = match.end()
+        if token.startswith('//'):
+            continue
+        if token == '/*':
+            depth = 1
+            while depth:
+                delimiter = re.search(r'/\*|\*/', content[cursor:])
+                if delimiter is None:
+                    return uris
+                depth += 1 if delimiter[0] == '/*' else -1
+                cursor += delimiter.end()
+            continue
+        if token in {'import', 'export'}:
+            expects_uri = True
+            continue
+        if expects_uri and token.startswith(("'", '"')):
+            uris.append(token[1:-1])
+        expects_uri = False
+    return uris
+
+
 def validate(root: Path) -> list[str]:
     """Return actionable errors for a concrete workspace, without changing it."""
     errors = []
@@ -30,7 +64,7 @@ def validate(root: Path) -> list[str]:
         imports_core = False
         for path in sorted((root/member/'lib').rglob('*.dart')):
             content = path.read_text(encoding='utf-8')
-            for uri in re.findall(r"(?m)^(?:import|export)\s+['\"]([^'\"]+)['\"]", content):
+            for uri in dart_imports(content):
                 if uri.startswith('package:'):
                     package = uri[8:].split('/')[0]
                     imports_core |= package == 'longvita_core'
@@ -47,9 +81,10 @@ def validate(root: Path) -> list[str]:
                       f'{path.relative_to(root)}: Firebase bootstrap belongs to clients')
         if member == 'web':
             check(imports_core, 'Web must consume the real shared Core package')
-    mobile_imports = '\n'.join(p.read_text(encoding='utf-8')
-                               for p in (root/'mobile/lib').rglob('*.dart'))
-    check('package:longvita_core/' in mobile_imports, 'Mobile must consume Core')
+    mobile_uris = [uri for p in (root/'mobile/lib').rglob('*.dart')
+                   for uri in dart_imports(p.read_text(encoding='utf-8'))]
+    check(any(uri.startswith('package:longvita_core/') for uri in mobile_uris),
+          'Mobile must consume Core')
     check(not list((root/'lib').rglob('*.dart')), 'Root still has a duplicate Dart implementation')
 
     config = json.loads((root/'firebase.json').read_text(encoding='utf-8'))

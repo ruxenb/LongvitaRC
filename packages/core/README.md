@@ -10,6 +10,12 @@ import 'package:longvita_core/longvita_core.dart';
 import 'package:longvita_core/models/meal_plan_model.dart';
 ```
 
+Barrel và các module dưới `lib/models`, `lib/services`, `lib/theme`,
+`lib/widgets`, `lib/firebase`, `lib/l10n` là public API được hỗ trợ. Chưa có
+implementation trong `lib/src`; nếu bổ sung thì client không import `src/`.
+Đổi đường dẫn public là thay đổi API cần cập nhật consumers, không chỉ là
+di chuyển nội bộ. Quy ước này theo [Dart package layout](https://dart.dev/tools/pub/create-packages).
+
 - `models/`: domain, serialization và shared state types.
 - `services/`: DataService, AdminService, metadata repository và contracts.
 - `firebase/`: Analytics và Remote Config dùng được trên cả hai client.

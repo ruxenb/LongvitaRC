@@ -44,7 +44,11 @@ and stored documents already use the audited `submitted` transition.
 security rules. Existing recipe documents remain active without a migration.
 The dashboard counts all recipes and subtracts explicitly archived documents.
 
-## Verification — 09/11/2026
+## Historical verification — 09/11/2026 (before CM-00/CM-02)
+
+This is the pre-migration record, including its original commands and output
+paths. Use the current Run/Build sections above for commands after migration;
+the old root entrypoint below no longer exists.
 
 - `flutter analyze`: no issues.
 - `flutter test test/admin/admin_web_test.dart`: 5/5 passed, covering the role

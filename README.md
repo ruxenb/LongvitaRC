@@ -54,7 +54,7 @@ Tuân thủ yêu cầu bắt buộc của Handout Mục 3 & 9 về việc ghim p
 | **Android build** | AGP `9.1.0`, Kotlin `2.4.0`, Gradle wrapper `9.3.1`, Java target 17 | `mobile/android/settings.gradle.kts`, `gradle-wrapper.properties`; JDK 21 chạy Gradle |
 | **Firebase Gradle plugins** | google-services `4.5.0`, Crashlytics `3.0.6` | `mobile/android/settings.gradle.kts` |
 | **Android SDK** | compileSdk/targetSdk 36, minSdk 24 | Theo Flutter 3.47.6 (`flutter.*SdkVersion`), đọc từ APK bằng `aapt2` |
-| **FlutterFire / Firebase CLI** | FlutterFire CLI `1.4.1`, firebase-tools `15.34.2` | Dùng để sinh `lib/firebase_options.dart`; firebase-tools khóa ở `firebase/package-lock.json` (`npm ci` trong `firebase/`) |
+| **FlutterFire / Firebase CLI** | FlutterFire CLI `1.4.1`, firebase-tools `15.34.2` | Cấu hình theo client: `mobile/lib/firebase_options.dart`, `web/lib/firebase_options.dart`; firebase-tools khóa ở `firebase/package-lock.json` (`npm ci` trong `firebase/`) |
 | **Python** | `3.12+` | Dành cho Google ARTEMIS Test Suite |
 | **Google ARTEMIS** | `351ca8422f7b5b54e80a9c1ce03a222e02415b6b` (Apache 2.0) | Pin tại `e2e_test/pyproject.toml` |
 | **Firebase Packages** | Core `3.15.2`, Auth `5.7.0`, Storage `12.4.10`, Messaging `15.2.10`, Analytics `11.6.0`, Crashlytics `4.3.10`, RemoteConfig `5.5.0`, Firestore `5.6.12`, google_sign_in `6.3.0` | Exact version trong pubspec của ba member, một `pubspec.lock` ở root |
@@ -125,6 +125,10 @@ cần cài toolchain tương ứng hoặc điều chỉnh các path ở đầu
 `scripts/project-env.ps1`.
 
 ### Bước 1: Khởi tạo môi trường & lấy dependencies
+
+Mở terminal tại **root repository**, nơi có `pubspec.lock` và danh sách
+workspace members. Thực hiện bước này trước khi `cd mobile` hoặc `cd web`.
+
 ```bash
 # Kiểm tra môi trường Flutter
 flutter doctor
