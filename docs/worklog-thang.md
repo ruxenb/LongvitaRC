@@ -1,5 +1,17 @@
 # Worklog — Thắng VLQ
 
+## 10/11/2026 — TV-04B mobile-browser evidence
+
+- Bổ sung sáu ảnh production của Web Admin chạy trên trình duyệt Android:
+  Sign-in, OAuth loading/popup-blocked, Review Queue empty, Recipes data,
+  Dashboard data và sign-in cancelled recovery.
+- Loại ảnh Google account chooser khỏi commit vì có email cá nhân.
+- WEB-01/02/08/12/17 có thêm bằng chứng production. WEB-13/18 được đánh dấu
+  Fail ở mobile-width vì Recipes bị cắt ngang và heading xuống dòng bất thường;
+  không tuyên bố responsive pass.
+- TV-04B chưa hoàn tất: còn desktop viewport chuẩn, hành động ghi dữ liệu,
+  approve/reject live, Console evidence và ảnh sau sửa responsive.
+
 ## 10/11/2026 — TV-00 production và TV-05 README
 
 - TV-00: deploy Flutter Web từ `web/` lên Firebase Hosting project
