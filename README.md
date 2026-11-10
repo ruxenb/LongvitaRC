@@ -236,8 +236,9 @@ Các màn hình Web hiện có:
 
 ### Final Assignment deliverables
 
-- **Web Hosting URL:** chưa có bằng chứng production/incognito; chờ quyền deploy
-  TV-00.
+- **Web Hosting URL:** https://longvita-8da7e.web.app — production release ngày
+  10/11/2026; HTTP 200, đúng title và Flutter assets. Google OAuth, role gate và
+  thao tác Firestore production vẫn cần ảnh kiểm chứng bằng tài khoản demo.
 - **Cross-role flow:** đặc tả, sequence diagram và bảng đo ba lượt tại
   [`docs/cross-role-flow.md`](docs/cross-role-flow.md); số đo live còn để trống.
 - **Web Admin checklist:** [`docs/web-admin-checklist.md`](docs/web-admin-checklist.md),
@@ -266,8 +267,10 @@ thể của từng thành viên chỉ được ghi khi có source/output hoặc 
 
 ### Trạng thái phần việc Thắng VLQ — 10/11/2026
 
+- TV-00 đã deploy production tại https://longvita-8da7e.web.app; HTTP và asset
+  check đạt, còn browser evidence cho OAuth/role gate.
 - TV-01, TV-02, TV-03 và TV-03B đã có implementation, test/evidence local trên
-  PR #25; vẫn phải đóng mọi review thread mới trước khi merge.
+  PR #25, đã merge vào `main` tại `ea7b888`.
 - TV-04 đã hoàn thành phần đặc tả và quy trình đo; chưa có ba lượt live.
 - TV-04B đã có checklist/evidence index; chưa có ảnh production.
 - TV-05 đang làm: hướng dẫn Web, roles, deliverable map, AI disclosure và giới
