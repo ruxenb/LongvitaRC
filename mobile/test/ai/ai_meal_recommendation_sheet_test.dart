@@ -17,7 +17,7 @@ class FakeGeminiAiService implements IGeminiAiService {
   Future<AiMealRecommendation> recommendLongevityMeal({
     required String mealType,
     int? targetCalories,
-    String? preferences,
+    List<String>? preferences,
   }) async {
     recommendCalled = true;
     return stubRecommendation ??
@@ -36,10 +36,10 @@ class FakeGeminiAiService implements IGeminiAiService {
   }
 
   @override
-  void logRecommendationAccepted(
-    String recommendationId, {
-    bool wasEdited = false,
-  }) {
+  Future<void> logRecommendationAccepted({
+    required String recommendationId,
+    required bool wasEdited,
+  }) async {
     acceptedId = recommendationId;
     acceptedWasEdited = wasEdited;
   }

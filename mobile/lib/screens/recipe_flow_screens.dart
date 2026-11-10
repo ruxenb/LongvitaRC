@@ -470,7 +470,7 @@ class _RecipeDetailsScreenState extends State<RecipeDetailsScreen> {
                     onPressed: () async {
                       final aiRecipe = await AiMealRecommendationSheet.show(
                         context: context,
-                        mealType: recipe.category,
+                        mealType: recipe.category == 'ca' ? 'lunch' : 'dinner',
                         targetCalories: recipe.calories.round(),
                         originalRecipe: recipe,
                       );
@@ -707,7 +707,9 @@ class _MealAlternativesScreenState extends State<MealAlternativesScreen> {
                             final aiRecipe =
                                 await AiMealRecommendationSheet.show(
                                   context: context,
-                                  mealType: widget.original.category,
+                                  mealType: widget.original.category == 'ca'
+                                      ? 'lunch'
+                                      : 'dinner',
                                   targetCalories:
                                       widget.original.calories.round(),
                                   originalRecipe: widget.original,

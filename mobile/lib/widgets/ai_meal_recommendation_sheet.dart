@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -18,7 +20,7 @@ import 'package:longvita_core/widgets/app_button.dart';
 class AiMealRecommendationSheet extends StatefulWidget {
   final String mealType;
   final int? targetCalories;
-  final String? preferences;
+  final List<String>? preferences;
   final RecipeModel? originalRecipe;
 
   const AiMealRecommendationSheet({
@@ -34,7 +36,7 @@ class AiMealRecommendationSheet extends StatefulWidget {
     required BuildContext context,
     required String mealType,
     int? targetCalories,
-    String? preferences,
+    List<String>? preferences,
     RecipeModel? originalRecipe,
   }) {
     return showModalBottomSheet<RecipeModel>(
@@ -124,9 +126,24 @@ class _AiMealRecommendationSheetState extends State<AiMealRecommendationSheet> {
     if (rec == null) return;
 
     final newName = _nameController.text.trim();
-    final newCalories = int.tryParse(_caloriesController.text) ?? rec.calories;
-    final newProtein =
-        double.tryParse(_proteinController.text) ?? rec.proteinGrams;
+    final caloriesParsed = int.tryParse(_caloriesController.text);
+    final proteinParsed = double.tryParse(_proteinController.text);
+
+    if (newName.isEmpty) {
+      setState(() => _errorMessage = 'Vui lòng nhập tên món ăn.');
+      return;
+    }
+    if (caloriesParsed == null || caloriesParsed <= 0) {
+      setState(() => _errorMessage = 'Lượng calo phải là số nguyên dương lớn hơn 0.');
+      return;
+    }
+    if (proteinParsed == null || proteinParsed <= 0) {
+      setState(() => _errorMessage = 'Lượng protein phải là số dương lớn hơn 0.');
+      return;
+    }
+
+    final newCalories = caloriesParsed;
+    final newProtein = proteinParsed;
     final newReason = _reasonController.text.trim();
 
     final wasEdited =
@@ -137,12 +154,19 @@ class _AiMealRecommendationSheetState extends State<AiMealRecommendationSheet> {
 
     // Log acceptance event to Firebase Analytics
     final aiService = context.read<IGeminiAiService>();
-    aiService.logRecommendationAccepted(rec.id, wasEdited: wasEdited);
+    unawaited(aiService.logRecommendationAccepted(
+      recommendationId: rec.id,
+      wasEdited: wasEdited,
+    ));
+
+    // Generate unique ID to prevent collisions in plan
+    final uniqueId = '${rec.id}-${DateTime.now().millisecondsSinceEpoch}';
 
     // Build finalized RecipeModel
     final updated = rec
         .copyWith(
-          mealName: newName.isNotEmpty ? newName : rec.mealName,
+          id: uniqueId,
+          mealName: newName,
           calories: newCalories,
           proteinGrams: newProtein,
           longevityReason:

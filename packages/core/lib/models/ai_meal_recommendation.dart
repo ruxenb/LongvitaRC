@@ -186,14 +186,16 @@ class AiMealRecommendation {
       category: category,
       proteinGrams: proteinGrams,
       calories: calories.toDouble(),
-      ingredients: ingredients
-          .map((ing) => IngredientModel(
-                name: ing,
-                quantity: 1,
-                unit: 'phần',
-                isPurchased: false,
-              ))
-          .toList(),
+      ingredients: [
+        for (var i = 0; i < ingredients.length; i++)
+          IngredientModel(
+            id: '$id-ing-$i',
+            name: ingredients[i],
+            amount: 1,
+            unit: 'phần',
+            isPurchased: false,
+          ),
+      ],
       instructions: [
         longevityReason,
         if (longevityNutrients.isNotEmpty)
