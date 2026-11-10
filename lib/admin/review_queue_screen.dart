@@ -102,34 +102,9 @@ class _PlanCard extends StatelessWidget {
   const _PlanCard({required this.plan, required this.vm});
 
   Future<void> reject(BuildContext context) async {
-    final controller = TextEditingController();
     final reason = await showDialog<String>(
       context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Từ chối thực đơn'),
-        content: TextField(
-          controller: controller,
-          autofocus: true,
-          maxLines: 3,
-          decoration: const InputDecoration(
-            labelText: 'Lý do',
-            hintText: 'Nêu rõ điểm cần điều chỉnh',
-          ),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('Hủy'),
-          ),
-          FilledButton(
-            onPressed: () {
-              final value = controller.text.trim();
-              if (value.isNotEmpty) Navigator.pop(context, value);
-            },
-            child: const Text('Xác nhận từ chối'),
-          ),
-        ],
-      ),
+      builder: (_) => const _RejectReasonDialog(),
     );
     if (reason != null && context.mounted) {
       await _review(context, 'rejected', reason: reason);
@@ -215,4 +190,63 @@ class _PlanCard extends StatelessWidget {
       ),
     );
   }
+}
+
+class _RejectReasonDialog extends StatefulWidget {
+  const _RejectReasonDialog();
+
+  @override
+  State<_RejectReasonDialog> createState() => _RejectReasonDialogState();
+}
+
+class _RejectReasonDialogState extends State<_RejectReasonDialog> {
+  final _controller = TextEditingController();
+  String? _validationError;
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  void _submit() {
+    final value = _controller.text.trim();
+    if (value.isEmpty) {
+      setState(() => _validationError = 'Vui lòng nhập lý do từ chối.');
+      return;
+    }
+    if (value.characters.length > 500) {
+      setState(() => _validationError = 'Lý do không được vượt quá 500 ký tự.');
+      return;
+    }
+    Navigator.pop(context, value);
+  }
+
+  @override
+  Widget build(BuildContext context) => AlertDialog(
+    title: const Text('Từ chối thực đơn'),
+    content: TextField(
+      controller: _controller,
+      autofocus: true,
+      maxLines: 3,
+      onChanged: (_) {
+        if (_validationError != null) {
+          setState(() => _validationError = null);
+        }
+      },
+      decoration: InputDecoration(
+        labelText: 'Lý do',
+        hintText: 'Nêu rõ điểm cần điều chỉnh',
+        errorText: _validationError,
+        counterText: '${_controller.text.characters.length}/500',
+      ),
+    ),
+    actions: [
+      TextButton(
+        onPressed: () => Navigator.pop(context),
+        child: const Text('Hủy'),
+      ),
+      FilledButton(onPressed: _submit, child: const Text('Xác nhận từ chối')),
+    ],
+  );
 }

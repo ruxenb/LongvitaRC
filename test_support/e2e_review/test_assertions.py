@@ -123,7 +123,7 @@ def test_sign_in_screen_that_stays_is_signed_out(monkeypatch):
 
 def test_sign_in_screen_before_a_restored_session_is_signed_in(monkeypatch):
     FakeDevice(monkeypatch, SIGN_IN, SIGN_IN, home(PLACEHOLDER_ACCOUNT))
-    assert harness._open_app() == harness.HOME_TITLE
+    assert harness._open_app() == "home"
 
 
 # PM-S64-03: a missing account must not make a negative check pass early.
@@ -190,6 +190,7 @@ async def test_sign_out_accepts_launcher_or_sign_in(last):
 
 @pytest.mark.parametrize("last", [
     "Press Android Back: the Longvita home screen appeared.",
+    "Pressed Back. Longvita Dashboard is visible, not the launcher.",
     "Press Android Back: Longvita Dashboard, ROLE: USER.",
     "Press Android Back: an unknown blank screen.",
 ])
@@ -198,6 +199,27 @@ async def test_sign_out_rejects_app_home_or_unknown_result(last):
         await auth_cases.test_tc11_sign_out_cannot_return_with_back(observe(
             "Tap Đồng ý: Đăng nhập bằng Google appears.", last,
         ))
+
+
+def test_tc11_dashboard_marker_regression_sync():
+    """Keep the critical TC-11 replay runnable without an async test plugin."""
+    def run_immediate(coroutine):
+        with pytest.raises(StopIteration):
+            coroutine.send(None)
+
+    run_immediate(auth_cases.test_tc11_sign_out_cannot_return_with_back(observe(
+        "Tap Đồng ý: Đăng nhập bằng Google appears.",
+        "Press Android Back: Android launcher and app icons are visible.",
+    )))
+    run_immediate(auth_cases.test_tc11_sign_out_cannot_return_with_back(observe(
+        "Tap Đồng ý: Đăng nhập bằng Google appears.",
+        "Press Android Back: Đăng nhập bằng Google remains visible.",
+    )))
+    with pytest.raises(AssertionError):
+        run_immediate(auth_cases.test_tc11_sign_out_cannot_return_with_back(observe(
+            "Tap Đồng ý: Đăng nhập bằng Google appears.",
+            "Pressed Back. Longvita Dashboard is visible, not the launcher.",
+        )))
 
 
 async def test_viewer_heading_must_follow_open_action(monkeypatch):

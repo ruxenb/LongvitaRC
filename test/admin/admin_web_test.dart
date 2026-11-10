@@ -115,6 +115,45 @@ void main() {
     expect(await cache.load('u1', () async => 'admin'), 'admin');
   });
 
+  test('role cache ignores a response from before clear', () async {
+    final cache = AdminRoleCache();
+    final oldResponse = Completer<String?>();
+
+    final oldLoad = cache.load('u1', () => oldResponse.future);
+    cache.clear();
+    oldResponse.complete('admin');
+    expect(await oldLoad, 'admin');
+
+    var freshLoads = 0;
+    expect(
+      await cache.load('u1', () async {
+        freshLoads++;
+        return 'staff';
+      }),
+      'staff',
+    );
+    expect(freshLoads, 1);
+  });
+
+  test('old role request cannot overwrite or remove the new request', () async {
+    final cache = AdminRoleCache();
+    final oldResponse = Completer<String?>();
+    final newResponse = Completer<String?>();
+
+    final oldLoad = cache.load('u1', () => oldResponse.future);
+    cache.clear();
+    final newLoad = cache.load('u1', () => newResponse.future);
+    final sharedNewLoad = cache.load('u1', () async => 'user');
+
+    oldResponse.complete('admin');
+    expect(await oldLoad, 'admin');
+    expect(identical(newLoad, sharedNewLoad), isTrue);
+
+    newResponse.complete('staff');
+    expect(await newLoad, 'staff');
+    expect(await cache.load('u1', () async => 'admin'), 'staff');
+  });
+
   test('admin auth errors are safe and friendly', () {
     expect(
       friendlyAdminAuthError(
@@ -164,6 +203,41 @@ void main() {
     );
     await tester.pumpAndSettle();
     expect(find.text('Tài khoản không có quyền'), findsOneWidget);
+  });
+
+  testWidgets('role gate reloads the same UID after logout', (tester) async {
+    final cache = AdminRoleCache();
+    final oldResponse = Completer<String?>();
+
+    await tester.pumpWidget(
+      app(
+        AdminRoleGate(
+          role: cache.load('u1', () => oldResponse.future),
+          onDenied: () {},
+          authorizedBuilder: (role) => Text('authorized:$role'),
+        ),
+      ),
+    );
+    expect(find.byType(CircularProgressIndicator), findsOneWidget);
+
+    cache.clear();
+    final newResponse = Completer<String?>();
+    await tester.pumpWidget(
+      app(
+        AdminRoleGate(
+          role: cache.load('u1', () => newResponse.future),
+          onDenied: () {},
+          authorizedBuilder: (role) => Text('authorized:$role'),
+        ),
+      ),
+    );
+    oldResponse.complete('staff');
+    await tester.pump();
+    expect(find.text('authorized:staff'), findsNothing);
+
+    newResponse.complete('admin');
+    await tester.pump();
+    expect(find.text('authorized:admin'), findsOneWidget);
   });
 
   test('recipe edit preserves structured ingredients and image', () {
@@ -238,6 +312,69 @@ void main() {
     await tester.pumpAndSettle();
     expect(service.reviewed, contains(('p1', 'rejected', 'Thiếu dữ liệu')));
     expect(events, ['approved', 'rejected']);
+  });
+
+  testWidgets('reject dialog validates empty and oversized reasons', (
+    tester,
+  ) async {
+    final service = FakeAdminService();
+    final vm = ReviewQueueViewModel(service);
+    await tester.pumpWidget(
+      ChangeNotifierProvider.value(
+        value: vm,
+        child: app(const ReviewQueueScreen()),
+      ),
+    );
+    await tester.pump();
+    service.plans.add([ReviewQueueItem.fromMap(plan().toMap(), 'p1')]);
+    await tester.pump();
+    await tester.tap(find.text('Từ chối'));
+    await tester.pump();
+
+    await tester.tap(find.text('Xác nhận từ chối'));
+    await tester.pump();
+    expect(find.text('Vui lòng nhập lý do từ chối.'), findsOneWidget);
+    expect(find.text('Từ chối thực đơn'), findsOneWidget);
+    expect(service.reviewed, isEmpty);
+
+    final oversized = 'a' * 501;
+    await tester.enterText(find.byType(TextField), oversized);
+    await tester.tap(find.text('Xác nhận từ chối'));
+    await tester.pump();
+    expect(find.text('Lý do không được vượt quá 500 ký tự.'), findsOneWidget);
+    expect(find.text('Từ chối thực đơn'), findsOneWidget);
+    expect(find.text(oversized), findsOneWidget);
+    expect(service.reviewed, isEmpty);
+
+    await tester.enterText(find.byType(TextField), 'Đã bổ sung đủ dữ liệu');
+    await tester.tap(find.text('Xác nhận từ chối'));
+    await tester.pumpAndSettle();
+    expect(
+      service.reviewed,
+      [('p1', 'rejected', 'Đã bổ sung đủ dữ liệu')],
+    );
+  });
+
+  testWidgets('reject dialog accepts a 500-character reason', (tester) async {
+    final service = FakeAdminService();
+    final vm = ReviewQueueViewModel(service);
+    await tester.pumpWidget(
+      ChangeNotifierProvider.value(
+        value: vm,
+        child: app(const ReviewQueueScreen()),
+      ),
+    );
+    await tester.pump();
+    service.plans.add([ReviewQueueItem.fromMap(plan().toMap(), 'p1')]);
+    await tester.pump();
+    await tester.tap(find.text('Từ chối'));
+    await tester.pump();
+
+    final boundaryReason = 'a' * 500;
+    await tester.enterText(find.byType(TextField), boundaryReason);
+    await tester.tap(find.text('Xác nhận từ chối'));
+    await tester.pumpAndSettle();
+    expect(service.reviewed, [('p1', 'rejected', boundaryReason)]);
   });
 
   test('failed review does not emit an Analytics event', () async {

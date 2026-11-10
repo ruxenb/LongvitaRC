@@ -45,21 +45,34 @@ class FirebaseAdminAuthGateway implements IAdminAuthGateway {
 class AdminRoleCache {
   final Map<String, String?> _values = {};
   final Map<String, Future<String?>> _requests = {};
+  var _generation = 0;
 
   Future<String?> load(String uid, Future<String?> Function() loader) {
     if (_values.containsKey(uid)) return Future.value(_values[uid]);
-    return _requests.putIfAbsent(uid, () async {
+    final existing = _requests[uid];
+    if (existing != null) return existing;
+
+    final generation = _generation;
+    late final Future<String?> request;
+    request = () async {
       try {
         final value = await loader();
-        _values[uid] = value;
+        if (_generation == generation && identical(_requests[uid], request)) {
+          _values[uid] = value;
+        }
         return value;
       } finally {
-        _requests.remove(uid);
+        if (_generation == generation && identical(_requests[uid], request)) {
+          _requests.remove(uid);
+        }
       }
-    });
+    }();
+    _requests[uid] = request;
+    return request;
   }
 
   void clear() {
+    _generation++;
     _values.clear();
     _requests.clear();
   }
