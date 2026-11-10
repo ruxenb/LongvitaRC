@@ -1,4 +1,10 @@
-# Longvita — Cloud-Enabled Mobile App
+# Longvita — Mobile App + Web Admin trên Firebase
+
+> **Final Assignment:** hệ thống gồm Flutter Mobile, Flutter Web Admin và
+> Firebase dùng chung. Phân công chính thức nằm tại
+> [`docs/tasks/final-task-assignment.md`](docs/tasks/final-task-assignment.md).
+> Web Admin hiện được phát triển trên PR #25; Hosting production và bằng chứng
+> mở ẩn danh chưa hoàn tất nên README không công bố URL giả định.
 
 > **Cập nhật 08/11/2026:** **Lab 3 chính là Assignment** đang triển khai, kế thừa thiết kế Lab 2. Giữ 112 task IDs/owners; các phần mobile/web/shared-core là cùng sản phẩm. Sáu dịch vụ Firebase đã có failure-case evidence ở các mức cloud/emulator khác nhau; không suy Storage Emulator thành production. ARTEMIS có một batch 7/7 pass và TC-11 chạy lại thành công, nhưng chưa đủ chiến dịch chính thức tối thiểu ba lượt/test.
 >
@@ -162,6 +168,35 @@ flutter devices
 flutter run
 ```
 
+### Chạy Web Admin
+
+Web Admin dùng entrypoint riêng và chỉ cho phép role `staff`/`admin`:
+
+```bash
+flutter run -d chrome -t lib/admin_main.dart
+```
+
+Build release dùng cho Firebase Hosting:
+
+```bash
+flutter build web --release -t lib/admin_main.dart
+```
+
+Output là `build/web`. Cấu hình SPA Hosting và Firestore rules mapping nằm ở
+`firebase.json`. Không chạy `firebase deploy` nếu tài khoản chưa có quyền trên
+project `longvita-8da7e`; deploy production phải được owner cho phép và phải lưu
+evidence URL mở ở cửa sổ ẩn danh.
+
+Các màn hình Web hiện có:
+
+- Sign-in Google và role gate `staff/admin`;
+- quản lý Recipes: tìm kiếm, tạo, sửa, archive/restore;
+- hàng đợi thực đơn `submitted`: approve/reject kèm lý do;
+- Dashboard với ba metrics và biểu đồ responsive;
+- Remote Config guidance và Analytics cho approve/reject. Announcement Form
+  và sự kiện `publish_announcement` chỉ hoàn tất khi CM-07 nối hành động ghi
+  Firestore thật.
+
 ---
 
 ## 5. Hướng Dẫn Chạy Bộ Test E2E ARTEMIS
@@ -199,6 +234,19 @@ flutter run
 - **Báo cáo PDF:** [`report/Lab03_<StudentID>.pdf`](report/)
 - **Slide Deck PDF:** [`slides/Lab03_<StudentID>_slides.pdf`](slides/)
 
+### Final Assignment deliverables
+
+- **Web Hosting URL:** chưa có bằng chứng production/incognito; chờ quyền deploy
+  TV-00.
+- **Cross-role flow:** đặc tả, sequence diagram và bảng đo ba lượt tại
+  [`docs/cross-role-flow.md`](docs/cross-role-flow.md); số đo live còn để trống.
+- **Web Admin checklist:** [`docs/web-admin-checklist.md`](docs/web-admin-checklist.md),
+  evidence index tại
+  [`evidence/web/TV-04B-20261110/`](evidence/web/TV-04B-20261110/README.md).
+- **Final Report:** `report/Final_<ID>.pdf` — chưa xuất bản.
+- **Final Slides:** `slides/Final_<ID>_slides.pdf` — chưa xuất bản.
+- **Final Demo Video:** link public/unlisted — chưa có.
+
 ---
 
 ## 7. Trạng thái bàn giao và AI disclosure
@@ -215,6 +263,18 @@ liệu. Output AI không được tính là bằng chứng runtime nếu không 
 run tương ứng. Chi tiết công cụ, findings, quyết định Accept/Modify/Reject và
 commit sửa nằm tại [`docs/code-review.md`](docs/code-review.md); disclosure cụ
 thể của từng thành viên chỉ được ghi khi có source/output hoặc worklog xác nhận.
+
+### Trạng thái phần việc Thắng VLQ — 10/11/2026
+
+- TV-01, TV-02, TV-03 và TV-03B đã có implementation, test/evidence local trên
+  PR #25; vẫn phải đóng mọi review thread mới trước khi merge.
+- TV-04 đã hoàn thành phần đặc tả và quy trình đo; chưa có ba lượt live.
+- TV-04B đã có checklist/evidence index; chưa có ảnh production.
+- TV-05 đang làm: hướng dẫn Web, roles, deliverable map, AI disclosure và giới
+  hạn đã được cập nhật; URL, tài khoản demo cụ thể và video chỉ thêm sau khi xác
+  minh quyền truy cập.
+- Không tuyên bố Hosting, Google OAuth Web, DebugView Web hoặc Remote Config
+  Console đã pass nếu chưa có evidence live tương ứng.
 
 ---
 

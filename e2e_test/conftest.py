@@ -147,7 +147,9 @@ def _stop_app() -> None:
 # Required when the device has more than one account.
 TEST_ACCOUNT = os.getenv("ARTEMIS_TEST_ACCOUNT", "")
 SIGN_IN_BUTTON = "Đăng nhập bằng Google"
-HOME_TITLES = ("Longvita", "Trang chủ", "Longvita Dashboard")
+# Markers that only appear after authentication. The sign-in screen also has
+# the "Longvita" heading, so that generic label must never identify Home.
+HOME_TITLES = ("Trang chủ", "Longvita Dashboard")
 
 
 def _nodes() -> list[tuple[str, tuple[int, int]]]:

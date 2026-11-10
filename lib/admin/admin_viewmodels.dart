@@ -48,6 +48,8 @@ class RecipeAdminViewModel extends _AdminViewModel {
 
   void start() {
     state = AdminLoadState.loading;
+    error = null;
+    notifyListeners();
     _subscription?.cancel();
     _subscription = service.watchRecipes().listen(
       (rows) {
@@ -103,6 +105,8 @@ class ReviewQueueViewModel extends _AdminViewModel {
 
   void start() {
     state = AdminLoadState.loading;
+    error = null;
+    notifyListeners();
     _subscription?.cancel();
     _subscription = service.watchSubmittedPlans().listen(
       (rows) {

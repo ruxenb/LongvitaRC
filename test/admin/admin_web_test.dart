@@ -254,6 +254,38 @@ void main() {
     vm.dispose();
   });
 
+  test('recipe retry immediately publishes its loading state', () {
+    final service = FakeAdminService();
+    final vm = RecipeAdminViewModel(service)
+      ..state = AdminLoadState.error
+      ..error = 'offline';
+    var notifications = 0;
+    vm.addListener(() => notifications++);
+
+    vm.start();
+
+    expect(vm.state, AdminLoadState.loading);
+    expect(vm.error, isNull);
+    expect(notifications, 1);
+    vm.dispose();
+  });
+
+  test('review retry immediately publishes its loading state', () {
+    final service = FakeAdminService();
+    final vm = ReviewQueueViewModel(service)
+      ..state = AdminLoadState.error
+      ..error = 'offline';
+    var notifications = 0;
+    vm.addListener(() => notifications++);
+
+    vm.start();
+
+    expect(vm.state, AdminLoadState.loading);
+    expect(vm.error, isNull);
+    expect(notifications, 1);
+    vm.dispose();
+  });
+
   testWidgets('dashboard covers loading, empty, error and data', (
     tester,
   ) async {
