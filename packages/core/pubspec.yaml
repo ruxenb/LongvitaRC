@@ -1,0 +1,9 @@
+name: longvita_core
+description: Shared Longvita domain, Firestore services and Flutter design system.
+publish_to: none
+version: 1.0.0
+environment:
+  sdk: ^3.13.2
+dependencies:
+  flutter:
+    sdk: flutter
