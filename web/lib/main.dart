@@ -6,7 +6,6 @@ import 'package:longvita_admin/admin/admin_app.dart';
 import 'package:longvita_admin/admin/admin_auth.dart';
 import 'package:longvita_admin/admin/admin_instrumentation.dart';
 import 'package:longvita_core/services/admin_service.dart';
-import 'package:longvita_admin/admin/admin_viewmodels.dart';
 
 import 'firebase_options.dart';
 
@@ -29,14 +28,6 @@ Future<void> main() async {
       providers: [
         Provider<IAdminService>.value(value: service),
         ChangeNotifierProvider.value(value: instrumentation),
-        ChangeNotifierProvider(create: (_) => RecipeAdminViewModel(service)),
-        ChangeNotifierProvider(
-          create: (_) => ReviewQueueViewModel(
-            service,
-            trackSuccessfulReview: instrumentation.logPlanReview,
-          ),
-        ),
-        ChangeNotifierProvider(create: (_) => DashboardViewModel(service)),
       ],
       child: LongvitaAdminApp(auth: FirebaseAdminAuthGateway()),
     ),
