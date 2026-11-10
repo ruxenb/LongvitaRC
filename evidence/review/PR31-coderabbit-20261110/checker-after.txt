@@ -1,0 +1,21 @@
+test_mobile_block_comment_is_not_consumption (test_monorepo.CoreConsumptionTest.test_mobile_block_comment_is_not_consumption)
+An import inside a block comment is ignored. ... ok
+test_mobile_line_comment_is_not_consumption (test_monorepo.CoreConsumptionTest.test_mobile_line_comment_is_not_consumption)
+A commented example is not an actual import. ... ok
+test_mobile_string_is_not_consumption (test_monorepo.CoreConsumptionTest.test_mobile_string_is_not_consumption)
+A URI in an ordinary string is not a dependency. ... ok
+test_multiline_string_is_not_consumption (test_monorepo.CoreConsumptionTest.test_multiline_string_is_not_consumption)
+A code example inside a multiline string must not pass the check. ... ok
+test_nested_comment_is_not_consumption (test_monorepo.CoreConsumptionTest.test_nested_comment_is_not_consumption)
+Dart allows nested block comments; the outer comment still applies. ... ok
+test_public_module_import_is_accepted (test_monorepo.CoreConsumptionTest.test_public_module_import_is_accepted)
+Documented public module imports remain supported. ... ok
+test_real_barrel_import_is_accepted (test_monorepo.CoreConsumptionTest.test_real_barrel_import_is_accepted)
+Both clients may import the shared facade. ... ok
+test_web_block_comment_is_not_consumption (test_monorepo.CoreConsumptionTest.test_web_block_comment_is_not_consumption)
+Web has the same real-import check as Mobile. ... ok
+
+----------------------------------------------------------------------
+Ran 8 tests in 0.217s
+
+OK
