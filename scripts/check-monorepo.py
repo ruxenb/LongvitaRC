@@ -16,6 +16,7 @@ def dart_imports(content: str) -> list[str]:
     uris = []
     cursor = 0
     expects_uri = False
+    in_directive = False
     while match := _DART_TOKEN.search(content, cursor):
         token = match[0]
         cursor = match.end()
@@ -32,10 +33,15 @@ def dart_imports(content: str) -> list[str]:
             continue
         if token in {'import', 'export'}:
             expects_uri = True
+            in_directive = True
             continue
-        if expects_uri and token.startswith(("'", '"')):
-            uris.append(token[1:-1])
-        expects_uri = False
+        literal = token[1:] if token.startswith(("r'", 'r"')) else token
+        if expects_uri and literal.startswith(("'", '"')):
+            width = 3 if literal.startswith(literal[0] * 3) else 1
+            uris.append(literal[width:-width])
+        if token == ';':
+            in_directive = False
+        expects_uri = in_directive and token == ')'
     return uris
 
 
