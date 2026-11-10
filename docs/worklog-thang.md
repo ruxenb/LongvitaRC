@@ -15,6 +15,19 @@
 - Evidence khử bí mật:
   `evidence/audit/S9-1-S9-4-20261110/README.md`.
 
+## 10/11/2026 — TV-04B mobile-browser evidence
+
+- Bổ sung sáu ảnh production của Web Admin chạy trên trình duyệt Android:
+  Sign-in, OAuth loading/popup-blocked, Review Queue empty, Recipes data,
+  Dashboard data và sign-in cancelled recovery.
+- Loại ảnh Google account chooser khỏi commit vì có email cá nhân.
+- WEB-01/02/08/12/13/17 có thêm bằng chứng production nhưng chỉ đạt một phần
+  theo phạm vi từng ca. WEB-18 fail mobile-width vì Recipes bị cắt ngang và
+  heading xuống dòng bất thường; CSS viewport chưa được ghi nhận nên cần chụp
+  lại, không tuyên bố responsive pass.
+- TV-04B chưa hoàn tất: còn desktop viewport chuẩn, hành động ghi dữ liệu,
+  approve/reject live, Console evidence và ảnh sau sửa responsive.
+
 ## 10/11/2026 — TV-00 production và TV-05 README
 
 - TV-00: deploy Flutter Web từ `web/` lên Firebase Hosting project

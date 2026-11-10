@@ -3,8 +3,9 @@
 > **Cập nhật:** 10/11/2026
 > **Owner thực thi:** Thắng VLQ
 > **Người tổng duyệt test report:** Thái An
-> **Trạng thái:** checklist và bằng chứng local đã chuẩn bị; production/live
-> screenshots còn chờ deploy và tài khoản demo đúng role.
+> **Trạng thái:** đã có Hosting, role gate và sáu ảnh production trên trình
+> duyệt điện thoại. Ảnh phát hiện Recipes chưa đạt mobile-width; các hành động
+> ghi dữ liệu, Console evidence và desktop viewport chuẩn vẫn còn thiếu.
 
 ## 1. Quy tắc evidence
 
@@ -21,24 +22,24 @@
 
 | ID | Màn hình/luồng | Ca cần chứng minh | Trạng thái hiện tại | Evidence cần bổ sung |
 |---|---|---|---|---|
-| WEB-01 | Sign-in | loading và popup Google | Có code/test local | ảnh Web thật |
-| WEB-02 | Role gate | `staff/admin` được vào | Có code/test local | ảnh tài khoản đúng role |
+| WEB-01 | Sign-in | loading và popup Google | Pass một phần trên mobile production; có popup-blocked/cancel recovery | Cần thêm popup thành công đã che PII |
+| WEB-02 | Role gate | `staff/admin` được vào | Admin pass production; staff chưa có tài khoản demo | Bổ sung staff khi nhóm cấp tài khoản |
 | WEB-03 | Role gate | `user` bị từ chối rõ ràng | Có code/test local | ảnh tài khoản sai role |
 | WEB-04 | Recipes | loading | Có widget test | ảnh spinner/skeleton có kiểm soát |
 | WEB-05 | Recipes | empty + CTA | Có widget state | ảnh collection/query rỗng an toàn |
 | WEB-06 | Recipes | data/search/create/edit | Có test và local verification | ảnh hành động chính |
 | WEB-07 | Recipes | archive/restore + lỗi ghi | Có code/test | ảnh success và error snackbar |
-| WEB-08 | Review Queue | loading/empty | Có widget state | ảnh hai trạng thái |
+| WEB-08 | Review Queue | loading/empty | Empty pass production trên mobile | Còn thiếu loading live |
 | WEB-09 | Review Queue | approve | Có test local | ảnh item + kết quả live |
 | WEB-10 | Review Queue | reject bắt buộc lý do | Có test local | ảnh dialog và kết quả live |
 | WEB-11 | Review Queue | document lỗi không approve | Có regression test | ảnh cảnh báo thật nếu có fixture an toàn |
-| WEB-12 | Dashboard | loading/empty/error/data | Có widget test | bốn ảnh hoặc video + ảnh đại diện |
-| WEB-13 | Dashboard | ≥3 metrics + chart responsive | Có code/test/build | ảnh 1440×900 và 412×915 |
+| WEB-12 | Dashboard | loading/empty/error/data | Data pass production trên mobile | Còn thiếu loading/empty/error live |
+| WEB-13 | Dashboard | ≥3 metrics + chart responsive | Pass một phần: 3 metrics hiển thị; chưa đủ chart/viewport chuẩn | ảnh 1440×900 và 412×915 |
 | WEB-14 | Remote Config | guidance true/false không rebuild | Có code/test local | ảnh trước/sau từ Console + Web live |
 | WEB-15 | Analytics | approve/reject trong DebugView | Có unit/widget test event | ảnh DebugView thật |
 | WEB-16 | Announcement | publish thành công + Analytics | Chờ CM-07 | ảnh form, Inbox Mobile, DebugView |
-| WEB-17 | Hosting | SPA reload và mở ẩn danh | Chờ quyền deploy | URL + ảnh ẩn danh |
-| WEB-18 | A11y/layout | keyboard, focus, text scale, overflow | Có một phần widget coverage | checklist thao tác Web thật |
+| WEB-17 | Hosting | SPA reload và mở ẩn danh | Pass một phần: URL/ẩn danh đạt, chưa có SPA route reload production | chụp reload production + metadata route |
+| WEB-18 | A11y/layout | keyboard, focus, text scale, overflow | Fail mobile-width ở Recipes; desktop/a11y còn thiếu | sửa overflow rồi kiểm tra lại |
 
 ## 3. Viewport bắt buộc
 
