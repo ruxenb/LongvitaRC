@@ -79,6 +79,7 @@ class ProfileDevice(FakeDevice):
     """Final Home has no identity; only tapping Profile reveals its email."""
 
     def __init__(self, monkeypatch, account, *, home_email=None, profile_labels=None):
+        """Build separate Home/Profile screens and patch only fake device I/O."""
         self.screen = "home"
         self.home_labels = ["Longvita", "Trang chủ", "Hồ sơ", "Tạo thực đơn tuần"]
         if home_email is not None:
@@ -89,10 +90,12 @@ class ProfileDevice(FakeDevice):
         super().__init__(monkeypatch, self.home_labels)
 
     def nodes(self):
+        """Expose only the current screen, with a distinct Profile tap target."""
         labels = self.home_labels if self.screen == "home" else self.profile_labels
         return [(label, (20, 40) if label == "Hồ sơ" else (0, 0)) for label in labels]
 
     def adb(self, *args):
+        """Record commands and reveal Profile only after its actual tap."""
         super().adb(*args)
         if args == ("shell", "input", "tap", "20", "40"):
             self.screen = "profile"
