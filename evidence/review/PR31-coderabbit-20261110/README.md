@@ -35,3 +35,23 @@ public được hỗ trợ. Khi thay public path thì phải cập nhật consum
 
 Raw review trong reviews-round1.json; log trước/sau đã lọc đường dẫn máy,
 log gốc chỉ local. Không có tài liệu điều phối private trong gói.
+
+## Round 2 — review 5839805270 trên 311b31e
+
+| ID | Góp ý | Quyết định / sửa |
+|---|---|---|
+| PR31-CR-07 | Minor inline4523362164: chưa kiểm URI trong conditional import/export | Accepted; 4bccb09 theo dõi directive tới dấu chấm phẩy và kiểm cả URI sau if(...) |
+| PR31-CR-08 | Minor outside-diff: hướng dẫn upgrade chưa nêu member pubspec | Accepted; 4bccb09 ghi commit đúng member pubspec + root lockfile, root pubspec nếu có sửa |
+| PR31-CR-09 | Nitpick: cần kiểm Web imports bị cấm | Accepted; regression giữ Core import hợp lệ rồi kiểm chính xác lỗi dart:io/Mobile |
+
+Bổ sung hỗ trợ raw/triple-quoted URI khi rà cùng đoạn lexer. Suite checker
+**15/15**; trên checker311b31e cùng15test **5fail/10pass**. Các ca mới bắt
+conditional Web IO/Core native export, nhận Core qua conditional import,
+raw URI và triple delimiter. Hai control mới kiểm ordinary forbidden imports
+và dừng directive ở semicolon; các control cũ giữ nguyên. Path diagnostics
+trong tests được normalize dấu phân cách để assertions chạy Windows/Linux.
+
+Bản thay đổi vẫn chỉ Python/docs; app Dart/config/assets/dependency giống bản
+508/508 đã kiểm. Không chạy lại Flutter/native/build không liên quan. Log
+trước/sau và raw review/comment được lưu ở đây; không ghi các lần thử test
+sai separator ban đầu thành một failure của app.
