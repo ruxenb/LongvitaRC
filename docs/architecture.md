@@ -1,5 +1,10 @@
 # Architecture Document — Longvita (Lab 3 & Final Assignment Bridge)
 
+> **CM-02:** cấu trúc hiện hành là `mobile/`, `web/`, `packages/core/` theo
+> [bản đồ migration](monorepo-migration.md). Các sơ đồ/đường dẫn root `lib/`
+> phía dưới mô tả mốc MVVM Lab 3 trước migration; các nguyên tắc phân lớp tiếp
+> tục áp dụng. Final mặc định PDF local + metadata; Storage chỉ demo Emulator.
+
 > **Trạng thái 02/11/2026:** Các sơ đồ bên dưới mô tả kiến trúc mục tiêu từ skeleton ban đầu. Bootstrap/Auth/session đã có implementation và kiểm chứng nêu trong [bàn giao Charlie](tasks/charlie-progress.md); không suy ra mọi flow/cloud service đã hoàn tất. Lab 3 chính là Assignment; web/shared-core được tích hợp trong cùng sản phẩm. Contract Auth/router/session và các quyết định schema/Storage còn cần owners review.
 
 > **Mô hình kiến trúc:** MVVM (Model - View - ViewModel) với Provider Dependency Injection  

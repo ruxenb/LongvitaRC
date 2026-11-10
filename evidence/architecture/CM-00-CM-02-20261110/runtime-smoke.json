@@ -1,0 +1,40 @@
+{
+  "baseline": "ea7b888",
+  "android": {
+    "avd": "LocalMate_API_35",
+    "androidVersion": "15",
+    "applicationId": "vn.edu.fpt.longvita",
+    "install": "adb install -r; no clear-data/uninstall",
+    "launchState": "COLD",
+    "launchTotalMs": 4127,
+    "observedSafeLabels": [
+      "Trang chủ",
+      "Hồ sơ",
+      "Longvita"
+    ],
+    "session": "existing signed-in session restored; no new sign-in",
+    "checkedLogErrors": [
+      "FATAL EXCEPTION",
+      "Unhandled Exception",
+      "Unable to load asset",
+      "duplicate-app",
+      "No Firebase App"
+    ],
+    "matchedErrorMarkers": []
+  },
+  "web": {
+    "build": "release served on loopback, no deploy",
+    "observedUi": [
+      "Trang quản trị Longvita",
+      "Quản trị dinh dưỡng trường thọ",
+      "Đăng nhập bằng Google"
+    ],
+    "consoleErrors": [],
+    "interaction": "enabled Flutter accessibility only; did not sign in"
+  },
+  "limits": [
+    "Not a new live cross-role acceptance run",
+    "No new ARTEMIS agent/device campaign",
+    "No Firestore rules deployment or Firebase project/configuration changes"
+  ]
+}

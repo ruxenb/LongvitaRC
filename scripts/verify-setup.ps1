@@ -32,7 +32,7 @@ try {
     Invoke-Check 'Python 3.12 for ARTEMIS' { uv run --python 3.12 python --version }
 
     if ($RestoreDependencies) {
-        Invoke-Check 'Flutter dependencies' { flutter pub get }
+        Invoke-Check 'Flutter dependencies' { flutter pub get --enforce-lockfile }
         Push-Location (Join-Path $repoRoot 'e2e_test')
         try {
             Invoke-Check 'ARTEMIS dependencies' { uv sync --python 3.12 }
@@ -43,7 +43,7 @@ try {
     }
 
     $requiredFiles = @(
-        'android\app\google-services.json'
+        'mobile\android\app\google-services.json'
         'firebase\storage.rules'
         'firebase\remote-config-defaults.json'
         'e2e_test\pyproject.toml'

@@ -1,0 +1,62 @@
+00:00 +0: loading <repo>/web/test/admin/admin_web_test.dart
+00:00 +0: <repo>/web/test/admin/admin_web_test.dart: admin role lookup is shared and cached until sign-out
+00:00 +1: <repo>/web/test/admin/admin_web_test.dart: role cache ignores a response from before clear
+00:00 +2: <repo>/web/test/admin/admin_web_test.dart: old role request cannot overwrite or remove the new request
+00:00 +3: <repo>/web/test/admin/admin_web_test.dart: admin auth errors are safe and friendly
+00:00 +4: <repo>/web/test/admin/admin_web_test.dart: role gate covers loading, denied and authorized
+00:00 +5: <repo>/web/test/admin/admin_web_test.dart: role gate covers loading, denied and authorized
+00:00 +6: <repo>/web/test/admin/admin_web_test.dart: role gate covers loading, denied and authorized
+00:00 +7: <repo>/web/test/admin/admin_web_test.dart: role gate covers loading, denied and authorized
+00:00 +8: <repo>/web/test/admin/admin_web_test.dart: role gate covers loading, denied and authorized
+00:00 +9: <repo>/web/test/admin/admin_web_test.dart: role gate covers loading, denied and authorized
+00:00 +10: <repo>/web/test/admin/admin_web_test.dart: role gate covers loading, denied and authorized
+00:00 +11: <repo>/web/test/admin/admin_web_test.dart: role gate covers loading, denied and authorized
+00:00 +12: <repo>/web/test/admin/admin_web_test.dart: role gate covers loading, denied and authorized
+00:00 +13: <repo>/web/test/admin/admin_web_test.dart: role gate covers loading, denied and authorized
+00:00 +14: <repo>/web/test/admin/admin_web_test.dart: role gate covers loading, denied and authorized
+00:00 +15: <repo>/web/test/admin/admin_web_test.dart: role gate covers loading, denied and authorized
+00:00 +16: <repo>/web/test/admin/admin_web_test.dart: role gate covers loading, denied and authorized
+00:00 +17: <repo>/web/test/admin/admin_web_test.dart: role gate covers loading, denied and authorized
+00:00 +18: <repo>/web/test/admin/admin_web_test.dart: role gate covers loading, denied and authorized
+00:01 +19: <repo>/web/test/admin/admin_web_test.dart: role gate covers loading, denied and authorized
+00:01 +20: <repo>/web/test/admin/admin_web_test.dart: role gate covers loading, denied and authorized
+00:01 +21: <repo>/web/test/admin/admin_web_test.dart: role gate covers loading, denied and authorized
+00:01 +22: <repo>/web/test/admin/admin_web_test.dart: role gate covers loading, denied and authorized
+00:01 +23: <repo>/web/test/admin/admin_web_test.dart: role gate covers loading, denied and authorized
+00:01 +24: <repo>/web/test/admin/admin_web_test.dart: role gate covers loading, denied and authorized
+00:01 +25: <repo>/web/test/admin/pr25_integration_test.dart: editing an existing source category preserves its value
+00:01 +26: <repo>/web/test/admin/pr25_integration_test.dart: editing an existing source category preserves its value
+00:01 +27: <repo>/web/test/admin/pr25_integration_test.dart: editing an existing source category preserves its value
+00:01 +28: <repo>/web/test/admin/pr25_integration_test.dart: editing an existing source category preserves its value
+00:01 +29: <repo>/web/test/admin/pr25_integration_test.dart: editing an existing source category preserves its value
+00:01 +30: <repo>/web/test/admin/pr25_integration_test.dart: editing an existing source category preserves its value
+00:01 +31: <repo>/web/test/admin/pr25_integration_test.dart: editing an existing source category preserves its value
+00:01 +32: <repo>/web/test/admin/pr25_integration_test.dart: editing an existing source category preserves its value
+00:01 +33: <repo>/web/test/admin/pr25_integration_test.dart: editing an existing source category preserves its value
+00:01 +34: <repo>/web/test/admin/pr25_integration_test.dart: editing an existing source category preserves its value
+00:01 +35: <repo>/web/test/admin/pr25_integration_test.dart: editing an existing source category preserves its value
+00:01 +36: <repo>/web/test/admin/pr25_integration_test.dart: editing an existing source category preserves its value
+00:01 +37: <repo>/web/test/admin/pr25_integration_test.dart: editing an existing source category preserves its value
+00:01 +38: <repo>/web/test/admin/pr25_integration_test.dart: editing an existing source category preserves its value
+00:01 +39: <repo>/web/test/admin/pr25_integration_test.dart: editing an existing source category preserves its value
+00:02 +40: <repo>/web/test/admin/admin_web_test.dart: review queue approves and rejects with reason
+00:02 +41: <repo>/web/test/admin/admin_web_test.dart: review queue approves and rejects with reason
+00:02 +42: <repo>/web/test/admin/admin_web_test.dart: review queue approves and rejects with reason
+00:02 +43: <repo>/web/test/admin/admin_web_test.dart: review queue approves and rejects with reason
+00:02 +44: <repo>/web/test/admin/admin_web_test.dart: review queue approves and rejects with reason
+00:02 +45: <repo>/web/test/admin/admin_web_test.dart: review queue approves and rejects with reason
+00:02 +46: <repo>/web/test/admin/admin_web_test.dart: review queue approves and rejects with reason
+00:02 +47: <repo>/web/test/admin/admin_web_test.dart: review queue approves and rejects with reason
+00:02 +48: <repo>/web/test/admin/admin_web_test.dart: review queue approves and rejects with reason
+00:02 +49: <repo>/web/test/admin/admin_web_test.dart: review queue approves and rejects with reason
+00:02 +50: <repo>/web/test/admin/admin_web_test.dart: review queue approves and rejects with reason
+00:02 +51: <repo>/web/test/admin/pr25_integration_test.dart: a bad submission stays visible without disabling valid reviews
+00:02 +52: <repo>/web/test/admin/pr25_integration_test.dart: a bad submission stays visible without disabling valid reviews
+00:02 +53: <repo>/web/test/admin/pr25_integration_test.dart: a bad submission stays visible without disabling valid reviews
+00:02 +54: <repo>/web/test/admin/pr25_integration_test.dart: a bad submission stays visible without disabling valid reviews
+00:02 +55: <repo>/web/test/admin/admin_web_test.dart: reject dialog accepts a 500-character reason
+00:02 +56: <repo>/web/test/admin/admin_web_test.dart: failed review does not emit an Analytics event
+00:02 +57: <repo>/web/test/admin/admin_web_test.dart: recipe retry immediately publishes its loading state
+00:02 +58: <repo>/web/test/admin/admin_web_test.dart: review retry immediately publishes its loading state
+00:02 +59: <repo>/web/test/admin/admin_web_test.dart: dashboard covers loading, empty, error and data
+00:02 +60: All tests passed!
