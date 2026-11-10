@@ -1,0 +1,10 @@
+{
+  "importAndSdkFormatOnly": 119,
+  "explicitAdapters": [
+    "mobile/lib/firebase_options.dart",
+    "packages/core/lib/theme/app_typography.dart",
+    "packages/core/lib/widgets/longvita_widgets.dart",
+    "mobile/test/qa/design_system_qa_test.dart",
+    "mobile/test/qa/qa_support.dart"
+  ]
+}

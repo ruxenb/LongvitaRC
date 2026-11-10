@@ -3,7 +3,8 @@
 ## Run locally
 
 ```powershell
-flutter run -d chrome -t lib/admin_main.dart
+cd web
+flutter run -d chrome
 ```
 
 Only Firebase users whose `users/{uid}.role` is `staff` or `admin` can enter
@@ -12,11 +13,13 @@ the console. Other signed-in users see an explicit access-denied state.
 ## Build and deploy
 
 ```powershell
-flutter build web --target lib/admin_main.dart --release
+cd web
+flutter build web --release
+cd ..
 firebase deploy --only firestore:rules,hosting --project longvita-8da7e
 ```
 
-The Hosting SPA serves `build/web` and rewrites application routes to
+The Hosting SPA serves `web/build/web` from the repository root and rewrites application routes to
 `index.html`.
 
 ## Delivered scope
@@ -41,7 +44,11 @@ and stored documents already use the audited `submitted` transition.
 security rules. Existing recipe documents remain active without a migration.
 The dashboard counts all recipes and subtracts explicitly archived documents.
 
-## Verification — 09/11/2026
+## Historical verification — 09/11/2026 (before CM-00/CM-02)
+
+This is the pre-migration record, including its original commands and output
+paths. Use the current Run/Build sections above for commands after migration;
+the old root entrypoint below no longer exists.
 
 - `flutter analyze`: no issues.
 - `flutter test test/admin/admin_web_test.dart`: 5/5 passed, covering the role
@@ -61,7 +68,7 @@ The 10/11 authentication, Rules and ARTEMIS follow-up is recorded in
 TV-03B implementation evidence is recorded in
 `evidence/web/TV-03B-20261110/README.md`.
 
-## Browser regression command
+## Browser regression command (from web/)
 
 Pass each test file separately. On the pinned Flutter toolchain, passing the
 directory `test/admin` to the Chrome runner can generate an invalid joined path.

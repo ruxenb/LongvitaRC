@@ -11,11 +11,12 @@ include: package:flutter_lints/flutter.yaml
 
 analyzer:
   exclude:
-    - build/**
-    - android/**
+    - "**/build/**"
+    - docs/coordination/**
+    - mobile/android/**
     - firebase/node_modules/**
     - test/firestore/node_modules/**
-    - web/**
+    - web/web/**
 
 linter:
   # The lint rules applied to this project can be customized in the

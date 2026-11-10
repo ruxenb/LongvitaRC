@@ -1,88 +1,10 @@
-name: longvita
-description: "Longvita - Cloud-Enabled Mobile App for Longevity Nutrition (PRM393 Lab 3)"
-publish_to: 'none'
-
-version: 1.0.0+1
-
+name: longvita_workspace
+publish_to: none
 environment:
   sdk: ^3.13.2
-
-# Hosted packages are pinned to the exact versions in pubspec.lock (S3-1).
-# Change a version on purpose, then commit pubspec.yaml and pubspec.lock
-# together; teammates restore with `flutter pub get --enforce-lockfile`.
-dependencies:
-  flutter:
-    sdk: flutter
-  flutter_localizations:
-    sdk: flutter
-  cupertino_icons: 1.0.9
-
-  # Architecture & State Management (MVVM + Provider)
-  provider: 6.1.5+1
-
-  # Firebase Core & Services (Lab 3 Requirement)
-  firebase_core: 3.15.2
-  firebase_auth: 5.7.0
-  google_sign_in: 6.3.0
-  firebase_storage: 12.4.10
-  firebase_messaging: 15.2.10
-  firebase_analytics: 11.6.0
-  firebase_crashlytics: 4.3.10
-  firebase_remote_config: 5.5.0
-  cloud_firestore: 5.6.12
-
-  # File Generation & Cloud Export
-  pdf: 3.13.1
-  printing: 5.15.1
-  path_provider: 2.1.6
-
-  # Networking & Utilities
-  http: 1.6.0
-  # Matches flutter_localizations bundled with Flutter 3.47.6.
-  intl: 0.20.3
-  google_fonts: 6.3.3
-
+workspace:
+  - mobile
+  - web
+  - packages/core
 dev_dependencies:
-  flutter_test:
-    sdk: flutter
   flutter_lints: 6.0.0
-
-flutter:
-  uses-material-design: true
-
-  assets:
-    - assets/images/
-    - assets/icons/
-    - assets/fonts/Quicksand-OFL.txt
-    - assets/fonts/Newsreader-OFL.txt
-    - assets/fonts/Fraunces-OFL.txt
-    # Static fonts embedded in exported PDFs (Apache 2.0), not used by the UI.
-    - assets/fonts/Roboto-Regular.ttf
-    - assets/fonts/Roboto-Bold.ttf
-    - assets/fonts/Roboto-LICENSE.txt
-
-  # Longvita design-system fonts (Figma Foundations 53:45), bundled from
-  # google/fonts under SIL OFL 1.1 (licences in assets/fonts/*-OFL.txt).
-  # Variable fonts are declared once per used weight so the engine never
-  # synthesises bold; AppTypography sets the matching `wght` axis.
-  fonts:
-    - family: Quicksand
-      fonts:
-        - asset: assets/fonts/Quicksand-Variable.ttf
-          weight: 400
-        - asset: assets/fonts/Quicksand-Variable.ttf
-          weight: 500
-        - asset: assets/fonts/Quicksand-Variable.ttf
-          weight: 600
-        - asset: assets/fonts/Quicksand-Variable.ttf
-          weight: 700
-    - family: Newsreader
-      fonts:
-        - asset: assets/fonts/Newsreader-Variable.ttf
-          weight: 600
-        - asset: assets/fonts/Newsreader-Variable.ttf
-          weight: 700
-    - family: Fraunces
-      fonts:
-        - asset: assets/fonts/Fraunces-Variable.ttf
-          weight: 700

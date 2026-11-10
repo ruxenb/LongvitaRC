@@ -1,0 +1,35 @@
+test_core_conditional_export_is_rejected (test_monorepo.CoreConsumptionTest.test_core_conditional_export_is_rejected)
+Native SDKs cannot hide in a Core conditional export. ... ok
+test_core_in_conditional_import_is_consumption (test_monorepo.CoreConsumptionTest.test_core_in_conditional_import_is_consumption)
+A valid Core dependency in the platform branch must be recognized. ... ok
+test_directive_ends_at_semicolon (test_monorepo.CoreConsumptionTest.test_directive_ends_at_semicolon)
+A following call/string is not part of the preceding directive. ... ok
+test_mobile_block_comment_is_not_consumption (test_monorepo.CoreConsumptionTest.test_mobile_block_comment_is_not_consumption)
+An import inside a block comment is ignored. ... ok
+test_mobile_line_comment_is_not_consumption (test_monorepo.CoreConsumptionTest.test_mobile_line_comment_is_not_consumption)
+A commented example is not an actual import. ... ok
+test_mobile_string_is_not_consumption (test_monorepo.CoreConsumptionTest.test_mobile_string_is_not_consumption)
+A URI in an ordinary string is not a dependency. ... ok
+test_multiline_delimiter_uri_is_checked (test_monorepo.CoreConsumptionTest.test_multiline_delimiter_uri_is_checked)
+Triple-quoted URI delimiters do not hide forbidden imports. ... ok
+test_multiline_string_is_not_consumption (test_monorepo.CoreConsumptionTest.test_multiline_string_is_not_consumption)
+A code example inside a multiline string must not pass the check. ... ok
+test_nested_comment_is_not_consumption (test_monorepo.CoreConsumptionTest.test_nested_comment_is_not_consumption)
+Dart allows nested block comments; the outer comment still applies. ... ok
+test_public_module_import_is_accepted (test_monorepo.CoreConsumptionTest.test_public_module_import_is_accepted)
+Documented public module imports remain supported. ... ok
+test_raw_core_uri_is_consumption (test_monorepo.CoreConsumptionTest.test_raw_core_uri_is_consumption)
+Valid raw URI literals are accepted for either client. ... ok
+test_real_barrel_import_is_accepted (test_monorepo.CoreConsumptionTest.test_real_barrel_import_is_accepted)
+Both clients may import the shared facade. ... ok
+test_web_block_comment_is_not_consumption (test_monorepo.CoreConsumptionTest.test_web_block_comment_is_not_consumption)
+Web has the same real-import check as Mobile. ... ok
+test_web_conditional_import_is_rejected (test_monorepo.CoreConsumptionTest.test_web_conditional_import_is_rejected)
+The selected platform URI must be checked as well as the stub. ... ok
+test_web_forbidden_imports_are_rejected (test_monorepo.CoreConsumptionTest.test_web_forbidden_imports_are_rejected)
+Keep Core consumption valid while checking each forbidden dependency. ... ok
+
+----------------------------------------------------------------------
+Ran 15 tests in 0.433s
+
+OK

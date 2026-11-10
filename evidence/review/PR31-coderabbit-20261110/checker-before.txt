@@ -1,0 +1,87 @@
+test_mobile_block_comment_is_not_consumption (test_monorepo.CoreConsumptionTest.test_mobile_block_comment_is_not_consumption)
+An import inside a block comment is ignored. ... FAIL
+test_mobile_line_comment_is_not_consumption (test_monorepo.CoreConsumptionTest.test_mobile_line_comment_is_not_consumption)
+A commented example is not an actual import. ... FAIL
+test_mobile_string_is_not_consumption (test_monorepo.CoreConsumptionTest.test_mobile_string_is_not_consumption)
+A URI in an ordinary string is not a dependency. ... FAIL
+test_multiline_string_is_not_consumption (test_monorepo.CoreConsumptionTest.test_multiline_string_is_not_consumption)
+A code example inside a multiline string must not pass the check. ... FAIL
+test_nested_comment_is_not_consumption (test_monorepo.CoreConsumptionTest.test_nested_comment_is_not_consumption)
+Dart allows nested block comments; the outer comment still applies. ... FAIL
+test_public_module_import_is_accepted (test_monorepo.CoreConsumptionTest.test_public_module_import_is_accepted)
+Documented public module imports remain supported. ... ok
+test_real_barrel_import_is_accepted (test_monorepo.CoreConsumptionTest.test_real_barrel_import_is_accepted)
+Both clients may import the shared facade. ... ok
+test_web_block_comment_is_not_consumption (test_monorepo.CoreConsumptionTest.test_web_block_comment_is_not_consumption)
+Web has the same real-import check as Mobile. ... FAIL
+
+======================================================================
+FAIL: test_mobile_block_comment_is_not_consumption (test_monorepo.CoreConsumptionTest.test_mobile_block_comment_is_not_consumption)
+An import inside a block comment is ignored.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>\test_support\architecture\test_monorepo.py", line 77, in test_mobile_block_comment_is_not_consumption
+    self.expect_rejected("/*\nimport 'package:longvita_core/longvita_core.dart';\n*/")
+  File "<repo>\test_support\architecture\test_monorepo.py", line 53, in expect_rejected
+    self.assertIn(expected, MODULE.validate(self.root))
+AssertionError: 'Mobile must consume Core' not found in []
+
+======================================================================
+FAIL: test_mobile_line_comment_is_not_consumption (test_monorepo.CoreConsumptionTest.test_mobile_line_comment_is_not_consumption)
+A commented example is not an actual import.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>\test_support\architecture\test_monorepo.py", line 69, in test_mobile_line_comment_is_not_consumption
+    self.expect_rejected("// import 'package:longvita_core/longvita_core.dart';")
+  File "<repo>\test_support\architecture\test_monorepo.py", line 53, in expect_rejected
+    self.assertIn(expected, MODULE.validate(self.root))
+AssertionError: 'Mobile must consume Core' not found in []
+
+======================================================================
+FAIL: test_mobile_string_is_not_consumption (test_monorepo.CoreConsumptionTest.test_mobile_string_is_not_consumption)
+A URI in an ordinary string is not a dependency.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>\test_support\architecture\test_monorepo.py", line 73, in test_mobile_string_is_not_consumption
+    self.expect_rejected("const example = 'package:longvita_core/models/user_model.dart';")
+  File "<repo>\test_support\architecture\test_monorepo.py", line 53, in expect_rejected
+    self.assertIn(expected, MODULE.validate(self.root))
+AssertionError: 'Mobile must consume Core' not found in []
+
+======================================================================
+FAIL: test_multiline_string_is_not_consumption (test_monorepo.CoreConsumptionTest.test_multiline_string_is_not_consumption)
+A code example inside a multiline string must not pass the check.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>\test_support\architecture\test_monorepo.py", line 89, in test_multiline_string_is_not_consumption
+    self.expect_rejected('const example = """\nimport \'package:longvita_core/longvita_core.dart\';\n""";')
+  File "<repo>\test_support\architecture\test_monorepo.py", line 53, in expect_rejected
+    self.assertIn(expected, MODULE.validate(self.root))
+AssertionError: 'Mobile must consume Core' not found in []
+
+======================================================================
+FAIL: test_nested_comment_is_not_consumption (test_monorepo.CoreConsumptionTest.test_nested_comment_is_not_consumption)
+Dart allows nested block comments; the outer comment still applies.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>\test_support\architecture\test_monorepo.py", line 85, in test_nested_comment_is_not_consumption
+    self.expect_rejected("/* /* nested */\nimport 'package:longvita_core/longvita_core.dart';\n*/")
+  File "<repo>\test_support\architecture\test_monorepo.py", line 53, in expect_rejected
+    self.assertIn(expected, MODULE.validate(self.root))
+AssertionError: 'Mobile must consume Core' not found in []
+
+======================================================================
+FAIL: test_web_block_comment_is_not_consumption (test_monorepo.CoreConsumptionTest.test_web_block_comment_is_not_consumption)
+Web has the same real-import check as Mobile.
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<repo>\test_support\architecture\test_monorepo.py", line 81, in test_web_block_comment_is_not_consumption
+    self.expect_rejected("/*\nimport 'package:longvita_core/longvita_core.dart';\n*/", 'web')
+  File "<repo>\test_support\architecture\test_monorepo.py", line 53, in expect_rejected
+    self.assertIn(expected, MODULE.validate(self.root))
+AssertionError: 'Web must consume the real shared Core package' not found in []
+
+----------------------------------------------------------------------
+Ran 8 tests in 0.338s
+
+FAILED (failures=6)

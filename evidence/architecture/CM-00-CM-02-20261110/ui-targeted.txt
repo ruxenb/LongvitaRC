@@ -1,0 +1,48 @@
+00:00 +0: loading <repo>/mobile/test/qa/design_system_qa_test.dart
+00:00 +0: <repo>/mobile/test/qa/design_system_qa_test.dart: (setUpAll)
+00:00 +0: <repo>/mobile/test/qa/design_system_qa_test.dart: screenshots (actual) buttons
+00:01 +1: <repo>/mobile/test/flows/flow2_final_ui_test.dart: Flow2 screenshot/layout width=360.0 scale=1.0
+00:01 +2: <repo>/mobile/test/flows/flow2_final_ui_test.dart: Flow2 screenshot/layout width=360.0 scale=1.0
+00:01 +3: <repo>/mobile/test/flows/flow2_final_ui_test.dart: Flow2 screenshot/layout width=360.0 scale=1.0
+00:02 +4: <repo>/mobile/test/flows/flow2_final_ui_test.dart: Flow2 screenshot/layout width=360.0 scale=1.0
+00:02 +5: <repo>/mobile/test/flows/flow2_final_ui_test.dart: Flow2 screenshot/layout width=360.0 scale=1.0
+00:02 +6: <repo>/mobile/test/qa/design_system_qa_test.dart: screenshots (actual) dialogs
+00:02 +7: <repo>/mobile/test/flows/flow2_final_ui_test.dart: Flow2 screenshot/layout width=360.0 scale=2.0
+00:02 +8: <repo>/mobile/test/qa/design_system_qa_test.dart: screenshots (actual) states
+00:02 +9: <repo>/mobile/test/flows/flow2_final_ui_test.dart: Flow2 screenshot/layout width=412.0 scale=1.0
+00:02 +10: <repo>/mobile/test/qa/design_system_qa_test.dart: screenshots (actual) supporting
+00:03 +11: <repo>/mobile/test/flows/flow2_final_ui_test.dart: Flow2 screenshot/layout width=412.0 scale=2.0
+00:03 +12: <repo>/mobile/test/qa/design_system_qa_test.dart: screenshots (actual) qa-responsive-360
+00:03 +13: <repo>/mobile/test/flows/flow2_final_ui_test.dart: Edit, create, tick entire row, Back and persistence stay connected
+00:03 +14: <repo>/mobile/test/flows/flow2_final_ui_test.dart: Edit, create, tick entire row, Back and persistence stay connected
+00:03 +15: <repo>/mobile/test/flows/flow2_final_ui_test.dart: Edit, create, tick entire row, Back and persistence stay connected
+00:03 +16: <repo>/mobile/test/flows/flow2_final_ui_test.dart: Edit, create, tick entire row, Back and persistence stay connected
+00:03 +17: <repo>/mobile/test/flows/flow2_final_ui_test.dart: Edit, create, tick entire row, Back and persistence stay connected
+00:03 +18: <repo>/mobile/test/flows/flow2_final_ui_test.dart: Edit, create, tick entire row, Back and persistence stay connected
+00:03 +19: <repo>/mobile/test/flows/flow2_final_ui_test.dart: Edit, create, tick entire row, Back and persistence stay connected
+00:03 +20: <repo>/mobile/test/flows/flow2_final_ui_test.dart: Edit, create, tick entire row, Back and persistence stay connected
+00:03 +21: <repo>/mobile/test/flows/flow2_final_ui_test.dart: Edit, create, tick entire row, Back and persistence stay connected
+00:03 +22: <repo>/mobile/test/flows/flow2_final_ui_test.dart: Edit, create, tick entire row, Back and persistence stay connected
+00:03 +23: <repo>/mobile/test/flows/flow2_final_ui_test.dart: Edit, create, tick entire row, Back and persistence stay connected
+00:04 +24: <repo>/mobile/test/flows/flow2_final_ui_test.dart: Edit, create, tick entire row, Back and persistence stay connected
+00:04 +25: <repo>/mobile/test/qa/design_system_qa_test.dart: spec checks checkbox semantics and toggle
+00:04 +26: <repo>/mobile/test/flows/flow2_final_ui_test.dart: Delete is in edit dialog; Undo restores the original category and position
+00:04 +27: <repo>/mobile/test/flows/flow2_final_ui_test.dart: Delete is in edit dialog; Undo restores the original category and position
+00:04 +28: <repo>/mobile/test/flows/flow2_final_ui_test.dart: Delete is in edit dialog; Undo restores the original category and position
+00:04 +29: <repo>/mobile/test/flows/flow2_final_ui_test.dart: Delete is in edit dialog; Undo restores the original category and position
+00:04 +30: <repo>/mobile/test/flows/flow2_final_ui_test.dart: Semantics headings, ingredient identity, checked state and hit targets
+00:04 +31: <repo>/mobile/test/flows/flow2_final_ui_test.dart: Read error has retry; empty saved checklist stays empty and CTA disabled
+00:04 +32: <repo>/mobile/test/flows/flow2_final_ui_test.dart: Failed checklist save preserves tick, then inline retry persists it
+00:04 +33: <repo>/mobile/test/flows/flow2_final_ui_test.dart: Unknown categories and long Vietnamese names remain readable at text2
+00:05 +34: <repo>/mobile/test/flows/flow2_final_ui_test.dart: Nutrition keeps current route; Profile destination is wired
+00:05 +35: <repo>/mobile/test/flows/flow2_final_ui_test.dart: Actual plan category aliases preserve data while grouping for display
+00:05 +36: <repo>/mobile/test/flows/flow2_final_ui_test.dart: Flow2 Vietnamese copy and Material edit controls stay local to this flow
+00:05 +37: <repo>/mobile/test/flows/flow2_final_ui_test.dart: Translate display units and decimal separator without rewriting stored data
+00:05 +38: <repo>/mobile/test/flows/flow2_final_ui_test.dart: PR26-CR01: unchanged save preserves 2.25
+00:06 +39: <repo>/mobile/test/flows/flow2_final_ui_test.dart: PR26-CR01: unchanged save preserves 0.04
+00:06 +40: <repo>/mobile/test/flows/flow2_final_ui_test.dart: PR26-CR01: unchanged save preserves 2.345
+00:06 +41: <repo>/mobile/test/flows/flow2_final_ui_test.dart: PR26-CR01: unchanged save preserves 0.004
+00:06 +42: <repo>/mobile/test/flows/flow2_final_ui_test.dart: PR26-CR01: unchanged save preserves 1e-7
+00:06 +43: <repo>/mobile/test/flows/flow2_final_ui_test.dart: PR26-CR01: unchanged save preserves 10.0
+00:07 +44: <repo>/mobile/test/flows/flow2_final_ui_test.dart: (tearDownAll)
+00:07 +44: All tests passed!
