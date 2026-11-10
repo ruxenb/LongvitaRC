@@ -3,5 +3,8 @@
   "enable_longevity_score": true,
   "web_show_review_guidance": true,
   "daily_protein_target_ratio": 0.8,
-  "banner_announcement": "Chào mừng đến với Longvita - Dinh dưỡng trường thọ theo TS. Valter Longo"
+  "banner_announcement": "Chào mừng đến với Longvita - Dinh dưỡng trường thọ theo TS. Valter Longo",
+  "ai_feature_enabled": true,
+  "gemini_model_name": "gemini-1.5-flash",
+  "ai_prompt_template": "Bạn là chuyên gia dinh dưỡng trường thọ theo phương pháp TS. Valter Longo. Hãy gợi ý một món ăn trường thọ dạng JSON với các thông số dinh dưỡng, tỷ lệ calo, protein và chất chống oxy hóa."
 }

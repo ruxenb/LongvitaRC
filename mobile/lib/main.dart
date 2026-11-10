@@ -14,6 +14,8 @@ import 'package:longvita_core/services/i_report_service.dart';
 import 'package:longvita/services/report_service.dart';
 import 'package:longvita/services/local_report_store.dart';
 import 'package:longvita/services/report_viewer.dart';
+import 'package:longvita_core/services/i_gemini_ai_service.dart';
+import 'package:longvita/services/gemini_ai_service.dart';
 
 // Firebase Helpers
 import 'package:longvita/firebase/firebase_bootstrap.dart';
@@ -68,6 +70,10 @@ Future<Widget> buildAppScope() async {
   final IAuthService authService = AuthService();
   final IDataService dataService = DataService();
   final IReportService reportService = ReportService();
+  final IGeminiAiService geminiAiService = GeminiAiService(
+    remoteConfig: remoteConfig,
+    analytics: analytics,
+  );
 
   // ViewModels holding per-user data are created up front so AuthViewModel
   // can clear them when a session ends.
@@ -108,6 +114,7 @@ Future<Widget> buildAppScope() async {
       Provider<IAuthService>.value(value: authService),
       Provider<IDataService>.value(value: dataService),
       Provider<IReportService>.value(value: reportService),
+      Provider<IGeminiAiService>.value(value: geminiAiService),
 
       // Firebase Service Singletons
       Provider<AnalyticsService>.value(value: analytics),
