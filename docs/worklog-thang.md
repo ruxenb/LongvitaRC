@@ -234,8 +234,8 @@ text files có prefix đường dẫn máy cũ; đã thay prefix bằng `<user-h
   không phải bằng chứng Storage cloud production.
 - **S6-1:** cần flow, accessibility, instrumentation và failure testing hoàn tất.
 - **S6-12:** cần ARTEMIS chỉ ra lỗi thuộc phạm vi Thắng.
-- **S7-1-VLQ và S7-4:** S7-2/S7-3 của Thắng đã hoàn thành; S7-1 vẫn chờ feature
-  freeze, còn S7-4 cần nghiệm thu hồ sơ review đủ thành viên.
+- **S7-4:** S7-1/S7-2/S7-3 của Thắng đã hoàn thành; S7-4 vẫn cần nghiệm thu
+  hồ sơ review đủ thành viên và xác nhận leader.
 - **S8-5/S8-10:** S8-1 và nội dung cá nhân S8-9 của Thắng đã hoàn thành; còn
   đầu vào nhóm và bước ghép report/slide cuối.
 - **S8-14/S8-15:** cần finding đã sửa và clip demo của các thành viên.
@@ -246,6 +246,9 @@ text files có prefix đường dẫn máy cũ; đã thay prefix bằng `<user-h
 
 ## 7. Review PR #6 trên nhánh Thang
 
+- S7-1-VLQ được đối chiếu lại ngày 10/11 và chuyển sang **Đã hoàn thành** vì PR
+  #6 đã được hai công cụ AI review, output đã lưu và hồ sơ đã merge. Việc này
+  xác nhận đầu ra review đã tồn tại, không thay thế mốc feature freeze S6-1.
 - `55bdf3e`: xử lý privacy/evidence findings từ Bugbot và Security Review.
 - `c42519f`: ghi 5 findings, quyết định, lý do và giới hạn vào
   `docs/code-review.md` và `evidence/review/PR-6-THANG-20261103/`.
@@ -284,3 +287,33 @@ text files có prefix đường dẫn máy cũ; đã thay prefix bằng `<user-h
 - S9-4 snapshot `main` có 185 commit, phân bố 2/55/54/36/3/23/2/10 từ 01–08/11;
   chronology hợp lý nhưng chưa có ngưỡng giảng viên và vẫn cần audit cuối.
 - Chi tiết audit: `evidence/audit/S9-1-S9-4-20261108/README.md`.
+
+## 10. Hiệu chỉnh tracker và cập nhật ngày 10/11/2026
+
+- Đối chiếu lại PR #6, `evidence/review/PR-6-THANG-20261103/README.md`, commit
+  sửa `55bdf3e` và merge commit `90d9fd0`: S7-1-VLQ đáp ứng đủ đầu ra gồm PR,
+  AI review và hồ sơ review trong repo.
+- Chuyển S7-1-VLQ từ **Chưa bắt đầu** sang **Đã hoàn thành**; tổng tiến độ cá
+  nhân tăng từ 13/28 lên 14/28. S7-2-VLQ và S7-3-VLQ giữ nguyên trạng thái đã
+  hoàn thành.
+- Giữ S6-1 ở **Chưa bắt đầu** vì chưa có tag `v1.0-rc` và chưa có xác nhận
+  feature freeze của nhóm. Việc hoàn thành đầu ra S7-1 trước dependency được ghi
+  như ngoại lệ trình tự, không được dùng để suy ra S6-1 đã đạt.
+- S7-4 vẫn **Đang làm** vì còn thiếu gói review/disclosure được nghiệm thu của
+  Thái An và xác nhận leader; không suy từ hồ sơ cá nhân của Thắng thành hoàn
+  thành review toàn nhóm.
+- Các deliverable cuối S8-5, S8-10, S8-15, S8-16 và audit/nộp bài S9 vẫn giữ
+  nguyên trạng thái cho đến khi có PDF, video public và lượt kiểm cuối.
+
+## 11. Yêu cầu leader xác nhận S6-1 và S7-4 ngày 10/11/2026
+
+- Soạn yêu cầu gửi Thái An tại
+  `docs/coordination/request-thai-an-s6-1-s7-4-20261110.md`, tách rõ hai quyết
+  định: chọn SHA/tag/tiêu chí kiểm thử cho S6-1 và bổ sung hồ sơ AI review cá
+  nhân cùng nghiệm thu tổng hợp cho S7-4.
+- S6-1 chuyển từ **Chưa bắt đầu** sang **Chờ leader xác nhận**; chưa tạo hoặc
+  push tag `v1.0-rc`, chưa suy một snapshot test cũ thành release candidate.
+- S7-4 giữ **Đang làm**. Hồ sơ ba thành viên không thay thế PR/output,
+  findings, quyết định, fix link và disclosure của Thái An.
+- Yêu cầu kèm điều kiện đóng task và mẫu phản hồi để quyết định của leader có
+  thể truy vết trong repo/GitHub, tránh nghiệm thu bằng suy đoán.
