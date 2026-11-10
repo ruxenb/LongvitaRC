@@ -1,0 +1,18 @@
+{
+  "phase": "after-publish",
+  "observedAt": "2026-11-10T12:28:14.960Z",
+  "readOnly": true,
+  "project": "longvita-8da7e",
+  "count": 1,
+  "documents": [
+    {
+      "id": "RcD18Y0qJsieDsvn0AjY",
+      "fields": {
+        "content": "Đây là thông báo kiểm thử CM-07 của nhóm Longvita. Tin được tạo từ Web Admin và kiểm tra tại Hộp thư thông báo trên Trang chủ Mobile. Không yêu cầu người dùng thực hiện thao tác.",
+        "createdAt": "2026-11-10T12:28:07.642Z",
+        "title": "Kiểm thử CM-07: thông báo từ Web",
+        "authorRole": "admin"
+      }
+    }
+  ]
+}

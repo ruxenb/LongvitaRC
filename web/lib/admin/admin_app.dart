@@ -7,6 +7,7 @@ import 'package:longvita_admin/admin/admin_auth_viewmodel.dart';
 import 'package:longvita_admin/admin/admin_instrumentation.dart';
 import 'package:longvita_admin/admin/admin_shell.dart';
 import 'package:longvita_admin/admin/admin_viewmodels.dart';
+import 'package:longvita_admin/admin/announcement_viewmodel.dart';
 import 'package:longvita_admin/admin/sign_in_web_screen.dart';
 
 class LongvitaAdminApp extends StatelessWidget {
@@ -63,6 +64,8 @@ class _AdminAccessGateState extends State<AdminAccessGate> {
     builder: (context, _) {
       final state = model.state;
       if (state.authorized) {
+        final sessionModel = model;
+        final sessionGeneration = model.sessionGeneration;
         return KeyedSubtree(
           key: ValueKey(model.sessionGeneration),
           child:
@@ -71,6 +74,11 @@ class _AdminAccessGateState extends State<AdminAccessGate> {
                 user: state.user!,
                 role: state.role!,
                 onSignOut: model.signOut,
+                sessionIsActive: () =>
+                    mounted &&
+                    identical(model, sessionModel) &&
+                    sessionModel.state.authorized &&
+                    sessionModel.sessionGeneration == sessionGeneration,
               ),
         );
       }
@@ -124,10 +132,12 @@ class _AdminSession extends StatelessWidget {
   final User user;
   final String role;
   final Future<void> Function() onSignOut;
+  final bool Function() sessionIsActive;
   const _AdminSession({
     required this.user,
     required this.role,
     required this.onSignOut,
+    required this.sessionIsActive,
   });
   @override
   Widget build(BuildContext context) {
@@ -143,6 +153,15 @@ class _AdminSession extends StatelessWidget {
           ),
         ),
         ChangeNotifierProvider(create: (_) => DashboardViewModel(service)),
+        ChangeNotifierProvider(
+          create: (_) => AnnouncementViewModel(
+            publisher: context.read<IAnnouncementPublisher>(),
+            uid: user.uid,
+            role: role,
+            sessionIsActive: sessionIsActive,
+            trackSuccessfulPublish: instrumentation.logPublishAnnouncement,
+          ),
+        ),
       ],
       child: AdminShell(user: user, role: role, onSignOut: onSignOut),
     );

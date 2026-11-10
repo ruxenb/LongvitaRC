@@ -1,0 +1,592 @@
+00:00 +0: loading <repo>/mobile/test/architecture/core_assets_test.dart
+00:00 +0: <repo>/mobile/test/auth/auth_error_mapper_test.dart: Google Sign-In sign_in_canceled is a cancel
+00:00 +1: <repo>/mobile/test/auth/auth_error_mapper_test.dart: Google Sign-In network_error is network
+00:00 +2: <repo>/mobile/test/auth/auth_error_mapper_test.dart: Google Sign-In ApiException 10 (DEVELOPER_ERROR: SHA/package) is configuration
+00:00 +3: <repo>/mobile/test/auth/auth_error_mapper_test.dart: Google Sign-In other sign_in_failed is a credential failure
+00:00 +4: <repo>/mobile/test/auth/auth_error_mapper_test.dart: Firebase Auth network-request-failed is network
+00:00 +5: <repo>/mobile/test/auth/auth_error_mapper_test.dart: Firebase Auth operation-not-allowed (provider disabled) is configuration
+00:00 +6: <repo>/mobile/test/auth/auth_error_mapper_test.dart: Firebase Auth user-disabled / invalid-credential are credential
+00:00 +7: <repo>/mobile/test/auth/auth_error_mapper_test.dart: Firestore profile permission-denied read is profileRead
+00:00 +8: <repo>/mobile/test/auth/auth_error_mapper_test.dart: Firestore profile permission-denied write is profileWrite
+00:00 +9: <repo>/mobile/test/auth/auth_error_mapper_test.dart: Firestore profile unavailable is network, not a cancelled sign-in
+00:00 +10: <repo>/mobile/test/architecture/core_assets_test.dart: Mobile bundles the shared UI fonts and their licences
+00:04 +11: <repo>/mobile/test/auth/auth_service_profile_cache_test.dart: a single load fills the cached profile
+00:04 +12: <repo>/mobile/test/auth/auth_service_profile_cache_test.dart: an older load finishing last does not replace the newer profile
+00:04 +13: <repo>/mobile/test/auth/auth_service_profile_cache_test.dart: a load of an ended session leaves no profile behind
+00:05 +14: <repo>/mobile/test/auth/auth_screens_test.dart: (setUpAll)
+00:05 +14: <repo>/mobile/test/auth/auth_screens_test.dart: signed out shows Sign-in with the Google action
+00:07 +15: <repo>/mobile/test/auth/auth_screens_test.dart: signed out shows Sign-in with the Google action
+00:07 +16: <repo>/mobile/test/auth/auth_screens_test.dart: signed out shows Sign-in with the Google action
+00:07 +17: <repo>/mobile/test/auth/auth_screens_test.dart: signed out shows Sign-in with the Google action
+00:07 +18: <repo>/mobile/test/auth/auth_screens_test.dart: signed out shows Sign-in with the Google action
+00:07 +19: <repo>/mobile/test/auth/auth_screens_test.dart: signed out shows Sign-in with the Google action
+00:07 +20: <repo>/mobile/test/auth/auth_screens_test.dart: signed out shows Sign-in with the Google action
+00:07 +21: <repo>/mobile/test/auth/auth_screens_test.dart: signed out shows Sign-in with the Google action
+00:07 +22: <repo>/mobile/test/auth/auth_screens_test.dart: signed out shows Sign-in with the Google action
+00:07 +23: <repo>/mobile/test/auth/auth_screens_test.dart: signed out shows Sign-in with the Google action
+00:07 +24: <repo>/mobile/test/auth/auth_screens_test.dart: signed out shows Sign-in with the Google action
+00:07 +25: <repo>/mobile/test/auth/auth_screens_test.dart: signed out shows Sign-in with the Google action
+00:07 +26: <repo>/mobile/test/auth/auth_screens_test.dart: signed out shows Sign-in with the Google action
+00:07 +27: <repo>/mobile/test/auth/auth_screens_test.dart: signed out shows Sign-in with the Google action
+00:07 +28: <repo>/mobile/test/auth/auth_screens_test.dart: signed out shows Sign-in with the Google action
+00:07 +29: <repo>/mobile/test/auth/auth_screens_test.dart: signed out shows Sign-in with the Google action
+00:07 +30: <repo>/mobile/test/auth/auth_screens_test.dart: signed out shows Sign-in with the Google action
+00:07 +31: <repo>/mobile/test/auth/auth_screens_test.dart: signed out shows Sign-in with the Google action
+00:07 +32: <repo>/mobile/test/auth/auth_screens_test.dart: signed out shows Sign-in with the Google action
+00:07 +33: <repo>/mobile/test/auth/auth_screens_test.dart: signed out shows Sign-in with the Google action
+00:07 +34: <repo>/mobile/test/auth/auth_viewmodel_test.dart: a profile load belongs to the session it started in the end of an old load leaves the new one shared
+00:07 +35: <repo>/mobile/test/auth/auth_screens_test.dart: picker open: loading button, repeated taps ignored
+00:07 +36: <repo>/mobile/test/auth/auth_screens_test.dart: picker open: loading button, repeated taps ignored
+00:07 +37: <repo>/mobile/test/auth/auth_screens_test.dart: picker open: loading button, repeated taps ignored
+00:07 +38: <repo>/mobile/test/auth/auth_screens_test.dart: picker open: loading button, repeated taps ignored
+00:07 +39: <repo>/mobile/test/auth/auth_screens_test.dart: picker open: loading button, repeated taps ignored
+00:07 +40: <repo>/mobile/test/auth/auth_screens_test.dart: picker open: loading button, repeated taps ignored
+00:07 +41: <repo>/mobile/test/auth/auth_screens_test.dart: picker open: loading button, repeated taps ignored
+00:07 +42: <repo>/mobile/test/auth/auth_screens_test.dart: picker open: loading button, repeated taps ignored
+00:07 +43: <repo>/mobile/test/auth/auth_screens_test.dart: picker open: loading button, repeated taps ignored
+00:07 +44: <repo>/mobile/test/auth/auth_viewmodel_test.dart: telemetry finishing late does not change a newer session a pending login event does not block the next sign-in
+00:07 +45: <repo>/mobile/test/auth/auth_screens_test.dart: cancel shows an informational notice that can be dismissed
+00:07 +46: <repo>/mobile/test/auth/auth_screens_test.dart: cancel shows an informational notice that can be dismissed
+00:07 +47: <repo>/mobile/test/auth/auth_screens_test.dart: cancel shows an informational notice that can be dismissed
+00:07 +48: <repo>/mobile/test/auth/auth_viewmodel_test.dart: a sign-in result belongs to its attempt an old result does not touch the next attempt (uid-b)
+00:07 +49: <repo>/mobile/test/auth/auth_screens_test.dart: credential failure shows an error and a retry label
+00:08 +50: <repo>/mobile/test/auth/auth_screens_test.dart: credential failure shows an error and a retry label
+00:08 +51: <repo>/mobile/test/auth/auth_screens_test.dart: credential failure shows an error and a retry label
+00:08 +52: <repo>/mobile/test/auth/auth_screens_test.dart: credential failure shows an error and a retry label
+00:08 +53: <repo>/mobile/test/auth/auth_screens_test.dart: credential failure shows an error and a retry label
+00:08 +54: <repo>/mobile/test/auth/session_race_test.dart: ProfileViewModel after switching to uid-b PM-S3-5-01: late upload is ignored
+00:08 +55: <repo>/mobile/test/auth/auth_screens_test.dart: profile failure opens recovery, not Sign-in; retry recovers
+00:08 +56: <repo>/mobile/test/auth/auth_screens_test.dart: profile failure opens recovery, not Sign-in; retry recovers
+00:08 +57: <repo>/mobile/test/auth/auth_screens_test.dart: profile failure opens recovery, not Sign-in; retry recovers
+00:08 +58: <repo>/mobile/test/auth/auth_screens_test.dart: profile failure opens recovery, not Sign-in; retry recovers
+00:08 +59: <repo>/mobile/test/auth/auth_screens_test.dart: profile failure opens recovery, not Sign-in; retry recovers
+00:08 +60: <repo>/mobile/test/auth/auth_screens_test.dart: profile failure opens recovery, not Sign-in; retry recovers
+00:09 +61: <repo>/mobile/test/auth/auth_screens_test.dart: profile failure opens recovery, not Sign-in; retry recovers
+00:09 +62: <repo>/mobile/test/auth/auth_screens_test.dart: profile failure opens recovery, not Sign-in; retry recovers
+00:09 +63: <repo>/mobile/test/auth/auth_screens_test.dart: profile failure opens recovery, not Sign-in; retry recovers
+00:09 +64: <repo>/mobile/test/auth/session_race_test.dart: ProfileViewModel progress and completion apply within the same session
+00:09 +65: <repo>/mobile/test/auth/auth_screens_test.dart: recovery sign-out returns to Sign-in
+00:09 +66: <repo>/mobile/test/auth/auth_screens_test.dart: recovery sign-out returns to Sign-in
+00:09 +67: <repo>/mobile/test/auth/auth_screens_test.dart: recovery sign-out returns to Sign-in
+00:09 +68: <repo>/mobile/test/auth/auth_screens_test.dart: recovery sign-out returns to Sign-in
+00:09 +69: <repo>/mobile/test/auth/auth_screens_test.dart: recovery sign-out returns to Sign-in
+00:09 +70: <repo>/mobile/test/auth/auth_screens_test.dart: recovery sign-out returns to Sign-in
+00:09 +71: <repo>/mobile/test/auth/session_race_test.dart: MealPlanViewModel after switching to uid-b late saved plans error is ignored
+00:09 +72: <repo>/mobile/test/auth/auth_screens_test.dart: logout removes pushed protected routes (Back cannot return)
+00:09 +73: <repo>/mobile/test/auth/auth_screens_test.dart: logout removes pushed protected routes (Back cannot return)
+00:09 +74: <repo>/mobile/test/auth/auth_screens_test.dart: logout removes pushed protected routes (Back cannot return)
+00:09 +75: <repo>/mobile/test/auth/auth_screens_test.dart: logout removes pushed protected routes (Back cannot return)
+00:09 +76: <repo>/mobile/test/auth/auth_screens_test.dart: logout removes pushed protected routes (Back cannot return)
+00:09 +77: <repo>/mobile/test/auth/auth_screens_test.dart: logout removes pushed protected routes (Back cannot return)
+00:09 +78: <repo>/mobile/test/auth/auth_screens_test.dart: logout removes pushed protected routes (Back cannot return)
+00:09 +79: <repo>/mobile/test/auth/auth_screens_test.dart: logout removes pushed protected routes (Back cannot return)
+00:09 +80: <repo>/mobile/test/auth/auth_screens_test.dart: logout removes pushed protected routes (Back cannot return)
+00:09 +81: <repo>/mobile/test/fcm/notification_history_test.dart: NotificationHistoryStore each user has their own file
+00:09 +82: <repo>/mobile/test/auth/session_race_test.dart: MealPlanViewModel after switching to uid-a late save is ignored
+00:09 +83: <repo>/mobile/test/auth/auth_screens_test.dart: start-up failure shows error + retry, then the app
+00:09 +84: <repo>/mobile/test/auth/auth_screens_test.dart: start-up failure shows error + retry, then the app
+00:09 +85: <repo>/mobile/test/auth/auth_screens_test.dart: start-up failure shows error + retry, then the app
+00:09 +86: <repo>/mobile/test/auth/auth_screens_test.dart: start-up failure shows error + retry, then the app
+00:09 +87: <repo>/mobile/test/auth/auth_screens_test.dart: start-up failure shows error + retry, then the app
+00:09 +88: <repo>/mobile/test/auth/auth_screens_test.dart: start-up failure shows error + retry, then the app
+00:09 +89: <repo>/mobile/test/auth/auth_screens_test.dart: start-up failure shows error + retry, then the app
+00:09 +90: <repo>/mobile/test/auth/auth_screens_test.dart: start-up failure shows error + retry, then the app
+Firebase start-up failed: not-configured Exception: no google-services
+00:09 +91: <repo>/mobile/test/fcm/notification_history_test.dart: NotificationHistoryStore claimPending returns the waiting messages until they are acked
+00:09 +92: <repo>/mobile/test/auth/auth_screens_test.dart: an initializer that throws shows error + retry, then the app
+00:09 +92: <repo>/mobile/test/fcm/notification_history_test.dart: NotificationService history a message comes back after the app restarts
+00:09 +92: <repo>/mobile/test/auth/auth_screens_test.dart: an initializer that throws shows error + retry, then the app
+Firebase start-up failed: unknown Bad state: injected initializer failure
+00:09 +93: <repo>/mobile/test/auth/auth_screens_test.dart: an initializer that throws shows error + retry, then the app
+00:09 +94: <repo>/mobile/test/fcm/notification_history_test.dart: NotificationService history the same user finds it after signing out and in
+00:09 +95: <repo>/mobile/test/auth/auth_screens_test.dart: a service failing after Firebase starts shows error + retry
+00:09 +95: <repo>/mobile/test/fcm/notification_history_test.dart: NotificationService history the next user never sees it
+00:09 +96: <repo>/mobile/test/auth/auth_screens_test.dart: a service failing after Firebase starts shows error + retry
+00:10 +96: <repo>/mobile/test/fcm/notification_history_test.dart: NotificationService history a redelivered message after a restart is not added twice
+00:10 +97: <repo>/mobile/test/auth/auth_screens_test.dart: a service failing after Firebase starts shows error + retry
+Firebase start-up failed: app-start Bad state: service start failed
+00:10 +98: <repo>/mobile/test/fcm/notification_history_test.dart: NotificationService history new messages stay above the restored ones
+00:10 +99: <repo>/mobile/test/auth/auth_screens_test.dart: screenshots (actual) sign-in idle 360
+00:10 +100: <repo>/mobile/test/fcm/notification_history_test.dart: NotificationService history background messages join the inbox at sign-in, oldest lowest
+00:10 +101: <repo>/mobile/test/fcm/notification_review_persistence_test.dart: CR02: foreground survives logout before unreadable history recovers
+FCM history unavailable: FileSystemException: read blocked, path = '<user>\AppData\Local\Temp\pm_pr19_da8a73b3/notifications/uid-a.json'
+FCM history unavailable: FileSystemException: read blocked, path = '<user>\AppData\Local\Temp\pm_pr19_da8a73b3/notifications/uid-a.json'
+00:10 +102: <repo>/mobile/test/fcm/notification_review_persistence_test.dart: CR02: foreground survives logout before unreadable history recovers
+FCM history unavailable: FileSystemException: read blocked, path = '<user>\AppData\Local\Temp\pm_pr19_da8a73b3/notifications/uid-a.json'
+00:10 +103: <repo>/mobile/test/fcm/notification_review_persistence_test.dart: CR02: foreground survives logout before unreadable history recovers
+00:10 +104: <repo>/mobile/test/auth/auth_screens_test.dart: screenshots (actual) sign-in cancelled 360
+00:10 +105: <repo>/mobile/test/auth/auth_screens_test.dart: screenshots (actual) sign-in cancelled 360
+00:10 +106: <repo>/mobile/test/fcm/notification_review_persistence_test.dart: CR03: legacy migration cannot evict newer pending at capacity
+00:10 +106: <repo>/mobile/test/fcm/notification_history_test.dart: NotificationService history tapping a background message that already waits routes once
+00:10 +107: <repo>/mobile/test/fcm/notification_review_persistence_test.dart: CR03: legacy migration cannot evict newer pending at capacity
+00:10 +107: <repo>/mobile/test/fcm/notification_history_test.dart: NotificationService history the inbox still works when the files cannot be used
+FCM history unavailable: FileSystemException: no disk, path = ''
+FCM history unavailable: FileSystemException: no disk, path = ''
+FCM pending unavailable: FileSystemException: no disk, path = ''
+FCM staging unavailable: FileSystemException: no disk, path = ''
+00:10 +108: <repo>/mobile/test/fcm/notification_review_persistence_test.dart: CR03: legacy migration cannot evict newer pending at capacity
+00:10 +109: <repo>/mobile/test/fcm/notification_review_persistence_test.dart: CR03: legacy migration cannot evict newer pending at capacity
+00:10 +110: <repo>/mobile/test/fcm/notification_review_persistence_test.dart: CR03: legacy migration cannot evict newer pending at capacity
+00:10 +111: <repo>/mobile/test/fcm/notification_review_persistence_test.dart: CR03: legacy migration cannot evict newer pending at capacity
+00:10 +112: <repo>/mobile/test/fcm/notification_review_persistence_test.dart: CR03: legacy migration cannot evict newer pending at capacity
+00:10 +113: <repo>/mobile/test/fcm/notification_review_persistence_test.dart: CR03: legacy migration cannot evict newer pending at capacity
+00:10 +114: <repo>/mobile/test/fcm/notification_review_persistence_test.dart: CR03: legacy migration cannot evict newer pending at capacity
+00:10 +115: <repo>/mobile/test/fcm/notification_review_persistence_test.dart: CR03: legacy migration cannot evict newer pending at capacity
+00:10 +116: <repo>/mobile/test/fcm/notification_review_persistence_test.dart: CR03: legacy migration cannot evict newer pending at capacity
+00:10 +117: <repo>/mobile/test/fcm/notification_review_persistence_test.dart: CR03: legacy migration cannot evict newer pending at capacity
+00:10 +118: <repo>/mobile/test/fcm/notification_review_persistence_test.dart: CR03: legacy migration cannot evict newer pending at capacity
+00:10 +119: <repo>/mobile/test/fcm/notification_review_persistence_test.dart: CR03: legacy migration cannot evict newer pending at capacity
+00:10 +120: <repo>/mobile/test/fcm/notification_review_persistence_test.dart: CR03: legacy migration cannot evict newer pending at capacity
+00:10 +121: <repo>/mobile/test/fcm/notification_review_persistence_test.dart: CR03: legacy migration cannot evict newer pending at capacity
+00:10 +122: <repo>/mobile/test/fcm/notification_review_persistence_test.dart: CR03: legacy migration cannot evict newer pending at capacity
+00:10 +123: <repo>/mobile/test/fcm/notification_review_persistence_test.dart: CR03: legacy migration cannot evict newer pending at capacity
+00:10 +124: <repo>/mobile/test/fcm/notification_review_persistence_test.dart: CR03: legacy migration cannot evict newer pending at capacity
+00:10 +125: <repo>/mobile/test/fcm/notification_review_persistence_test.dart: CR03: legacy migration cannot evict newer pending at capacity
+00:10 +126: <repo>/mobile/test/fcm/notification_review_persistence_test.dart: CR03: legacy migration cannot evict newer pending at capacity
+00:10 +127: <repo>/mobile/test/fcm/notification_review_persistence_test.dart: CR03: legacy migration cannot evict newer pending at capacity
+00:10 +128: <repo>/mobile/test/fcm/notification_review_persistence_test.dart: CR03: legacy migration cannot evict newer pending at capacity
+00:10 +129: <repo>/mobile/test/fcm/notification_review_persistence_test.dart: CR03: legacy migration cannot evict newer pending at capacity
+00:10 +130: <repo>/mobile/test/fcm/notification_review_persistence_test.dart: CR03: legacy migration cannot evict newer pending at capacity
+00:10 +131: <repo>/mobile/test/fcm/notification_review_persistence_test.dart: CR03: legacy migration cannot evict newer pending at capacity
+00:10 +132: <repo>/mobile/test/fcm/notification_review_persistence_test.dart: CR03: legacy migration cannot evict newer pending at capacity
+00:10 +133: <repo>/mobile/test/fcm/notification_review_persistence_test.dart: CR03: legacy migration cannot evict newer pending at capacity
+00:10 +133: <repo>/mobile/test/fcm/notification_service_test.dart: NotificationService initializes once, including the background handler
+00:10 +134: <repo>/mobile/test/fcm/notification_review_persistence_test.dart: CR03: legacy migration cannot evict newer pending at capacity
+00:10 +135: <repo>/mobile/test/fcm/notification_review_persistence_test.dart: CR03: legacy migration cannot evict newer pending at capacity
+00:10 +135: <repo>/mobile/test/fcm/notification_service_test.dart: NotificationService foreground, opened and initial all reach one inbox
+FCM history unavailable: Binding has not yet been initialized.
+The "instance" getter on the ServicesBinding binding mixin is only available once that binding has been initialized.
+Typically, this is done by calling "WidgetsFlutterBinding.ensureInitialized()" or "runApp()" (the latter calls the former). Typically this call is done in the "void main()" method. The "ensureInitialized" method is idempotent; calling it multiple times is not harmful. After calling that method, the "instance" getter will return the binding.
+In a test, one can call "TestWidgetsFlutterBinding.ensureInitialized()" as the first line in the test's "main()" method to initialize the binding.
+If ServicesBinding is a custom binding mixin, there must also be a custom binding class, like WidgetsFlutterBinding, but that mixes in the selected binding, and that is the class that must be constructed before using the "instance" getter.
+FCM staging unavailable: Binding has not yet been initialized.
+The "instance" getter on the ServicesBinding binding mixin is only available once that binding has been initialized.
+Typically, this is done by calling "WidgetsFlutterBinding.ensureInitialized()" or "runApp()" (the latter calls the former). Typically this call is done in the "void main()" method. The "ensureInitialized" method is idempotent; calling it multiple times is not harmful. After calling that method, the "instance" getter will return the binding.
+In a test, one can call "TestWidgetsFlutterBinding.ensureInitialized()" as the first line in the test's "main()" method to initialize the binding.
+If ServicesBinding is a custom binding mixin, there must also be a custom binding class, like WidgetsFlutterBinding, but that mixes in the selected binding, and that is the class that must be constructed before using the "instance" getter.
+FCM history unavailable: Binding has not yet been initialized.
+The "instance" getter on the ServicesBinding binding mixin is only available once that binding has been initialized.
+Typically, this is done by calling "WidgetsFlutterBinding.ensureInitialized()" or "runApp()" (the latter calls the former). Typically this call is done in the "void main()" method. The "ensureInitialized" method is idempotent; calling it multiple times is not harmful. After calling that method, the "instance" getter will return the binding.
+In a test, one can call "TestWidgetsFlutterBinding.ensureInitialized()" as the first line in the test's "main()" method to initialize the binding.
+If ServicesBinding is a custom binding mixin, there must also be a custom binding class, like WidgetsFlutterBinding, but that mixes in the selected binding, and that is the class that must be constructed before using the "instance" getter.
+FCM pending unavailable: Binding has not yet been initialized.
+The "instance" getter on the ServicesBinding binding mixin is only available once that binding has been initialized.
+Typically, this is done by calling "WidgetsFlutterBinding.ensureInitialized()" or "runApp()" (the latter calls the former). Typically this call is done in the "void main()" method. The "ensureInitialized" method is idempotent; calling it multiple times is not harmful. After calling that method, the "instance" getter will return the binding.
+In a test, one can call "TestWidgetsFlutterBinding.ensureInitialized()" as the first line in the test's "main()" method to initialize the binding.
+If ServicesBinding is a custom binding mixin, there must also be a custom binding class, like WidgetsFlutterBinding, but that mixes in the selected binding, and that is the class that must be constructed before using the "instance" getter.
+FCM staging unavailable: Binding has not yet been initialized.
+The "instance" getter on the ServicesBinding binding mixin is only available once that binding has been initialized.
+Typically, this is done by calling "WidgetsFlutterBinding.ensureInitialized()" or "runApp()" (the latter calls the former). Typically this call is done in the "void main()" method. The "ensureInitialized" method is idempotent; calling it multiple times is not harmful. After calling that method, the "instance" getter will return the binding.
+In a test, one can call "TestWidgetsFlutterBinding.ensureInitialized()" as the first line in the test's "main()" method to initialize the binding.
+If ServicesBinding is a custom binding mixin, there must also be a custom binding class, like WidgetsFlutterBinding, but that mixes in the selected binding, and that is the class that must be constructed before using the "instance" getter.
+FCM staging unavailable: Binding has not yet been initialized.
+The "instance" getter on the ServicesBinding binding mixin is only available once that binding has been initialized.
+Typically, this is done by calling "WidgetsFlutterBinding.ensureInitialized()" or "runApp()" (the latter calls the former). Typically this call is done in the "void main()" method. The "ensureInitialized" method is idempotent; calling it multiple times is not harmful. After calling that method, the "instance" getter will return the binding.
+In a test, one can call "TestWidgetsFlutterBinding.ensureInitialized()" as the first line in the test's "main()" method to initialize the binding.
+If ServicesBinding is a custom binding mixin, there must also be a custom binding class, like WidgetsFlutterBinding, but that mixes in the selected binding, and that is the class that must be constructed before using the "instance" getter.
+00:11 +136: <repo>/mobile/test/fcm/notification_review_persistence_test.dart: CR03: legacy migration cannot evict newer pending at capacity
+00:11 +136: <repo>/mobile/test/fcm/notification_service_test.dart: NotificationService foreground then tap of one message is deduplicated
+FCM history unavailable: Binding has not yet been initialized.
+The "instance" getter on the ServicesBinding binding mixin is only available once that binding has been initialized.
+Typically, this is done by calling "WidgetsFlutterBinding.ensureInitialized()" or "runApp()" (the latter calls the former). Typically this call is done in the "void main()" method. The "ensureInitialized" method is idempotent; calling it multiple times is not harmful. After calling that method, the "instance" getter will return the binding.
+In a test, one can call "TestWidgetsFlutterBinding.ensureInitialized()" as the first line in the test's "main()" method to initialize the binding.
+If ServicesBinding is a custom binding mixin, there must also be a custom binding class, like WidgetsFlutterBinding, but that mixes in the selected binding, and that is the class that must be constructed before using the "instance" getter.
+FCM history unavailable: Binding has not yet been initialized.
+The "instance" getter on the ServicesBinding binding mixin is only available once that binding has been initialized.
+Typically, this is done by calling "WidgetsFlutterBinding.ensureInitialized()" or "runApp()" (the latter calls the former). Typically this call is done in the "void main()" method. The "ensureInitialized" method is idempotent; calling it multiple times is not harmful. After calling that method, the "instance" getter will return the binding.
+In a test, one can call "TestWidgetsFlutterBinding.ensureInitialized()" as the first line in the test's "main()" method to initialize the binding.
+If ServicesBinding is a custom binding mixin, there must also be a custom binding class, like WidgetsFlutterBinding, but that mixes in the selected binding, and that is the class that must be constructed before using the "instance" getter.
+FCM pending unavailable: Binding has not yet been initialized.
+The "instance" getter on the ServicesBinding binding mixin is only available once that binding has been initialized.
+Typically, this is done by calling "WidgetsFlutterBinding.ensureInitialized()" or "runApp()" (the latter calls the former). Typically this call is done in the "void main()" method. The "ensureInitialized" method is idempotent; calling it multiple times is not harmful. After calling that method, the "instance" getter will return the binding.
+In a test, one can call "TestWidgetsFlutterBinding.ensureInitialized()" as the first line in the test's "main()" method to initialize the binding.
+If ServicesBinding is a custom binding mixin, there must also be a custom binding class, like WidgetsFlutterBinding, but that mixes in the selected binding, and that is the class that must be constructed before using the "instance" getter.
+FCM staging unavailable: Binding has not yet been initialized.
+The "instance" getter on the ServicesBinding binding mixin is only available once that binding has been initialized.
+Typically, this is done by calling "WidgetsFlutterBinding.ensureInitialized()" or "runApp()" (the latter calls the former). Typically this call is done in the "void main()" method. The "ensureInitialized" method is idempotent; calling it multiple times is not harmful. After calling that method, the "instance" getter will return the binding.
+In a test, one can call "TestWidgetsFlutterBinding.ensureInitialized()" as the first line in the test's "main()" method to initialize the binding.
+If ServicesBinding is a custom binding mixin, there must also be a custom binding class, like WidgetsFlutterBinding, but that mixes in the selected binding, and that is the class that must be constructed before using the "instance" getter.
+00:11 +137: <repo>/mobile/test/fcm/notification_review_persistence_test.dart: CR03: legacy migration cannot evict newer pending at capacity
+00:11 +137: <repo>/mobile/test/fcm/notification_service_test.dart: NotificationService arrival while the app is open is reported once for a new foreground message
+FCM history unavailable: Binding has not yet been initialized.
+The "instance" getter on the ServicesBinding binding mixin is only available once that binding has been initialized.
+Typically, this is done by calling "WidgetsFlutterBinding.ensureInitialized()" or "runApp()" (the latter calls the former). Typically this call is done in the "void main()" method. The "ensureInitialized" method is idempotent; calling it multiple times is not harmful. After calling that method, the "instance" getter will return the binding.
+In a test, one can call "TestWidgetsFlutterBinding.ensureInitialized()" as the first line in the test's "main()" method to initialize the binding.
+If ServicesBinding is a custom binding mixin, there must also be a custom binding class, like WidgetsFlutterBinding, but that mixes in the selected binding, and that is the class that must be constructed before using the "instance" getter.
+FCM history unavailable: Binding has not yet been initialized.
+The "instance" getter on the ServicesBinding binding mixin is only available once that binding has been initialized.
+Typically, this is done by calling "WidgetsFlutterBinding.ensureInitialized()" or "runApp()" (the latter calls the former). Typically this call is done in the "void main()" method. The "ensureInitialized" method is idempotent; calling it multiple times is not harmful. After calling that method, the "instance" getter will return the binding.
+In a test, one can call "TestWidgetsFlutterBinding.ensureInitialized()" as the first line in the test's "main()" method to initialize the binding.
+If ServicesBinding is a custom binding mixin, there must also be a custom binding class, like WidgetsFlutterBinding, but that mixes in the selected binding, and that is the class that must be constructed before using the "instance" getter.
+FCM pending unavailable: Binding has not yet been initialized.
+The "instance" getter on the ServicesBinding binding mixin is only available once that binding has been initialized.
+Typically, this is done by calling "WidgetsFlutterBinding.ensureInitialized()" or "runApp()" (the latter calls the former). Typically this call is done in the "void main()" method. The "ensureInitialized" method is idempotent; calling it multiple times is not harmful. After calling that method, the "instance" getter will return the binding.
+In a test, one can call "TestWidgetsFlutterBinding.ensureInitialized()" as the first line in the test's "main()" method to initialize the binding.
+If ServicesBinding is a custom binding mixin, there must also be a custom binding class, like WidgetsFlutterBinding, but that mixes in the selected binding, and that is the class that must be constructed before using the "instance" getter.
+FCM staging unavailable: Binding has not yet been initialized.
+The "instance" getter on the ServicesBinding binding mixin is only available once that binding has been initialized.
+Typically, this is done by calling "WidgetsFlutterBinding.ensureInitialized()" or "runApp()" (the latter calls the former). Typically this call is done in the "void main()" method. The "ensureInitialized" method is idempotent; calling it multiple times is not harmful. After calling that method, the "instance" getter will return the binding.
+00:11 +138: <repo>/mobile/test/fcm/notification_review_persistence_test.dart: CR03: legacy migration cannot evict newer pending at capacity
+00:11 +139: <repo>/mobile/test/fcm/notification_review_persistence_test.dart: CR03: legacy migration cannot evict newer pending at capacity
+00:11 +140: <repo>/mobile/test/fcm/notification_review_persistence_test.dart: CR03: legacy migration cannot evict newer pending at capacity
+00:11 +141: <repo>/mobile/test/fcm/notification_review_persistence_test.dart: CR03: legacy migration cannot evict newer pending at capacity
+00:11 +142: <repo>/mobile/test/fcm/notification_review_persistence_test.dart: CR03: legacy migration cannot evict newer pending at capacity
+00:11 +143: <repo>/mobile/test/fcm/notification_review_persistence_test.dart: CR03: legacy migration cannot evict newer pending at capacity
+00:11 +144: <repo>/mobile/test/fcm/notification_review_persistence_test.dart: CR03: legacy migration cannot evict newer pending at capacity
+00:11 +145: <repo>/mobile/test/fcm/notification_review_persistence_test.dart: CR03: legacy migration cannot evict newer pending at capacity
+00:11 +146: <repo>/mobile/test/fcm/notification_review_persistence_test.dart: CR03: legacy migration cannot evict newer pending at capacity
+00:11 +147: <repo>/mobile/test/fcm/notification_review_persistence_test.dart: CR03: legacy migration cannot evict newer pending at capacity
+00:11 +148: <repo>/mobile/test/fcm/notification_review_persistence_test.dart: CR03: legacy migration cannot evict newer pending at capacity
+00:11 +149: <repo>/mobile/test/fcm/notification_review_persistence_test.dart: CR03: legacy migration cannot evict newer pending at capacity
+00:11 +150: <repo>/mobile/test/fcm/notification_review_persistence_test.dart: CR03: legacy migration cannot evict newer pending at capacity
+00:11 +151: <repo>/mobile/test/fcm/notification_review_persistence_test.dart: CR03: legacy migration cannot evict newer pending at capacity
+00:11 +152: <repo>/mobile/test/fcm/notification_review_persistence_test.dart: CR03: legacy migration cannot evict newer pending at capacity
+00:11 +153: <repo>/mobile/test/fcm/notification_review_persistence_test.dart: CR03: legacy migration cannot evict newer pending at capacity
+00:11 +154: <repo>/mobile/test/fcm/notification_review_persistence_test.dart: CR03: legacy migration cannot evict newer pending at capacity
+00:11 +155: <repo>/mobile/test/fcm/notification_review_persistence_test.dart: CR03: legacy migration cannot evict newer pending at capacity
+00:11 +156: <repo>/mobile/test/fcm/notification_review_persistence_test.dart: CR03: legacy migration cannot evict newer pending at capacity
+00:11 +157: <repo>/mobile/test/fcm/notification_review_persistence_test.dart: CR03: legacy migration cannot evict newer pending at capacity
+00:11 +158: <repo>/mobile/test/fcm/notification_review_persistence_test.dart: CR03: legacy migration cannot evict newer pending at capacity
+00:11 +159: <repo>/mobile/test/fcm/notification_review_persistence_test.dart: CR03: legacy migration cannot evict newer pending at capacity
+00:11 +160: <repo>/mobile/test/fcm/notification_review_persistence_test.dart: CR03: legacy migration cannot evict newer pending at capacity
+00:11 +161: <repo>/mobile/test/fcm/notification_review_persistence_test.dart: CR03: legacy migration cannot evict newer pending at capacity
+00:11 +162: <repo>/mobile/test/fcm/notification_review_persistence_test.dart: CR03: legacy migration cannot evict newer pending at capacity
+00:11 +163: <repo>/mobile/test/fcm/notification_history_test.dart: queue on disk keeps at most maxPending messages, the newest
+00:11 +164: <repo>/mobile/test/fcm/notification_history_test.dart: queue on disk keeps at most maxPending messages, the newest
+00:11 +165: <repo>/mobile/test/fcm/notification_review_persistence_test.dart: CR04: interrupted legacy migration resumes without duplicates
+00:11 +166: <repo>/mobile/test/fcm/notification_review_persistence_test.dart: CR04: interrupted legacy migration resumes without duplicates
+00:11 +167: <repo>/mobile/test/auth/auth_screens_test.dart: screenshots (actual) sign-in loading 412
+00:11 +168: <repo>/mobile/test/auth/auth_screens_test.dart: screenshots (actual) sign-in loading 412
+00:11 +169: <repo>/mobile/test/auth/auth_screens_test.dart: screenshots (actual) sign-in loading 412
+00:11 +170: <repo>/mobile/test/auth/auth_screens_test.dart: screenshots (actual) sign-in loading 412
+00:11 +171: <repo>/mobile/test/auth/auth_screens_test.dart: screenshots (actual) sign-in loading 412
+00:11 +172: <repo>/mobile/test/flows/flow2_final_ui_test.dart: Flow2 screenshot/layout width=360.0 scale=1.0
+00:11 +172: <repo>/mobile/test/fcm/notification_history_test.dart: NotificationService sessions and persistence history of A, B and no recipient: A sees only A, valid entries stay
+00:11 +173: <repo>/mobile/test/flows/flow2_final_ui_test.dart: Flow2 screenshot/layout width=360.0 scale=1.0
+00:11 +174: <repo>/mobile/test/flows/flow2_final_ui_test.dart: Flow2 screenshot/layout width=360.0 scale=1.0
+00:11 +175: <repo>/mobile/test/flows/flow2_final_ui_test.dart: Flow2 screenshot/layout width=360.0 scale=1.0
+00:11 +176: <repo>/mobile/test/flows/flow2_final_ui_test.dart: Flow2 screenshot/layout width=360.0 scale=1.0
+00:12 +177: <repo>/mobile/test/flows/flow2_final_ui_test.dart: Flow2 screenshot/layout width=360.0 scale=1.0
+00:12 +178: <repo>/mobile/test/flows/flow2_final_ui_test.dart: Flow2 screenshot/layout width=360.0 scale=1.0
+00:12 +179: <repo>/mobile/test/flows/flow2_final_ui_test.dart: Flow2 screenshot/layout width=360.0 scale=1.0
+00:12 +180: <repo>/mobile/test/flows/flow2_final_ui_test.dart: Flow2 screenshot/layout width=360.0 scale=1.0
+00:12 +181: <repo>/mobile/test/flows/flow2_final_ui_test.dart: Flow2 screenshot/layout width=360.0 scale=1.0
+00:12 +181: <repo>/mobile/test/fcm/notification_history_test.dart: NotificationService sessions and persistence a failed save keeps the messages queued; the retry adds no duplicate
+FCM history task failed: FileSystemException: disk full, path = ''
+00:12 +182: <repo>/mobile/test/flows/flow2_final_ui_test.dart: Flow2 screenshot/layout width=360.0 scale=1.0
+00:12 +182: <repo>/mobile/test/fcm/notification_history_test.dart: NotificationService sessions and persistence history that cannot be read is not overwritten, and is read again
+FCM history unavailable: FileSystemException: busy, path = ''
+FCM history unavailable: FileSystemException: busy, path = ''
+00:12 +183: <repo>/mobile/test/flows/flow2_final_ui_test.dart: Flow2 screenshot/layout width=360.0 scale=1.0
+00:12 +183: <repo>/mobile/test/fcm/notification_history_test.dart: NotificationService sessions and persistence history that cannot be read is not overwritten, and is read again
+FCM history unavailable: FileSystemException: busy, path = ''
+00:12 +184: <repo>/mobile/test/flows/flow2_final_ui_test.dart: Flow2 screenshot/layout width=360.0 scale=1.0
+00:12 +184: <repo>/mobile/test/fcm/notification_history_test.dart: NotificationService sessions and persistence a tap arriving while the history loads is saved with it, opened once
+00:12 +185: <repo>/mobile/test/flows/flow2_final_ui_test.dart: Flow2 screenshot/layout width=360.0 scale=1.0
+00:12 +185: <repo>/mobile/test/fcm/notification_history_test.dart: NotificationService sessions and persistence sign-out keeps A's saved history and drops what is on screen
+00:12 +186: <repo>/mobile/test/flows/flow2_final_ui_test.dart: Flow2 screenshot/layout width=360.0 scale=1.0
+00:12 +186: <repo>/mobile/test/fcm/notification_history_test.dart: PM-S412 review fixes PM-S412-01: a save still running at re-login is read, not lost
+00:12 +187: <repo>/mobile/test/flows/flow2_final_ui_test.dart: Flow2 screenshot/layout width=360.0 scale=1.0
+00:12 +188: <repo>/mobile/test/flows/flow2_final_ui_test.dart: Flow2 screenshot/layout width=360.0 scale=1.0
+00:12 +188: <repo>/mobile/test/fcm/notification_history_test.dart: PM-S412 review fixes PM-S412-01: another user is not held up by A's pending save
+00:12 +189: <repo>/mobile/test/flows/flow2_final_ui_test.dart: Flow2 screenshot/layout width=360.0 scale=1.0
+00:12 +190: <repo>/mobile/test/flows/flow2_final_ui_test.dart: Flow2 screenshot/layout width=360.0 scale=1.0
+00:12 +191: <repo>/mobile/test/flows/flow2_final_ui_test.dart: Flow2 screenshot/layout width=360.0 scale=1.0
+00:12 +192: <repo>/mobile/test/flows/flow2_final_ui_test.dart: Flow2 screenshot/layout width=360.0 scale=1.0
+00:12 +193: <repo>/mobile/test/flows/flow2_final_ui_test.dart: Flow2 screenshot/layout width=360.0 scale=1.0
+00:12 +193: <repo>/mobile/test/fcm/notification_history_test.dart: PM-S412 review fixes PM-S412-02: read errors at the file boundary history is not replaced while unreadable, and saved once readable
+FCM history unavailable: FileSystemException: read blocked, path = '<user>\AppData\Local\Temp\longvita_notificationscceb6f58/notifications/uid-a.json'
+FCM history unavailable: FileSystemException: read blocked, path = '<user>\AppData\Local\Temp\longvita_notificationscceb6f58/notifications/uid-a.json'
+FCM history unavailable: FileSystemException: read blocked, path = '<user>\AppData\Local\Temp\longvita_notificationscceb6f58/notifications/uid-a.json'
+00:12 +194: <repo>/mobile/test/flows/flow2_final_ui_test.dart: Flow2 screenshot/layout width=360.0 scale=1.0
+00:12 +195: <repo>/mobile/test/flows/flow2_final_ui_test.dart: Flow2 screenshot/layout width=360.0 scale=1.0
+00:12 +196: <repo>/mobile/test/flows/flow2_final_ui_test.dart: Flow2 screenshot/layout width=360.0 scale=1.0
+00:12 +196: <repo>/mobile/test/fcm/notification_history_test.dart: PM-S412 review fixes PM-S412-02: read errors at the file boundary a file locked by another process is not overwritten (Windows)
+FCM history unavailable: PathAccessException: readInto failed, path = '<user>\AppData\Local\Temp\longvita_notifications99e26854/notifications/uid-a.json' (OS Error: The process cannot access the file because another process has locked a portion of the file, errno = 33)
+FCM history unavailable: PathAccessException: readInto failed, path = '<user>\AppData\Local\Temp\longvita_notifications99e26854/notifications/uid-a.json' (OS Error: The process cannot access the file because another process has locked a portion of the file, errno = 33)
+00:12 +197: <repo>/mobile/test/flows/flow2_final_ui_test.dart: Flow2 screenshot/layout width=360.0 scale=1.0
+00:13 +198: <repo>/mobile/test/flows/flow2_final_ui_test.dart: Flow2 screenshot/layout width=360.0 scale=1.0
+00:13 +199: <repo>/mobile/test/flows/flow2_final_ui_test.dart: Flow2 screenshot/layout width=360.0 scale=1.0
+00:13 +200: <repo>/mobile/test/flows/flow2_final_ui_test.dart: Flow2 screenshot/layout width=360.0 scale=1.0
+00:13 +201: <repo>/mobile/test/flows/flow2_final_ui_test.dart: Flow2 screenshot/layout width=360.0 scale=1.0
+00:13 +202: <repo>/mobile/test/flows/flow2_final_ui_test.dart: Flow2 screenshot/layout width=360.0 scale=1.0
+00:13 +203: <repo>/mobile/test/flows/flow2_final_ui_test.dart: Flow2 screenshot/layout width=360.0 scale=1.0
+00:13 +204: <repo>/mobile/test/flows/flow2_final_ui_test.dart: Flow2 screenshot/layout width=360.0 scale=1.0
+00:13 +205: <repo>/mobile/test/flows/flow2_final_ui_test.dart: Flow2 screenshot/layout width=360.0 scale=1.0
+00:13 +206: <repo>/mobile/test/flows/flow2_final_ui_test.dart: Flow2 screenshot/layout width=360.0 scale=1.0
+00:13 +207: <repo>/mobile/test/flows/flow2_final_ui_test.dart: Flow2 screenshot/layout width=360.0 scale=1.0
+00:13 +208: <repo>/mobile/test/flows/flow2_final_ui_test.dart: Flow2 screenshot/layout width=360.0 scale=1.0
+00:13 +209: <repo>/mobile/test/flows/flow2_final_ui_test.dart: Flow2 screenshot/layout width=360.0 scale=1.0
+00:13 +210: <repo>/mobile/test/flows/flow2_final_ui_test.dart: Flow2 screenshot/layout width=360.0 scale=1.0
+00:13 +211: <repo>/mobile/test/flows/flow2_final_ui_test.dart: Flow2 screenshot/layout width=360.0 scale=1.0
+00:13 +212: <repo>/mobile/test/flows/flow2_final_ui_test.dart: Flow2 screenshot/layout width=360.0 scale=1.0
+00:13 +213: <repo>/mobile/test/flows/flow2_final_ui_test.dart: Flow2 screenshot/layout width=360.0 scale=1.0
+00:13 +214: <repo>/mobile/test/flows/flow2_final_ui_test.dart: Flow2 screenshot/layout width=360.0 scale=1.0
+00:13 +215: <repo>/mobile/test/flows/flow2_final_ui_test.dart: Flow2 screenshot/layout width=360.0 scale=1.0
+00:13 +216: <repo>/mobile/test/flows/flow2_final_ui_test.dart: Flow2 screenshot/layout width=360.0 scale=1.0
+00:13 +217: <repo>/mobile/test/flows/flow2_final_ui_test.dart: Flow2 screenshot/layout width=360.0 scale=1.0
+00:13 +218: <repo>/mobile/test/flows/flow2_final_ui_test.dart: Flow2 screenshot/layout width=360.0 scale=1.0
+00:13 +219: <repo>/mobile/test/flows/flow2_final_ui_test.dart: Flow2 screenshot/layout width=360.0 scale=1.0
+00:13 +220: <repo>/mobile/test/flows/flow2_final_ui_test.dart: Flow2 screenshot/layout width=360.0 scale=1.0
+00:13 +221: <repo>/mobile/test/flows/hoang_a11y_widgets_test.dart: S04/S07/S08/S05 fit width 360.0 at text scale 1.0
+00:13 +222: <repo>/mobile/test/flows/hoang_a11y_widgets_test.dart: S04/S07/S08/S05 fit width 360.0 at text scale 1.0
+00:13 +223: <repo>/mobile/test/flows/hoang_a11y_widgets_test.dart: S04/S07/S08/S05 fit width 360.0 at text scale 1.0
+00:13 +224: <repo>/mobile/test/flows/hoang_a11y_widgets_test.dart: S04/S07/S08/S05 fit width 360.0 at text scale 1.0
+00:14 +225: <repo>/mobile/test/flows/hoang_a11y_widgets_test.dart: S04/S07/S08/S05 fit width 360.0 at text scale 1.0
+00:14 +226: <repo>/mobile/test/flows/hoang_a11y_widgets_test.dart: S04/S07/S08/S05 fit width 360.0 at text scale 1.0
+00:14 +227: <repo>/mobile/test/flows/hoang_a11y_widgets_test.dart: S04/S07/S08/S05 fit width 360.0 at text scale 1.0
+00:14 +228: <repo>/mobile/test/flows/hoang_a11y_widgets_test.dart: S04/S07/S08/S05 fit width 360.0 at text scale 1.0
+00:14 +229: <repo>/mobile/test/flows/hoang_a11y_widgets_test.dart: S04/S07/S08/S05 fit width 360.0 at text scale 1.0
+00:14 +230: <repo>/mobile/test/flows/hoang_a11y_widgets_test.dart: S04/S07/S08/S05 fit width 360.0 at text scale 1.0
+00:14 +231: <repo>/mobile/test/flows/hoang_review_regression_test.dart: PR10-CR-01: card has one labelled accessible tap target
+00:14 +232: <repo>/mobile/test/flows/hoang_review_regression_test.dart: PR10-CR-01: card has one labelled accessible tap target
+00:14 +233: <repo>/mobile/test/flows/hoang_review_regression_test.dart: PR10-CR-01: card has one labelled accessible tap target
+00:14 +234: <repo>/mobile/test/flows/hoang_review_regression_test.dart: PR10-CR-01: card has one labelled accessible tap target
+00:14 +235: <repo>/mobile/test/flows/hoang_review_regression_test.dart: PR10-CR-01: card has one labelled accessible tap target
+00:14 +236: <repo>/mobile/test/flows/flow2_final_ui_test.dart: Edit, create, tick entire row, Back and persistence stay connected
+00:14 +237: <repo>/mobile/test/flows/flow2_final_ui_test.dart: Edit, create, tick entire row, Back and persistence stay connected
+00:15 +238: <repo>/mobile/test/flows/flow2_final_ui_test.dart: Edit, create, tick entire row, Back and persistence stay connected
+00:15 +239: <repo>/mobile/test/flows/hoang_a11y_widgets_test.dart: S07 requires a positive quantity
+00:15 +240: <repo>/mobile/test/profile/final_pdf_metadata_screen_test.dart: Final sign-out warns that the local PDF has no app cloud backup
+00:16 +241: <repo>/mobile/test/profile/final_pdf_metadata_screen_test.dart: Final sign-out warns that the local PDF has no app cloud backup
+00:16 +242: <repo>/mobile/test/profile/final_pdf_metadata_screen_test.dart: Final sign-out warns that the local PDF has no app cloud backup
+00:16 +243: <repo>/mobile/test/profile/final_pdf_metadata_screen_test.dart: Final sign-out warns that the local PDF has no app cloud backup
+00:16 +244: <repo>/mobile/test/profile/final_pdf_metadata_screen_test.dart: Final sign-out warns that the local PDF has no app cloud backup
+00:16 +245: <repo>/mobile/test/profile/final_pdf_metadata_screen_test.dart: Final sign-out warns that the local PDF has no app cloud backup
+00:16 +246: <repo>/mobile/test/profile/final_pdf_metadata_screen_test.dart: Final sign-out warns that the local PDF has no app cloud backup
+00:16 +247: <repo>/mobile/test/profile/final_pdf_metadata_screen_test.dart: Final sign-out warns that the local PDF has no app cloud backup
+00:16 +248: <repo>/mobile/test/profile/final_pdf_metadata_screen_test.dart: Final sign-out warns that the local PDF has no app cloud backup
+00:16 +249: <repo>/mobile/test/profile/final_pdf_metadata_screen_test.dart: Final sign-out warns that the local PDF has no app cloud backup
+00:16 +250: <repo>/mobile/test/profile/final_pdf_metadata_screen_test.dart: Final sign-out warns that the local PDF has no app cloud backup
+00:16 +251: <repo>/mobile/test/profile/final_pdf_metadata_screen_test.dart: Final sign-out warns that the local PDF has no app cloud backup
+00:16 +252: <repo>/mobile/test/profile/final_pdf_metadata_screen_test.dart: Final sign-out warns that the local PDF has no app cloud backup
+00:16 +253: <repo>/mobile/test/profile/final_pdf_metadata_screen_test.dart: Final sign-out warns that the local PDF has no app cloud backup
+00:16 +254: <repo>/mobile/test/profile/final_pdf_metadata_screen_test.dart: Final sign-out warns that the local PDF has no app cloud backup
+00:16 +255: <repo>/mobile/test/profile/final_pdf_metadata_screen_test.dart: Final sign-out warns that the local PDF has no app cloud backup
+00:17 +256: <repo>/mobile/test/profile/final_pdf_metadata_screen_test.dart: Final sign-out warns that the local PDF has no app cloud backup
+00:17 +257: <repo>/mobile/test/profile/final_pdf_metadata_screen_test.dart: Final sign-out warns that the local PDF has no app cloud backup
+00:17 +258: <repo>/mobile/test/profile/final_pdf_metadata_screen_test.dart: Final sign-out warns that the local PDF has no app cloud backup
+00:17 +259: <repo>/mobile/test/profile/final_pdf_metadata_screen_test.dart: Final sign-out warns that the local PDF has no app cloud backup
+00:17 +260: <repo>/mobile/test/profile/profile_screen_test.dart: Final Profile reports local success with no upload URL or retry
+00:17 +261: <repo>/mobile/test/profile/profile_screen_test.dart: Final Profile reports local success with no upload URL or retry
+00:17 +262: <repo>/mobile/test/profile/profile_screen_test.dart: Final Profile reports local success with no upload URL or retry
+00:17 +263: <repo>/mobile/test/profile/profile_screen_test.dart: Final Profile reports local success with no upload URL or retry
+00:17 +264: <repo>/mobile/test/profile/profile_screen_test.dart: Final Profile reports local success with no upload URL or retry
+00:17 +265: <repo>/mobile/test/profile/profile_screen_test.dart: Final Profile reports local success with no upload URL or retry
+00:17 +266: <repo>/mobile/test/profile/profile_screen_test.dart: Final Profile reports local success with no upload URL or retry
+00:17 +267: <repo>/mobile/test/profile/profile_screen_test.dart: Final Profile reports local success with no upload URL or retry
+00:17 +268: <repo>/mobile/test/profile/profile_screen_test.dart: Final Profile reports local success with no upload URL or retry
+00:17 +269: <repo>/mobile/test/profile/profile_screen_test.dart: Final Profile reports local success with no upload URL or retry
+00:17 +270: <repo>/mobile/test/qa/design_system_qa_test.dart: screenshots (actual) buttons
+00:17 +270: <repo>/mobile/test/profile/final_pdf_metadata_screen_test.dart: saving, pending, confirmed are separate from the usable local file
+00:17 +271: <repo>/mobile/test/qa/design_system_qa_test.dart: screenshots (actual) buttons
+00:17 +272: <repo>/mobile/test/flows/flow2_final_ui_test.dart: Flow2 Vietnamese copy and Material edit controls stay local to this flow
+00:17 +272: <repo>/mobile/test/profile/profile_screen_test.dart: shows who is signed in
+00:17 +273: <repo>/mobile/test/flows/flow2_final_ui_test.dart: Flow2 Vietnamese copy and Material edit controls stay local to this flow
+00:17 +274: <repo>/mobile/test/report/export_plan_selection_test.dart: after switching plans, the PDF is built from the new plan
+00:17 +274: <repo>/mobile/test/profile/final_pdf_metadata_screen_test.dart: metadata error retry is single-flight and reuses payload without hiding open/share
+00:17 +275: <repo>/mobile/test/report/export_plan_selection_test.dart: after switching plans, the PDF is built from the new plan
+00:18 +276: <repo>/mobile/test/report/export_plan_selection_test.dart: after switching plans, the PDF is built from the new plan
+00:18 +276: <repo>/mobile/test/profile/final_pdf_metadata_screen_test.dart: a missing local file cannot be presented as an available cloud PDF
+00:18 +277: <repo>/mobile/test/report/export_plan_selection_test.dart: after switching plans, the PDF is built from the new plan
+00:18 +278: <repo>/mobile/test/report/export_plan_selection_test.dart: after switching plans, the PDF is built from the new plan
+00:18 +279: <repo>/mobile/test/report/export_plan_selection_test.dart: after switching plans, the PDF is built from the new plan
+00:18 +280: <repo>/mobile/test/report/export_plan_selection_test.dart: after switching plans, the PDF is built from the new plan
+00:18 +281: <repo>/mobile/test/report/export_plan_selection_test.dart: after switching plans, the PDF is built from the new plan
+00:18 +282: <repo>/mobile/test/report/export_plan_selection_test.dart: after switching plans, the PDF is built from the new plan
+00:18 +283: <repo>/mobile/test/report/export_plan_selection_test.dart: after switching plans, the PDF is built from the new plan
+00:18 +283: <repo>/mobile/test/profile/final_pdf_metadata_screen_test.dart: Final generating button is disabled with no tap action, a second tap starts nothing
+00:18 +284: <repo>/mobile/test/report/export_plan_selection_test.dart: after switching plans, the PDF is built from the new plan
+00:18 +285: <repo>/mobile/test/report/export_plan_selection_test.dart: after switching plans, the PDF is built from the new plan
+00:18 +286: <repo>/mobile/test/report/export_plan_selection_test.dart: after switching plans, the PDF is built from the new plan
+00:18 +287: <repo>/mobile/test/report/export_plan_selection_test.dart: after switching plans, the PDF is built from the new plan
+00:18 +288: <repo>/mobile/test/report/export_plan_selection_test.dart: after switching plans, the PDF is built from the new plan
+00:18 +289: <repo>/mobile/test/report/export_plan_selection_test.dart: after switching plans, the PDF is built from the new plan
+00:18 +290: <repo>/mobile/test/report/export_plan_selection_test.dart: after switching plans, the PDF is built from the new plan
+00:18 +291: <repo>/mobile/test/report/export_plan_selection_test.dart: after switching plans, the PDF is built from the new plan
+00:18 +292: <repo>/mobile/test/report/export_plan_selection_test.dart: after switching plans, the PDF is built from the new plan
+00:18 +293: <repo>/mobile/test/report/export_plan_selection_test.dart: after switching plans, the PDF is built from the new plan
+00:18 +294: <repo>/mobile/test/report/export_plan_selection_test.dart: after switching plans, the PDF is built from the new plan
+00:18 +295: <repo>/mobile/test/report/export_plan_selection_test.dart: after switching plans, the PDF is built from the new plan
+00:18 +296: <repo>/mobile/test/report/export_plan_selection_test.dart: after switching plans, the PDF is built from the new plan
+00:18 +297: <repo>/mobile/test/report/export_plan_selection_test.dart: after switching plans, the PDF is built from the new plan
+00:18 +298: <repo>/mobile/test/report/export_plan_selection_test.dart: after switching plans, the PDF is built from the new plan
+00:18 +299: <repo>/mobile/test/report/export_plan_selection_test.dart: after switching plans, the PDF is built from the new plan
+00:18 +300: <repo>/mobile/test/report/export_plan_selection_test.dart: after switching plans, the PDF is built from the new plan
+00:18 +301: <repo>/mobile/test/report/export_plan_selection_test.dart: after switching plans, the PDF is built from the new plan
+00:18 +302: <repo>/mobile/test/report/export_plan_selection_test.dart: after switching plans, the PDF is built from the new plan
+00:18 +303: <repo>/mobile/test/report/export_plan_selection_test.dart: after switching plans, the PDF is built from the new plan
+00:18 +304: <repo>/mobile/test/report/export_plan_selection_test.dart: after switching plans, the PDF is built from the new plan
+00:18 +305: <repo>/mobile/test/report/export_plan_selection_test.dart: after switching plans, the PDF is built from the new plan
+00:18 +306: <repo>/mobile/test/report/export_plan_selection_test.dart: after switching plans, the PDF is built from the new plan
+00:18 +307: <repo>/mobile/test/report/export_plan_selection_test.dart: after switching plans, the PDF is built from the new plan
+00:18 +308: <repo>/mobile/test/report/export_plan_selection_test.dart: after switching plans, the PDF is built from the new plan
+00:18 +309: <repo>/mobile/test/report/export_plan_selection_test.dart: after switching plans, the PDF is built from the new plan
+00:18 +310: <repo>/mobile/test/report/export_plan_selection_test.dart: after switching plans, the PDF is built from the new plan
+00:18 +311: <repo>/mobile/test/report/export_plan_selection_test.dart: after switching plans, the PDF is built from the new plan
+00:18 +312: <repo>/mobile/test/report/export_plan_selection_test.dart: after switching plans, the PDF is built from the new plan
+00:18 +313: <repo>/mobile/test/report/export_plan_selection_test.dart: after switching plans, the PDF is built from the new plan
+00:18 +314: <repo>/mobile/test/report/export_plan_selection_test.dart: after switching plans, the PDF is built from the new plan
+00:18 +315: <repo>/mobile/test/report/export_plan_selection_test.dart: after switching plans, the PDF is built from the new plan
+00:18 +316: <repo>/mobile/test/report/export_plan_selection_test.dart: after switching plans, the PDF is built from the new plan
+00:18 +317: <repo>/mobile/test/report/export_plan_selection_test.dart: after switching plans, the PDF is built from the new plan
+00:18 +318: <repo>/mobile/test/report/export_plan_selection_test.dart: after switching plans, the PDF is built from the new plan
+00:18 +318: <repo>/mobile/test/profile/final_pdf_metadata_screen_test.dart: Final metadata pending fits 360.0 dp at text scale 1.0
+00:18 +318: <repo>/mobile/test/profile/profile_screen_test.dart: sign-out from Profile leaves it and shows Sign-in
+00:18 +319: <repo>/mobile/test/report/export_plan_selection_test.dart: after switching plans, the PDF is built from the new plan
+00:18 +320: <repo>/mobile/test/report/export_plan_selection_test.dart: after switching plans, the PDF is built from the new plan
+00:18 +321: <repo>/mobile/test/report/export_plan_selection_test.dart: after switching plans, the PDF is built from the new plan
+00:18 +322: <repo>/mobile/test/report/export_plan_selection_test.dart: after switching plans, the PDF is built from the new plan
+00:18 +323: <repo>/mobile/test/report/export_plan_selection_test.dart: after switching plans, the PDF is built from the new plan
+00:18 +324: <repo>/mobile/test/report/export_plan_selection_test.dart: after switching plans, the PDF is built from the new plan
+00:18 +325: <repo>/mobile/test/report/export_plan_selection_test.dart: after switching plans, the PDF is built from the new plan
+00:18 +326: <repo>/mobile/test/report/export_plan_selection_test.dart: after switching plans, the PDF is built from the new plan
+00:18 +327: <repo>/mobile/test/report/export_plan_selection_test.dart: after switching plans, the PDF is built from the new plan
+00:18 +328: <repo>/mobile/test/report/export_plan_selection_test.dart: after switching plans, the PDF is built from the new plan
+00:18 +329: <repo>/mobile/test/report/export_plan_selection_test.dart: after switching plans, the PDF is built from the new plan
+00:18 +330: <repo>/mobile/test/report/export_plan_selection_test.dart: after switching plans, the PDF is built from the new plan
+00:18 +331: <repo>/mobile/test/report/export_plan_selection_test.dart: after switching plans, the PDF is built from the new plan
+00:18 +332: <repo>/mobile/test/report/export_plan_selection_test.dart: after switching plans, the PDF is built from the new plan
+00:18 +333: <repo>/mobile/test/report/export_plan_selection_test.dart: after switching plans, the PDF is built from the new plan
+00:18 +334: <repo>/mobile/test/report/export_plan_selection_test.dart: after switching plans, the PDF is built from the new plan
+00:18 +335: <repo>/mobile/test/report/export_plan_selection_test.dart: after switching plans, the PDF is built from the new plan
+00:18 +336: <repo>/mobile/test/report/export_plan_selection_test.dart: after switching plans, the PDF is built from the new plan
+00:18 +337: <repo>/mobile/test/report/export_plan_selection_test.dart: after switching plans, the PDF is built from the new plan
+00:18 +337: <repo>/mobile/test/profile/profile_screen_test.dart: cancelling the sign-out keeps the session
+00:18 +338: <repo>/mobile/test/report/export_plan_selection_test.dart: after switching plans, the PDF is built from the new plan
+00:19 +338: <repo>/mobile/test/profile/final_pdf_metadata_screen_test.dart: Final metadata error fits 360.0 dp at text scale 1.0
+00:19 +339: <repo>/mobile/test/report/export_plan_selection_test.dart: after switching plans, the PDF is built from the new plan
+00:19 +340: <repo>/mobile/test/report/report_service_test.dart: ReportService generates a PDF with the fonts embedded
+00:19 +341: <repo>/mobile/test/flows/flow2_final_ui_test.dart: PR26-CR01: unchanged save preserves 2.345
+00:19 +342: <repo>/mobile/test/qa/design_system_qa_test.dart: screenshots (actual) dialogs
+00:19 +342: <repo>/mobile/test/profile/final_pdf_metadata_screen_test.dart: Final metadata pending fits 360.0 dp at text scale 2.0
+00:19 +343: <repo>/mobile/test/qa/design_system_qa_test.dart: screenshots (actual) dialogs
+00:19 +344: <repo>/mobile/test/qa/design_system_qa_test.dart: screenshots (actual) dialogs
+00:19 +344: <repo>/mobile/test/report/export_plan_selection_test.dart: after a meal change, the PDF has the new meal and totals
+00:19 +345: <repo>/mobile/test/qa/design_system_qa_test.dart: screenshots (actual) dialogs
+00:19 +346: <repo>/mobile/test/qa/design_system_qa_test.dart: screenshots (actual) dialogs
+00:19 +347: <repo>/mobile/test/qa/design_system_qa_test.dart: screenshots (actual) dialogs
+00:19 +348: <repo>/mobile/test/qa/design_system_qa_test.dart: screenshots (actual) dialogs
+00:19 +349: <repo>/mobile/test/qa/design_system_qa_test.dart: screenshots (actual) dialogs
+00:19 +350: <repo>/mobile/test/qa/design_system_qa_test.dart: screenshots (actual) dialogs
+00:19 +350: <repo>/mobile/test/profile/profile_screen_test.dart: Home opens Profile, and Back returns to Home
+00:19 +351: <repo>/mobile/test/qa/design_system_qa_test.dart: screenshots (actual) dialogs
+00:19 +352: <repo>/mobile/test/qa/design_system_qa_test.dart: screenshots (actual) dialogs
+00:19 +353: <repo>/mobile/test/flows/flow2_final_ui_test.dart: PR26-CR01: unchanged save preserves 0.004
+00:19 +354: <repo>/mobile/test/flows/flow2_final_ui_test.dart: PR26-CR01: unchanged save preserves 0.004
+00:19 +354: <repo>/mobile/test/profile/final_pdf_metadata_screen_test.dart: Final metadata error fits 360.0 dp at text scale 2.0
+00:19 +355: <repo>/mobile/test/flows/flow2_final_ui_test.dart: PR26-CR01: unchanged save preserves 0.004
+00:19 +356: <repo>/mobile/test/profile/profile_screen_test.dart: Home has one way to export: it leads to Profile
+00:19 +357: <repo>/mobile/test/profile/profile_screen_test.dart: Home has one way to export: it leads to Profile
+00:19 +358: <repo>/mobile/test/profile/profile_screen_test.dart: Home has one way to export: it leads to Profile
+00:19 +359: <repo>/mobile/test/profile/profile_screen_test.dart: Home has one way to export: it leads to Profile
+00:19 +360: <repo>/mobile/test/profile/profile_screen_test.dart: Home has one way to export: it leads to Profile
+00:19 +361: <repo>/mobile/test/profile/profile_screen_test.dart: Home has one way to export: it leads to Profile
+00:19 +362: <repo>/mobile/test/profile/profile_screen_test.dart: Home has one way to export: it leads to Profile
+00:19 +363: <repo>/mobile/test/profile/profile_screen_test.dart: Home has one way to export: it leads to Profile
+00:19 +363: <repo>/mobile/test/profile/final_pdf_metadata_screen_test.dart: Final metadata pending fits 412.0 dp at text scale 1.0
+00:19 +364: <repo>/mobile/test/profile/profile_screen_test.dart: Home has one way to export: it leads to Profile
+00:19 +365: <repo>/mobile/test/profile/profile_screen_test.dart: Home has one way to export: it leads to Profile
+00:19 +366: <repo>/mobile/test/qa/design_system_qa_test.dart: screenshots (actual) states
+00:19 +367: <repo>/mobile/test/qa/design_system_qa_test.dart: screenshots (actual) states
+00:20 +368: <repo>/mobile/test/profile/final_pdf_metadata_screen_test.dart: Final metadata error fits 412.0 dp at text scale 1.0
+00:20 +369: <repo>/mobile/test/profile/profile_screen_test.dart: tapping a notification opens Profile from Home
+00:20 +370: <repo>/mobile/test/profile/profile_screen_test.dart: tapping a notification opens Profile from Home
+00:20 +371: <repo>/mobile/test/profile/profile_screen_test.dart: tapping a notification opens Profile from Home
+00:20 +372: <repo>/mobile/test/profile/profile_screen_test.dart: tapping a notification opens Profile from Home
+00:20 +372: <repo>/mobile/test/profile/final_pdf_metadata_screen_test.dart: Final metadata pending fits 412.0 dp at text scale 2.0
+00:20 +373: <repo>/mobile/test/profile/profile_screen_test.dart: tapping a notification opens Profile from Home
+00:20 +374: <repo>/mobile/test/profile/profile_screen_test.dart: tapping a notification opens Profile from Home
+00:20 +375: <repo>/mobile/test/profile/final_pdf_metadata_screen_test.dart: Final metadata error fits 412.0 dp at text scale 2.0
+00:20 +376: <repo>/mobile/test/profile/final_pdf_metadata_screen_test.dart: Final metadata error fits 412.0 dp at text scale 2.0
+00:20 +377: <repo>/mobile/test/profile/final_pdf_metadata_screen_test.dart: Final metadata error fits 412.0 dp at text scale 2.0
+00:20 +378: <repo>/mobile/test/profile/final_pdf_metadata_screen_test.dart: Final metadata error fits 412.0 dp at text scale 2.0
+00:20 +379: <repo>/mobile/test/profile/final_pdf_metadata_screen_test.dart: Final metadata error fits 412.0 dp at text scale 2.0
+00:20 +380: <repo>/mobile/test/profile/final_pdf_metadata_screen_test.dart: Final metadata error fits 412.0 dp at text scale 2.0
+00:20 +381: <repo>/mobile/test/profile/final_pdf_metadata_screen_test.dart: Final metadata error fits 412.0 dp at text scale 2.0
+00:20 +382: <repo>/mobile/test/profile/final_pdf_metadata_screen_test.dart: Final metadata error fits 412.0 dp at text scale 2.0
+00:20 +383: <repo>/mobile/test/profile/final_pdf_metadata_screen_test.dart: Final metadata error fits 412.0 dp at text scale 2.0
+00:20 +384: <repo>/mobile/test/profile/final_pdf_metadata_screen_test.dart: Final metadata error fits 412.0 dp at text scale 2.0
+00:20 +385: <repo>/mobile/test/profile/final_pdf_metadata_screen_test.dart: Final metadata error fits 412.0 dp at text scale 2.0
+00:20 +386: <repo>/mobile/test/profile/profile_screen_test.dart: tapping a notification a message only received does not navigate
+00:20 +387: <repo>/mobile/test/profile/profile_screen_test.dart: tapping a notification a message only received does not navigate
+00:20 +388: <repo>/mobile/test/profile/profile_screen_test.dart: tapping a notification a message only received does not navigate
+00:20 +389: <repo>/mobile/test/profile/profile_screen_test.dart: tapping a notification a message only received does not navigate
+00:20 +390: <repo>/mobile/test/profile/profile_screen_test.dart: tapping a notification a message only received does not navigate
+00:20 +391: <repo>/mobile/test/profile/profile_screen_test.dart: tapping a notification a message only received does not navigate
+00:20 +392: <repo>/mobile/test/profile/profile_screen_test.dart: tapping a notification a message only received does not navigate
+00:20 +393: <repo>/mobile/test/profile/profile_screen_test.dart: tapping a notification a message only received does not navigate
+00:20 +394: <repo>/mobile/test/profile/profile_screen_test.dart: tapping a notification a message only received does not navigate
+00:20 +395: <repo>/mobile/test/profile/profile_screen_test.dart: tapping a notification a message only received does not navigate
+00:20 +396: <repo>/mobile/test/profile/profile_screen_test.dart: tapping a notification a message only received does not navigate
+00:20 +397: <repo>/mobile/test/profile/profile_screen_test.dart: tapping a notification a message only received does not navigate
+00:20 +398: <repo>/mobile/test/qa/design_system_qa_test.dart: screenshots (actual) qa-responsive-360-text2_0
+00:20 +399: <repo>/mobile/test/profile/profile_screen_test.dart: tapping a notification a message received on Home shows there and View opens it
+00:20 +400: <repo>/mobile/test/profile/profile_screen_test.dart: tapping a notification a message received on Home shows there and View opens it
+00:21 +401: <repo>/mobile/test/profile/profile_screen_test.dart: tapping a notification a message received on Home shows there and View opens it
+00:21 +402: <repo>/mobile/test/widget_test.dart: AppButton renders properly with Design System theme
+00:21 +403: <repo>/mobile/test/widget_test.dart: AppButton renders properly with Design System theme
+00:21 +404: <repo>/mobile/test/widget_test.dart: AppButton renders properly with Design System theme
+00:21 +404: <repo>/mobile/test/profile/profile_screen_test.dart: tapping a notification a message received on another screen shows there
+00:21 +405: <repo>/mobile/test/widget_test.dart: AppButton renders properly with Design System theme
+00:21 +406: <repo>/mobile/test/widget_test.dart: AppButton renders properly with Design System theme
+00:21 +407: <repo>/mobile/test/widget_test.dart: AppButton renders properly with Design System theme
+00:21 +408: <repo>/mobile/test/widget_test.dart: AppButton renders properly with Design System theme
+00:21 +409: <repo>/mobile/test/widget_test.dart: AppButton renders properly with Design System theme
+00:21 +409: <repo>/mobile/test/profile/profile_screen_test.dart: tapping a notification a repeated message shows nothing new
+00:21 +410: <repo>/mobile/test/widget_test.dart: AppButton renders properly with Design System theme
+00:21 +411: <repo>/mobile/test/widget_test.dart: AppButton renders properly with Design System theme
+00:21 +412: <repo>/mobile/test/widget_test.dart: AppButton renders properly with Design System theme
+00:21 +413: <repo>/mobile/test/profile/profile_screen_test.dart: tapping a notification PM-FCM-02: a message belongs to the session that received it sign-out removes the message and its View action
+00:21 +414: <repo>/mobile/test/profile/profile_screen_test.dart: tapping a notification PM-FCM-02: a message belongs to the session that received it sign-out removes the message and its View action
+00:21 +415: <repo>/mobile/test/qa/design_system_qa_test.dart: spec checks snackbar Undo calls back and hides
+00:21 +416: <repo>/mobile/test/profile/profile_screen_test.dart: tapping a notification PM-FCM-02: a message belongs to the session that received it View kept from before sign-out does not open Profile
+00:21 +417: <repo>/mobile/test/profile/profile_screen_test.dart: tapping a notification PM-FCM-02: a message belongs to the session that received it View kept from before sign-out does not open Profile
+00:21 +418: <repo>/mobile/test/profile/profile_screen_test.dart: tapping a notification PM-FCM-02: a message belongs to the session that received it A -> B: B sees nothing of A and A's View does nothing
+00:21 +419: <repo>/mobile/test/profile/profile_screen_test.dart: tapping a notification PM-FCM-02: a message belongs to the session that received it A -> sign-out -> A: the old View does nothing
+00:21 +420: <repo>/mobile/test/profile/profile_screen_test.dart: tapping a notification PM-FCM-02: a message belongs to the session that received it A -> sign-out -> A: a new message still shows and opens
+00:22 +421: <repo>/mobile/test/profile/profile_screen_test.dart: tapping a notification PM-FCM-02: a message belongs to the session that received it session ending before the frame shows nothing
+00:22 +422: <repo>/mobile/test/profile/profile_screen_test.dart: tapping a notification PM-FCM-02: a message belongs to the session that received it a tap from the shade after sign-out waits for sign-in
+00:22 +423: <repo>/mobile/test/profile/profile_screen_test.dart: tapping a notification PM-FCM-02: a message belongs to the session that received it a message for no recipient shows nothing and opens nothing
+00:22 +424: <repo>/mobile/test/profile/profile_screen_test.dart: tapping a notification PM-FCM-02: a message belongs to the session that received it a tap for no recipient before sign-in does not open for A
+00:22 +425: <repo>/mobile/test/profile/profile_screen_test.dart: tapping a notification PM-FCM-02: a message belongs to the session that received it a message for another user shows nothing and opens nothing
+00:22 +426: <repo>/mobile/test/profile/profile_screen_test.dart: tapping a notification PM-FCM-02: a message belongs to the session that received it a tap for another user before sign-in does not open for A
+00:22 +427: <repo>/mobile/test/profile/profile_screen_test.dart: tapping a notification PM-FCM-02: a message belongs to the session that received it queued behind another snackbar two messages, then sign-out: neither ever shows again
+00:22 +428: <repo>/mobile/test/profile/profile_screen_test.dart: tapping a notification PM-FCM-02: a message belongs to the session that received it queued behind another snackbar waiting behind other feedback: the feedback stays, the message never shows
+00:22 +429: <repo>/mobile/test/profile/profile_screen_test.dart: tapping a notification PM-FCM-02: a message belongs to the session that received it queued behind another snackbar feedback waiting behind a message still shows after sign-out
+00:23 +430: <repo>/mobile/test/profile/profile_screen_test.dart: tapping a notification PM-FCM-02: a message belongs to the session that received it queued behind another snackbar queued messages of A never reach B
+00:23 +431: <repo>/mobile/test/profile/profile_screen_test.dart: tapping a notification PM-FCM-02: a message belongs to the session that received it queued behind another snackbar A signs back in: old queue stays gone, a new message shows
+00:23 +432: <repo>/mobile/test/profile/profile_screen_test.dart: tapping a notification PM-FCM-02: a message belongs to the session that received it a message for B shows nothing to A
+00:23 +433: <repo>/mobile/test/profile/profile_screen_test.dart: tapping a notification a message already in the inbox still opens, once
+00:23 +434: <repo>/mobile/test/profile/profile_screen_test.dart: tapping a notification does not stack a second Profile
+00:23 +435: <repo>/mobile/test/profile/profile_screen_test.dart: export without a plan the action is disabled and says why
+00:23 +436: <repo>/mobile/test/profile/profile_screen_test.dart: export shows progress while the upload runs and ignores repeat taps
+00:23 +437: <repo>/mobile/test/profile/profile_screen_test.dart: export success shows the download URL and no retry
+00:23 +438: <repo>/mobile/test/profile/profile_screen_test.dart: export failed upload keeps the file: message, retry, open and share
+00:23 +439: <repo>/mobile/test/profile/profile_screen_test.dart: export cancel stops the upload and allows a retry
+00:24 +440: <repo>/mobile/test/profile/profile_screen_test.dart: export a PDF that cannot be opened is reported
+00:24 +441: <repo>/mobile/test/profile/profile_screen_test.dart: notifications empty inbox says so
+00:24 +442: <repo>/mobile/test/profile/profile_screen_test.dart: notifications a message arriving while Profile is open appears
+00:24 +443: <repo>/mobile/test/profile/profile_screen_test.dart: notifications a message with a bad target stays and says it cannot open
+00:24 +444: <repo>/mobile/test/profile/profile_screen_test.dart: notifications denied permission is explained
+00:24 +445: <repo>/mobile/test/profile/profile_screen_test.dart: notifications saved history shows when Profile opens
+00:24 +446: <repo>/mobile/test/profile/profile_screen_test.dart: notifications a background message shows when the app resumes
+00:24 +447: <repo>/mobile/test/profile/profile_screen_test.dart: notifications sign-out empties the inbox
+00:24 +448: <repo>/mobile/test/profile/profile_screen_test.dart: Remote Config shows current values
+00:24 +449: <repo>/mobile/test/profile/profile_screen_test.dart: Remote Config refresh reports new values
+00:24 +450: <repo>/mobile/test/profile/profile_screen_test.dart: Remote Config a fetch with the same values does not claim new values
+00:24 +451: <repo>/mobile/test/profile/profile_screen_test.dart: Remote Config refresh does not claim success when nothing was applied
+00:24 +452: <repo>/mobile/test/profile/profile_screen_test.dart: Remote Config while refreshing, the action says so and cannot be repeated
+00:24 +453: <repo>/mobile/test/profile/profile_screen_test.dart: Crashlytics cancelling the confirmation does not crash
+00:24 +454: <repo>/mobile/test/profile/profile_screen_test.dart: Crashlytics confirming triggers the test crash once
+00:24 +455: <repo>/mobile/test/profile/profile_screen_test.dart: layout and semantics no overflow: 360 wide
+00:24 +456: <repo>/mobile/test/profile/profile_screen_test.dart: layout and semantics no overflow: 412 wide
+00:24 +457: <repo>/mobile/test/profile/profile_screen_test.dart: layout and semantics no overflow: 360 wide at text scale 2
+00:25 +458: <repo>/mobile/test/profile/profile_screen_test.dart: layout and semantics no overflow: 412 wide at text scale 2
+00:25 +459: <repo>/mobile/test/profile/profile_screen_test.dart: layout and semantics actions are named for assistive technology
+00:25 +460: <repo>/mobile/test/profile/profile_screen_test.dart: layout and semantics each card title is a heading of its own, after an upload
+00:25 +461: <repo>/mobile/test/profile/profile_screen_test.dart: layout and semantics every heading has a level, so Android reports it
+00:25 +462: <repo>/mobile/test/profile/profile_screen_test.dart: layout and semantics upload progress speaks its phase once, percentage as value
+00:25 +463: <repo>/mobile/test/profile/profile_screen_test.dart: layout and semantics sign-out dialog is announced, closes in Vietnamese, and fits at text scale 2
+00:25 +464: <repo>/mobile/test/profile/profile_screen_test.dart: layout and semantics test crash dialog is announced, closes in Vietnamese, and fits at text scale 2
+00:25 +465: All tests passed!

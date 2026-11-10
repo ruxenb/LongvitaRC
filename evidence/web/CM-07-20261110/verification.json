@@ -1,0 +1,15 @@
+{
+  "productionAnnouncementsCreated": 1,
+  "webTests": 68,
+  "baseline": "0cfe9055ccdde9fec2feb23b57ce37e40564dddc",
+  "rulesDeployed": false,
+  "mobileTests": 465,
+  "coreTests": 20,
+  "apkSha256": "89670D6F03CC17699F0C160D09E9CD73714E3EA46FCE3848F7E423B6EDFF51B3",
+  "sourceCommit": "89f04f89966b788635e5fb63775f42a3fa9b4209",
+  "dart": "3.13.5",
+  "webMainJsSha256": "1D11F2C14794BB681C96874A3E392BD507A0255D93D95BFEB93F1D3A9F35980F",
+  "hostingDeployed": false,
+  "canonicalFirestoreRules": 103,
+  "flutter": "3.47.6"
+}

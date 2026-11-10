@@ -7,6 +7,7 @@ import 'package:longvita_admin/admin/dashboard_screen.dart';
 import 'package:longvita_admin/admin/admin_instrumentation.dart';
 import 'package:longvita_admin/admin/recipe_management_screen.dart';
 import 'package:longvita_admin/admin/review_queue_screen.dart';
+import 'package:longvita_admin/admin/announcement_form.dart';
 
 class AdminShell extends StatefulWidget {
   final User user;
@@ -42,6 +43,11 @@ class _AdminShellState extends State<AdminShell> {
       selectedIcon: Icon(Icons.fact_check),
       label: Text('Xét duyệt'),
     ),
+    NavigationRailDestination(
+      icon: Icon(Icons.campaign_outlined),
+      selectedIcon: Icon(Icons.campaign),
+      label: Text('Thông báo'),
+    ),
   ];
 
   @override
@@ -55,6 +61,7 @@ class _AdminShellState extends State<AdminShell> {
         refreshingConfig: instrumentation.refreshing,
         refreshConfig: instrumentation.refresh,
       ),
+      const AnnouncementForm(),
     ];
     return Scaffold(
       body: Row(
