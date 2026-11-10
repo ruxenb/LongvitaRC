@@ -1,0 +1,22 @@
+00:00 +0: loading <repo>/packages/core/test/analytics/analytics_service_test.dart
+00:00 +0: <repo>/packages/core/test/analytics/analytics_service_test.dart: export sends exactly one SDK event with typed report parameters
+00:00 +1: <repo>/packages/core/test/analytics/analytics_service_test.dart: the SDK receives the supplied topic and actual report values
+00:00 +2: <repo>/packages/core/test/analytics/analytics_service_test.dart: SDK failure neither breaks the export nor retries the event
+00:00 +3: <repo>/packages/core/test/analytics/analytics_service_test.dart: Web staff actions use exact event names without identifiers
+00:00 +4: <repo>/packages/core/test/report/report_metadata_test.dart: ReportMetadata roundtrips exactly the six public fields, including null plan
+00:00 +5: <repo>/packages/core/test/report/report_metadata_test.dart: ReportMetadata new exports in the same clock tick have distinct non-PII names
+00:00 +6: <repo>/packages/core/test/report/report_metadata_test.dart: ReportMetadata normalizes creation time to UTC once
+00:00 +7: <repo>/packages/core/test/report/report_metadata_test.dart: ReportMetadata rejects malformed or private fields on deserialization
+00:00 +8: <repo>/packages/core/test/report/report_metadata_test.dart: ReportMetadata validates Firestore path IDs by UTF-8 bytes
+00:00 +9: <repo>/packages/core/test/report/report_metadata_test.dart: ReportMetadata accepts the size boundaries and rejects UID-shaped export names
+00:00 +10: <repo>/packages/core/test/report/report_metadata_test.dart: FirestoreReportMetadataRepository writes one full owner-scoped document with no extra fields
+00:00 +11: <repo>/packages/core/test/report/report_metadata_test.dart: FirestoreReportMetadataRepository keeps the original write pending until its completion
+00:00 +12: <repo>/packages/core/test/report/report_metadata_test.dart: FirestoreReportMetadataRepository retries the same immutable payload without changing identity
+00:00 +13: <repo>/packages/core/test/report/report_metadata_test.dart: FirestoreReportMetadataRepository invalid owner IDs never reach the SDK
+00:00 +14: <repo>/packages/core/test/report/report_metadata_test.dart: FirestoreReportMetadataRepository preserves classified SDK failures, including late rejections
+00:01 +15: <repo>/packages/core/test/services/announcement_publication_test.dart: required and maximum lengths include Vietnamese Unicode
+00:01 +16: <repo>/packages/core/test/services/announcement_publication_test.dart: payload is exactly the existing four fields and round-trips to Mobile
+00:01 +17: <repo>/packages/core/test/services/announcement_publication_test.dart: rejects an unprivileged role and untrimmed fields
+00:01 +18: <repo>/packages/core/test/services/announcement_publication_test.dart: retry equality requires every field and rejects changes or extra fields
+00:02 +19: <repo>/packages/core/test/widgets/core_package_test.dart: Core widgets work without importing either client
+00:02 +20: All tests passed!

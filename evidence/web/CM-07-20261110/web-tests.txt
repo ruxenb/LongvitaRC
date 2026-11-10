@@ -1,0 +1,70 @@
+00:00 +0: loading <repo>/web/test/admin/admin_web_test.dart
+00:00 +0: <repo>/web/test/admin/admin_web_test.dart: admin role lookup is shared and cached until sign-out
+00:00 +1: <repo>/web/test/admin/admin_web_test.dart: role cache ignores a response from before clear
+00:00 +2: <repo>/web/test/admin/admin_web_test.dart: old role request cannot overwrite or remove the new request
+00:00 +3: <repo>/web/test/admin/admin_web_test.dart: admin auth errors are safe and friendly
+00:00 +4: <repo>/web/test/admin/admin_web_test.dart: role gate covers loading, denied and authorized
+00:01 +5: <repo>/web/test/admin/admin_web_test.dart: role gate reloads the same UID after logout
+00:01 +6: <repo>/web/test/admin/admin_web_test.dart: recipe edit preserves structured ingredients and image
+00:01 +7: <repo>/web/test/admin/admin_web_test.dart: recipe create and archive actions call the service
+00:01 +8: <repo>/web/test/admin/admin_web_test.dart: recipe create and archive actions call the service
+00:01 +9: <repo>/web/test/admin/pr25_integration_test.dart: editing an existing source category preserves its value
+00:02 +10: <repo>/web/test/admin/pr25_integration_test.dart: editing an existing source category preserves its value
+00:02 +11: <repo>/web/test/admin/pr25_integration_test.dart: editing an existing source category preserves its value
+00:02 +12: <repo>/web/test/admin/pr25_integration_test.dart: editing an existing source category preserves its value
+00:02 +13: <repo>/web/test/admin/pr25_integration_test.dart: editing an existing source category preserves its value
+00:02 +14: <repo>/web/test/admin/pr25_integration_test.dart: editing an existing source category preserves its value
+00:02 +15: <repo>/web/test/admin/pr25_integration_test.dart: editing an existing source category preserves its value
+00:02 +16: <repo>/web/test/admin/pr25_integration_test.dart: editing an existing source category preserves its value
+00:02 +17: <repo>/web/test/admin/pr25_integration_test.dart: editing an existing source category preserves its value
+00:02 +18: <repo>/web/test/admin/pr25_integration_test.dart: editing an existing source category preserves its value
+00:03 +19: <repo>/web/test/admin/pr25_integration_test.dart: editing an existing source category preserves its value
+00:03 +20: <repo>/web/test/admin/pr25_integration_test.dart: editing an existing source category preserves its value
+00:03 +21: <repo>/web/test/admin/pr25_integration_test.dart: editing an existing source category preserves its value
+00:03 +22: <repo>/web/test/announcements/announcement_test.dart: empty form validates; cancel does not send; confirmation sends once
+00:03 +23: <repo>/web/test/announcements/announcement_test.dart: empty form validates; cancel does not send; confirmation sends once
+00:03 +24: <repo>/web/test/announcements/announcement_test.dart: empty form validates; cancel does not send; confirmation sends once
+00:03 +25: <repo>/web/test/announcements/announcement_test.dart: empty form validates; cancel does not send; confirmation sends once
+00:03 +26: <repo>/web/test/announcements/announcement_test.dart: empty form validates; cancel does not send; confirmation sends once
+00:03 +27: <repo>/web/test/announcements/announcement_test.dart: empty form validates; cancel does not send; confirmation sends once
+00:03 +28: <repo>/web/test/announcements/announcement_test.dart: empty form validates; cancel does not send; confirmation sends once
+00:03 +29: <repo>/web/test/announcements/announcement_test.dart: empty form validates; cancel does not send; confirmation sends once
+00:03 +30: <repo>/web/test/announcements/announcement_test.dart: empty form validates; cancel does not send; confirmation sends once
+00:04 +31: <repo>/web/test/announcements/announcement_test.dart: empty form validates; cancel does not send; confirmation sends once
+00:04 +32: <repo>/web/test/announcements/announcement_test.dart: empty form validates; cancel does not send; confirmation sends once
+00:04 +33: <repo>/web/test/announcements/announcement_test.dart: empty form validates; cancel does not send; confirmation sends once
+00:04 +34: <repo>/web/test/announcements/announcement_test.dart: empty form validates; cancel does not send; confirmation sends once
+00:04 +35: <repo>/web/test/announcements/announcement_test.dart: empty form validates; cancel does not send; confirmation sends once
+00:04 +36: <repo>/web/test/announcements/announcement_test.dart: empty form validates; cancel does not send; confirmation sends once
+00:04 +37: <repo>/web/test/announcements/announcement_test.dart: empty form validates; cancel does not send; confirmation sends once
+00:04 +38: <repo>/web/test/announcements/announcement_test.dart: empty form validates; cancel does not send; confirmation sends once
+00:04 +39: <repo>/web/test/announcements/announcement_test.dart: empty form validates; cancel does not send; confirmation sends once
+00:05 +40: <repo>/web/test/announcements/announcement_test.dart: empty form validates; cancel does not send; confirmation sends once
+00:05 +41: <repo>/web/test/announcements/announcement_test.dart: empty form validates; cancel does not send; confirmation sends once
+00:05 +42: <repo>/web/test/announcements/announcement_test.dart: empty form validates; cancel does not send; confirmation sends once
+00:05 +43: <repo>/web/test/announcements/announcement_test.dart: empty form validates; cancel does not send; confirmation sends once
+00:05 +44: <repo>/web/test/announcements/announcement_test.dart: empty form validates; cancel does not send; confirmation sends once
+00:05 +45: <repo>/web/test/announcements/announcement_test.dart: empty form validates; cancel does not send; confirmation sends once
+00:05 +46: <repo>/web/test/announcements/announcement_test.dart: empty form validates; cancel does not send; confirmation sends once
+00:05 +47: <repo>/web/test/announcements/announcement_test.dart: empty form validates; cancel does not send; confirmation sends once
+00:05 +48: <repo>/web/test/announcements/announcement_test.dart: empty form validates; cancel does not send; confirmation sends once
+00:05 +49: <repo>/web/test/announcements/announcement_test.dart: empty form validates; cancel does not send; confirmation sends once
+00:05 +50: <repo>/web/test/announcements/announcement_test.dart: empty form validates; cancel does not send; confirmation sends once
+00:05 +51: <repo>/web/test/announcements/announcement_test.dart: empty form validates; cancel does not send; confirmation sends once
+00:05 +52: <repo>/web/test/announcements/announcement_test.dart: empty form validates; cancel does not send; confirmation sends once
+00:05 +53: <repo>/web/test/announcements/announcement_test.dart: empty form validates; cancel does not send; confirmation sends once
+00:05 +54: <repo>/web/test/announcements/announcement_test.dart: empty form validates; cancel does not send; confirmation sends once
+00:05 +55: <repo>/web/test/announcements/announcement_test.dart: empty form validates; cancel does not send; confirmation sends once
+00:05 +56: <repo>/web/test/auth/sign_in_web_screen_test.dart: sign-in uses Core button with disabled loading semantics
+00:05 +57: <repo>/web/test/auth/sign_in_web_screen_test.dart: sign-in uses Core button with disabled loading semantics
+00:05 +58: <repo>/web/test/auth/sign_in_web_screen_test.dart: sign-in uses Core button with disabled loading semantics
+00:06 +59: <repo>/web/test/auth/cm06_baseline_regression_test.dart: CM06: role-only gate denies an unexpected non-null role
+00:06 +60: <repo>/web/test/auth/sign_in_web_screen_test.dart: sign-in/error at Size(360.0, 480.0) and text 2.0 scrolls without overflow
+00:06 +61: <repo>/web/test/auth/cm06_baseline_regression_test.dart: CM06: role failures never expose raw SDK details
+00:06 +62: <repo>/web/test/auth/sign_in_web_screen_test.dart: sign-in/error at Size(412.0, 620.0) and text 2.0 scrolls without overflow
+00:06 +63: <repo>/web/test/auth/cm06_baseline_regression_test.dart: CM06: a stalled role read has a bounded wait and retry
+00:06 +64: <repo>/web/test/auth/cm06_baseline_regression_test.dart: CM06: a stalled role read has a bounded wait and retry
+00:06 +65: <repo>/web/test/auth/sign_in_web_screen_test.dart: real access gate retries a failed role query without Google login
+00:06 +66: <repo>/web/test/auth/sign_in_web_screen_test.dart: same UID re-login replaces the authorized subtree without an intermediate frame
+00:06 +67: <repo>/web/test/auth/sign_in_web_screen_test.dart: role error does not endlessly animate after the timeout
+00:06 +68: All tests passed!
