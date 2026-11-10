@@ -1,5 +1,20 @@
 # Worklog — Thắng VLQ
 
+## 10/11/2026 — S9 audit và S8-5 report draft
+
+- S9-1: Gitleaks 8.30.1 quét tree và 232 non-merge commit của `origin/main`.
+  Đã redaction bốn lần xuất hiện download token trên ba dòng raw ARTEMIS; tree
+  scan giảm từ 7 xuống 4 findings. Không lưu raw report hoặc giá trị token vào
+  evidence mới; token lịch sử vẫn cần revoke trên Firebase.
+- S9-2: xác nhận Mobile/Web/google-services cùng project `longvita-8da7e`,
+  project number `1041459198085`, package `vn.edu.fpt.longvita`.
+- S9-4: snapshot `origin/main` có 273 commit, gồm 232 non-merge và 41 merge,
+  phân bố từ 01–10/11; vẫn phải audit lại trước nộp.
+- S8-5: tạo `report/Lab03_SE184739_draft.md`; chưa xuất PDF cuối vì thiếu test
+  report, nội dung/ảnh cuối của thành viên và video.
+- Evidence khử bí mật:
+  `evidence/audit/S9-1-S9-4-20261110/README.md`.
+
 ## 10/11/2026 — TV-00 production và TV-05 README
 
 - TV-00: deploy Flutter Web từ `web/` lên Firebase Hosting project
