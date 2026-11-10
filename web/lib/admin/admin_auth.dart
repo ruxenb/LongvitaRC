@@ -65,7 +65,12 @@ class FirebaseAdminAuthGateway implements IAdminAuthGateway {
   final FirebaseFirestore _firestore;
   final AdminRoleCache _roleCache = AdminRoleCache();
   late final AdminAuthMutations _mutations = AdminAuthMutations(
-    login: () => _auth.signInWithPopup(GoogleAuthProvider()).then((_) {}),
+    login: () => _auth
+        .signInWithPopup(
+          GoogleAuthProvider()
+            ..setCustomParameters({'prompt': 'select_account'}),
+        )
+        .then((_) {}),
     logout: _auth.signOut,
   );
 
