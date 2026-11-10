@@ -15,7 +15,7 @@ class GeminiAiService implements IGeminiAiService {
   final AnalyticsService? _analytics;
   final String? _apiKey;
 
-  static const String _defaultModel = 'gemini-1.5-flash';
+  static const String _defaultModel = 'gemini-2.0-flash';
   static const Duration _timeout = Duration(seconds: 12);
 
   GeminiAiService({
@@ -82,8 +82,9 @@ class GeminiAiService implements IGeminiAiService {
     }
 
     // 5. Execute HTTP call to Gemini Developer API
+    // PR36-CR-02: Pass API key via header 'x-goog-api-key' instead of query parameter
     final uri = Uri.parse(
-      'https://generativelanguage.googleapis.com/v1beta/models/$cleanModel:generateContent?key=$key',
+      'https://generativelanguage.googleapis.com/v1beta/models/$cleanModel:generateContent',
     );
 
     final requestBody = jsonEncode({
@@ -108,7 +109,10 @@ class GeminiAiService implements IGeminiAiService {
       final response = await _client
           .post(
             uri,
-            headers: {'Content-Type': 'application/json'},
+            headers: {
+              'Content-Type': 'application/json',
+              'x-goog-api-key': key,
+            },
             body: requestBody,
           )
           .timeout(_timeout);
@@ -123,6 +127,12 @@ class GeminiAiService implements IGeminiAiService {
             return structured;
           }
         }
+        // PR36-CR-03: Differentiate invalid payload from HTTP failure
+        _logAiError('parse_failed', mealType);
+        return AiMealRecommendation.fallback(
+          mealType: mealType,
+          reason: 'Gemini response missing required fields or invalid JSON schema',
+        );
       }
 
       // Record non-fatal error in Analytics and fallback
@@ -165,17 +175,16 @@ class GeminiAiService implements IGeminiAiService {
   }
 
   void _logAiError(String errorType, String mealType) {
-    try {
+    // PR36-CR-04: Attach unawaited and catch async exceptions to avoid unhandled async errors
+    unawaited(
       _analytics?.logEvent(
         name: 'ai_error',
         parameters: {
           'error_type': errorType,
           'meal_type': mealType.toLowerCase(),
         },
-      );
-    } catch (_) {
-      // Non-fatal
-    }
+      ).catchError((_) {}),
+    );
   }
 
   String _buildPrompt({
@@ -234,6 +243,16 @@ YÊU CẦU ĐẶC BIỆT:
       cleaned = cleaned.trim();
 
       final decoded = jsonDecode(cleaned) as Map<String, dynamic>;
+
+      // PR36-CR-05: Strict validation of required fields to prevent fabricated defaults
+      final mealName = decoded['mealName'] as String? ?? decoded['meal_name'] as String?;
+      final calories = (decoded['calories'] as num?)?.toInt();
+      final ingredients = decoded['ingredients'] as List<dynamic>?;
+
+      if (mealName == null || mealName.trim().isEmpty) return null;
+      if (calories == null || calories <= 0) return null;
+      if (ingredients == null || ingredients.isEmpty) return null;
+
       decoded['isAiGenerated'] = true;
       decoded['sourceNote'] = 'Google Gemini Developer API (Level 2 Structured Output)';
       return AiMealRecommendation.fromJson(decoded);

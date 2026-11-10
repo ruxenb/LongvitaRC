@@ -33,6 +33,8 @@ void main() {
 
       final client = MockClient((request) async {
         expect(request.url.toString(), contains('generativelanguage.googleapis.com'));
+        expect(request.url.queryParameters.containsKey('key'), isFalse, reason: 'PR36-CR-02: Key must not be in query parameter');
+        expect(request.headers['x-goog-api-key'], 'test-api-key', reason: 'PR36-CR-02: Key must be in header');
         expect(request.headers['Content-Type'], 'application/json');
 
         // Zero PII check: ensure no personal identifiers are sent
@@ -122,6 +124,33 @@ void main() {
       expect(result, isNotNull);
       expect(result.mealName, contains('Súp đậu Garbanzo'));
       expect(result.isAiGenerated, isFalse);
+    });
+
+    test('rejects incomplete Gemini output with missing calories or mealName and triggers fallback', () async {
+      final incompleteResponse = {
+        'candidates': [
+          {
+            'content': {
+              'parts': [
+                {
+                  'text': jsonEncode({
+                    'mealName': '',
+                    'calories': 0,
+                    'ingredients': [],
+                  })
+                }
+              ]
+            }
+          }
+        ]
+      };
+
+      final client = MockClient((_) async => http.Response(jsonEncode(incompleteResponse), 200));
+      final service = GeminiAiService(httpClient: client, apiKey: 'test-api-key');
+
+      final result = await service.recommendLongevityMeal(mealType: 'lunch');
+      expect(result.isAiGenerated, isFalse);
+      expect(result.sourceNote, contains('Valter Longo Diet Standard'));
     });
 
     test('AiMealRecommendation model copyWith and json roundtrip', () {

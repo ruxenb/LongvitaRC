@@ -69,7 +69,7 @@ sequenceDiagram
 ### 2.3. Cấu hình linh hoạt qua Firebase Remote Config
 Được quản lý thông qua file `firebase/remote-config-defaults.json`:
 - `ai_feature_enabled`: Cờ Boolean (mặc định: `true`). Khi tắt trên Firebase Console, ứng dụng tự động dùng Fallback mà không cần rebuild bản app mới.
-- `gemini_model_name`: Tên model AI (mặc định: `gemini-1.5-flash`). Có thể chuyển sang `gemini-1.5-pro` từ xa.
+- `gemini_model_name`: Tên model AI (mặc định: `gemini-2.0-flash`). Có thể chuyển sang các model nâng cao từ xa.
 - `ai_prompt_template`: Mẫu prompt hệ thống hướng dẫn chuẩn hóa dinh dưỡng.
 
 ---
