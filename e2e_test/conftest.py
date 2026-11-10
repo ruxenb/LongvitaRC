@@ -243,10 +243,17 @@ def _open_app() -> str:
     raise SetupError("precondition: the sign-in screen did not stay, and the app is not on its home screen")
 
 
-def _home_shows_test_account() -> bool:
-    """Whether the signed-in identity on the home screen is TEST_ACCOUNT."""
+def _profile_shows_test_account() -> bool:
+    """Match the configured identity on Profile, never infer it from Home."""
     account = configured_account().lower()
-    return any(account in label.lower().split("\n") for label in _labels())
+    # Profile's Text inserts a zero-width break before @ for layout; its
+    # semanticsLabel contains the raw email. Accept either observed form,
+    # while requiring a whole line, not a substring of another account.
+    return any(
+        line.replace("\u200b", "").strip().lower() == account
+        for label in _labels()
+        for line in label.splitlines()
+    )
 
 
 def ensure_signed_out() -> None:
@@ -275,7 +282,9 @@ def ensure_signed_in() -> None:
         _wait_for(*HOME_TITLES, timeout=60)
     if _open_app() != "home":
         raise SetupError("precondition: not signed in")
-    if not _home_shows_test_account():
+    _tap("Hồ sơ")
+    _wait_for("Đăng xuất")
+    if not _profile_shows_test_account():
         raise SetupError("precondition: signed in with an account other than ARTEMIS_TEST_ACCOUNT")
     _stop_app()
 
@@ -292,7 +301,10 @@ def _set_up_account_state(request) -> dict | None:
     ensure()
     return {
         "state": state,
-        "verified_by": "uiautomator after reopening the app",
+        "verified_by": (
+            "uiautomator Home then Profile account identity"
+            if state == "signed_in" else "uiautomator after reopening the app"
+        ),
         "account_checked": state == "signed_in",
         "seconds": round(time.time() - started, 1),
     }

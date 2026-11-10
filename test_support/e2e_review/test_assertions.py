@@ -5,6 +5,7 @@ account-state setup checks cover PM-S64-01..03.
 No daemon, account, emulator, Console edit or network request is used here.
 """
 import os
+import asyncio
 import sys
 import json
 import urllib.error
@@ -74,6 +75,32 @@ SIGN_IN = ["Longvita", "Thực đơn trường thọ cho cả tuần", "Đăng n
 ANR = ["Google Play services isn't responding", "Close app", "Wait"]
 
 
+class ProfileDevice(FakeDevice):
+    """Final Home has no identity; only tapping Profile reveals its email."""
+
+    def __init__(self, monkeypatch, account, *, home_email=None, profile_labels=None):
+        self.screen = "home"
+        self.home_labels = ["Longvita", "Trang chủ", "Hồ sơ", "Tạo thực đơn tuần"]
+        if home_email is not None:
+            self.home_labels.append(home_email)
+        self.profile_labels = profile_labels if profile_labels is not None else [
+            "Hồ sơ", f"Test User\n{account}\nVai trò: user", "Đăng xuất",
+        ]
+        super().__init__(monkeypatch, self.home_labels)
+
+    def nodes(self):
+        labels = self.home_labels if self.screen == "home" else self.profile_labels
+        return [(label, (20, 40) if label == "Hồ sơ" else (0, 0)) for label in labels]
+
+    def adb(self, *args):
+        super().adb(*args)
+        if args == ("shell", "input", "tap", "20", "40"):
+            self.screen = "profile"
+
+    def assert_profile_opened(self):
+        assert ("shell", "input", "tap", "20", "40") in self.commands
+
+
 def home(account):
     return ["Longvita Dashboard", "Hồ sơ", f"Test User\n{account}\nROLE: USER"]
 
@@ -87,17 +114,53 @@ def raises_setup_error(error):
 # PM-S64-01: being signed in is not enough; it must be the configured account.
 
 def test_signed_in_setup_rejects_another_account(monkeypatch):
-    FakeDevice(monkeypatch, home("someone.else@example.com"))
+    device = ProfileDevice(monkeypatch, "someone.else@example.com")
     with pytest.raises(Exception) as caught:
         harness.ensure_signed_in()
     raises_setup_error(caught.value)
     assert "someone.else" not in str(caught.value)
+    device.assert_profile_opened()
 
 
 def test_signed_in_setup_accepts_the_configured_account(monkeypatch):
-    device = FakeDevice(monkeypatch, home(PLACEHOLDER_ACCOUNT))
+    device = ProfileDevice(monkeypatch, PLACEHOLDER_ACCOUNT)
     harness.ensure_signed_in()
+    device.assert_profile_opened()
     assert ("shell", "am", "force-stop", harness.APP_PACKAGE) in device.commands
+
+
+def test_signed_in_setup_does_not_trust_identity_on_home(monkeypatch):
+    device = ProfileDevice(monkeypatch, "someone.else@example.com", home_email=PLACEHOLDER_ACCOUNT)
+    with pytest.raises(harness.SetupError):
+        harness.ensure_signed_in()
+    device.assert_profile_opened()
+
+
+def test_signed_in_setup_rejects_a_missing_profile_identity(monkeypatch):
+    device = ProfileDevice(monkeypatch, "", profile_labels=["Hồ sơ", "Đăng xuất"])
+    with pytest.raises(harness.SetupError):
+        harness.ensure_signed_in()
+    device.assert_profile_opened()
+
+
+def test_signed_in_setup_rejects_an_unavailable_profile(monkeypatch):
+    device = ProfileDevice(monkeypatch, PLACEHOLDER_ACCOUNT, profile_labels=ANR)
+    with pytest.raises(harness.SetupError):
+        harness.ensure_signed_in()
+    device.assert_profile_opened()
+
+
+def test_signed_in_setup_accepts_the_profile_layout_email_break(monkeypatch):
+    device = ProfileDevice(monkeypatch, PLACEHOLDER_ACCOUNT.replace("@", "\u200b@"))
+    harness.ensure_signed_in()
+    device.assert_profile_opened()
+
+
+def test_signed_in_setup_requires_an_exact_profile_email(monkeypatch):
+    device = ProfileDevice(monkeypatch, "not-" + PLACEHOLDER_ACCOUNT)
+    with pytest.raises(harness.SetupError):
+        harness.ensure_signed_in()
+    device.assert_profile_opened()
 
 
 # PM-S64-02: a sign-in screen seen for a moment is not proof of signed out.
@@ -180,6 +243,7 @@ def test_action_substrings_remain_available_for_tapped():
 
 @pytest.mark.parametrize("last", [
     "Press Android Back: Android launcher and app icons are visible.",
+    "Pressed Back. Trang chủ Android (launcher) is visible.",
     "Press Android Back: Đăng nhập bằng Google remains visible.",
 ])
 async def test_sign_out_accepts_launcher_or_sign_in(last):
@@ -191,6 +255,7 @@ async def test_sign_out_accepts_launcher_or_sign_in(last):
 @pytest.mark.parametrize("last", [
     "Press Android Back: the Longvita home screen appeared.",
     "Pressed Back. Longvita Dashboard is visible, not the launcher.",
+    "Pressed Back. Trang chủ Longvita is visible, not the launcher.",
     "Press Android Back: Longvita Dashboard, ROLE: USER.",
     "Press Android Back: an unknown blank screen.",
 ])
@@ -203,20 +268,16 @@ async def test_sign_out_rejects_app_home_or_unknown_result(last):
 
 def test_tc11_dashboard_marker_regression_sync():
     """Keep the critical TC-11 replay runnable without an async test plugin."""
-    def run_immediate(coroutine):
-        with pytest.raises(StopIteration):
-            coroutine.send(None)
-
-    run_immediate(auth_cases.test_tc11_sign_out_cannot_return_with_back(observe(
+    asyncio.run(auth_cases.test_tc11_sign_out_cannot_return_with_back(observe(
         "Tap Đồng ý: Đăng nhập bằng Google appears.",
         "Press Android Back: Android launcher and app icons are visible.",
     )))
-    run_immediate(auth_cases.test_tc11_sign_out_cannot_return_with_back(observe(
+    asyncio.run(auth_cases.test_tc11_sign_out_cannot_return_with_back(observe(
         "Tap Đồng ý: Đăng nhập bằng Google appears.",
         "Press Android Back: Đăng nhập bằng Google remains visible.",
     )))
     with pytest.raises(AssertionError):
-        run_immediate(auth_cases.test_tc11_sign_out_cannot_return_with_back(observe(
+        asyncio.run(auth_cases.test_tc11_sign_out_cannot_return_with_back(observe(
             "Tap Đồng ý: Đăng nhập bằng Google appears.",
             "Pressed Back. Longvita Dashboard is visible, not the launcher.",
         )))
