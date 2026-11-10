@@ -6,16 +6,17 @@ Thư mục này là nơi nhận ảnh Web thật theo `docs/web-admin-checklist.
 
 Phiên kiểm tra ngày 10/11/2026 mở
 `https://longvita-8da7e.web.app` bằng trình duyệt Android ở chế độ portrait.
-Kích thước ảnh chụp là `922 × 2048` px; không suy kích thước pixel ảnh thành CSS
-viewport vì thiết bị có device-pixel ratio riêng. Build Hosting gần nhất đã
-được xác minh từ `main` commit `0cfe905`.
+Kích thước ảnh chụp là `922 × 2048` px. CSS viewport của phiên này **không được
+ghi nhận**, nên ảnh chỉ là mobile-browser observation và không được dùng để xác
+nhận ca bắt buộc `412 × 915`; cần chụp lại với viewport đã đo. Build Hosting
+gần nhất đã được xác minh từ `main` commit `0cfe905`.
 
 | File | Role/trạng thái | Kết quả |
 |:---|:---|:---|
 | `01-mobile-portrait-signin.png` | Chưa đăng nhập | Trang đăng nhập production tải thành công trên điện thoại. |
-| `02-mobile-portrait-oauth-loading-popup-blocked.png` | OAuth loading/error | Có trạng thái chờ rõ ràng; trình duyệt báo chặn popup nên đây là bằng chứng recovery, không phải login pass. |
+| `02-mobile-portrait-oauth-loading-popup-blocked.png` | OAuth loading + popup blocked | Có trạng thái chờ và thông báo popup bị chặn; ảnh này không chứng minh recovery hay login pass. Recovery sau hủy nằm ở ảnh 06. |
 | `03-mobile-portrait-review-empty.png` | `admin`, Review Queue | Empty state và hướng dẫn xét duyệt hiển thị; bố cục dùng được nhưng hẹp. |
-| `04-mobile-portrait-recipes-responsive-finding.png` | `admin`, Recipes data | Dữ liệu Firestore tải được nhưng tiêu đề xuống dòng và bảng bị cắt; WEB-13/18 fail ở mobile width. |
+| `04-mobile-portrait-recipes-responsive-finding.png` | `admin`, Recipes data | Dữ liệu Firestore tải được nhưng tiêu đề xuống dòng và bảng bị cắt; đây là finding WEB-18. |
 | `05-mobile-portrait-dashboard-data.png` | `admin`, Dashboard data | Ba metrics và phần biểu đồ tải từ Firestore; bố cục xếp dọc. |
 | `06-mobile-portrait-signin-cancelled.png` | OAuth cancelled | Thông báo hủy đăng nhập và CTA thử lại hiển thị đúng. |
 
@@ -36,15 +37,18 @@ thoại, không phải ứng dụng Flutter Mobile native.
 
 - WEB-01: **Pass một phần** — có Sign-in, OAuth loading và cancellation; popup
   bị trình duyệt chặn trong một lượt.
-- WEB-02: **Pass production** — admin vào được Dashboard/Recipes/Review Queue;
-  role gate chi tiết nằm ở evidence TV-00.
+- WEB-02: **Pass một phần** — admin vào được Dashboard/Recipes/Review Queue;
+  staff chưa được kiểm tra production. Role gate chi tiết nằm ở evidence TV-00.
 - WEB-08: **Pass empty state** — Review Queue không có thực đơn chờ duyệt.
 - WEB-12: **Pass data đại diện** — Dashboard có dữ liệu; loading/empty/error
   riêng vẫn chưa đủ ảnh.
-- WEB-13 và WEB-18: **Fail mobile-width** — Recipes overflow/cắt nội dung và
-  heading xuống dòng bất thường. Cần sửa responsive rồi chụp lại.
-- WEB-17: **Pass URL trên mobile browser**; bằng chứng ẩn danh desktop nằm ở
-  [`../TV-00-20261110/`](../TV-00-20261110/README.md).
+- WEB-13: **Pass một phần** — ba Dashboard metrics hiển thị; chưa kiểm đủ chart
+  tại `1440 × 900` và `412 × 915`.
+- WEB-18: **Fail mobile-width** — Recipes overflow/cắt nội dung và heading xuống
+  dòng bất thường. Cần sửa rồi chụp lại với CSS viewport đã ghi nhận.
+- WEB-17: **Pass một phần** — URL mở trên mobile browser và có bằng chứng ẩn
+  danh desktop tại [`../TV-00-20261110/`](../TV-00-20261110/README.md), nhưng
+  chưa có evidence reload một SPA route trên production.
 
 ## Còn thiếu
 

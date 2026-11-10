@@ -34,11 +34,11 @@
 | WEB-10 | Review Queue | reject bắt buộc lý do | Có test local | ảnh dialog và kết quả live |
 | WEB-11 | Review Queue | document lỗi không approve | Có regression test | ảnh cảnh báo thật nếu có fixture an toàn |
 | WEB-12 | Dashboard | loading/empty/error/data | Data pass production trên mobile | Còn thiếu loading/empty/error live |
-| WEB-13 | Dashboard | ≥3 metrics + chart responsive | 3 metrics pass; Recipes mobile layout fail, chưa đủ viewport chuẩn | ảnh 1440×900 và 412×915 sau sửa |
+| WEB-13 | Dashboard | ≥3 metrics + chart responsive | Pass một phần: 3 metrics hiển thị; chưa đủ chart/viewport chuẩn | ảnh 1440×900 và 412×915 |
 | WEB-14 | Remote Config | guidance true/false không rebuild | Có code/test local | ảnh trước/sau từ Console + Web live |
 | WEB-15 | Analytics | approve/reject trong DebugView | Có unit/widget test event | ảnh DebugView thật |
 | WEB-16 | Announcement | publish thành công + Analytics | Chờ CM-07 | ảnh form, Inbox Mobile, DebugView |
-| WEB-17 | Hosting | SPA reload và mở ẩn danh | Pass production; có evidence TV-00 và mobile browser | giữ URL + metadata deploy |
+| WEB-17 | Hosting | SPA reload và mở ẩn danh | Pass một phần: URL/ẩn danh đạt, chưa có SPA route reload production | chụp reload production + metadata route |
 | WEB-18 | A11y/layout | keyboard, focus, text scale, overflow | Fail mobile-width ở Recipes; desktop/a11y còn thiếu | sửa overflow rồi kiểm tra lại |
 
 ## 3. Viewport bắt buộc
