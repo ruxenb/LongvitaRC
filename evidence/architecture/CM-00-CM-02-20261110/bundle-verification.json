@@ -1,0 +1,14 @@
+{
+  "apkSha256": "6ae0c2756b110e8bdb048f6599e022942b6ac94bd2dd8ec8e8031b32a2110472",
+  "qaFixtureAbsentFromApk": true,
+  "webMainJsSha256": "358fe5b0e89161e69151ad2ed516a7bb0f370a2a44228d32fc0750679bd27cda",
+  "sharedFontAndLicenseByteMatches": {
+    "mobile": 6,
+    "web": 6
+  },
+  "fontFamilies": [
+    "packages/longvita_core/Quicksand",
+    "packages/longvita_core/Newsreader",
+    "packages/longvita_core/Fraunces"
+  ]
+}

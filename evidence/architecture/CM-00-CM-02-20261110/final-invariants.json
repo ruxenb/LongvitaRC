@@ -1,0 +1,14 @@
+{
+  "mappedFilesPresent": 172,
+  "nativeFilesByteIdentical": 20,
+  "assetsByteIdentical": 11,
+  "lockedPackageRecordsUnchanged": 102,
+  "testDartFilesRelocated": 33,
+  "canonicalGitContentUnchanged": [
+    "firebase/firestore.rules",
+    "firebase/storage.rules",
+    "docs/data-model.md",
+    "e2e_test/conftest.py"
+  ],
+  "boundaryNegativeChecks": 4
+}

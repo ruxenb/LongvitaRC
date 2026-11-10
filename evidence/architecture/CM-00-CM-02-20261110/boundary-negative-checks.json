@@ -1,0 +1,18 @@
+[
+  {
+    "case": "core_imports_mobile",
+    "rejected": true
+  },
+  {
+    "case": "web_native_io",
+    "rejected": true
+  },
+  {
+    "case": "core_imports_native_fcm",
+    "rejected": true
+  },
+  {
+    "case": "old_hosting_output",
+    "rejected": true
+  }
+]
