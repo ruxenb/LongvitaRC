@@ -1,0 +1,6 @@
+Flutter 3.47.6 / Chrome headless / Windows
+Browser test suite did not start. CDP captured:
+1. WebAssembly.compile: HTTP status code is not ok.
+2. Failed dynamic import: /canvaskit/chromium/canvaskit.js
+3. DartError: Web test for adminadmin_web_test.dart not found (missing path separator).
+The isolated test browser was closed after diagnosis; runner then reported connection closed before suite loaded for both files. 0 browser test passes; not an app regression result. No Flutter SDK changes made.

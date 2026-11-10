@@ -1,0 +1,19 @@
+{
+  "base": "968fb71dec76def6d4d0484805c0765634521c53",
+  "regressionBefore": {
+    "pass": 59,
+    "fail": 8
+  },
+  "regressionAfter": {
+    "pass": 67,
+    "fail": 0
+  },
+  "collectedE2eCases": 18,
+  "realArtemisRuns": 0,
+  "productionWrites": false,
+  "sourceSha256": {
+    "e2e_test/conftest.py": "5763211fbf623f83e4f77b7a69488b1410cbb9c48a4773c23e7b30466283bb27",
+    "e2e_test/test_auth.py": "ada39a72e5b5bf497c094ebf0510a1939c33d2cb13aea8dd7b862c3e9e36b70a",
+    "test_support/e2e_review/test_assertions.py": "4a82663b35cf7c5eed9b5b97cb61957dfb5495edae5e2eb729c44e901d227e55"
+  }
+}

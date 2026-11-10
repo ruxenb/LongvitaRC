@@ -1,0 +1,12 @@
+FCM token: token
+00:23 +489: <repo>/test/profile/profile_screen_test.dart: layout and semantics each card title is a heading of its own, after an upload
+FCM token: token
+00:23 +490: <repo>/test/profile/profile_screen_test.dart: layout and semantics every heading has a level, so Android reports it
+FCM token: token
+00:24 +491: <repo>/test/profile/profile_screen_test.dart: layout and semantics upload progress speaks its phase once, percentage as value
+FCM token: token
+00:24 +492: <repo>/test/profile/profile_screen_test.dart: layout and semantics sign-out dialog is announced, closes in Vietnamese, and fits at text scale 2
+FCM token: token
+00:24 +493: <repo>/test/profile/profile_screen_test.dart: layout and semantics test crash dialog is announced, closes in Vietnamese, and fits at text scale 2
+FCM token: token
+00:24 +494: All tests passed!

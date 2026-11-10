@@ -10,11 +10,13 @@ class FlowFrame extends StatelessWidget {
   final String title;
   final Widget child;
   final List<Widget>? actions;
+  final Widget? bottomNavigationBar;
   const FlowFrame({
     super.key,
     required this.title,
     required this.child,
     this.actions,
+    this.bottomNavigationBar,
   });
 
   @override
@@ -24,6 +26,7 @@ class FlowFrame extends StatelessWidget {
         title: Semantics(header: true, headingLevel: 1, child: Text(title)),
         actions: actions,
       ),
+      bottomNavigationBar: bottomNavigationBar,
       body: SafeArea(
         child: Center(
           child: ConstrainedBox(

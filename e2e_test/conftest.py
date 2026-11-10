@@ -147,7 +147,9 @@ def _stop_app() -> None:
 # Required when the device has more than one account.
 TEST_ACCOUNT = os.getenv("ARTEMIS_TEST_ACCOUNT", "")
 SIGN_IN_BUTTON = "Đăng nhập bằng Google"
-HOME_TITLE = "Longvita Dashboard"
+# Markers that only appear after authentication. The sign-in screen also has
+# the "Longvita" heading, so that generic label must never identify Home.
+HOME_TITLES = ("Trang chủ", "Longvita Dashboard")
 
 
 def _nodes() -> list[tuple[str, tuple[int, int]]]:
@@ -226,30 +228,37 @@ def _open_app() -> str:
     """
     _stop_app()
     _adb("shell", "am", "start", "-n", f"{APP_PACKAGE}/.MainActivity")
-    if _wait_for(SIGN_IN_BUTTON, HOME_TITLE) == HOME_TITLE:
-        return HOME_TITLE
+    if _wait_for(SIGN_IN_BUTTON, *HOME_TITLES) in HOME_TITLES:
+        return "home"
     deadline = time.time() + RESTORE_SECONDS
     while time.time() < deadline:
-        if _first_line_starts(_labels(), HOME_TITLE):
-            return HOME_TITLE
+        if any(_first_line_starts(_labels(), title) for title in HOME_TITLES):
+            return "home"
         time.sleep(POLL_SECONDS)
     final = _labels()
-    if _first_line_starts(final, HOME_TITLE):
-        return HOME_TITLE
+    if any(_first_line_starts(final, title) for title in HOME_TITLES):
+        return "home"
     if _first_line_starts(final, SIGN_IN_BUTTON):
         return SIGN_IN_BUTTON
     raise SetupError("precondition: the sign-in screen did not stay, and the app is not on its home screen")
 
 
-def _home_shows_test_account() -> bool:
-    """Whether the signed-in identity on the home screen is TEST_ACCOUNT."""
+def _profile_shows_test_account() -> bool:
+    """Match the configured identity on Profile, never infer it from Home."""
     account = configured_account().lower()
-    return any(account in label.lower().split("\n") for label in _labels())
+    # Profile's Text inserts a zero-width break before @ for layout; its
+    # semanticsLabel contains the raw email. Accept either observed form,
+    # while requiring a whole line, not a substring of another account.
+    return any(
+        line.replace("\u200b", "").strip().lower() == account
+        for label in _labels()
+        for line in label.splitlines()
+    )
 
 
 def ensure_signed_out() -> None:
     """Starts a case on the sign-in screen, through the app's own sign-out."""
-    if _open_app() == HOME_TITLE:
+    if _open_app() == "home":
         _tap("Hồ sơ")
         _wait_for("Đăng xuất")
         _tap("Đăng xuất")
@@ -270,10 +279,12 @@ def ensure_signed_in() -> None:
         _tap(SIGN_IN_BUTTON)
         _wait_for(account)
         _tap(account)
-        _wait_for(HOME_TITLE, timeout=60)
-    if _open_app() != HOME_TITLE:
+        _wait_for(*HOME_TITLES, timeout=60)
+    if _open_app() != "home":
         raise SetupError("precondition: not signed in")
-    if not _home_shows_test_account():
+    _tap("Hồ sơ")
+    _wait_for("Đăng xuất")
+    if not _profile_shows_test_account():
         raise SetupError("precondition: signed in with an account other than ARTEMIS_TEST_ACCOUNT")
     _stop_app()
 
@@ -290,7 +301,10 @@ def _set_up_account_state(request) -> dict | None:
     ensure()
     return {
         "state": state,
-        "verified_by": "uiautomator after reopening the app",
+        "verified_by": (
+            "uiautomator Home then Profile account identity"
+            if state == "signed_in" else "uiautomator after reopening the app"
+        ),
         "account_checked": state == "signed_in",
         "seconds": round(time.time() - started, 1),
     }

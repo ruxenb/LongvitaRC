@@ -2,11 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../models/announcement_model.dart';
+import '../models/recipe_model.dart';
 import '../services/i_data_service.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_spacing.dart';
+import '../theme/app_typography.dart';
 import '../viewmodels/auth_viewmodel.dart';
 import '../viewmodels/profile_viewmodel.dart';
+import '../viewmodels/meal_plan_viewmodel.dart';
 import '../widgets/app_button.dart';
 import '../widgets/app_card.dart';
 import '../widgets/app_navigation_bar.dart';
@@ -14,6 +17,7 @@ import '../widgets/state_views.dart';
 import 'meal_flow_screens.dart';
 import 'profile_screen.dart';
 import 'recipe_flow_screens.dart';
+import 'shopping_flow_screens.dart';
 
 /// S01: Firebase-backed entry point for all three business flows.
 class HomeScreen extends StatefulWidget {
@@ -74,10 +78,30 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     final user = context.watch<AuthViewModel>().currentUser;
     final profile = context.watch<ProfileViewModel>();
+    final plan = context.watch<MealPlanViewModel>().activePlan;
+    RecipeModel? todayMeal;
+    final todayIndex = DateTime.now().weekday - DateTime.monday;
+    if (plan != null) {
+      for (final day in plan.days) {
+        if (day.dayIndex == todayIndex && day.meals.isNotEmpty) {
+          todayMeal = day.meals.first;
+          break;
+        }
+      }
+    }
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Longvita Dashboard'),
+        title: const Text('Longvita'),
         actions: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: AppSpacing.s8),
+            child: Center(
+              child: Text(
+                user?.displayName.split(' ').first ?? 'Minh Anh',
+                style: AppTypography.label,
+              ),
+            ),
+          ),
           IconButton(
             tooltip: 'Hồ sơ',
             icon: const Icon(Icons.account_circle_outlined),
@@ -101,42 +125,58 @@ class _HomeScreenState extends State<HomeScreen> {
             child: ListView(
               padding: const EdgeInsets.all(AppSpacing.pageMargin),
               children: [
+                Text(
+                  'Xin chào, ${user?.displayName.split(' ').first ?? 'bạn'}',
+                  style: AppTypography.headingM,
+                ),
+                const SizedBox(height: AppSpacing.s16),
                 AppCard(
-                  child: Row(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      CircleAvatar(
-                        radius: 28,
-                        backgroundColor: AppColors.bgSelected,
-                        backgroundImage: user?.photoUrl == null
-                            ? null
-                            : NetworkImage(user!.photoUrl!),
-                        child: user?.photoUrl == null
-                            ? const Icon(Icons.person, size: 28)
-                            : null,
+                      const Text(
+                        'Nhịp sống 7 ngày của bạn',
+                        style: AppTypography.title,
                       ),
-                      const SizedBox(width: 16),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                      const SizedBox(height: AppSpacing.s8),
+                      const Text(
+                        'Theo dõi bữa ăn, công thức và mua sắm tại một nơi.',
+                        style: AppTypography.supporting,
+                      ),
+                      const SizedBox(height: AppSpacing.s12),
+                      Container(
+                        padding: const EdgeInsets.all(AppSpacing.s12),
+                        decoration: const BoxDecoration(
+                          color: AppColors.bgSelected,
+                          borderRadius: AppRadius.rounded12,
+                        ),
+                        child: const Row(
                           children: [
-                            Text(
-                              user?.displayName ?? 'Người dùng Longvita',
-                              style: Theme.of(context).textTheme.titleLarge,
+                            Icon(
+                              Icons.calendar_today_outlined,
+                              color: AppColors.actionPrimary,
                             ),
-                            Text(
-                              user?.email ?? '',
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                            Text(
-                              'ROLE: ${user?.role.toUpperCase() ?? 'USER'}',
-                              style: const TextStyle(
-                                fontWeight: FontWeight.bold,
+                            SizedBox(width: AppSpacing.s8),
+                            Expanded(
+                              child: Text(
+                                'Sẵn sàng cho một tuần mới',
+                                style: AppTypography.label,
                               ),
                             ),
                           ],
                         ),
                       ),
                     ],
+                  ),
+                ),
+                const SizedBox(height: AppSpacing.s12),
+                AppButton(
+                  text: 'Tạo thực đơn tuần',
+                  icon: Icons.arrow_forward,
+                  onPressed: () => Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (_) => const PreferencesScreen(),
+                    ),
                   ),
                 ),
                 if (profile.bannerText.isNotEmpty) ...[
@@ -154,51 +194,79 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
                 ],
-                const SizedBox(height: 24),
-                Semantics(
-                  header: true,
-                  child: Text(
-                    'Hành Động Nhanh',
-                    style: Theme.of(context).textTheme.titleLarge,
-                  ),
-                ),
-                const SizedBox(height: 12),
+                const SizedBox(height: AppSpacing.s24),
+                const Text('Hôm nay', style: AppTypography.title),
+                const SizedBox(height: AppSpacing.s8),
                 AppCard(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      Text(
-                        'Lập thực đơn 7 ngày từ dữ liệu thật',
-                        style: Theme.of(context).textTheme.titleMedium,
-                      ),
-                      const SizedBox(height: 8),
-                      const Text(
-                        'Nhập sở thích và xem gợi ý từ Firestore. '
-                        'Không tạo món mẫu hoặc tự điền tuổi/cân nặng.',
-                      ),
-                      const SizedBox(height: 16),
-                      AppButton(
-                        text: 'Tạo thực đơn',
-                        icon: Icons.restaurant_outlined,
-                        onPressed: () => Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (_) => const PreferencesScreen(),
-                          ),
+                      if (todayMeal == null)
+                        const Text(
+                          'Chưa có thực đơn. Hãy tạo thực đơn tuần để xem món hôm nay.',
+                          style: AppTypography.supporting,
+                        )
+                      else
+                        Row(
+                          children: [
+                            const CircleAvatar(
+                              radius: 34,
+                              backgroundColor: AppColors.bgSelected,
+                              child: Icon(
+                                Icons.soup_kitchen_outlined,
+                                color: AppColors.actionPrimary,
+                              ),
+                            ),
+                            const SizedBox(width: AppSpacing.s12),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    todayMeal.name,
+                                    style: AppTypography.labelStrong,
+                                  ),
+                                  if (todayMeal.sourceNote.isNotEmpty) ...[
+                                    const SizedBox(height: AppSpacing.s4),
+                                    Text(
+                                      todayMeal.sourceNote,
+                                      style: AppTypography.supporting,
+                                    ),
+                                  ],
+                                ],
+                              ),
+                            ),
+                          ],
                         ),
-                      ),
-                      const SizedBox(height: 12),
+                      const SizedBox(height: AppSpacing.s12),
+                      if (todayMeal?.isBookCitation == true)
+                        const Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text('Từ sách', style: AppTypography.label),
+                            Text('Đang chờ', style: AppTypography.supporting),
+                          ],
+                        ),
+                      const SizedBox(height: AppSpacing.s16),
                       AppButton(
-                        text: 'Kế hoạch đã lưu',
+                        text: 'Thực đơn đã lưu',
                         variant: AppButtonVariant.secondary,
                         onPressed: () => _navigateTo(1),
                       ),
-                      const SizedBox(height: 12),
+                      const SizedBox(height: AppSpacing.s8),
                       AppButton(
-                        text: 'Tra cứu công thức',
+                        text: 'Danh sách mua sắm',
                         variant: AppButtonVariant.secondary,
-                        onPressed: () => _navigateTo(2),
+                        onPressed: plan == null
+                            ? null
+                            : () => Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (_) =>
+                                      const IngredientSummaryScreen(),
+                                ),
+                              ),
                       ),
-                      const SizedBox(height: 12),
+                      const SizedBox(height: AppSpacing.s8),
                       AppButton(
                         text: 'Xuất báo cáo PDF ở Hồ sơ',
                         variant: AppButtonVariant.secondary,
@@ -259,7 +327,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                   const SizedBox(height: 4),
                                   Text(announcement.content),
                                   const SizedBox(height: 4),
-                                  Text('Vai trò: ${announcement.authorRole}'),
+                                  Text(
+                                    'Vai trò: ${_roleLabel(announcement.authorRole)}',
+                                  ),
                                 ],
                               ),
                             ),
@@ -275,4 +345,10 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
+
+  String _roleLabel(String role) => switch (role) {
+    'admin' => 'Quản trị viên',
+    'staff' => 'Nhân viên',
+    _ => 'Người dùng',
+  };
 }

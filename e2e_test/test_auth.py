@@ -13,8 +13,13 @@ import conftest as harness
 
 # Signs of Android's launcher in the agent's description, as opposed to the app.
 LAUNCHER = re.compile(r"launcher|device'?s home screen|app icons|app drawer|\bdock\b", re.I)
-# Signs that Back went back into the signed-in app.
-APP_HOME = re.compile(r"Longvita Dashboard|Dashbo|ROLE: USER|Hành Động Nhanh|Tạo thực đơn mẫu ngay|Hồ sơ")
+# App-specific evidence only: bare "Trang chủ" may be Android's launcher,
+# and bare "Longvita" also appears on Sign-in.
+APP_HOME = re.compile(
+    r"Longvita\s+(?:Dashboard|home(?:\s+screen)?)|Trang chủ Longvita|"
+    r"ROLE:\s*USER|Hành động nhanh|Tạo thực đơn|Nhịp sống 7 ngày",
+    re.IGNORECASE,
+)
 
 
 @pytest.mark.needs_account

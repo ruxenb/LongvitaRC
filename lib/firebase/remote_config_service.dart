@@ -10,15 +10,15 @@ class RemoteConfigService {
   final FirebaseRemoteConfig _remoteConfig;
 
   RemoteConfigService({FirebaseRemoteConfig? remoteConfig})
-      : _remoteConfig = remoteConfig ?? FirebaseRemoteConfig.instance;
+    : _remoteConfig = remoteConfig ?? FirebaseRemoteConfig.instance;
 
   /// Giá trị mặc định trong ứng dụng (In-App Defaults)
   static const Map<String, dynamic> defaultParameters = {
     'max_meal_recommendations': 5,
     'enable_longevity_score': true,
+    'web_show_review_guidance': true,
     'daily_protein_target_ratio': 0.8,
-    'banner_announcement':
-        'Chào mừng đến với Longvita - Dinh dưỡng trường thọ theo TS. Valter Longo',
+    'banner_announcement': 'Chào mừng đến với Longvita - Dinh dưỡng trường thọ theo TS. Valter Longo',
   };
 
   /// Khởi tạo và đồng bộ cấu hình từ xa
@@ -28,8 +28,9 @@ class RemoteConfigService {
         RemoteConfigSettings(
           fetchTimeout: const Duration(seconds: 10),
           // Trong môi trường dev/test, đặt minimumFetchInterval thấp để thấy thay đổi tức thì
-          minimumFetchInterval:
-              kDebugMode ? const Duration(seconds: 5) : const Duration(hours: 1),
+          minimumFetchInterval: kDebugMode
+              ? const Duration(seconds: 5)
+              : const Duration(hours: 1),
         ),
       );
 
@@ -64,6 +65,10 @@ class RemoteConfigService {
   /// Tham số 2: Feature flag bật/tắt hiển thị Điểm trường thọ (bool)
   bool get enableLongevityScore =>
       _remoteConfig.getBool('enable_longevity_score');
+
+  /// Cờ Web Admin: hiện/ẩn hướng dẫn nghiệp vụ trên hàng đợi xét duyệt.
+  bool get webShowReviewGuidance =>
+      _remoteConfig.getBool('web_show_review_guidance');
 
   /// Tham số 3: Tỷ lệ mục tiêu đạm mỗi ngày (double)
   double get proteinTargetRatio =>

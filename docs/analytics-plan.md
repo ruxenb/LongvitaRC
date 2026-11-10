@@ -21,6 +21,23 @@
 | **`export_report`** *(Custom snake_case)* | Sinh file PDF thực đơn và tải lên Firebase Storage | `topic` *(string: "longevity_meal_plan", giữ tương thích)*,<br/>`report_topic` *(string: cùng giá trị topic, quan sát trên GA4)*,<br/>`file_size_kb` *(int)*,<br/>`has_shopping_list` *(int: 0 hoặc 1)* | Có bao nhiêu phần trăm người dùng tạo thực đơn thực sự xuất file PDF để áp dụng thực tế? | **Flow 2 / Profile:** Xuất báo cáo |
 | **`toggle_shopping_item`** *(Custom snake_case)* | Người dùng tick chọn mua xong nguyên liệu tại S08 | `ingredient_id` *(string)*,<br/>`is_checked` *(int: 0 hoặc 1)* | Tỷ lệ hoàn thành danh sách đi chợ đạt bao nhiêu phần trăm? Nhóm nguyên liệu nào bị bỏ sót? | **Flow 2:** Bước S08 Shopping List |
 
+### Final Assignment Web Admin — TV-03B, 10/11/2026
+
+| Event | Trigger thành công | Parameters |
+|:---|:---|:---|
+| `approve_plan` | Firestore cập nhật thực đơn sang `approved` thành công | `surface = web_admin` |
+| `reject_plan` | Firestore cập nhật thực đơn sang `rejected` thành công | `surface = web_admin` |
+| `publish_announcement` | Form CM-07 ghi thông báo thành công | `surface = web_admin` |
+
+Không gửi UID, email, plan ID, nội dung thông báo hoặc lý do từ chối lên
+Analytics. Thao tác Firestore thất bại không được log như một thành công.
+`publish_announcement` đã có contract/hook dùng chung trong
+`AdminWebInstrumentation`; CM-07 phải gọi hook sau khi write thành công.
+
+Remote Config dùng `web_show_review_guidance` (bool, mặc định `true`) để
+hiện/ẩn thẻ hướng dẫn trên Web Review Queue. Nút đồng bộ cạnh thẻ gọi
+`fetchAndActivate` và cập nhật UI mà không rebuild/deploy ứng dụng.
+
 ---
 
 ### Làm rõ contract export_report — S5-4, 08/11/2026

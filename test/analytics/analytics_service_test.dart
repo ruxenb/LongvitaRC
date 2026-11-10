@@ -22,46 +22,68 @@ class RecordingAnalyticsSdk implements FirebaseAnalytics {
 }
 
 void main() {
-  test('export sends exactly one SDK event with typed report parameters', () async {
-    final sdk = RecordingAnalyticsSdk();
-    await AnalyticsService(analytics: sdk).logExportReport(
-      fileSizeKb: 19,
-      hasShoppingList: 0,
-    );
-    expect(sdk.calls, hasLength(1));
-    expect(sdk.calls.single.name, 'export_report');
-    expect(sdk.calls.single.parameters, {
-      'topic': 'longevity_meal_plan',
-      'report_topic': 'longevity_meal_plan',
-      'file_size_kb': 19,
-      'has_shopping_list': 0,
-    });
-  });
+  test(
+    'export sends exactly one SDK event with typed report parameters',
+    () async {
+      final sdk = RecordingAnalyticsSdk();
+      await AnalyticsService(analytics: sdk)
+          .logExportReport(fileSizeKb: 19, hasShoppingList: 0);
+      expect(sdk.calls, hasLength(1));
+      expect(sdk.calls.single.name, 'export_report');
+      expect(sdk.calls.single.parameters, {
+        'topic': 'longevity_meal_plan',
+        'report_topic': 'longevity_meal_plan',
+        'file_size_kb': 19,
+        'has_shopping_list': 0,
+      });
+    },
+  );
 
-  test('the SDK receives the supplied topic and actual report values', () async {
-    final sdk = RecordingAnalyticsSdk();
-    await AnalyticsService(analytics: sdk).logExportReport(
-      topic: 'another_report',
-      fileSizeKb: 7,
-      hasShoppingList: 1,
-    );
-    expect(sdk.calls.single.parameters, {
-      'topic': 'another_report',
-      'report_topic': 'another_report',
-      'file_size_kb': 7,
-      'has_shopping_list': 1,
-    });
-  });
+  test(
+    'the SDK receives the supplied topic and actual report values',
+    () async {
+      final sdk = RecordingAnalyticsSdk();
+      await AnalyticsService(analytics: sdk).logExportReport(
+        topic: 'another_report',
+        fileSizeKb: 7,
+        hasShoppingList: 1,
+      );
+      expect(sdk.calls.single.parameters, {
+        'topic': 'another_report',
+        'report_topic': 'another_report',
+        'file_size_kb': 7,
+        'has_shopping_list': 1,
+      });
+    },
+  );
 
   test('SDK failure neither breaks the export nor retries the event', () async {
     final sdk = RecordingAnalyticsSdk()..fail = true;
     await expectLater(
-      AnalyticsService(analytics: sdk).logExportReport(
-        fileSizeKb: 19,
-        hasShoppingList: 0,
-      ),
+      AnalyticsService(analytics: sdk)
+          .logExportReport(fileSizeKb: 19, hasShoppingList: 0),
       completes,
     );
     expect(sdk.calls, hasLength(1));
+  });
+
+  test('Web staff actions use exact event names without identifiers', () async {
+    final sdk = RecordingAnalyticsSdk();
+    final analytics = AnalyticsService(analytics: sdk);
+
+    await analytics.logApprovePlan();
+    await analytics.logRejectPlan();
+    await analytics.logPublishAnnouncement();
+
+    expect(sdk.calls.map((call) => call.name), [
+      'approve_plan',
+      'reject_plan',
+      'publish_announcement',
+    ]);
+    for (final call in sdk.calls) {
+      expect(call.parameters, const {'surface': 'web_admin'});
+      expect(call.parameters, isNot(contains('uid')));
+      expect(call.parameters, isNot(contains('plan_id')));
+    }
   });
 }

@@ -8,7 +8,7 @@ class AnalyticsService {
   final FirebaseAnalytics _analytics;
 
   AnalyticsService({FirebaseAnalytics? analytics})
-      : _analytics = analytics ?? FirebaseAnalytics.instance;
+    : _analytics = analytics ?? FirebaseAnalytics.instance;
 
   /// Gán User ID sau khi đăng nhập thành công để theo dõi phiên (không dùng email)
   Future<void> setUserId(String? uid) async {
@@ -50,9 +50,7 @@ class AnalyticsService {
     try {
       await _analytics.logSearch(
         searchTerm: searchTerm,
-        parameters: {
-          'result_count': resultCount,
-        },
+        parameters: {'result_count': resultCount},
       );
     } catch (_) {}
   }
@@ -131,9 +129,15 @@ class AnalyticsService {
     required String planId,
     required String status,
   }) async {
-    await logEvent('save_meal_plan', {
-      'plan_id': planId,
-      'status': status,
-    });
+    await logEvent('save_meal_plan', {'plan_id': planId, 'status': status});
   }
+
+  Future<void> logApprovePlan() =>
+      logEvent('approve_plan', const {'surface': 'web_admin'});
+
+  Future<void> logRejectPlan() =>
+      logEvent('reject_plan', const {'surface': 'web_admin'});
+
+  Future<void> logPublishAnnouncement() =>
+      logEvent('publish_announcement', const {'surface': 'web_admin'});
 }

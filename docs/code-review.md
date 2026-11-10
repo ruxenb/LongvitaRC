@@ -75,6 +75,26 @@ Hai ca tái hiện trước sửa fail đúng rủi ro false-pass; bộ kiểm a
 
 Follow-up `0df2563` thay protocol hai dòng của bản sửa ban đầu bằng cách tương thích producer thực; `1d3d995` kiểm root cửa sổ và loại câu phủ định; `d7c7609` thu hẹp phủ định vào heading/visibility; `d7ffa05` sửa Back/background. Bộ kiểm hiện tại 49/49 pass, có replay đã lưu. Chưa có native rerun mới. Không dùng commit `bcaa8a5` riêng lẻ như bản viewer assertion cuối cùng.
 
+### 1.3 PR #25 — follow-up cuối trên head `1781a73` (10/11/2026)
+
+Ba finding dưới đây đến từ gói follow-up có probe tái hiện độc lập. Chúng được
+đánh giá theo nội dung kỹ thuật dù GitHub/CodeRabbit có thể trình bày comment
+inline hoặc outside-diff tùy phạm vi diff của head đang review; không đổi quyết
+định chỉ vì comment không gắn được vào dòng. Commit sửa: `ac3a187`.
+
+| ID | Vị trí | Hình thức | Quyết định và lý do | Regression |
+|---|---|---|---|---|
+| PR25-FU-01 | `lib/admin/admin_auth.dart`, `AdminRoleCache.load/clear` | Finding concurrency; có thể xuất hiện outside-diff khi bot chỉ review patch mới | **Accepted.** Request trước logout có thể ghi cache hoặc xóa request của phiên sau. Generation kết hợp kiểm tra identity bảo đảm request cũ không mutate phiên mới, nhưng các lời gọi cùng UID trong một phiên vẫn dùng chung Future. | Hai race A→logout→A, request sharing và role gate cùng UID sau logout. |
+| PR25-FU-02 | `e2e_test/test_auth.py`, `APP_HOME`; `test_support/e2e_review/test_assertions.py` | Finding assertion/inline | **Accepted.** `Longvita Dashboard` là Home của APK cũ; thiếu marker này tạo false-pass TC-11. Không dùng `Longvita` đơn lẻ vì Sign-in cũng chứa chuỗi đó. Đồng thời cập nhật test-support sang contract `HOME_TITLES`/kết quả `home`. | Dashboard sau Back bị từ chối; launcher và Sign-in vẫn được chấp nhận. |
+| PR25-FU-03 | `lib/admin/review_queue_screen.dart`, dialog từ chối | Finding validation; vẫn Accepted nếu CodeRabbit chỉ đưa được outside-diff | **Accepted.** Silent no-op với chuỗi rỗng không giải thích lỗi và không giới hạn payload. Dialog nay kiểm sau trim, giữ nội dung, báo lỗi tại chỗ, không đóng/ghi service khi rỗng hoặc quá 500 ký tự. | Rỗng, đúng 500, 501 và sửa nội dung lỗi thành hợp lệ. |
+
+Xác minh tại `ac3a187`: scoped Web Admin **26/26**, toàn bộ Flutter
+**505/505**, `flutter analyze lib test` sạch và Web Admin release build thành
+công. Hai Python regression sync liên quan đạt **2/2** trong
+`e2e_test/.venv`; toàn file `test_assertions.py` dừng tại async test đầu tiên
+sau 6 test sync nên không ghi nhận full Python suite pass. Không chạy ARTEMIS,
+ADB hoặc thiết bị trong follow-up này.
+
 ## 2. Kịch Bản & Mẫu Tham Khảo Chuẩn Appendix C (Reference Guide)
 
 > [!NOTE]

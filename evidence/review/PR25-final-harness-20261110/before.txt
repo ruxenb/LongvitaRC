@@ -1,0 +1,208 @@
+FFFFFFF...........F................................................      [100%]
+================================== FAILURES ===================================
+________________ test_signed_in_setup_rejects_another_account _________________
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x00000158E41D34A0>
+
+    def test_signed_in_setup_rejects_another_account(monkeypatch):
+        device = ProfileDevice(monkeypatch, "someone.else@example.com")
+        with pytest.raises(Exception) as caught:
+            harness.ensure_signed_in()
+        raises_setup_error(caught.value)
+        assert "someone.else" not in str(caught.value)
+>       device.assert_profile_opened()
+
+test_support\e2e_review\test_assertions.py:121:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <test_assertions.ProfileDevice object at 0x00000158E41D2C00>
+
+    def assert_profile_opened(self):
+>       assert ("shell", "input", "tap", "20", "40") in self.commands
+E       AssertionError: assert ('shell', 'input', 'tap', '20', '40') in [('shell', 'am', 'force-stop', 'vn.edu.fpt.longvita'), ('shell', 'am', 'start', '-n', 'vn.edu.fpt.longvita/.MainActivi...hell', 'am', 'force-stop', 'vn.edu.fpt.longvita'), ('shell', 'am', 'start', '-n', 'vn.edu.fpt.longvita/.MainActivity')]
+E        +  where [('shell', 'am', 'force-stop', 'vn.edu.fpt.longvita'), ('shell', 'am', 'start', '-n', 'vn.edu.fpt.longvita/.MainActivi...hell', 'am', 'force-stop', 'vn.edu.fpt.longvita'), ('shell', 'am', 'start', '-n', 'vn.edu.fpt.longvita/.MainActivity')] = <test_assertions.ProfileDevice object at 0x00000158E41D2C00>.commands
+
+test_support\e2e_review\test_assertions.py:100: AssertionError
+_____________ test_signed_in_setup_accepts_the_configured_account _____________
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x00000158E41D2A50>
+
+    def test_signed_in_setup_accepts_the_configured_account(monkeypatch):
+        device = ProfileDevice(monkeypatch, PLACEHOLDER_ACCOUNT)
+>       harness.ensure_signed_in()
+
+test_support\e2e_review\test_assertions.py:126:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+    def ensure_signed_in() -> None:
+        """Starts a case signed in as TEST_ACCOUNT, picked in Google's account picker.
+
+        A session of another account is a setup error; the message does not name it.
+        """
+        account = configured_account()
+        if _open_app() == SIGN_IN_BUTTON:
+            _tap(SIGN_IN_BUTTON)
+            _wait_for(account)
+            _tap(account)
+            _wait_for(*HOME_TITLES, timeout=60)
+        if _open_app() != "home":
+            raise SetupError("precondition: not signed in")
+        if not _home_shows_test_account():
+>           raise SetupError("precondition: signed in with an account other than ARTEMIS_TEST_ACCOUNT")
+E           conftest.SetupError: precondition: signed in with an account other than ARTEMIS_TEST_ACCOUNT
+
+e2e_test\conftest.py:279: SetupError
+____________ test_signed_in_setup_does_not_trust_identity_on_home _____________
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x00000158E41D26F0>
+
+    def test_signed_in_setup_does_not_trust_identity_on_home(monkeypatch):
+        device = ProfileDevice(monkeypatch, "someone.else@example.com", home_email=PLACEHOLDER_ACCOUNT)
+>       with pytest.raises(harness.SetupError):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE SetupError
+
+test_support\e2e_review\test_assertions.py:133: Failed
+___________ test_signed_in_setup_rejects_a_missing_profile_identity ___________
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x00000158E41D3EC0>
+
+    def test_signed_in_setup_rejects_a_missing_profile_identity(monkeypatch):
+        device = ProfileDevice(monkeypatch, "", profile_labels=["H\u1ed3 s\u01a1", "\u0110\u0103ng xu\u1ea5t"])
+        with pytest.raises(harness.SetupError):
+            harness.ensure_signed_in()
+>       device.assert_profile_opened()
+
+test_support\e2e_review\test_assertions.py:142:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <test_assertions.ProfileDevice object at 0x00000158E41D3380>
+
+    def assert_profile_opened(self):
+>       assert ("shell", "input", "tap", "20", "40") in self.commands
+E       AssertionError: assert ('shell', 'input', 'tap', '20', '40') in [('shell', 'am', 'force-stop', 'vn.edu.fpt.longvita'), ('shell', 'am', 'start', '-n', 'vn.edu.fpt.longvita/.MainActivi...hell', 'am', 'force-stop', 'vn.edu.fpt.longvita'), ('shell', 'am', 'start', '-n', 'vn.edu.fpt.longvita/.MainActivity')]
+E        +  where [('shell', 'am', 'force-stop', 'vn.edu.fpt.longvita'), ('shell', 'am', 'start', '-n', 'vn.edu.fpt.longvita/.MainActivi...hell', 'am', 'force-stop', 'vn.edu.fpt.longvita'), ('shell', 'am', 'start', '-n', 'vn.edu.fpt.longvita/.MainActivity')] = <test_assertions.ProfileDevice object at 0x00000158E41D3380>.commands
+
+test_support\e2e_review\test_assertions.py:100: AssertionError
+_____________ test_signed_in_setup_rejects_an_unavailable_profile _____________
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x00000158E420BD70>
+
+    def test_signed_in_setup_rejects_an_unavailable_profile(monkeypatch):
+        device = ProfileDevice(monkeypatch, PLACEHOLDER_ACCOUNT, profile_labels=ANR)
+        with pytest.raises(harness.SetupError):
+            harness.ensure_signed_in()
+>       device.assert_profile_opened()
+
+test_support\e2e_review\test_assertions.py:149:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <test_assertions.ProfileDevice object at 0x00000158E420AC00>
+
+    def assert_profile_opened(self):
+>       assert ("shell", "input", "tap", "20", "40") in self.commands
+E       AssertionError: assert ('shell', 'input', 'tap', '20', '40') in [('shell', 'am', 'force-stop', 'vn.edu.fpt.longvita'), ('shell', 'am', 'start', '-n', 'vn.edu.fpt.longvita/.MainActivi...hell', 'am', 'force-stop', 'vn.edu.fpt.longvita'), ('shell', 'am', 'start', '-n', 'vn.edu.fpt.longvita/.MainActivity')]
+E        +  where [('shell', 'am', 'force-stop', 'vn.edu.fpt.longvita'), ('shell', 'am', 'start', '-n', 'vn.edu.fpt.longvita/.MainActivi...hell', 'am', 'force-stop', 'vn.edu.fpt.longvita'), ('shell', 'am', 'start', '-n', 'vn.edu.fpt.longvita/.MainActivity')] = <test_assertions.ProfileDevice object at 0x00000158E420AC00>.commands
+
+test_support\e2e_review\test_assertions.py:100: AssertionError
+_________ test_signed_in_setup_accepts_the_profile_layout_email_break _________
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x00000158E4208DA0>
+
+    def test_signed_in_setup_accepts_the_profile_layout_email_break(monkeypatch):
+        device = ProfileDevice(monkeypatch, PLACEHOLDER_ACCOUNT.replace("@", "\u200b@"))
+>       harness.ensure_signed_in()
+
+test_support\e2e_review\test_assertions.py:154:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+    def ensure_signed_in() -> None:
+        """Starts a case signed in as TEST_ACCOUNT, picked in Google's account picker.
+
+        A session of another account is a setup error; the message does not name it.
+        """
+        account = configured_account()
+        if _open_app() == SIGN_IN_BUTTON:
+            _tap(SIGN_IN_BUTTON)
+            _wait_for(account)
+            _tap(account)
+            _wait_for(*HOME_TITLES, timeout=60)
+        if _open_app() != "home":
+            raise SetupError("precondition: not signed in")
+        if not _home_shows_test_account():
+>           raise SetupError("precondition: signed in with an account other than ARTEMIS_TEST_ACCOUNT")
+E           conftest.SetupError: precondition: signed in with an account other than ARTEMIS_TEST_ACCOUNT
+
+e2e_test\conftest.py:279: SetupError
+____________ test_signed_in_setup_requires_an_exact_profile_email _____________
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x00000158E420AED0>
+
+    def test_signed_in_setup_requires_an_exact_profile_email(monkeypatch):
+        device = ProfileDevice(monkeypatch, "not-" + PLACEHOLDER_ACCOUNT)
+        with pytest.raises(harness.SetupError):
+            harness.ensure_signed_in()
+>       device.assert_profile_opened()
+
+test_support\e2e_review\test_assertions.py:162:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <test_assertions.ProfileDevice object at 0x00000158E420B5C0>
+
+    def assert_profile_opened(self):
+>       assert ("shell", "input", "tap", "20", "40") in self.commands
+E       AssertionError: assert ('shell', 'input', 'tap', '20', '40') in [('shell', 'am', 'force-stop', 'vn.edu.fpt.longvita'), ('shell', 'am', 'start', '-n', 'vn.edu.fpt.longvita/.MainActivi...hell', 'am', 'force-stop', 'vn.edu.fpt.longvita'), ('shell', 'am', 'start', '-n', 'vn.edu.fpt.longvita/.MainActivity')]
+E        +  where [('shell', 'am', 'force-stop', 'vn.edu.fpt.longvita'), ('shell', 'am', 'start', '-n', 'vn.edu.fpt.longvita/.MainActivi...hell', 'am', 'force-stop', 'vn.edu.fpt.longvita'), ('shell', 'am', 'start', '-n', 'vn.edu.fpt.longvita/.MainActivity')] = <test_assertions.ProfileDevice object at 0x00000158E420B5C0>.commands
+
+test_support\e2e_review\test_assertions.py:100: AssertionError
+_ test_sign_out_accepts_launcher_or_sign_in[Pressed Back. Trang ch\u1ee7 Android (launcher) is visible.] _
+
+last = 'Pressed Back. Trang ch\u1ee7 Android (launcher) is visible.'
+
+    @pytest.mark.parametrize("last", [
+        "Press Android Back: Android launcher and app icons are visible.",
+        "Pressed Back. Trang ch\u1ee7 Android (launcher) is visible.",
+        "Press Android Back: \u0110\u0103ng nh\u1eadp b\u1eb1ng Google remains visible.",
+    ])
+    async def test_sign_out_accepts_launcher_or_sign_in(last):
+>       await auth_cases.test_tc11_sign_out_cannot_return_with_back(observe(
+            "Tap \u0110\u1ed3ng \xfd: \u0110\u0103ng nh\u1eadp b\u1eb1ng Google appears.", last,
+        ))
+
+test_support\e2e_review\test_assertions.py:249:
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+run_case = <function observe.<locals>.run at 0x00000158E42016C0>
+
+    @pytest.mark.signed_in
+    async def test_tc11_sign_out_cannot_return_with_back(run_case):
+        output = await run_case(
+            "Open the Longvita app; it opens signed in on the home screen. Open 'H\u1ed3 s\u01a1'. Tap '\u0110\u0103ng xu\u1ea5t'. In the "
+            "confirmation dialog tap '\u0110\u1ed3ng \xfd'. When the sign-in screen shows, press the "
+            "Android Back button once.",
+            "Whether the sign-in screen appeared after confirming, and what is on screen "
+            "after pressing Back: the launcher, the sign-in screen or the home screen.",
+        )
+
+        assert "\u0110\u0103ng nh\u1eadp b\u1eb1ng Google" in output.after("tap", "\u0110\u1ed3ng \xfd")
+        # Only the screen after Back counts. "Home screen" alone is ambiguous: it
+        # may be Android's launcher or the app's own dashboard.
+        after_back = output.after("back", whole_word=True)
+        assert after_back, "the agent did not report pressing Back"
+>       assert not APP_HOME.search(after_back), after_back
+E       AssertionError: Pressed Back. Trang ch\u1ee7 Android (launcher) is visible.
+E       assert not <re.Match object; span=(14, 23), match='Trang ch\u1ee7'>
+E        +  where <re.Match object; span=(14, 23), match='Trang ch\u1ee7'> = <built-in method search of re.Pattern object at 0x00000158E16591D0>('Pressed Back. Trang ch\u1ee7 Android (launcher) is visible.')
+E        +    where <built-in method search of re.Pattern object at 0x00000158E16591D0> = re.compile('Trang ch\u1ee7|Longvita Dashboard|ROLE: USER|H\xe0nh \u0111\u1ed9ng nhanh|T\u1ea1o th\u1ef1c \u0111\u01a1n|H\u1ed3 s\u01a1', re.IGNORECASE).search
+
+e2e_test\test_auth.py:72: AssertionError
+=========================== short test summary info ===========================
+FAILED e2e_test\test_assertions.py::test_signed_in_setup_rejects_another_account
+FAILED e2e_test\test_assertions.py::test_signed_in_setup_accepts_the_configured_account
+FAILED e2e_test\test_assertions.py::test_signed_in_setup_does_not_trust_identity_on_home
+FAILED e2e_test\test_assertions.py::test_signed_in_setup_rejects_a_missing_profile_identity
+FAILED e2e_test\test_assertions.py::test_signed_in_setup_rejects_an_unavailable_profile
+FAILED e2e_test\test_assertions.py::test_signed_in_setup_accepts_the_profile_layout_email_break
+FAILED e2e_test\test_assertions.py::test_signed_in_setup_requires_an_exact_profile_email
+FAILED e2e_test\test_assertions.py::test_sign_out_accepts_launcher_or_sign_in[Pressed Back. Trang ch\u1ee7 Android (launcher) is visible.]
+8 failed, 59 passed in 4.16s

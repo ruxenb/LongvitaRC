@@ -304,14 +304,12 @@ class DataService implements IDataService {
       }
       days.add(DailyMeal(dayIndex: day, dayName: names[day], meals: chosen));
     }
-    final protein = (weightKg * (age >= 65 ? 1.0 : 0.8))
-        .clamp(40.0, 95.0)
-        .toDouble();
+    final protein = calculateProteinTarget(weightKg, age);
     final calories = (weightKg * 28 * 0.9).clamp(1400.0, 2400.0).toDouble();
     return MealPlanModel(
       id: '',
       uid: uid,
-      title: 'Thực đơn 7 ngày ($age tuổi, ${weightKg.toStringAsFixed(1)} kg)',
+      title: 'Thực đơn 7 ngày (${weightKg.toStringAsFixed(1)} kg)',
       targetCalories: calories,
       targetProteinGrams: protein,
       days: days,

@@ -24,10 +24,10 @@ class AppNavigationBar extends StatelessWidget {
   /// Legacy English Figma labels for callers not yet migrated.
   /// New Vietnamese flows use [vietnameseDestinations].
   static const List<AppNavigationDestination> longvitaDestinations = [
-    AppNavigationDestination(icon: AppIcons.home, label: 'Home'),
-    AppNavigationDestination(icon: AppIcons.calendarToday, label: 'Plan'),
-    AppNavigationDestination(icon: AppIcons.spa, label: 'Nutrition'),
-    AppNavigationDestination(icon: AppIcons.accountCircle, label: 'Profile'),
+    AppNavigationDestination(icon: AppIcons.home, label: 'Trang chủ'),
+    AppNavigationDestination(icon: AppIcons.calendarToday, label: 'Thực đơn'),
+    AppNavigationDestination(icon: AppIcons.spa, label: 'Dinh dưỡng'),
+    AppNavigationDestination(icon: AppIcons.accountCircle, label: 'Hồ sơ'),
   ];
 
   /// Vietnamese labels agreed by the team on 09/11/2026. Flows opt in

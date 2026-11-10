@@ -9,7 +9,7 @@ run_case writes action-scoped replay evidence and fails on missing observations.
 async def test_tc02_create_seven_day_plan(run_case):
     """S01 -> S02 -> S03 -> S04, with user-entered preferences."""
     observation = await run_case(
-        "Open Longvita signed in on 'Longvita Dashboard'. "
+        "Open Longvita signed in on the Vietnamese home screen. "
         "Tap 'Tạo thực đơn'. On S02 enter age 67 and weight 60 kg, "
         "select 3 meals/day and 12-hour eating window. Tap 'Tiếp tục'. "
         "On S03 tap 'Tạo kế hoạch' once and wait until it finishes. "

@@ -135,7 +135,7 @@ class LongvitaApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Longvita — Longevity Nutrition',
+      title: 'Longvita — Dinh dưỡng trường thọ',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.lightTheme,
       home: const AuthGate(),
