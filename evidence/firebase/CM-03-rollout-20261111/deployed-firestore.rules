@@ -1,0 +1,245 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Deny all by default
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Helper functions
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isOwner(uid) {
+      return isAuthenticated() && request.auth.uid == uid;
+    }
+
+    function getUserData() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data;
+    }
+
+    function hasRole(role) {
+      return isAuthenticated() && getUserData().role == role;
+    }
+
+    function isStaffOrAdmin() {
+      return isAuthenticated() && (getUserData().role == 'staff' || getUserData().role == 'admin');
+    }
+
+    function isNonEmptyString(value) {
+      return value is string && value.size() > 0;
+    }
+
+    function isOptionalString(value) {
+      return value == null || value is string;
+    }
+
+    function isBoundedString(value, maxSize) {
+      return value is string && value.size() <= maxSize;
+    }
+
+    function isNonEmptyBoundedString(value, maxSize) {
+      return isNonEmptyString(value) && value.size() <= maxSize;
+    }
+
+    function isNonNegativeNumber(value) {
+      return value is number && value >= 0;
+    }
+
+    function changedKeys() {
+      return request.resource.data.diff(resource.data).affectedKeys();
+    }
+
+    // Data shapes mirror toMap() of the models in lib/models/
+    function isValidUser(data) {
+      return data.keys().hasOnly(['email', 'displayName', 'photoUrl', 'role', 'createdAt'])
+          && data.keys().hasAll(['email', 'displayName', 'role', 'createdAt'])
+          && isBoundedString(data.email, 320)
+          && isNonEmptyBoundedString(data.displayName, 120)
+          && (data.get('photoUrl', null) == null || isBoundedString(data.photoUrl, 2048))
+          && data.role in ['user', 'staff', 'admin']
+          && data.createdAt is string;
+    }
+
+    function isValidRecipe(data) {
+      return data.keys().hasOnly(['name', 'description', 'category', 'proteinGrams', 'calories',
+                                  'ingredients', 'instructions', 'imageUrl', 'sourceNote', 'isArchived'])
+          && data.keys().hasAll(['name', 'description', 'category', 'proteinGrams', 'calories',
+                                 'ingredients', 'instructions', 'sourceNote'])
+          && isNonEmptyBoundedString(data.name, 120)
+          && isBoundedString(data.description, 2000)
+          && isNonEmptyBoundedString(data.category, 60)
+          && isNonNegativeNumber(data.proteinGrams)
+          && isNonNegativeNumber(data.calories)
+          && data.ingredients is list && data.ingredients.size() <= 50
+          && data.instructions is list && data.instructions.size() <= 30
+          && (data.get('imageUrl', null) == null || isBoundedString(data.imageUrl, 2048))
+          && isBoundedString(data.sourceNote, 1000)
+          // Soft delete (archive). Absent means active, so older recipes stay valid.
+          && data.get('isArchived', false) is bool;
+    }
+
+    function isValidMealPlan(data) {
+      return data.keys().hasOnly(['uid', 'title', 'targetCalories', 'targetProteinGrams', 'status',
+                                  'reviewerReason', 'days', 'createdAt'])
+          && data.keys().hasAll(['uid', 'title', 'targetCalories', 'targetProteinGrams', 'status',
+                                 'days', 'createdAt'])
+          && data.uid is string
+          && isNonEmptyBoundedString(data.title, 120)
+          && isNonNegativeNumber(data.targetCalories)
+          && isNonNegativeNumber(data.targetProteinGrams)
+          && data.status in ['draft', 'submitted', 'approved', 'rejected']
+          && (data.get('reviewerReason', null) == null || isBoundedString(data.reviewerReason, 500))
+          // A weekly plan; DataService requires exactly 7 days before saving.
+          && data.days is list && data.days.size() <= 7
+          // Drafts may be partial; a plan sent for review (or reviewed) has all 7 days.
+          && (data.status == 'draft' || data.days.size() == 7)
+          && data.createdAt is string;
+    }
+
+    function isValidAnnouncement(data) {
+      return data.keys().hasOnly(['title', 'content', 'authorRole', 'createdAt'])
+          && data.keys().hasAll(['title', 'content', 'authorRole', 'createdAt'])
+          && isNonEmptyBoundedString(data.title, 120)
+          && isNonEmptyBoundedString(data.content, 2000)
+          && data.authorRole == getUserData().role
+          && data.createdAt is string;
+    }
+
+    // Collection: users/{uid}
+    match /users/{uid} {
+      // Appendix A: Self; admin. Staff read only their own profile (for the role gate).
+      allow read: if isOwner(uid) || hasRole('admin');
+
+      // On first sign in, user can create their profile with role = 'user'
+      allow create: if isOwner(uid)
+                    && request.resource.data.role == 'user'
+                    && isValidUser(request.resource.data);
+
+      // Owners edit their own display fields. Only an Admin changes roles, and never their own.
+      allow update: if isValidUser(request.resource.data)
+                    && ((isOwner(uid) && changedKeys().hasOnly(['displayName', 'photoUrl']))
+                        || (hasRole('admin') && !isOwner(uid) && changedKeys().hasOnly(['role'])));
+
+      // Appendix A: no client deletes a profile.
+      allow delete: if false;
+    }
+
+    // Collection: recipes/{id}
+    match /recipes/{id} {
+      // Anyone signed in can read longevity recipes; clients hide isArchived == true.
+      allow read: if isAuthenticated();
+
+      // Only staff/admin can create, update, or archive (isArchived) recipes
+      allow create, update: if isStaffOrAdmin() && isValidRecipe(request.resource.data);
+      // Archive instead of delete, so saved meal plans keep their recipes.
+      allow delete: if false;
+    }
+
+    // Collection: meal_plans/{id}
+    match /meal_plans/{id} {
+      // Owner or staff can read
+      allow read: if isAuthenticated() && (resource.data.uid == request.auth.uid || isStaffOrAdmin());
+
+      // User creates new plan with status = 'draft'
+      allow create: if isAuthenticated()
+                    && request.resource.data.uid == request.auth.uid
+                    && request.resource.data.status == 'draft'
+                    && request.resource.data.get('reviewerReason', null) == null
+                    && isValidMealPlan(request.resource.data);
+
+      // Owner: edit while 'draft' or change to 'submitted'; uid, createdAt and the review stay locked
+      function isOwnerDraftUpdate() {
+        return isOwner(resource.data.uid)
+            && resource.data.status == 'draft'
+            && request.resource.data.status in ['draft', 'submitted']
+            && changedKeys().hasOnly(['title', 'targetCalories', 'targetProteinGrams', 'status', 'days']);
+      }
+
+      // Staff/admin: 'submitted' -> 'approved' or 'rejected'; a rejection must carry a reason
+      function isStaffReview() {
+        return isStaffOrAdmin()
+            && resource.data.status == 'submitted'
+            && changedKeys().hasOnly(['status', 'reviewerReason'])
+            && (request.resource.data.status == 'approved'
+                || (request.resource.data.status == 'rejected'
+                    && isNonEmptyString(request.resource.data.get('reviewerReason', null))));
+      }
+
+      allow update: if isValidMealPlan(request.resource.data)
+                    && (isOwnerDraftUpdate() || isStaffReview());
+
+      allow delete: if isAuthenticated() && resource.data.uid == request.auth.uid && resource.data.status == 'draft';
+    }
+
+    // Collection group: shopping_lists/{uid}/plans/{planId}
+    // S4-5: Shopping items are owner-only, never shared with other accounts.
+    match /shopping_lists/{uid}/plans/{planId} {
+      allow read: if isOwner(uid);
+      allow create, update: if isOwner(uid)
+          && request.resource.data.keys().hasOnly(['uid', 'planId', 'updatedAt', 'items'])
+          && request.resource.data.keys().hasAll(['uid', 'planId', 'updatedAt', 'items'])
+          && request.resource.data.uid == uid
+          && request.resource.data.planId == planId
+          && request.resource.data.updatedAt is string
+          && request.resource.data.items is list
+          && request.resource.data.items.size() <= 500;
+      allow delete: if isOwner(uid);
+    }
+
+    // Subcollection: users/{uid}/report_exports/{exportId}
+    // NC-02: metadata of a PDF saved on the owner's device
+    // (docs/pdf-export-contract.md). Owner-only: staff/admin of another UID
+    // are denied, and the users/{uid} rules above do not cascade here.
+    function isValidReportExportShape(data, exportId) {
+      return data.keys().hasOnly(['exportId', 'planId', 'createdAt', 'fileName', 'sizeBytes', 'schemaVersion'])
+          && data.keys().hasAll(['exportId', 'planId', 'createdAt', 'fileName', 'sizeBytes', 'schemaVersion'])
+          && data.exportId == exportId
+          && exportId.matches('^pdf_[0-9]{8}T[0-9]{6}Z_[0-9a-f]{16}$')
+          && data.fileName == exportId + '.pdf'
+          && data.createdAt is string
+          && data.createdAt.matches('^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}([.][0-9]{1,6})?Z$')
+          && data.sizeBytes is int && data.sizeBytes > 0 && data.sizeBytes <= 10485760
+          && data.schemaVersion is int && data.schemaVersion == 1
+          && (data.planId == null
+              || (data.planId is string
+                  && data.planId.size() > 0
+                  && data.planId.size() <= 1500
+                  && !data.planId.matches('.*[/].*')));
+    }
+
+    // A saved plan must exist and belong to the owner. Checked on create only.
+    function referencesOwnedPlan(planId, uid) {
+      return planId == null
+          || get(/databases/$(database)/documents/meal_plans/$(planId)).data.uid == uid;
+    }
+
+    match /users/{uid}/report_exports/{exportId} {
+      allow read: if isOwner(uid);
+      allow create: if isOwner(uid)
+                    && isValidReportExportShape(request.resource.data, exportId)
+                    && referencesOwnedPlan(request.resource.data.planId, uid);
+      // Retry of the same export: only an identical payload, without reading
+      // the plan again, so history survives the plan being deleted.
+      allow update: if isOwner(uid)
+                    && isValidReportExportShape(request.resource.data, exportId)
+                    && request.resource.data == resource.data;
+      allow delete: if false;
+    }
+
+    // Collection: announcements/{id}
+    match /announcements/{id} {
+      // All authenticated users can read announcements
+      allow read: if isAuthenticated();
+
+      // Only staff and admin can publish announcements
+      allow create: if isStaffOrAdmin() && isValidAnnouncement(request.resource.data);
+      allow update: if isStaffOrAdmin()
+                    && isValidAnnouncement(request.resource.data)
+                    && changedKeys().hasOnly(['title', 'content']);
+      allow delete: if isStaffOrAdmin();
+    }
+  }
+}
