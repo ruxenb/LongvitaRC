@@ -3,8 +3,11 @@
 > **Final Assignment:** hệ thống gồm Flutter Mobile, Flutter Web Admin và
 > Firebase dùng chung. Phân công chính thức nằm tại
 > [`docs/tasks/final-task-assignment.md`](docs/tasks/final-task-assignment.md).
-> Web Admin đã tích hợp qua PR #25; Hosting production và bằng chứng
-> mở ẩn danh chưa hoàn tất nên README không công bố URL giả định.
+> Web Admin đã được deploy lên Firebase Hosting tại
+> **https://longvita-8da7e.web.app**. Ngày 10/11/2026, nhóm đã kiểm tra URL ở
+> cửa sổ ẩn danh, đăng nhập thành công bằng role `admin` và xác nhận role
+> `user` bị chặn đúng thiết kế. Bằng chứng TV-00:
+> [`evidence/web/TV-00-20261110/`](evidence/web/TV-00-20261110/README.md).
 
 > **Cập nhật 08/11/2026:** **Lab 3 chính là Assignment** đang triển khai, kế thừa thiết kế Lab 2. Giữ 112 task IDs/owners; các phần mobile/web/shared-core là cùng sản phẩm. Sáu dịch vụ Firebase đã có failure-case evidence ở các mức cloud/emulator khác nhau; không suy Storage Emulator thành production. ARTEMIS có một batch 7/7 pass và TC-11 chạy lại thành công, nhưng chưa đủ chiến dịch chính thức tối thiểu ba lượt/test.
 >
@@ -231,8 +234,10 @@ Các màn hình Web hiện có:
 
 ### Final Assignment deliverables
 
-- **Web Hosting URL:** chưa có bằng chứng production/incognito; chờ quyền deploy
-  TV-00.
+- **Web Hosting URL:** [https://longvita-8da7e.web.app](https://longvita-8da7e.web.app)
+  — đã kiểm tra HTTP 200, cửa sổ ẩn danh, đăng nhập `admin` và chặn `user` ngày
+  10/11/2026; xem [bằng chứng TV-00](evidence/web/TV-00-20261110/README.md).
+- **Repository:** [github.com/ruxenb/LongvitaRC](https://github.com/ruxenb/LongvitaRC).
 - **Cross-role flow:** đặc tả, sequence diagram và bảng đo ba lượt tại
   [`docs/cross-role-flow.md`](docs/cross-role-flow.md); số đo live còn để trống.
 - **Web Admin checklist:** [`docs/web-admin-checklist.md`](docs/web-admin-checklist.md),
@@ -253,23 +258,28 @@ Các màn hình Web hiện có:
 - Report PDF, slide PDF và video public vẫn là placeholder cho đến khi S8-5,
   S8-10 và S8-15 hoàn tất.
 
-AI đã được dùng có kiểm soát cho code review, viết/kiểm tra test và biên tập tài
-liệu. Output AI không được tính là bằng chứng runtime nếu không có log, ảnh hoặc
-run tương ứng. Chi tiết công cụ, findings, quyết định Accept/Modify/Reject và
-commit sửa nằm tại [`docs/code-review.md`](docs/code-review.md); disclosure cụ
-thể của từng thành viên chỉ được ghi khi có source/output hoặc worklog xác nhận.
+AI đã được dùng có kiểm soát; output AI không được tính là bằng chứng runtime
+nếu không có log, ảnh hoặc run tương ứng.
+
+| Công cụ AI | Phạm vi sử dụng | Bằng chứng / giới hạn |
+|:---|:---|:---|
+| **OpenAI Codex** | Phân tích repository, hỗ trợ viết test, review, tài liệu và chuẩn bị deploy | Mọi thay đổi phải qua diff, test và review; runtime claim cần bằng chứng riêng |
+| **CodeRabbit** | Review tự động trên pull request | Finding và quyết định Accept/Modify/Reject được tổng hợp tại [`docs/code-review.md`](docs/code-review.md) và `evidence/review/` |
+| **Google ARTEMIS + Gemini** | Điều khiển/đánh giá luồng E2E trên thiết bị | Chỉ công nhận kết quả có trace/run trong [`evidence/artemis/`](evidence/artemis/README.md); compile/collect test không đồng nghĩa E2E pass |
 
 ### Trạng thái phần việc Thắng VLQ — 10/11/2026
 
+- TV-00 đã deploy production tại https://longvita-8da7e.web.app; HTTP, cửa sổ
+  ẩn danh, Google OAuth và role gate `admin`/`user` đã được kiểm tra.
 - TV-01, TV-02, TV-03 và TV-03B đã có implementation, test/evidence local trên
-  PR #25; vẫn phải đóng mọi review thread mới trước khi merge.
+  PR #25, đã merge vào `main` tại `ea7b888`.
 - TV-04 đã hoàn thành phần đặc tả và quy trình đo; chưa có ba lượt live.
 - TV-04B đã có checklist/evidence index; chưa có ảnh production.
-- TV-05 đang làm: hướng dẫn Web, roles, deliverable map, AI disclosure và giới
-  hạn đã được cập nhật; URL, tài khoản demo cụ thể và video chỉ thêm sau khi xác
-  minh quyền truy cập.
-- Không tuyên bố Hosting, Google OAuth Web, DebugView Web hoặc Remote Config
-  Console đã pass nếu chưa có evidence live tương ứng.
+- TV-05 đã cập nhật URL, hướng dẫn chạy, roles, tài khoản demo, phiên bản, AI
+  disclosure và deliverable map. Task còn chờ nhóm cấp tài khoản `staff` riêng,
+  cùng link video, report PDF và slide PDF cuối trước khi đánh dấu hoàn thành.
+- Không tuyên bố DebugView Web, Remote Config Console hoặc deliverable cuối đã
+  pass nếu chưa có evidence live tương ứng.
 
 ---
 
@@ -308,12 +318,15 @@ Lưu ý: chỉnh sửa trong Firebase Console dùng quyền quản trị project
 
 ### Tài khoản demo theo role
 
-Bốn tài khoản thành viên đều là `admin`. Khi Mobile chỉ nhận role `user` (task HD-03B), các tài khoản này sẽ bị Mobile từ chối, nên demo cần:
+Web dùng Google OAuth nên repository **không lưu mật khẩu**. Chủ tài khoản tự
+đăng nhập khi demo; không chia sẻ mật khẩu, token hoặc UID qua Git.
 
-| Role | Tài khoản | Ghi chú |
+| Role | Tài khoản đã kiểm tra | Client / kết quả ngày 10/11/2026 |
 |:---|:---|:---|
-| `user` | Một tài khoản Google riêng | Đăng nhập Mobile lần đầu là có `role = 'user'`. |
-| `staff` | Một tài khoản Google riêng | Đăng nhập Mobile một lần để có hồ sơ, rồi admin đổi role thành `staff`. |
-| `admin` | Tài khoản của một thành viên | Dùng cho Web Admin. |
+| `user` | `phamvanminh150204@gmail.com` | Web xác thực Google thành công nhưng hiển thị “Tài khoản không có quyền”, đúng role gate. |
+| `staff` | **Chưa được nhóm cung cấp** | Cần một Google account riêng đăng nhập lần đầu, sau đó admin đổi `users/{uid}.role` thành `staff`. |
+| `admin` | `thangvlqse184739@fpt.edu.vn` | Web đăng nhập thành công và mở Dashboard production. |
 
-Email cụ thể của tài khoản demo sẽ được ghi ở mục tài khoản demo khi hoàn thiện README (TV-05).
+Các admin bổ sung đã xác minh trong Firestore: `minhpvse183365@fpt.edu.vn` và
+`duongvuthaian@gmail.com`. Tài khoản Hoàng chưa xuất hiện trong Firebase Auth ở
+lần kiểm tra này, vì vậy README không tuyên bố đã cấp role cho tài khoản đó.

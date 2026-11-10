@@ -1,8 +1,21 @@
 # Worklog — Thắng VLQ
 
+## 10/11/2026 — TV-00 production và TV-05 README
+
+- TV-00: deploy Flutter Web từ `web/` lên Firebase Hosting project
+  `longvita-8da7e`; production URL `https://longvita-8da7e.web.app` trả HTTP
+  200 và mở được trong Cốc Cốc ẩn danh.
+- Kiểm tra role gate production: `admin` vào Dashboard; `user` xác thực Google
+  nhưng bị chặn đúng màn hình “Tài khoản không có quyền”. Deploy chỉ gồm
+  Hosting, không deploy Rules và không ghi dữ liệu production.
+- TV-05: cập nhật README với URL, hướng dẫn Mobile/Web/emulator, roles, tài khoản
+  demo đã xác minh, pinned versions, AI disclosure và deliverable map.
+- Chưa đóng TV-05: còn thiếu tài khoản `staff` riêng, video public/unlisted,
+  report PDF và slide PDF cuối. Ảnh TV-00 cần làm sạch PII trước khi commit.
+
 > **Vai trò:** Technical Architect & Co-Lead  
-> **Ngày cập nhật:** 08/11/2026
-> **Nhánh kiểm tra:** `main`  
+> **Ngày cập nhật:** 10/11/2026
+> **Nhánh kiểm tra:** `codex/tv00-hosting-evidence` (đồng bộ `main` tại `0cfe905`)  
 > **Mục đích:** Ghi bằng chứng hoàn thành, phần còn thiếu, lỗi đã phát hiện và điều kiện tiếp tục cho các task do Thắng phụ trách.
 
 ## 1. Tóm tắt trạng thái
