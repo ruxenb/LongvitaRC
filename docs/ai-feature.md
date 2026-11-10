@@ -174,3 +174,20 @@ Bộ unit test tại [`mobile/test/ai/gemini_ai_service_test.dart`](../mobile/te
 - [x] Chuyển đổi an toàn sang Fallback khi thiếu API key.
 - [x] Kiểm tra bảo mật Zero PII: Không có email, họ tên, user_id trong request.
 - [x] Khả năng copyWith và chỉnh sửa bởi người dùng (`isEditedByUser: true`).
+
+---
+
+## 6. Giao Diện Người Dùng & Thao Tác Trực Quan (UI Implementation)
+
+Tuân thủ nghiêm ngặt quy định tại Mục 8 của đề bài Final Assignment:
+> *"AI-generated output must be clearly labeled and editable by the user before saving."*
+
+1. **Điểm chạm trên UI (Entry Points):**
+   - **Màn hình Chi tiết món ăn (S05):** Nút *"Gợi ý món mới từ Gemini AI"* ([`recipe_flow_screens.dart`](../mobile/lib/screens/recipe_flow_screens.dart)).
+   - **Màn hình Chọn món thay thế (S06):** Thẻ nổi bật *"Gợi ý món thay thế bằng Gemini AI"* giúp người dùng đổi món tức thì kể cả khi danh mục món tĩnh trong Firestore không có lựa chọn phù hợp.
+2. **Giao diện Bottom Sheet ([`AiMealRecommendationSheet`](../mobile/lib/widgets/ai_meal_recommendation_sheet.dart)):**
+   - **Gắn nhãn rõ ràng (Explicit AI Label):** Huy hiệu màu xanh nổi bật: `✨ AI-Generated (Google Gemini 2.0 Flash)`. Nếu rơi vào chế độ Fallback, huy hiệu tự động đổi thành `🛡️ An toàn: Fallback (Thực đơn chuẩn TS. Valter Longo)`.
+   - **Cho phép chỉnh sửa trước khi lưu (Editable by User):** Các ô nhập liệu *Tên món ăn*, *Lượng calo (kcal)*, *Protein (g)* đều ở dạng `TextFormField` cho phép người dùng tùy ý điều chỉnh theo khẩu vị và thể trạng thực tế.
+   - **Ghi nhận sự kiện Analytics:** Khi người dùng bấm *"Áp dụng món ăn này"*, hệ thống phát hiện xem người dùng có chỉnh sửa hay không và tự động log sự kiện `ai_result_accepted (recommendation_id, was_edited: true/false)`.
+3. **Bộ kiểm thử Widget tự động:**
+   - [`mobile/test/ai/ai_meal_recommendation_sheet_test.dart`](../mobile/test/ai/ai_meal_recommendation_sheet_test.dart): Kiểm tra nhãn AI, khả năng sửa tên món, log `wasEdited=true` và hiển thị Fallback.

@@ -1,4 +1,6 @@
 import 'dart:convert';
+import 'package:longvita_core/models/ingredient_model.dart';
+import 'package:longvita_core/models/recipe_model.dart';
 
 /// Level 2 Structured Output Model for Gemini AI Longevity Nutrition Recommendation.
 /// Corresponds to PRM393 Final Assignment Section 8 requirements.
@@ -171,6 +173,36 @@ class AiMealRecommendation {
       isEditedByUser: isEditedByUser ?? this.isEditedByUser,
       confidenceScore: confidenceScore ?? this.confidenceScore,
       sourceNote: sourceNote ?? this.sourceNote,
+    );
+  }
+
+  /// Converts this AI recommendation into a domain [RecipeModel]
+  /// for seamless replacement or addition into weekly meal plans.
+  RecipeModel toRecipeModel({String category = 'dau'}) {
+    return RecipeModel(
+      id: id,
+      name: mealName,
+      description: description.isNotEmpty ? description : longevityReason,
+      category: category,
+      proteinGrams: proteinGrams,
+      calories: calories.toDouble(),
+      ingredients: ingredients
+          .map((ing) => IngredientModel(
+                name: ing,
+                quantity: 1,
+                unit: 'phần',
+                isPurchased: false,
+              ))
+          .toList(),
+      instructions: [
+        longevityReason,
+        if (longevityNutrients.isNotEmpty)
+          'Dưỡng chất trường thọ: ${longevityNutrients.join(", ")}',
+        'Thời gian chuẩn bị: $preparationMinutes phút',
+      ],
+      sourceNote: isAiGenerated
+          ? (sourceNote != null ? '[ai] $sourceNote' : '[ai] Google Gemini 2.0 Flash')
+          : (sourceNote ?? '[fallback] Valter Longo Diet Standard'),
     );
   }
 }
