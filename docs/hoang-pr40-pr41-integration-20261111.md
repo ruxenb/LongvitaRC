@@ -46,3 +46,10 @@ Hai log `evidence/artemis/full-pass-batch1.txt` và `full-pass-batch2.txt` chứ
 - Kiểm tra lại các thay đổi mới ngay trước khi merge PR, vì main và các PR vẫn có thể cập nhật.
 
 **Kết luận:** Không phát hiện merge conflict hay lỗi Flutter unit/widget test khi ghép PR #40 với PR #41 ở snapshot được nêu. **Chưa đủ cơ sở xác nhận toàn bộ task Hoàng hoặc Final Assignment 100%.**
+
+
+## Cập nhật phát hiện conflict mới 11/11
+
+Kết quả không conflict ở phần trên đúng tại snapshot cũ của PR #40. Sau commit mới cập nhật kịch bản ARTEMIS trên nhánh Hoàng, kiểm tra ghép PR #40 và #41 phát hiện **hai xung đột thực** ở e2e_test/test_detail.py và e2e_test/test_flows.py. Main gốc vẫn sạch. Đây là conflict giữa hai PR nếu ghép mà không xử lý.
+
+Đã giải quyết ở nhánh audit/resolve-pr40-pr41-20261111, commit 1df3e0d, trên worktree riêng, Mobile 485/485 + Core 20/20 + Web 69/69 = **574/574 tests đạt, Analyze 0 vấn đề**. Xem docs/hoang-pr40-pr41-conflict-resolution-20261111.md. Không merge nhánh audit trực tiếp thay cho review và nghiệm thu của cả hai PR.

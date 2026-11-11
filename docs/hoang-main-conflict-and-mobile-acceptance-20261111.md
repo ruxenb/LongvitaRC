@@ -105,3 +105,10 @@ Không sửa production Firestore, không đổi role tài khoản, không tạo
 - ADB Samsung SM-A155F Android 16 ở trạng thái device; cài đặt bằng install -r, không xóa dữ liệu, trả PHONE_INSTALL_EXIT=0 và app có PID sau khởi chạy.
 - Log build ở D:/PRM393/hoang_s09_apk_build_20261111.log. Đây là bằng chứng build/cài và khởi chạy, không phải ảnh nghiệm thu riêng S09, do điện thoại tự khóa trong đợt thao tác.
 - Code S09 mới có test riêng đạt và Flutter toàn bộ 484/484 đạt. ARTEMIS, ba lần cross-role Firebase thật, và đối chiếu ảnh Figma toàn bộ vẫn chưa có đủ bằng chứng để nhận 100%.
+
+
+## Cập nhật phát hiện conflict mới 11/11
+
+Kết quả không conflict ở phần trên đúng tại snapshot cũ của PR #40. Sau commit mới cập nhật kịch bản ARTEMIS trên nhánh Hoàng, kiểm tra ghép PR #40 và #41 phát hiện **hai xung đột thực** ở e2e_test/test_detail.py và e2e_test/test_flows.py. Main gốc vẫn sạch. Đây là conflict giữa hai PR nếu ghép mà không xử lý.
+
+Đã giải quyết ở nhánh audit/resolve-pr40-pr41-20261111, commit 1df3e0d, trên worktree riêng, Mobile 485/485 + Core 20/20 + Web 69/69 = **574/574 tests đạt, Analyze 0 vấn đề**. Xem docs/hoang-pr40-pr41-conflict-resolution-20261111.md. Không merge nhánh audit trực tiếp thay cho review và nghiệm thu của cả hai PR.
