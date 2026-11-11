@@ -1,0 +1,16 @@
+{
+  "files": [
+    {
+      "file": "deployed-firestore.rules",
+      "sha256": "66eb848da878959d106db3e4f4f1da1a557231f0a84d0618ea88b4a00da8dcb3"
+    },
+    {
+      "file": "staff-dashboard-after.png",
+      "sha256": "70b5f57e1438c8802afb0571c855c22804ef63623c48a859904d31bdc2369f95"
+    },
+    {
+      "file": "verification.json",
+      "sha256": "becc81787b7ce219f36454268a1a63de4d9b3f7758a298a7020b4b6211ef7b68"
+    }
+  ]
+}

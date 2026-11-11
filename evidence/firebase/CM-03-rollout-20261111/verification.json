@@ -1,0 +1,61 @@
+{
+  "project": "longvita-8da7e",
+  "database": "(default)",
+  "sourceCommit": "aaae57d0a11a4e7ad9219a7ebc4192f73855a432",
+  "sourceBaseline": "a4eaa2767ecb810730b572c083a47ad565179ed1",
+  "rulesGitBlob": "2c382be45b9ed55e0df40f6d01ba1b07230d00c1",
+  "deployment": {
+    "tool": "Firebase CLI",
+    "scope": [
+      "firestore:rules"
+    ],
+    "exitCode": 0,
+    "rulesetName": "projects/longvita-8da7e/rulesets/7eb64fde-6ba7-461f-81c2-707a9ae2eb10",
+    "releaseUpdateTimeUtc": "2026-11-10T17:02:54.186917Z",
+    "releaseUpdateTimeVietnam": "2026-11-11T00:02:54+07:00",
+    "beforeRulesetName": "projects/longvita-8da7e/rulesets/d808e252-7484-459b-b504-81ff052f64e9",
+    "deployedSourceSha256": "66eb848da878959d106db3e4f4f1da1a557231f0a84d0618ea88b4a00da8dcb3",
+    "targetSourceSha256": "66eb848da878959d106db3e4f4f1da1a557231f0a84d0618ea88b4a00da8dcb3",
+    "sourceExactMatch": true
+  },
+  "roleInventory": {
+    "counts": {
+      "admin": 3,
+      "user": 1,
+      "staff": 1
+    },
+    "unchangedByDeployment": true
+  },
+  "postDeploymentSmoke": {
+    "client": "Hosted Flutter Web Admin",
+    "url": "https://longvita-8da7e.web.app/",
+    "role": "staff",
+    "identityConfirmedInUi": true,
+    "dashboardCounts": {
+      "activeRecipes": 2,
+      "submittedPlans": 0,
+      "approvedPlans": 0
+    },
+    "recipesVisible": 2,
+    "reviewQueue": "empty without permission error"
+  },
+  "scope": {
+    "applicationDocumentWrites": 0,
+    "roleWrites": 0,
+    "hostingDeployed": false,
+    "storageDeployed": false,
+    "indexesDeployed": false
+  },
+  "testEvidence": {
+    "firestoreEmulatorPassed": 103,
+    "testRun": "Existing run on unchanged rules source; not rerun for deployment or report",
+    "log": "../../web/CM-07-20261110/rules.txt",
+    "productionNegativeOrWriteMatrixRun": false
+  },
+  "provenance": "Selected non-identifying fields from local CLI deployment/readback audit; no CLI credential or actor document exported. Source was re-read from active Firebase Rules release after deployment.",
+  "limits": [
+    "Client smoke covers staff reads; the full allow/deny matrix ran on Emulator.",
+    "No assertion of Hosting source commit or CM-07 Hosting deployment.",
+    "Rollback snapshot remains private; no rollback was needed."
+  ]
+}
