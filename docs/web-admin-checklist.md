@@ -3,9 +3,10 @@
 > **Cập nhật:** 10/11/2026
 > **Owner thực thi:** Thắng VLQ
 > **Người tổng duyệt test report:** Thái An
-> **Trạng thái:** đã có Hosting, role gate và sáu ảnh production trên trình
-> duyệt điện thoại. Ảnh phát hiện Recipes chưa đạt mobile-width; các hành động
-> ghi dữ liệu, Console evidence và desktop viewport chuẩn vẫn còn thiếu.
+> **Trạng thái:** đã có Hosting và bộ ảnh production trên trình duyệt điện thoại
+> cho sign-in/OAuth, role-denied, Dashboard, Recipes/search/create/edit UI và
+> Review Queue empty. Ảnh phát hiện Recipes chưa đạt mobile-width; thao tác ghi
+> dữ liệu thành công, Console evidence và desktop viewport chuẩn vẫn còn thiếu.
 
 ## 1. Quy tắc evidence
 
@@ -22,12 +23,12 @@
 
 | ID | Màn hình/luồng | Ca cần chứng minh | Trạng thái hiện tại | Evidence cần bổ sung |
 |---|---|---|---|---|
-| WEB-01 | Sign-in | loading và popup Google | Pass một phần trên mobile production; có popup-blocked/cancel recovery | Cần thêm popup thành công đã che PII |
+| WEB-01 | Sign-in | loading và popup Google | Pass production trên mobile cho việc mở OAuth: có loading, account chooser và cancel recovery; ảnh chooser chứa PII được owner cho phép lưu | Cần chuỗi evidence login mới hoàn chỉnh; che PII trước khi dùng công khai |
 | WEB-02 | Role gate | `staff/admin` được vào | Admin pass production; staff chưa có tài khoản demo | Bổ sung staff khi nhóm cấp tài khoản |
-| WEB-03 | Role gate | `user` bị từ chối rõ ràng | Có code/test local | ảnh tài khoản sai role |
+| WEB-03 | Role gate | `user` bị từ chối rõ ràng | Pass production trên mobile: có màn hình từ chối, ảnh không lộ email | Kiểm tra lại sau deploy kế tiếp |
 | WEB-04 | Recipes | loading | Có widget test | ảnh spinner/skeleton có kiểm soát |
 | WEB-05 | Recipes | empty + CTA | Có widget state | ảnh collection/query rỗng an toàn |
-| WEB-06 | Recipes | data/search/create/edit | Có test và local verification | ảnh hành động chính |
+| WEB-06 | Recipes | data/search/create/edit | Pass một phần production: có data, search result và form create/edit; chưa chứng minh Save thành công | ảnh kết quả ghi thành công |
 | WEB-07 | Recipes | archive/restore + lỗi ghi | Có code/test | ảnh success và error snackbar |
 | WEB-08 | Review Queue | loading/empty | Empty pass production trên mobile | Còn thiếu loading live |
 | WEB-09 | Review Queue | approve | Có test local | ảnh item + kết quả live |

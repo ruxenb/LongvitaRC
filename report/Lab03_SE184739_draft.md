@@ -65,18 +65,26 @@ The production Web Admin is hosted at
 https://longvita-8da7e.web.app. Google OAuth allows `staff` and `admin` while a
 normal `user` receives a clear access-denied screen.
 
-Available screens include:
+The production screenshots supplied on 11/11/2026 confirm these deployed
+screens and states:
 
 - Dashboard with active recipes, submitted plans and approved plans;
-- recipe search/create/edit/archive management;
-- review queue with approve/reject behavior;
-- announcement publication to the Mobile inbox.
+- recipe data/search plus create and edit forms;
+- review queue empty state;
+- role-gated sign-in, including a clear denied state for a non-staff account.
 
-Production screenshots demonstrate sign-in, role gating, Dashboard data,
-recipe data and the empty review queue. Mobile-browser evidence also found a
-responsive defect: the Recipes heading wraps excessively and the table is
-clipped at narrow width. This is reported as a failed finding rather than a
-false responsive pass. Evidence:
+Announcement publication to the Mobile inbox exists in the current source and
+passes local tests, but it is not claimed as deployed production functionality
+until a production screenshot and Mobile-inbox result are recorded.
+
+Production mobile-browser screenshots demonstrate sign-in/OAuth flow, role
+denial, Dashboard data, recipe data/search, create/edit forms and the empty
+review queue. They do not prove successful recipe writes, archive/restore,
+approve/reject, announcement deployment or a standard desktop viewport.
+Mobile-browser evidence also found a responsive defect: the Recipes heading
+wraps excessively and the table is clipped at narrow width. The CSS viewport
+was not recorded, so this is a mobile-width observation rather than a pass for
+the required `412 × 915` case. Evidence and per-image limitations:
 [`evidence/web/TV-04B-20261110/`](../evidence/web/TV-04B-20261110/README.md).
 
 ## 6. Testing and AI-assisted review
@@ -104,18 +112,23 @@ Known limitations at this draft checkpoint:
 
 - ARTEMIS does not yet have a final leader-approved three-run report for every
   required case.
-- Web Recipes needs a narrow-viewport responsive fix and post-fix evidence.
+- Web Recipes has a source-level narrow-viewport fix but still needs a
+  production deploy/retest and post-fix evidence at a recorded CSS viewport.
 - Cross-role approve/reject measurements are not yet recorded for three live
   runs.
 - Storage production upload is not claimed under the current Spark constraint.
 
 ## 8. Security and release audit
 
-Leader Thái An approved feature freeze and tag `v1.0-rc` at `aeae4c3`.
+Leader Thái An approved the code baseline `a4eaa27`. Tag `v1.0-rc` points to
+`aeae4c3`, the following documentation-only decision commit; these two SHAs are
+recorded separately rather than treating the tag commit as the approved code
+baseline.
 Gitleaks 8.30.1 found expected Firebase client configuration plus four
 Firebase Storage download-token occurrences in raw ARTEMIS evidence. The
-current-tree values were redacted; their historical tokens must still be
-revoked before S9-1 can close. The audit is recorded
+current-tree values were redacted. Those URLs target the local Storage Emulator,
+so the retained emulator dataset must be handled separately from a production
+download-URL audit. The audit is recorded
 in [`evidence/audit/S9-1-S9-4-20261110/`](../evidence/audit/S9-1-S9-4-20261110/README.md).
 
 ## 9. Lessons learned
@@ -136,5 +149,5 @@ in [`evidence/audit/S9-1-S9-4-20261110/`](../evidence/audit/S9-1-S9-4-20261110/R
 - [ ] Hoàng: final three-flow subsection and selected native screenshots.
 - [ ] Thắng: three live cross-role measurements and responsive post-fix image.
 - [ ] Group: final demo video link, final appendix references and leader signoff.
-- [ ] Security: revoke the historical Storage download tokens, confirm API-key
-  restrictions and repeat the final Gitleaks scan.
+- [ ] Security: confirm the emulator dataset disposition, audit production
+  download URLs, confirm API-key restrictions and repeat the final Gitleaks scan.

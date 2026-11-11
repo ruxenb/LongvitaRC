@@ -22,10 +22,12 @@ Current-tree classification:
   `mobile/lib/firebase_options.dart` and `web/lib/firebase_options.dart`.
   These are client configuration values, not service-account private keys, but
   they still require Firebase/Google API restriction review before S9-1 closes.
-- Three affected lines containing four Firebase Storage download-token
+- Three affected lines containing four Firebase Storage download-token-shaped
   occurrences in `evidence/artemis/raw/runs.jsonl` were sanitized to
-  `token=<redacted>`. The corresponding historical tokens still require
-  revoke/rotation in Firebase before S9-1 closes.
+  `token=<redacted>`. The recorded URLs use `10.0.2.2:9199`, which identifies
+  the local Storage Emulator rather than production Firebase Storage. If the
+  emulator dataset was retained, remove or reset that local dataset. Audit
+  production download URLs separately before requiring production revocation.
 - One false positive in
   `evidence/review/PR25-final-harness-20261110/verification.json` line 16: the
   value is a source verification hash keyed by a test-file path, not a secret.
@@ -35,10 +37,11 @@ pre-monorepo `android/app/google-services.json`. No service-account JSON,
 password or keystore finding was identified by this scan. This statement does
 not waive manual review or Google Console restrictions.
 
-**Status:** S9-1 remains **In progress** until the historical download tokens
-are revoked and the client-key restrictions are confirmed. The current tree no
-longer contains the raw download-token values; its remaining four findings are
-the three client configuration keys and the documented hash false positive.
+**Status:** S9-1 remains **In progress** until the emulator dataset disposition,
+production download-URL audit and client-key restrictions are confirmed. The
+current tree no longer contains the raw token-shaped values; its remaining four
+findings are the three client configuration keys and the documented hash false
+positive.
 
 ## S9-2 — Firebase project identity
 

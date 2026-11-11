@@ -282,16 +282,12 @@ nếu không có log, ảnh hoặc run tương ứng.
   ẩn danh, Google OAuth và role gate `admin`/`user` đã được kiểm tra.
 - TV-01, TV-02, TV-03 và TV-03B đã có implementation, test/evidence local trên
   PR #25, đã merge vào `main` tại `ea7b888`.
-- TV-04 đã hoàn thành phần đặc tả và quy trình đo; chưa có ba lượt live.
-- TV-04B đã có ảnh production trên desktop/mobile browser và checklist; vẫn
-  thiếu hành động ghi dữ liệu, staff, Console evidence và ảnh sau sửa responsive.
 - TV-04 đã hoàn thành phần đặc tả và quy trình đo; Hosting đã hoạt động nhưng
   chưa có ba lượt cross-role live hợp lệ.
-- TV-04B đã có sáu ảnh production trên trình duyệt điện thoại: Sign-in, OAuth
-  loading/cancel, Review Queue empty, Recipes data và Dashboard data. Evidence
-  hiện chỉ đạt một phần; ảnh Recipes phát hiện lỗi responsive WEB-18 và bộ ảnh
-  vẫn thiếu desktop viewport chuẩn, CRUD/review live, Analytics DebugView và
-  Remote Config live.
+- TV-04B có bộ ảnh production trên trình duyệt điện thoại: Sign-in/OAuth,
+  role-denied, Dashboard data, Recipes data/search/create/edit UI và Review
+  Queue empty. Ảnh chưa chứng minh thao tác ghi dữ liệu thành công, staff,
+  Console, announcement, approve/reject hay desktop viewport chuẩn.
 - Source WEB-18 đã được sửa ngày 11/11 bằng compact recipe cards dưới 720 px;
   analyzer sạch, 27/27 test trực tiếp và 69/69 toàn package Web pass; release
   build thành công. Chưa ghi production pass cho tới khi deploy và chụp lại
