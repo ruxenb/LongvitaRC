@@ -205,7 +205,7 @@ class _AiMealRecommendationSheetState extends State<AiMealRecommendationSheet> {
                   width: 44,
                   height: 5,
                   decoration: BoxDecoration(
-                    color: AppColors.borderControl.withOpacity(0.4),
+                    color: AppColors.borderControl.withValues(alpha: 0.4),
                     borderRadius: BorderRadius.circular(10),
                   ),
                 ),
@@ -531,7 +531,7 @@ class _AiMealRecommendationSheetState extends State<AiMealRecommendationSheet> {
           decoration: BoxDecoration(
             color: AppColors.bgSurface,
             borderRadius: BorderRadius.circular(10),
-            border: Border.all(color: AppColors.borderControl.withOpacity(0.5)),
+            border: Border.all(color: AppColors.borderControl.withValues(alpha: 0.5)),
           ),
           child: Text(
             rec.longevityReason,

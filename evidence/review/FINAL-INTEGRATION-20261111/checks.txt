@@ -1,0 +1,13 @@
+Baseline 17cbbd1 + integration fixes in this PR.
+Workspace boundary validation: PASS
+flutter pub get --enforce-lockfile: PASS
+Core analyzer: No issues found
+Mobile analyzer: No issues found
+Web analyzer: No issues found
+Core: 20/20 passed
+Mobile: 483/483 passed
+Web: 69/69 passed
+Total Flutter: 572/572 passed
+APK debug: Built (134.0s)
+Web release: Built (61.2s); Wasm dry run succeeded
+No live AI key/network call, deployment, production document/role write, or ARTEMIS live run.
