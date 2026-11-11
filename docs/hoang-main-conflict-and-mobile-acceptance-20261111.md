@@ -65,8 +65,18 @@ Không sửa production Firestore, không đổi role tài khoản, không tạo
 - Shared Core: Analyze **0 lỗi**, **20/20 bài test đạt**.
 - Web Admin: Analyze **0 lỗi**, **69/69 bài test đạt**.
 - Tất cả kết quả trên chạy ở monorepo đã đồng bộ `origin/main` commit `53d7fc5` vào nhánh Hoàng; đây là unit/widget tests, không phải ba lần ARTEMIS hoặc kiểm thử production liên vai trò.
-- Android debug APK đã build và cài đè trên Samsung A15 **thành công** (`APK_BUILD=0`, `APK_INSTALL=0`), không xóa dữ liệu ứng dụng; sau khi mở app có PID. Ảnh thật xác nhận `Vai trò: Người dùng`, `Khu vực minh họa Firebase`, `Cấu hình từ xa`, `Làm mới cấu hình`.
+- Android debug APK đã build và cài đè trên Samsung A15 **thành công** (`APK_BUILD=0`, `APK_INSTALL=0`), không xóa dữ liệu ứng dụng; sau khi mở app có PID. Ảnh thật xác nhận `Vai trò: Người dùng`, `Tiện ích Firebase`, `Cấu hình từ xa`, `Làm mới cấu hình`.
 - Ảnh có thông tin tài khoản chỉ lưu cục bộ dưới `D:\PRM393\Longvita_phone_evidence\20261111_merged_main\profile_final.png` và `profile_config_final.png`; không thêm ảnh nhạy cảm vào Git.
 - Nhánh `main` cục bộ tại `D:\PRM393\LongvitaRC` đã được cập nhật bằng fast-forward rồi checkout thành công, Git trả `main...origin/main`. Các thư mục untracked của đồng đội được giữ nguyên.
 - Android build còn cảnh báo về plugin Kotlin/SDK XML tương lai, nhưng **build hiện tại thành công**; cảnh báo này không phải merge conflict.
 - ARTEMIS daemon/API key/test account chưa sẵn có, live cross-role 3 lượt vẫn chưa chạy, dataset recipe chưa phê duyệt đủ. Vì vậy trạng thái toàn bộ 26 task và HD01–08 vẫn phải đánh giá theo bằng chứng, không tuyên bố đạt 100%.
+
+## 8. Xác minh sạch sau clean build, A15 và kiểm tra hai PR (11/11/2026)
+
+- Sau khi thay tiêu đề Hồ sơ thành **Tiện ích Firebase**, chạy Flutter clean, pub get theo lockfile và build lại từ đầu: **thành công**.
+- Flutter Analyze: **No issues found**. Flutter Test chạy serial: **483/483 đạt**. Log ở D:\PRM393\hoang_final_a15_analyze.log, hoang_final_a15_tests.log và hoang_final_a15_build.log.
+- Android debug APK: **BUILD_EXIT=0**. Cài lại trên Samsung A15 (SM-A155F/Android 16) bằng adb install -r: **INSTALL_EXIT=0**; PID sau mở: **16207**. Không xóa dữ liệu ứng dụng.
+- Ảnh thực tế sau khi app tải hoàn tất xác nhận **Tiện ích Firebase** và **Vai trò: Người dùng**. Ảnh gốc có PII chỉ ở D:\PRM393\Longvita_phone_evidence\20261111_clean_rebuild\profile_heading_verified.png; ảnh đã cắt khu vực danh tính dùng trong Git là evidence/hoang/android-a15-20261111/profile-vietnamese-no-pii.png.
+- Logcat lần smoke gần nhất: **ERROR_MATCHES=0** với ba mẫu FATAL EXCEPTION, E/flutter, FlutterError trong 1.000 dòng cuối. Không suy rộng thành đảm bảo không crash.
+- Kiểm tra ghép PR #41 vào nhánh Hoàng bằng git merge-tree: **exit=0**. Main cục bộ tại D:\PRM393\LongvitaRC trùng origin/main commit 53d7fc5; index unmerged=0 và tracked diff=0. Các file untracked android/ và evidence/ui/CHARLIE-UI-01 được giữ nguyên.
+- ARTEMIS thực vẫn thiếu daemon/API key/test account, live cross-role và bộ recipe đã duyệt chưa có chứng cứ. **Chưa đạt nghiệm thu toàn bộ 100%.**

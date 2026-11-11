@@ -57,3 +57,9 @@
 - Flutter Mobile: Analyze 0 vấn đề, 483/483 test đạt. Shared Core: Analyze 0 vấn đề, 20/20 test đạt. Web: Analyze 0 vấn đề, 69/69 test đạt.
 - Ảnh có thông tin cá nhân chỉ lưu tại `D:\PRM393\Longvita_phone_evidence\20261111_merged_main`, không upload vào repo.
 - Bằng chứng full test là tự động chạy local, không thay cho ARTEMIS 3 lần, Firebase cross-role production 3 lần, kiểm chứng recipe và Video Demo.
+
+## Xác minh A15 bằng clean build — 11/11/2026
+
+- Flutter Analyze 0 vấn đề, Flutter Test 483/483 đạt, debug APK build và adb install -r trên Samsung A15 thành công, không xóa app data. PID: 16207; smoke logcat có 0 dòng crash/error khớp bộ lọc.
+- Ảnh mới từ máy thật xác nhận **Tiện ích Firebase**, **Vai trò: Người dùng**, **Cấu hình từ xa**. Ảnh gốc chỉ lưu trong D:\PRM393\Longvita_phone_evidence\20261111_clean_rebuild. Bản cắt không có thông tin cá nhân trong Git: evidence/hoang/android-a15-20261111/profile-vietnamese-no-pii.png.
+- Đây là kiểm tra UI và build, chưa thay cho ARTEMIS 3 lần, kiểm thử Firestore cross-role live hoặc xác minh dữ liệu recipe.
