@@ -115,3 +115,14 @@ Các ảnh chứa thông tin tài khoản cá nhân, token, UID hoặc tài li�
 ### Cập nhật nguồn trích dẫn tại màn S05
 
 Sau kiểm tra bố cục S04, code đã giữ ghi chú nguồn trên thẻ ở tối đa hai dòng, đồng thời **hiển thị đầy đủ trường sourceNote trong S05 dưới nhãn Nguồn tham khảo**, không lược bỏ dữ liệu. Widget test kiểm tra chuỗi đầy đủ và chống tràn khi phóng chữ. Kết quả cuối chạy lại: Mobile Flutter Analyze 0 lỗi, 487/487 tests, APK debug build thành công. Việc cài lại APK của thay đổi S05 sau cùng cần ADB kết nối ổn định.
+
+
+## 11. Hợp nhất main và kết quả ARTEMIS theo log mới (11/11/2026)
+
+Trong lúc sửa S04/S05, main đã cập nhật tới 733aa7a (PR #41 merge 706ffef), và nhánh PR40 nhận main vào e4ec827. Sau khi commit thay đổi Hoàng 4aa85ff, đã merge nhánh remote mới vào local tại 4030f63. Xung đột duy nhất của lượt này là thẻ món ở mobile/lib/screens/meal_flow_screens.dart. Bản giải quyết giữ cả chỉ số kcal/đạm của PR41 và ghi chú nguồn tối đa hai dòng trên S04; S05 có toàn văn nguồn và không có nhãn Đang chờ chen vào tên món.
+
+Kiểm thử lại chính bản ghép tại 4030f63: Mobile Flutter tests **487/487**, Core **20/20**, Web **69/69**, tổng **576/576 đạt**; Flutter Analyze 0 vấn đề trên cả ba; Python compileall e2e_test/ đạt. Đây là kiểm thử code/mock, không phải ARTEMIS hay Firestore cross-role live.
+
+Từ evidence/artemis/raw/runs.jsonl mới trên main, có **45 bản ghi của nhóm / 15 tên test**, trong đó **11 bản ghi** thuộc test_flows.py và test_detail.py của Hoàng (8 completed, 3 failed). Không có test case Hoàng nào đạt ba completed. Trạng thái completed không mặc nhiên là pass về nội dung. Xem docs/hoang-artemis-run-audit-20261111.md để biết từng ca và yêu cầu kiểm tra lại.
+
+Bảng 26 task Lab3 và 9 task HD đã đối chiếu theo bằng chứng thực: docs/hoang-task-matrix-20261111.md. Không tự nhận hoàn tất 100% các task còn thiếu ARTEMIS 3 lần, cross-role Web Staff live, native S10/S07/S08/PDF và phê duyệt nutritional recipe.

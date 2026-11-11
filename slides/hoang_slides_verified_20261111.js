@@ -92,7 +92,7 @@ function item(s,k,v,x,y,w){
 }
 // Slide 4
 {
- const s=base(4,'Chất lượng đã đo và giới hạn nghiệm thu','Chỉ ghi nhận kết quả đã kiểm; không đồng nhất unit/widget test với ARTEMIS và Firebase cross-role.');
+ const s=base(4,'Chất lượng đã đo và giới hạn nghiệm thu','Bản tích hợp PR41: Mobile 487 + Core 20 + Web 69 = 576 bài đạt; ARTEMIS và cross-role còn chờ.');
  box(s,0.75,2.08,5.76,4.57,C.white);
  txt(s,'487 / 487',1.12,2.42,5.04,1.15,{fontSize:48,bold:true,color:C.green,align:'center'});
  txt(s,'Bài kiểm thử Flutter đạt',1.2,3.64,4.87,0.39,{fontSize:17,bold:true,align:'center'});

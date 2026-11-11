@@ -49,3 +49,10 @@ Tạo worktree riêng `D:\PRM393\LongvitaRC-PR40-PR41-Resolve-20261111`, nhánh 
 - Cài APK cập nhật lên Samsung Galaxy A15 qua adb install -r: **Success**, PID sau mở **22838**, smoke logcat gần nhất 0 dòng khớp FATAL EXCEPTION/E/flutter/FlutterError. Không xóa app data.
 - Màn hình điện thoại ở trạng thái khóa/sạc lúc chụp sau cài đặt; **chưa có ảnh S06 thực tế** từ lần cài này. Widget test S06 và APK byte inspection là bằng chứng nhãn, không thay thế việc đi đủ luồng S04→S05→S06 trên điện thoại.
 - Ảnh khóa/sạc và log gốc chỉ lưu cục bộ tại D:\PRM393\Longvita_phone_evidence\20261111_s06_reinstall, không đưa lên Git.
+
+
+## Bản tích hợp hiện tại sau khi PR #41 merge main
+
+Tài liệu phía trên ghi lại snapshot cũ tại 53d7fc5 và audit commit 1df3e0d. Sau đó PR #41 đã merge vào main ở 706ffef (main 733aa7a), PR #40 đồng bộ main ở e4ec827. Commit Hoàng 4aa85ff được merge cùng remote PR40 thành 4030f63, xử lý một conflict mới trong meal_flow_screens.dart bằng cách kết hợp calo/đạm PR41 và sourceNote S04/S05 của Hoàng. Không có unmerged files sau đó.
+
+**Kiểm thử bản tích hợp 4030f63:** Mobile 487/487, Core 20/20, Web 69/69, tổng **576/576 pass**, Flutter Analyze 0 vấn đề cả ba; Python e2e_test compileall đạt. Đây là bản cần đưa lên PR40 sau review, **không merge nhánh audit cũ vào main**.

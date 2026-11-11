@@ -99,3 +99,11 @@
 - Còn thiếu ARTEMIS live 3 lần/ca, Web Staff review realtime, Figma đủ 10 màn, PDF/video và kiểm định recipe; không ghi 26/26 hoàn thành.
 
 - Bổ sung riêng nhãn Nguồn tham khảo và toàn văn sourceNote ở S05 khi S04 đã cắt ghi chú quá dài. Chạy lại full suite 487/487, analyze 0 vấn đề, build APK thành công. Tại lần kiểm tra cuối USB ADB mất kết nối, chưa chụp/cài APK của thay đổi S05 sau cùng.
+
+
+## 2026-11-11 — Hợp nhất PR #41 đã merge main và audit ARTEMIS thực
+
+- Khi push commit Hoàng 4aa85ff, Git từ chối non-fast-forward do remote PR40 đã cập nhật main, gồm PR41 merge 706ffef. Không force push, fetch và đối chiếu đầy đủ ba phía.
+- Giải quyết hunk S04, bảo tồn calo/đạm từ PR41 và sourceNote 2 dòng của Hoàng; merge commit 4030f63. Không có unmerged files.
+- Kiểm thử bản ghép: Mobile 487/487, Core 20/20, Web 69/69; tổng **576/576 pass**, Flutter Analyze 0 vấn đề cả ba, Python compileall e2e_test thành công. Logs lưu D:\PRM393\hoang_pr41_merged_*.
+- Phân tích 45 run log ARTEMIS từ main: 11 bản ghi thuộc Hoàng, 8 completed/3 failed, chưa ca nào có >=3 completed. Không gọi completed là pass nếu replay/goal chưa xác nhận; xem docs/hoang-artemis-run-audit-20261111.md.

@@ -23,8 +23,8 @@ Phép kiểm vừa chạy: **Flutter Analyze 0 issues; 487/487 Flutter tests; An
 | S4-16 | Có responsive tests; pending toàn bộ | 360/412dp, chữ 100/200%; thiết bị A15, contrast/TalkBack đầy đủ pending |
 | S4-17 | Có tài liệu; pending duyệt Figma | Traceability đã có, chưa được nhóm duyệt sai lệch của 10 màn |
 | S5-3 | Có code; thiếu Console | Analytics events có mã, DebugView live chưa có |
-| S6-5 | Có script; chưa có ARTEMIS run | e2e_test/test_flows.py và test_search.py; chưa đạt >=3 run |
-| S6-6 | Có script; chưa có ARTEMIS run | test_detail.py; không được lấy compileall làm test E2E |
+| S6-5 | Có script; chưa có ARTEMIS run | e2e_test/test_flows.py và test_search.py; đã có vài runs thực nhưng chưa đủ 3 lượt mỗi case |
+| S6-6 | Có script; chưa có ARTEMIS run | test_detail.py đã có 3 runs trên 3 ca khác nhau (1 completed, 2 failed); không được lấy compileall làm test E2E |
 | S6-13 | Có regression fixes; chưa chứng minh ARTEMIS | Đã sửa UI phát hiện qua native; không có run ARTEMIS + retest |
 | S7-1-HD | Có đầu ra kỹ thuật | PR #20 từng merged và review AI; PR #40 mở chờ checks/review cuối |
 | S7-2-HD | Có đầu ra kỹ thuật | Bảng findings/quyết định trong docs/code-review.md |
@@ -51,8 +51,8 @@ Phép kiểm vừa chạy: **Flutter Analyze 0 issues; 487/487 Flutter tests; An
 
 ## Trạng thái Git và giới hạn
 
-- Main gốc sạch tại 53d7fc5, nhưng PR #40 và #41 phiên bản gần nhất **có conflict giữa hai nhánh** ở e2e_test/test_detail.py và test_flows.py. Đã có nhánh audit/resolve-pr40-pr41-20261111, 574/574 Flutter tests trên bản ghép snapshot đó. Không merge audit trực tiếp vào main.
-- CodeRabbit PR #40 đang chạy ở lần kiểm tra 11/11; PR #41 cần được nhóm review riêng. Không coi MERGEABLE của từng PR với main là không conflict giữa hai PR.
+- Main đã cập nhật tới 733aa7a và PR #41 được merge tại 706ffef. Nhánh Hoàng tích hợp remote PR #40 qua merge 4030f63, đã giải quyết hunk S04 và giữ nguyên thay đổi khác của PR #41. Bản mới đạt 576/576 Flutter tests với 0 vấn đề Analyze trên Mobile/Core/Web. Nhánh audit/resolve-pr40-pr41-20261111 là lịch sử snapshot cũ, không merge audit trực tiếp vào main.
+- CodeRabbit PR #40 cần được nhóm kiểm tra trạng thái cuối sau khi push; PR #41 đã merge vào main. Không suy diễn kết quả check đã hoàn tất từ code local. Không coi MERGEABLE của từng PR với main là không conflict giữa hai PR.
 - Không tự nhập recipe chưa qua gate dữ liệu, không tự ghi ARTEMIS success, không tiết lộ PII/credential.
 
 ## Bằng chứng giữ riêng
