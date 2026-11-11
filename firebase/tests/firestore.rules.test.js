@@ -55,6 +55,7 @@ const announcement = (authorRole = 'staff', overrides = {}) => ({
   title: 'Thông báo',
   content: 'Nội dung',
   authorRole,
+  targetRoles: ['admin', 'staff', 'user'],
   createdAt: CREATED_AT,
   ...overrides,
 });
@@ -398,7 +399,15 @@ describe('announcements', () => {
 
   test('user allowed: read and stream', async () => {
     await assertSucceeds(alice().doc('announcements/a1').get());
-    await assertSucceeds(alice().collection('announcements').orderBy('createdAt', 'desc').limit(20).get());
+    await assertSucceeds(alice().collection('announcements')
+      .where('targetRoles', 'array-contains', 'user').get());
+  });
+
+  test('each account reads only announcements targeting its role', async () => {
+    await seed('announcements/admin-only', announcement('admin', { targetRoles: ['admin'] }));
+    await assertFails(alice().doc('announcements/admin-only').get());
+    await assertFails(staff().doc('announcements/admin-only').get());
+    await assertSucceeds(admin().doc('announcements/admin-only').get());
   });
 
   test('user denied: create, update, delete', async () => {
@@ -417,6 +426,8 @@ describe('announcements', () => {
     await assertFails(staff().doc('announcements/a2').set(announcement('admin')));
     await assertFails(staff().doc('announcements/a2').set(announcement('staff', { title: '' })));
     await assertFails(staff().doc('announcements/a2').set(announcement('staff', { pinned: true })));
+    await assertFails(staff().doc('announcements/a2').set(announcement('staff', { targetRoles: [] })));
+    await assertFails(staff().doc('announcements/a2').set(announcement('staff', { targetRoles: ['owner'] })));
     await assertFails(staff().doc('announcements/a1').update({ createdAt: 'later' }));
     await assertFails(staff().doc('announcements/a2').set(announcement('staff', { title: 'x'.repeat(121) })));
     await assertFails(staff().doc('announcements/a2').set(announcement('staff', { content: 'x'.repeat(2001) })));

@@ -15,7 +15,7 @@ abstract class IDataService {
     String status, {
     String? reason,
   });
-  Stream<List<AnnouncementModel>> streamAnnouncements();
+  Stream<List<AnnouncementModel>> streamAnnouncements(String role);
   Future<List<IngredientModel>?> getShoppingItems(String uid, String planId);
   Future<void> saveShoppingItems(
     String uid,

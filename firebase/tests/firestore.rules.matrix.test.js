@@ -74,6 +74,7 @@ const announcement = (authorRole, overrides = {}) => ({
   title: 'Lịch tư vấn dinh dưỡng',
   content: 'Nội dung',
   authorRole,
+  targetRoles: ['admin', 'staff', 'user'],
   createdAt: CREATED_AT,
   ...overrides,
 });
@@ -174,7 +175,7 @@ const CASES = [
   ['R-36', 'announcements', 'anonymous', 'read announcements', 'Denied',
     (db) => db.collection('announcements').get()],
   ['R-37', 'announcements', 'user', 'stream newest announcements (Inbox)', 'Allowed',
-    (db) => db.collection('announcements').orderBy('createdAt', 'desc').limit(20).get()],
+    (db) => db.collection('announcements').where('targetRoles', 'array-contains', 'user').get()],
   ['R-38', 'announcements', 'user', 'publish an announcement', 'Denied',
     (db) => db.doc('announcements/a2').set(announcement('user'))],
   ['R-39', 'announcements', 'staff', 'publish an announcement as staff', 'Allowed',

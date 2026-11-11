@@ -146,12 +146,6 @@ class _AdminSession extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => RecipeAdminViewModel(service)),
-        ChangeNotifierProvider(
-          create: (_) => ReviewQueueViewModel(
-            service,
-            trackSuccessfulReview: instrumentation.logPlanReview,
-          ),
-        ),
         ChangeNotifierProvider(create: (_) => DashboardViewModel(service)),
         ChangeNotifierProvider(
           create: (_) => AnnouncementViewModel(

@@ -95,6 +95,11 @@ void main() {
         isTrue,
       );
       expect(publisher.requests.last.announcement.title, 'Tin kiểm thử');
+      expect(publisher.requests.last.announcement.targetRoles, [
+        'admin',
+        'staff',
+        'user',
+      ]);
       expect(vm.published, isTrue);
       expect(events, 1);
       vm.startNew();
@@ -219,6 +224,42 @@ void main() {
       vm.dispose();
     },
   );
+
+  testWidgets('admin can target selected roles and must keep one selected', (
+    tester,
+  ) async {
+    final publisher = _Publisher();
+    final vm = _model(publisher);
+    await tester.pumpWidget(host(vm));
+    await tester.tap(find.byKey(const ValueKey('announcement-role-admin')));
+    await tester.tap(find.byKey(const ValueKey('announcement-role-staff')));
+    await tester.tap(find.byKey(const ValueKey('announcement-role-user')));
+    await tester.enterText(
+      find.byKey(const ValueKey('announcement-title')),
+      'Tin theo vai trò',
+    );
+    await tester.enterText(
+      find.byKey(const ValueKey('announcement-content')),
+      'Nội dung',
+    );
+    await tester.ensureVisible(find.text('Phát thông báo'));
+    await tester.tap(find.text('Phát thông báo'));
+    await tester.pumpAndSettle();
+    expect(
+      find.text('Vui lòng chọn ít nhất một nhóm người nhận.'),
+      findsOneWidget,
+    );
+    expect(find.byType(AlertDialog), findsNothing);
+
+    await tester.tap(find.byKey(const ValueKey('announcement-role-staff')));
+    await tester.tap(find.text('Phát thông báo'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Đồng ý phát'));
+    await tester.pumpAndSettle();
+    expect(publisher.requests.single.announcement.targetRoles, ['staff']);
+    await tester.pumpWidget(const SizedBox());
+    vm.dispose();
+  });
 
   for (final width in [360.0, 1280.0]) {
     testWidgets(

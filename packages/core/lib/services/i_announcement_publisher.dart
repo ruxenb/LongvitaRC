@@ -28,6 +28,13 @@ class AnnouncementPublication {
     if (uid.isEmpty ||
         !RegExp(r'^[a-zA-Z0-9]{20}$').hasMatch(item.id) ||
         !const ['staff', 'admin'].contains(item.authorRole) ||
+        item.targetRoles.isEmpty ||
+        item.targetRoles.length >
+            AnnouncementModel.supportedTargetRoles.length ||
+        item.targetRoles.any(
+          (role) => !AnnouncementModel.supportedTargetRoles.contains(role),
+        ) ||
+        item.targetRoles.toSet().length != item.targetRoles.length ||
         titleError(item.title) != null ||
         contentError(item.content) != null ||
         item.title != item.title.trim() ||

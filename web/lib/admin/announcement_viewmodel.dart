@@ -26,6 +26,7 @@ class AnnouncementViewModel extends ChangeNotifier {
 
   String title = '';
   String content = '';
+  Set<String> targetRoles = {...AnnouncementModel.supportedTargetRoles};
   String? error;
   bool showValidation = false;
   AnnouncementPhase phase = AnnouncementPhase.editing;
@@ -62,11 +63,25 @@ class AnnouncementViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  void toggleTargetRole(String role, bool selected) {
+    if (_disposed ||
+        !editable ||
+        !AnnouncementModel.supportedTargetRoles.contains(role)) {
+      return;
+    }
+    if (selected) {
+      targetRoles.add(role);
+    } else {
+      targetRoles.remove(role);
+    }
+    notifyListeners();
+  }
+
   bool validate() {
     if (_disposed || busy || published || !sessionIsActive()) return false;
     showValidation = true;
     notifyListeners();
-    return titleError == null && contentError == null;
+    return titleError == null && contentError == null && targetRoles.isNotEmpty;
   }
 
   Future<void> publish() async {
@@ -87,6 +102,7 @@ class AnnouncementViewModel extends ChangeNotifier {
           title: title.trim(),
           content: content.trim(),
           authorRole: role,
+          targetRoles: targetRoles.toList(growable: false)..sort(),
           createdAt: now().toUtc(),
         ),
       );
@@ -117,6 +133,7 @@ class AnnouncementViewModel extends ChangeNotifier {
     _publication = null;
     title = '';
     content = '';
+    targetRoles = {...AnnouncementModel.supportedTargetRoles};
     error = null;
     showValidation = false;
     phase = AnnouncementPhase.editing;
