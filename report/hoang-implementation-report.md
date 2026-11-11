@@ -126,3 +126,15 @@ Kiểm thử lại chính bản ghép tại 4030f63: Mobile Flutter tests **487/
 Từ evidence/artemis/raw/runs.jsonl mới trên main, có **45 bản ghi của nhóm / 15 tên test**, trong đó **11 bản ghi** thuộc test_flows.py và test_detail.py của Hoàng (8 completed, 3 failed). Không có test case Hoàng nào đạt ba completed. Trạng thái completed không mặc nhiên là pass về nội dung. Xem docs/hoang-artemis-run-audit-20261111.md để biết từng ca và yêu cầu kiểm tra lại.
 
 Bảng 26 task Lab3 và 9 task HD đã đối chiếu theo bằng chứng thực: docs/hoang-task-matrix-20261111.md. Không tự nhận hoàn tất 100% các task còn thiếu ARTEMIS 3 lần, cross-role Web Staff live, native S10/S07/S08/PDF và phê duyệt nutritional recipe.
+
+## 13. Nghiệm thu Android thật bổ sung trên Samsung A15 (11/11/2026)
+
+S10 đã mở lại bản nháp 7 ngày sau cài đè; S04 hiển thị đúng dữ liệu thực đơn có nguồn; S05 toàn văn nguồn; S07 chặn input 0, cho lưu 1360→1361g, đọc lại sau điều hướng và trả về 1360g; S08 checkbox giữ sau điều hướng và trả về không đánh dấu; HD-06 tạo và mở PDF 2 trang trên Android Print Preview. 13 ảnh đã cắt PII ở evidence/hoang/android-a15-20261111/native-*.png và biên bản docs/hoang-native-acceptance-20261111.md.
+
+Firebase Emulator Rules 22/22 đạt; recipe offline safety gates 31/31 đạt nhưng bộ staged không được publish. Chưa có ARTEMIS 3 lượt/ca, Web Staff live x3, metadata PDF và Analytics/Crashlytics đối chiếu qua Console, video ba luồng, Figma full-screen và phê duyệt nutrition. Không kết luận hoàn tất 100%.
+
+## 14. Bổ sung S09 native và latest main (11/11/2026)
+
+Sau khi PR42 merge, latest main 95b1c31 đã được phân tích và test lại hoàn toàn: Mobile Flutter 487/487, Core 20/20, Web 69/69, tổng 576/576 và Analyze không lỗi. Build APK debug, cài -r và mở được trên Samsung A15. Mở Dinh dưỡng → Tra cứu công thức → Chi tiết công thức → Kiến thức sách (S09): bốn nguyên tắc và nguồn web rõ; không khẳng định số trang sách hoặc giá trị dinh dưỡng đã được thẩm định y khoa. Có ảnh redacted bổ sung. Tổng 14 ảnh native mới, không chứa email/PII.
+
+Trên app thực Firebase đang trả 2 món; commit 29 recipe catalog chưa có bằng chứng phê duyệt và seed thật vào shared Firebase. ARTEMIS x3 và luồng xét duyệt Web Staff live vẫn chưa nghiệm thu.

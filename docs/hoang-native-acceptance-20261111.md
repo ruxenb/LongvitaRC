@@ -43,3 +43,23 @@ Không đánh dấu 26/26 task Lab3 hay HD-01..08 100% nếu chưa có các bằ
 ## Cập nhật sau phép kiểm cuối lúc 16:30
 
 S05 đã được bổ sung đoạn **Nguồn tham khảo** lấy nguyên văn trường sourceNote khi có nội dung. S04 chỉ cắt ngắn nguồn thành hai dòng trên thẻ, thông tin đầy đủ còn đọc được tại S05. Widget regression đã xác minh tên nguồn đầy đủ. Sau cập nhật: **Flutter Analyze 0 vấn đề, Flutter Test 487/487 đạt, Android APK debug build thành công**. Samsung A15 tạm mất kết nối ADB lúc kiểm tra cuối; phiên bản APK S05 mới nhất **chưa được cài và chụp lại**. Không coi ảnh S05 cũ là bằng chứng mới.
+
+## Cập nhật 17:30 ngày 11/11 — Samsung A15 thực, ưu tiên so với các hạn chế ở phía trên
+
+- Sau ADB install -r Success, ứng dụng mở được bằng session đã đăng nhập. S10 nạp bản nháp 7 ngày lưu ngày 11/11/2026 sau cài đè/restart; mở vào S04, recipe hiện tên, kcal, đạm và nguồn tóm tắt. Đây là read-back qua app, chưa phải query trực tiếp Firestore Console.
+- S05 trên APK đã sửa hiển thị toàn văn Nguồn tham khảo, đường dẫn và chú thích USDA; danh sách nguyên liệu có tên dài vẫn hiển thị đầy đủ.
+- S07: input 0 bị từ chối với lỗi Số lượng phải lớn hơn 0. Farro/spelt 1360g đổi thành 1361g, app báo đã lưu; rời màn và vào lại còn 1361g; cuối cùng đổi lại 1360g và được báo đã lưu. Không để lại số lượng thử nghiệm. Xóa/Hoàn tác chưa kiểm chứng trên thiết bị.
+- S08: tạo danh sách mua sắm từ S07, đánh dấu Farro/spelt, rời và vào lại checkbox vẫn chọn; sau đó bỏ dấu, trở về trạng thái ban đầu.
+- HD-06: Profile xuất PDF, hiện thông báo Đã lưu PDF trên máy và Đã đồng bộ thông tin báo cáo; Mở PDF đã lưu gọi Android Print Preview, thấy 2 trang thực đơn 7 ngày. Metadata chưa đọc độc lập bằng Firebase Admin Console. Ảnh an toàn chỉ là trạng thái export; raw preview có dữ liệu hồ sơ nên giữ riêng ngoài Git.
+- Đã chạy 22/22 Firebase Security Rules Emulator tests pass (project demo-longvita) và 31/31 recipe offline tests pass. Hai recipe staged chưa được duyệt xuất bản, có 4 publication blockers; không cập nhật production. Log lưu ngoài repo tại D:\PRM393\hoang_20261111_*.
+- PR #42 đã merge vào main ở 9043134. Main lúc bắt đầu cập nhật tài liệu: 95b1c31, chứa thay đổi catalog recipe của nhóm; kiểm thử mới nhất phải được tính theo main hiện tại.
+- ARTEMIS chưa có e2e_test/.env hoặc daemon đúng API ở cổng 8000; health ở 8080 không chứng minh đó là ARTEMIS. Chưa chạy 3 lần và chưa xác minh assertion/replay. Cũng còn Web Staff duyệt→Mobile live x3, Analytics/Crashlytics console, kiểm định nutrition, đối chiếu toàn bộ Figma và video 3 flows.
+
+Các ảnh đã che thông tin: evidence/hoang/android-a15-20261111/native-*.png. Đây là bằng chứng mới nhất, thay thế các ghi chú chưa có native S07/S08/S10/PDF ở những mốc trước. Không ghi 100% toàn bộ task khi còn thiếu gate độc lập.
+
+## Bổ sung S09 và phiên bản main 17:38 ngày 11/11
+
+- Main đã thêm commit catalog recipe và PR42; trên main 95b1c31 đã chạy lại Flutter Analyze 0 vấn đề và Flutter Test 487 Mobile + 20 Core + 69 Web = 576/576 đạt; Android APK debug build thành công, cài trên A15 install -r Success, Home đã load với tài khoản cũ.
+- Từ Dinh dưỡng vào Tra cứu công thức, màn đang có hai recipe trong Firebase thật; chọn recipe và mở S05. Cuộn xuống, bấm Kiến thức sách (TS. Valter Longo) đã mở S09. UIAutomator xác minh tiêu đề Kiến thức sách, 4 nguyên tắc và Nguồn tham khảo có URL; không bịa trang sách, phân biệt nutrition USDA là ước tính.
+- Ảnh đã cắt vùng cá nhân: evidence/hoang/android-a15-20261111/native-s09-book-knowledge.png. Như vậy S01–S10 đã có ít nhất một lần kiểm tra đường đi/hiển thị trên máy Android; kiểm thử trọn vẹn cho mọi state và so khớp 10 Figma vẫn chưa đạt.
+- Vẫn cần ARTEMIS x3 có assertion/replay thật, role live x3, Firebase Console metadata, video 3 flows, recipe khoa học và Figma 10/10.

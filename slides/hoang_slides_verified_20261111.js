@@ -64,7 +64,7 @@ function item(s,k,v,x,y,w){
  const pics=[
  ['S02 · TÙY CHỌN','s02-options-no-pii.png'],
  ['S03 · TẠO THỰC ĐƠN','s03-setup-no-pii.png'],
- ['S04 · KẾT QUẢ','s04-generated-preview-before-polish.png'],
+ ['S04 · SAU SỬA','native-s04-after-merge.png'],
  ];
  for(let i=0;i<3;i++){
    const x=0.78+i*4.17;
@@ -73,7 +73,7 @@ function item(s,k,v,x,y,w){
    photo(s,pics[i][1],x+0.28,2.72,3.2,2.77);
  }
  box(s,0.79,5.98,11.75,0.77,C.sage);
- txt(s,'Khi lưu S04, ứng dụng báo: “Đã lưu kế hoạch lên Firestore.” Chưa có ảnh S10 read-back sau khởi động lại.',1.02,6.12,11.24,0.5,{fontSize:13,bold:true,color:C.green,align:'center'});
+ txt(s,'Khi lưu S04, ứng dụng báo: “Đã lưu kế hoạch lên Firestore.” S10 đã đọc lại thực đơn 7 ngày sau cài lại APK.',1.02,6.12,11.24,0.5,{fontSize:13,bold:true,color:C.green,align:'center'});
 }
 // Slide 3
 {
@@ -98,14 +98,14 @@ function item(s,k,v,x,y,w){
  txt(s,'Bài kiểm thử Flutter đạt',1.2,3.64,4.87,0.39,{fontSize:17,bold:true,align:'center'});
  item(s,'MOBILE ANALYZE','0 vấn đề',1.02,4.35,2.44);
  item(s,'ANDROID DEBUG APK','Build thành công',3.66,4.35,2.53);
- txt(s,'Samsung A15: đã chạy flow, lưu Firestore và có ảnh thật; ảnh S04 hiện tại là bản trước sửa UI.',1.08,5.67,5.13,0.62,{fontSize:12.5,color:C.muted});
+ txt(s,'Samsung A15: S04/S05/S07/S08/S10 và xuất PDF đều có ảnh thật sau sửa.',1.08,5.67,5.13,0.62,{fontSize:12.5,color:C.muted});
  box(s,6.78,2.08,5.72,4.57,C.white);
  label(s,'CẦN NGHIỆM THU THÊM',7.06,2.32,4.98,C.peach);
  const points=[
   'ARTEMIS: ít nhất 3 lượt thực cho mỗi ca.',
   'Web staff duyệt → Mobile nhận trạng thái (3 lần).',
-  'S07/S08 và S10: mở lại dữ liệu trên thiết bị.',
-  'Xuất PDF thật, metadata, Analytics / Crashlytics.',
+  'Xóa / Hoàn tác, offline và ARTEMIS còn chờ.',
+  'PDF 2 trang đã mở; metadata và Analytics Console còn chờ.',
   'Phê duyệt recipe, 10 màn Figma và video demo.'
  ];
  points.forEach((v,i)=>{txt(s,(i+1)+'.',7.13,2.98+i*0.59,0.36,0.35,{fontSize:13.4,bold:true,color:C.orange});txt(s,v,7.49,2.96+i*0.59,4.66,0.49,{fontSize:12.6});});

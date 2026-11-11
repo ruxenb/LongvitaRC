@@ -107,3 +107,17 @@
 - Giải quyết hunk S04, bảo tồn calo/đạm từ PR41 và sourceNote 2 dòng của Hoàng; merge commit 4030f63. Không có unmerged files.
 - Kiểm thử bản ghép: Mobile 487/487, Core 20/20, Web 69/69; tổng **576/576 pass**, Flutter Analyze 0 vấn đề cả ba, Python compileall e2e_test thành công. Logs lưu D:\PRM393\hoang_pr41_merged_*.
 - Phân tích 45 run log ARTEMIS từ main: 11 bản ghi thuộc Hoàng, 8 completed/3 failed, chưa ca nào có >=3 completed. Không gọi completed là pass nếu replay/goal chưa xác nhận; xem docs/hoang-artemis-run-audit-20261111.md.
+
+## 2026-11-11 17:30 — Native acceptance bổ sung
+
+- Cài lại APK bằng ADB trên Samsung A15, giữ dữ liệu người dùng. S10 read-back thực đơn 7 ngày, S04/S05 nguồn đầy đủ.
+- S07 kiểm chứng nhập 0 bị từ chối, chỉnh 1360→1361g, vào lại còn 1361g, trả về 1360g; S08 checkbox giữ trạng thái sau vào lại và đã bỏ chọn khôi phục.
+- Profile xuất PDF và mở Android Print Preview 2 trang; chưa đọc Firestore Admin Console độc lập.
+- 13 ảnh native đã che PII (không commit ảnh raw); Firestore Rules Emulator 22/22, recipe offline 31/31. PR #42 đã merge.
+- Chưa đủ ARTEMIS x3, live staff review, Firebase Console, Figma 10/10, video demo và gate phê duyệt recipe.
+
+## 2026-11-11 17:38 — S09 native và latest main
+
+- Main 95b1c31 tích hợp PR #42 và catalog mới, Flutter Analyze 0 vấn đề (3 package); Mobile 487, Core 20, Web 69 = 576/576 tests đạt; APK debug build thành công.
+- Cài lại A15 giữ dữ liệu và thử S05→S09, thấy 4 nguyên tắc sách, nguồn URL và disclaimer USDA; ảnh redacted native-s09-book-knowledge.png.
+- Firebase search trên app hiện có 2 món; không tự seed 29 công thức mới vì chưa thẩm định nguồn. Vẫn giữ yêu cầu chạy ARTEMIS x3, dual-role và Figma.
