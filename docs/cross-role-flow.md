@@ -1,5 +1,8 @@
 # TV-04 — Luồng liên vai trò Mobile ↔ Web Admin
 
+> **Thay đổi phạm vi sau PR #48 (11/11/2026):** S04 đã loại bỏ nút `Gửi chuyên gia xét duyệt` theo yêu cầu chủ dự án. Mô tả gửi/duyệt thực đơn trong tài liệu này là **luồng thiết kế lịch sử**, hiện không thể chủ động bắt đầu từ Mobile. Không ghi nhận là đã chạy live 3 lần; tiêu chí Cross-role của Final Assignment có nguy cơ chưa đạt nếu không có phương án thay thế được giảng viên chấp thuận. Luồng **Web Admin phát thông báo → Mobile Inbox nhận từ Firestore** vẫn là chức năng riêng, không cần nút gửi chuyên gia và phải được kiểm thử/đo độc lập.
+
+
 > **Cập nhật:** 11/11/2026
 > **Owner:** Thắng VLQ; phối hợp Hoàng DV
 > **Trạng thái:** đặc tả và quy trình đo đã hoàn thành; Firebase Hosting TV-00

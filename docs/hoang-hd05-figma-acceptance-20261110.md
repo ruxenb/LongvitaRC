@@ -1,5 +1,8 @@
 # Hoàng — Bổ sung HD-05 và đối chiếu Figma S04 (10/11/2026)
 
+> **Ghi chú phạm vi mới 11/11/2026 — sau PR #48:** Nội dung HD-05 bên dưới là lịch sử triển khai, **không còn là chức năng thao tác của Mobile hiện hành**. Theo yêu cầu chủ dự án, S04 đã xóa nút `Gửi chuyên gia xét duyệt` và handler gửi; chỉ giữ `Lưu thực đơn`/`Lưu thay đổi`, `Xem nguyên liệu`, cùng khả năng đọc trạng thái plan lịch sử. Figma S04 cũng chỉ có nút Save Plan và View Ingredients. PR #48 (merge `d3ee428`) đạt 487/487 Mobile tests và đã xác minh trên Samsung A15: nút gửi không hiện ở cuối màn S04. Không được lấy các test HD-05 trước ngày này làm bằng chứng Web Staff duyệt live ba lần.
+
+
 ## Phạm vi và nguồn
 
 - Nhánh: `feature/hoang-vietnamese-figma-20261110`; PR #29.
