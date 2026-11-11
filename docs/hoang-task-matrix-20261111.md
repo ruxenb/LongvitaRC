@@ -2,6 +2,9 @@
 
 Bản này là **bảng bằng chứng hiện tại, không phải xác nhận nghiệm thu 100%**. Nguồn đối chiếu: docs/tasks/task-hoang.md, docs/tasks/final-task-assignment.md, docs/hoang-native-acceptance-20261111.md, report/hoang-implementation-report.md và kết quả CI trên máy.
 
+> **Cập nhật mới 12/11/2026:** [Biên bản QA Android thật, 3 clip flow và 1 clip recovery](hoang-a15-acceptance-20261112.md). Trên main e9618ee: 487/487 Mobile tests, 118/118 Firebase Rules Emulator tests; A15 mở S01/S10/S04/S07, video S07→S08 và S04→S05→S09, offline S04/S07/S10, StartupGate Error→Retry; sau QA đã cài lại APK thường và phục hồi Wi-Fi/TalkBack. TalkBack onboarding, native Delete/Undo, Console, 29 recipe provenance và nghiệm thu Figma vẫn chưa hoàn thành. Các số 576/576 và trạng thái PR cũ bên dưới là **lịch sử**, không phải baseline mới.
+
+
 Phép kiểm vừa chạy: **Flutter Analyze 0 issues; 487/487 Flutter tests; Android APK build thành công và cài đè Galaxy A15 thành công**. Lưu thành công Firestore là thông báo app, chưa phải independent read-back. Bản mới nhất tiếp tục thêm toàn bộ sourceNote tại S05, cần xác minh trong lần chạy sau.
 
 ## 26 task Lab 3
