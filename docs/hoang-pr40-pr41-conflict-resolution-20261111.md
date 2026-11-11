@@ -40,3 +40,12 @@ Tạo worktree riêng `D:\PRM393\LongvitaRC-PR40-PR41-Resolve-20261111`, nhánh 
 - Logs tại D:\PRM393\hoang_resolved_prs_mobile_*, hoang_resolved_prs_core_* và hoang_resolved_prs_web_*.
 - Đã push nhánh kiểm toán (KHÔNG phải merge vào main): https://github.com/ruxenb/LongvitaRC/tree/audit/resolve-pr40-pr41-20261111 ; commit 1df3e0d.
 - Sau khi PR #41 được review và merge, cần cập nhật PR #40 rồi đối chiếu hai file xung đột theo bản kiểm toán. Không merge nhánh audit như production.
+
+
+## APK S06 tiếng Việt và Samsung A15
+
+- Sau chỉnh 5 nhãn S06, Flutter Analyze **0 vấn đề**, Flutter Mobile Test **485/485 đạt**.
+- Android debug APK PR #40 build thành công, kiểm tra nội dung kernel_blob.bin có đủ **4 chuỗi tiếng Việt then chốt của S06**; không lấy bản APK cache cũ để khẳng định.
+- Cài APK cập nhật lên Samsung Galaxy A15 qua adb install -r: **Success**, PID sau mở **22838**, smoke logcat gần nhất 0 dòng khớp FATAL EXCEPTION/E/flutter/FlutterError. Không xóa app data.
+- Màn hình điện thoại ở trạng thái khóa/sạc lúc chụp sau cài đặt; **chưa có ảnh S06 thực tế** từ lần cài này. Widget test S06 và APK byte inspection là bằng chứng nhãn, không thay thế việc đi đủ luồng S04→S05→S06 trên điện thoại.
+- Ảnh khóa/sạc và log gốc chỉ lưu cục bộ tại D:\PRM393\Longvita_phone_evidence\20261111_s06_reinstall, không đưa lên Git.
