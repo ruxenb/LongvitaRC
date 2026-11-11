@@ -474,14 +474,14 @@ class _RecipeDetailsScreenState extends State<RecipeDetailsScreen> {
                         targetCalories: recipe.calories.round(),
                         originalRecipe: recipe,
                       );
-                      if (aiRecipe != null && mounted) {
+                      if (aiRecipe != null && context.mounted) {
                         final vm = context.read<MealPlanViewModel>();
                         final success = await vm.replaceMeal(
                           dayIndex: widget.dayIndex ?? 0,
                           originalId: recipe.id,
                           replacement: aiRecipe,
                         );
-                        if (success && mounted) {
+                        if (success && context.mounted) {
                           Navigator.of(context).pop();
                         }
                       }
@@ -661,7 +661,7 @@ class _MealAlternativesScreenState extends State<MealAlternativesScreen> {
                       color: AppColors.bgSelected,
                       borderRadius: AppRadius.rounded12,
                       border: Border.all(
-                        color: AppColors.actionPrimary.withOpacity(0.4),
+                        color: AppColors.actionPrimary.withValues(alpha: 0.4),
                       ),
                     ),
                     child: Column(
@@ -714,7 +714,7 @@ class _MealAlternativesScreenState extends State<MealAlternativesScreen> {
                                       widget.original.calories.round(),
                                   originalRecipe: widget.original,
                                 );
-                            if (aiRecipe != null && mounted) {
+                            if (aiRecipe != null && context.mounted) {
                               setState(() => _selected = aiRecipe);
                               await _replace();
                             }

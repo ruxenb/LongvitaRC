@@ -96,6 +96,9 @@ void main() {
     // User taps apply button
     final applyBtn = find.byKey(const Key('ai-meal-apply-btn'));
     expect(applyBtn, findsOneWidget);
+    tester.testTextInput.hide();
+    await tester.ensureVisible(applyBtn);
+    await tester.pumpAndSettle();
     await tester.tap(applyBtn);
     await tester.pumpAndSettle();
 

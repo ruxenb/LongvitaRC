@@ -19,6 +19,9 @@ class RemoteConfigService {
     'web_show_review_guidance': true,
     'daily_protein_target_ratio': 0.8,
     'banner_announcement': 'Chào mừng đến với Longvita - Dinh dưỡng trường thọ theo TS. Valter Longo',
+    'ai_feature_enabled': true,
+    'gemini_model_name': 'gemini-2.0-flash',
+    'ai_prompt_template': 'Bạn là chuyên gia dinh dưỡng trường thọ theo phương pháp TS. Valter Longo. Hãy gợi ý một món ăn trường thọ dạng JSON với các thông số dinh dưỡng, tỷ lệ calo, protein và chất chống oxy hóa.',
   };
 
   /// Khởi tạo và đồng bộ cấu hình từ xa
@@ -57,6 +60,12 @@ class RemoteConfigService {
   // ===========================================================================
   // GETTERS TRUY XUẤT CÁC THAM SỐ (ĐƯỢC GỌI TỪ VIEWMODEL / UI)
   // ===========================================================================
+
+  /// Read a boolean parameter without exposing the SDK to client services.
+  bool getBool(String key) => _remoteConfig.getBool(key);
+
+  /// Read a string parameter without exposing the SDK to client services.
+  String getString(String key) => _remoteConfig.getString(key);
 
   /// Tham số 1: Số lượng món gợi ý hiển thị tối đa (int)
   int get maxRecommendations =>
