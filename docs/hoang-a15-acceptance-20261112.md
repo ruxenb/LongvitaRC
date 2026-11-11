@@ -17,6 +17,7 @@
 | StartupGate Error → Retry | QA APK hiện “Không thể khởi động ứng dụng”; bấm “Thử lại” vào Home. Sau đó cài lại APK chuẩn thành công | **Ca lỗi khởi động Android đạt**, không thay tất cả network-error paths |
 | TalkBack | Bật được service và bound; tutorial TalkBack xuất hiện, che nội dung app nên chưa thể kết luận đọc S04. Đã tắt service, đóng tutorial, khôi phục Longvita | **Chưa đạt TalkBack end-to-end** |
 | 29 recipe | Dry-run 29/29 qua kiểm tra cấu trúc, exit 0 | **Chưa được duyệt nội dung sách, dinh dưỡng và quyền phát hành** |
+| Recipe publication/provenance offline tests | **41/41 Node tests pass**, exit 0; log D:\PRM393\hoang_recipe_offline_tests_20261112.log | Kiểm thử gate, schema, phép tính, provenance giả lập; không chứng nhận đúng sách hoặc cho phép publish |
 
 Ảnh raw của từng bước: D:\PRM393\Longvita_phone_evidence\native-qa-20261111\
 Ảnh offline hợp lệ: D:\PRM393\Longvita_phone_evidence\offline-20261112\
