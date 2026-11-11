@@ -73,6 +73,7 @@ class MemoryData implements IDataService {
   List<RecipeModel> recipes = [beans, vegetables];
   final Map<String, MealPlanModel> plans = {};
   final Map<String, List<IngredientModel>> checklists = {};
+  final StreamController<void> planEvents = StreamController<void>.broadcast();
   bool failRead = false;
   bool failWrite = false;
   bool failChecklist = false;
@@ -101,6 +102,7 @@ class MemoryData implements IDataService {
     }
     final id = plan.id.isNotEmpty ? plan.id : 'plan-${++saved}';
     plans[id] = plan.copyWith(id: id);
+    planEvents.add(null);
     return id;
   }
 
@@ -108,6 +110,30 @@ class MemoryData implements IDataService {
   Future<List<MealPlanModel>> getUserMealPlans(String uid) async {
     if (failRead) throw Exception('offline');
     return plans.values.where((p) => p.uid == uid).toList();
+  }
+
+  @override
+  Stream<List<MealPlanModel>> streamUserMealPlans(String uid) async* {
+    yield await getUserMealPlans(uid);
+    yield* planEvents.stream.asyncMap((_) => getUserMealPlans(uid));
+  }
+
+  @override
+  Future<void> updateMealPlanStatus(
+    String planId,
+    String status, {
+    String? reason,
+  }) async {
+    if (failWrite) {
+      throw const DataFailure(
+        DataFailureKind.offline,
+        'Không gửi được xét duyệt',
+      );
+    }
+    final plan = plans[planId];
+    if (plan == null) throw StateError('Không tìm thấy kế hoạch');
+    plans[planId] = plan.copyWith(status: status, reviewerReason: reason);
+    planEvents.add(null);
   }
 
   @override
@@ -394,6 +420,63 @@ void main() {
     data.failRead = true;
     await plans.fetchSavedPlans('uid-1');
     expect(plans.savedPlansState, isA<ViewStateError<List<MealPlanModel>>>());
+  });
+
+  test(
+    'HD-05: gửi thực đơn chỉ khi đã lưu, đúng chủ sở hữu và bản nháp',
+    () async {
+      final draft = fixturePlan(id: 'review-1');
+      data.plans[draft.id] = draft;
+      plans.selectSavedPlan(draft);
+      expect(await plans.submitForReview('other-plan'), isFalse);
+      expect(await plans.submitForReview(draft.id), isTrue);
+      expect(plans.activePlan!.status, 'submitted');
+      expect(data.plans[draft.id]!.status, 'submitted');
+      expect(await plans.submitForReview(draft.id), isFalse);
+    },
+  );
+
+  test(
+    'HD-05: chuyên gia duyệt cập nhật tự động qua Firestore stream',
+    () async {
+      final draft = fixturePlan(id: 'review-stream');
+      data.plans[draft.id] = draft;
+      plans.selectSavedPlan(draft);
+      await Future<void>.delayed(Duration.zero);
+      expect(await plans.submitForReview(draft.id), isTrue);
+      await data.updateMealPlanStatus(draft.id, 'approved');
+      await Future<void>.delayed(const Duration(milliseconds: 10));
+      expect(plans.activePlan!.status, 'approved');
+      expect(plans.currentPlanState, isA<ViewStateSuccess<MealPlanModel>>());
+      expect(await plans.saveActivePlan(), isFalse);
+    },
+  );
+
+  test('HD-05: lỗi gửi giữ bản nháp và có thể thử lại', () async {
+    final draft = fixturePlan(id: 'review-offline');
+    data.plans[draft.id] = draft;
+    plans.selectSavedPlan(draft);
+    data.failWrite = true;
+    expect(await plans.submitForReview(draft.id), isFalse);
+    expect(plans.activePlan!.status, 'draft');
+    expect(plans.submitState, isA<ViewStateError<bool>>());
+    data.failWrite = false;
+    expect(await plans.submitForReview(draft.id), isTrue);
+  });
+
+  test('HD-05: phiên cũ không cập nhật đè dữ liệu phiên mới', () async {
+    final old = fixturePlan(id: 'old-review');
+    data.plans[old.id] = old;
+    plans.selectSavedPlan(old);
+    plans.clearSession();
+    plans.onSessionStarted(testUser('uid-2'));
+    final current = fixturePlan(id: 'current-review', uid: 'uid-2');
+    data.plans[current.id] = current;
+    plans.selectSavedPlan(current);
+    await data.updateMealPlanStatus(old.id, 'approved');
+    await Future<void>.delayed(const Duration(milliseconds: 10));
+    expect(plans.activePlan!.id, current.id);
+    expect(plans.activePlan!.status, 'draft');
   });
 
   test('S4-5: totals, positive validation, delete and Undo', () {
