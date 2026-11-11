@@ -269,7 +269,7 @@ void main() {
 
     expect(find.text('User uid-a'), findsOneWidget);
     expect(find.textContaining('example.test'), findsOneWidget);
-    expect(find.text('Vai trò: user'), findsOneWidget);
+    expect(find.text('Vai trò: Người dùng'), findsOneWidget);
   });
 
   testWidgets('sign-out from Profile leaves it and shows Sign-in', (
@@ -976,7 +976,7 @@ void main() {
     });
   });
 
-  group('Remote Config', () {
+  group('Cấu hình từ xa', () {
     testWidgets('shows current values', (tester) async {
       await pumpProfile(tester);
 
@@ -1059,7 +1059,7 @@ void main() {
       expect(
         tester.getSemantics(button),
         isSemantics(
-          label: 'Cập nhật Remote Config',
+          label: 'Làm mới cấu hình',
           isButton: true,
           hasEnabledState: true,
           isEnabled: true,
@@ -1123,7 +1123,7 @@ void main() {
         'Quay lại',
         'Đăng xuất',
         'Xuất báo cáo PDF',
-        'Cập nhật Remote Config',
+        'Làm mới cấu hình',
         'Gây crash thử',
       ]) {
         expect(find.bySemanticsLabel(label), findsOneWidget, reason: label);
@@ -1143,7 +1143,7 @@ void main() {
       for (final title in [
         'Báo cáo PDF',
         'Thông báo',
-        'Remote Config',
+        'Cấu hình từ xa',
         'Crashlytics',
       ]) {
         expect(
@@ -1187,7 +1187,7 @@ void main() {
         ('Firebase Demo Area', 2),
         ('Báo cáo PDF', 3),
         ('Thông báo', 3),
-        ('Remote Config', 3),
+        ('Cấu hình từ xa', 3),
         ('Crashlytics', 3),
       ]) {
         expect(

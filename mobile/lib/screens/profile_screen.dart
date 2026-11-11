@@ -85,6 +85,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 }
 
+String _displayRole(String role) => switch (role) {
+  'user' => 'Người dùng',
+  'staff' => 'Nhân viên',
+  'admin' => 'Quản trị viên',
+  'expert' => 'Chuyên gia',
+  _ => role,
+};
+
 class _IdentityCard extends StatelessWidget {
   final UserModel user;
 
@@ -167,7 +175,7 @@ class _IdentityCard extends StatelessWidget {
                     const SizedBox(height: AppSpacing.s8),
                     AppBadge(
                       kind: AppBadgeKind.pending,
-                      label: 'Vai trò: ${user.role}',
+                      label: 'Vai trò: ${_displayRole(user.role)}',
                     ),
                   ],
                 ),
@@ -566,7 +574,7 @@ class _RemoteConfigCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           const _CardHeader(
-            title: 'Remote Config',
+            title: 'Cấu hình từ xa',
             description: 'Giá trị đang áp dụng trong ứng dụng.',
           ),
           const SizedBox(height: AppSpacing.s16),
@@ -579,13 +587,13 @@ class _RemoteConfigCard extends StatelessWidget {
             value: profile.enableScore ? 'Bật' : 'Tắt',
           ),
           _ConfigRow(
-            label: 'Banner',
+            label: 'Thông điệp',
             value: profile.bannerText.isEmpty ? 'Trống' : profile.bannerText,
           ),
           const SizedBox(height: AppSpacing.s8),
           AppButton(
             key: const Key('profile-refresh-config'),
-            text: 'Cập nhật Remote Config',
+            text: 'Làm mới cấu hình',
             loadingText: 'Đang cập nhật…',
             variant: AppButtonVariant.secondary,
             isLoading: profile.isRefreshingConfig,
