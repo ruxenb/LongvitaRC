@@ -583,7 +583,7 @@ class _MealAlternativesScreenState extends State<MealAlternativesScreen> {
           onPressed: () => Navigator.of(context).maybePop(),
         ),
         title: const Text(
-          'Meal alternatives',
+          'Món thay thế',
           style: TextStyle(
             fontFamily: AppTypography.quicksand,
             fontSize: 16,
@@ -602,7 +602,7 @@ class _MealAlternativesScreenState extends State<MealAlternativesScreen> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   const Text(
-                    'Choose a replacement',
+                    'Chọn món thay thế',
                     style: TextStyle(
                       fontFamily: AppTypography.newsreader,
                       fontSize: 24,
@@ -612,7 +612,7 @@ class _MealAlternativesScreenState extends State<MealAlternativesScreen> {
                   ),
                   const SizedBox(height: 4),
                   const Text(
-                    'Your original meal stays unchanged until you confirm.',
+                    'Món hiện tại chỉ thay đổi sau khi bạn xác nhận.',
                     style: TextStyle(
                       fontFamily: AppTypography.quicksand,
                       fontSize: 14,
@@ -632,7 +632,7 @@ class _MealAlternativesScreenState extends State<MealAlternativesScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Original: ${widget.original.name}',
+                          'Món hiện tại: ${widget.original.name}',
                           style: const TextStyle(
                             fontFamily: AppTypography.quicksand,
                             fontSize: 14,
@@ -710,8 +710,8 @@ class _MealAlternativesScreenState extends State<MealAlternativesScreen> {
                                   mealType: widget.original.category == 'ca'
                                       ? 'lunch'
                                       : 'dinner',
-                                  targetCalories:
-                                      widget.original.calories.round(),
+                                  targetCalories: widget.original.calories
+                                      .round(),
                                   originalRecipe: widget.original,
                                 );
                             if (aiRecipe != null && context.mounted) {
@@ -901,7 +901,7 @@ class _MealAlternativesScreenState extends State<MealAlternativesScreen> {
                     const AppBadge(kind: AppBadgeKind.appSuggestion),
                   const Spacer(),
                   Text(
-                    '${recipe.proteinGrams.toStringAsFixed(0)}g protein • ${recipe.calories.toStringAsFixed(0)} kcal',
+                    '${recipe.proteinGrams.toStringAsFixed(0)} g đạm • ${recipe.calories.toStringAsFixed(0)} kcal',
                     style: const TextStyle(
                       fontFamily: AppTypography.quicksand,
                       fontSize: 12,
@@ -919,7 +919,7 @@ class _MealAlternativesScreenState extends State<MealAlternativesScreen> {
   }
 }
 
-/// S09: Book knowledge principles and verified source citation from Figma (108:332).
+/// S09: Book principles with only the source note actually available on the recipe.
 class BookKnowledgeScreen extends StatelessWidget {
   final RecipeModel? recipe;
   const BookKnowledgeScreen({super.key, this.recipe});
@@ -938,7 +938,7 @@ class BookKnowledgeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final sourceText = recipe != null && recipe!.sourceNote.trim().isNotEmpty
         ? recipe!.sourceNote
-        : 'The Longevity Diet · Phụ lục A và các nguyên tắc dinh dưỡng Longvita sử dụng.';
+        : 'Chưa có nguồn trích dẫn được xác minh cho nội dung này.';
 
     return Scaffold(
       backgroundColor: AppColors.bgCanvas,
@@ -952,7 +952,7 @@ class BookKnowledgeScreen extends StatelessWidget {
           onPressed: () => Navigator.of(context).maybePop(),
         ),
         title: const Text(
-          'Book knowledge',
+          'Kiến thức sách',
           style: TextStyle(
             fontFamily: AppTypography.quicksand,
             fontSize: 16,
@@ -1047,7 +1047,7 @@ class BookKnowledgeScreen extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         const Text(
-                          'Source',
+                          'Nguồn tham khảo',
                           style: TextStyle(
                             fontFamily: AppTypography.quicksand,
                             fontSize: 14,

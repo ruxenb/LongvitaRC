@@ -28,6 +28,13 @@ Người dùng chỉ được gửi thực đơn đã lưu, đủ bảy ngày, c
 5. Unit/widget test không thay thế thử nghiệm Firebase thực tế, ảnh Android và ARTEMIS.
 
 ## 6. Bằng chứng còn thiếu
-Android SDK platform chưa cài hoàn chỉnh; không có lượt ARTEMIS tối thiểu ba lần, video demo trên thiết bị, đối chiếu pixel Figma toàn bộ màn hình, Firebase cross-role live và minh chứng DebugView/Crashlytics. Chưa thể khẳng định dinh dưỡng của mọi recipe an toàn hoặc chính xác cho từng đối tượng chỉ từ Firestore. Các mục này vẫn phải nghiệm thu trước khi tuyên bố hoàn thành 100%.
+Tại thời điểm soạn ngày 10/11, Android SDK còn thiếu. Đến 11/11, SDK/NDK/Emulator đã cài và ứng dụng đã build, chạy trên Samsung A15; tuy nhiên vẫn thiếu ARTEMIS tối thiểu ba lượt đạt mỗi ca, video demo đầy đủ, đối chiếu Figma cả 10 màn, kiểm thử Firebase cross-role live và đối chiếu DebugView/Crashlytics Console. Chưa thể khẳng định dinh dưỡng của mọi recipe an toàn hoặc chính xác cho từng đối tượng chỉ từ Firestore. Các mục này vẫn phải nghiệm thu trước khi tuyên bố hoàn thành 100%.
 
 **Nguồn review và thay đổi:** docs/hoang-hd05-figma-acceptance-20261110.md, docs/hoang-vi-figma-20261110.md, PR #29.
+
+## 7. Bằng chứng Mobile thật bổ sung — 11/11/2026
+
+- Monorepo Mobile: Flutter Analyze không có lỗi; **483/483** bài widget/unit test đạt. APK build lại từ đầu và cài thành công trên Samsung A15 Android 16, không xóa data.
+- Sau khi sửa nhãn, UI đã hiển thị **Tiện ích Firebase**, **Vai trò: Người dùng**, **Cấu hình từ xa**. Ảnh chụp đã loại bỏ khu vực danh tính: [Ảnh kiểm chứng](../evidence/hoang/android-a15-20261111/profile-vietnamese-no-pii.png).
+- Quy trình xác minh, thông tin main/PR và giới hạn nghiệm thu ở [Biên bản Git & Android](hoang-main-conflict-and-mobile-acceptance-20261111.md).
+- Không đánh giá dữ liệu dinh dưỡng là chính xác y khoa; không coi kiểm thử đơn vị hoặc một batch ARTEMIS của thành viên khác là chứng minh 100% tất cả tiêu chí.
