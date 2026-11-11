@@ -1,7 +1,9 @@
 // Read-only audit of user-facing language and pictographs in Flutter source.
 const fs = require('node:fs');
 const path = require('node:path');
-const root = path.join(__dirname, '..', 'lib');
+const root = fs.existsSync(path.join(__dirname, '..', 'mobile', 'lib'))
+  ? path.join(__dirname, '..', 'mobile', 'lib')
+  : path.join(__dirname, '..', 'lib');
 function files(dir){return fs.readdirSync(dir,{withFileTypes:true}).flatMap(x=>x.isDirectory()?files(path.join(dir,x.name)):x.name.endsWith('.dart')?[path.join(dir,x.name)]:[]);}
 let eng=[],emoji=[];
 const literal=/'(?:\\.|[^'\\])*'|"(?:\\.|[^"\\])*"/g;
