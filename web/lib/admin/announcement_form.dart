@@ -106,6 +106,39 @@ class _AnnouncementFormState extends State<AnnouncementForm> {
                         ),
                       ),
                       const SizedBox(height: AppSpacing.s24),
+                      Text('Đối tượng nhận', style: AppTypography.labelStrong),
+                      const SizedBox(height: AppSpacing.s8),
+                      Wrap(
+                        spacing: AppSpacing.s8,
+                        runSpacing: AppSpacing.s8,
+                        children: [
+                          for (final entry in const {
+                            'admin': 'Admin',
+                            'staff': 'Staff',
+                            'user': 'User',
+                          }.entries)
+                            FilterChip(
+                              key: ValueKey('announcement-role-${entry.key}'),
+                              label: Text(entry.value),
+                              selected: model.targetRoles.contains(entry.key),
+                              onSelected: model.editable
+                                  ? (selected) => model.toggleTargetRole(
+                                      entry.key,
+                                      selected,
+                                    )
+                                  : null,
+                            ),
+                        ],
+                      ),
+                      if (model.showValidation && model.targetRoles.isEmpty)
+                        const Padding(
+                          padding: EdgeInsets.only(top: AppSpacing.s8),
+                          child: Text(
+                            'Vui lòng chọn ít nhất một nhóm người nhận.',
+                            style: TextStyle(color: AppColors.feedbackError),
+                          ),
+                        ),
+                      const SizedBox(height: AppSpacing.s24),
                       Semantics(
                         liveRegion: true,
                         child: Text(
@@ -193,6 +226,10 @@ class _AnnouncementFormState extends State<AnnouncementForm> {
                       Text(
                         'Người đăng: ${model.role == 'admin' ? 'Quản trị viên' : 'Nhân viên'}',
                       ),
+                      const SizedBox(height: AppSpacing.s8),
+                      Text(
+                        'Người nhận: ${_targetRoleLabels(model.targetRoles)}',
+                      ),
                     ],
                   ),
                 ),
@@ -203,4 +240,12 @@ class _AnnouncementFormState extends State<AnnouncementForm> {
       ),
     ),
   );
+
+  String _targetRoleLabels(Set<String> roles) {
+    if (roles.length == AnnouncementModel.supportedTargetRoles.length) {
+      return 'Tất cả tài khoản';
+    }
+    const labels = {'admin': 'Admin', 'staff': 'Staff', 'user': 'User'};
+    return roles.map((role) => labels[role] ?? role).join(', ');
+  }
 }

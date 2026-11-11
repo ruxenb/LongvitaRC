@@ -162,16 +162,23 @@ class DataService implements IDataService {
   }
 
   @override
-  Stream<List<AnnouncementModel>> streamAnnouncements() async* {
+  Stream<List<AnnouncementModel>> streamAnnouncements(String role) async* {
+    if (!AnnouncementModel.supportedTargetRoles.contains(role)) {
+      throw const DataFailure(
+        DataFailureKind.invalid,
+        'Vai trò nhận thông báo không hợp lệ.',
+      );
+    }
     try {
       await for (final snapshot
           in _announcementsRef
-              .orderBy('createdAt', descending: true)
-              .limit(20)
+              .where('targetRoles', arrayContains: role)
               .snapshots()) {
-        yield snapshot.docs
+        final announcements = snapshot.docs
             .map((doc) => AnnouncementModel.fromMap(doc.data(), doc.id))
-            .toList(growable: false);
+            .toList();
+        announcements.sort((a, b) => b.createdAt.compareTo(a.createdAt));
+        yield announcements.take(20).toList(growable: false);
       }
     } catch (error) {
       throw DataFailure.from(error);

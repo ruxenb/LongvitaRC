@@ -1,12 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 import 'package:longvita_core/theme/app_colors.dart';
 import 'package:longvita_admin/admin/dashboard_screen.dart';
-import 'package:longvita_admin/admin/admin_instrumentation.dart';
 import 'package:longvita_admin/admin/recipe_management_screen.dart';
-import 'package:longvita_admin/admin/review_queue_screen.dart';
 import 'package:longvita_admin/admin/announcement_form.dart';
 
 class AdminShell extends StatefulWidget {
@@ -39,11 +36,6 @@ class _AdminShellState extends State<AdminShell> {
       label: Text('Công thức'),
     ),
     NavigationRailDestination(
-      icon: Icon(Icons.fact_check_outlined),
-      selectedIcon: Icon(Icons.fact_check),
-      label: Text('Xét duyệt'),
-    ),
-    NavigationRailDestination(
       icon: Icon(Icons.campaign_outlined),
       selectedIcon: Icon(Icons.campaign),
       label: Text('Thông báo'),
@@ -52,15 +44,9 @@ class _AdminShellState extends State<AdminShell> {
 
   @override
   Widget build(BuildContext context) {
-    final instrumentation = context.watch<AdminWebInstrumentation>();
     final pages = [
       const DashboardScreen(),
       const RecipeManagementScreen(),
-      ReviewQueueScreen(
-        showGuidance: instrumentation.showReviewGuidance,
-        refreshingConfig: instrumentation.refreshing,
-        refreshConfig: instrumentation.refresh,
-      ),
       const AnnouncementForm(),
     ];
     return Scaffold(
