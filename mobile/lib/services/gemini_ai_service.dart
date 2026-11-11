@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+
 import 'package:http/http.dart' as http;
 import 'package:longvita_core/firebase/analytics_service.dart';
 import 'package:longvita_core/firebase/remote_config_service.dart';
@@ -23,10 +24,14 @@ class GeminiAiService implements IGeminiAiService {
     RemoteConfigService? remoteConfig,
     AnalyticsService? analytics,
     String? apiKey,
-  })  : _client = httpClient ?? http.Client(),
-        _remoteConfig = remoteConfig,
-        _analytics = analytics,
-        _apiKey = apiKey;
+  }) : this._(httpClient ?? http.Client(), remoteConfig, analytics, apiKey);
+
+  GeminiAiService._(
+    this._client,
+    this._remoteConfig,
+    this._analytics,
+    this._apiKey,
+  );
 
   @override
   Future<AiMealRecommendation> recommendLongevityMeal({
@@ -43,11 +48,16 @@ class GeminiAiService implements IGeminiAiService {
       );
     }
 
-    final modelName = _remoteConfig?.getString('gemini_model_name') ?? _defaultModel;
-    final cleanModel = modelName.trim().isEmpty ? _defaultModel : modelName.trim();
+    final modelName =
+        _remoteConfig?.getString('gemini_model_name') ?? _defaultModel;
+    final cleanModel = modelName.trim().isEmpty
+        ? _defaultModel
+        : modelName.trim();
 
     // 2. Zero PII: Prepare prompt containing ONLY nutritional constraints
-    final sanitizedCalories = targetCalories != null && targetCalories > 0 ? targetCalories : 400;
+    final sanitizedCalories = targetCalories != null && targetCalories > 0
+        ? targetCalories
+        : 400;
     final sanitizedPrefs = preferences != null && preferences.isNotEmpty
         ? preferences.where((p) => p.trim().isNotEmpty).take(5).join(', ')
         : 'Địa Trung Hải, thực vật nguyên phần, ít đường';
@@ -60,14 +70,11 @@ class GeminiAiService implements IGeminiAiService {
 
     // 3. Log Analytics request (Zero PII parameters only)
     try {
-      await _analytics?.logEvent(
-        name: 'ai_request',
-        parameters: {
-          'meal_type': mealType.toLowerCase(),
-          'target_calories': sanitizedCalories,
-          'model_name': cleanModel,
-        },
-      );
+      await _analytics?.logEvent('ai_request', {
+        'meal_type': mealType.toLowerCase(),
+        'target_calories': sanitizedCalories,
+        'model_name': cleanModel,
+      });
     } catch (_) {
       // Analytics failure must never block application flow
     }
@@ -92,9 +99,9 @@ class GeminiAiService implements IGeminiAiService {
         {
           'role': 'user',
           'parts': [
-            {'text': prompt}
-          ]
-        }
+            {'text': prompt},
+          ],
+        },
       ],
       'generationConfig': {
         'temperature': 0.4,
@@ -102,7 +109,7 @@ class GeminiAiService implements IGeminiAiService {
         'topP': 0.9,
         'maxOutputTokens': 1024,
         'responseMimeType': 'application/json',
-      }
+      },
     });
 
     try {
@@ -118,7 +125,8 @@ class GeminiAiService implements IGeminiAiService {
           .timeout(_timeout);
 
       if (response.statusCode >= 200 && response.statusCode < 300) {
-        final Map<String, dynamic> responseJson = jsonDecode(response.body) as Map<String, dynamic>;
+        final Map<String, dynamic> responseJson =
+            jsonDecode(response.body) as Map<String, dynamic>;
         final rawText = _extractTextFromGeminiResponse(responseJson);
 
         if (rawText != null && rawText.isNotEmpty) {
@@ -131,7 +139,8 @@ class GeminiAiService implements IGeminiAiService {
         _logAiError('parse_failed', mealType);
         return AiMealRecommendation.fallback(
           mealType: mealType,
-          reason: 'Gemini response missing required fields or invalid JSON schema',
+          reason:
+              'Gemini response missing required fields or invalid JSON schema',
         );
       }
 
@@ -162,13 +171,10 @@ class GeminiAiService implements IGeminiAiService {
     required bool wasEdited,
   }) async {
     try {
-      await _analytics?.logEvent(
-        name: 'ai_result_accepted',
-        parameters: {
-          'recommendation_id': recommendationId,
-          'was_edited': wasEdited ? 1 : 0,
-        },
-      );
+      await _analytics?.logEvent('ai_result_accepted', {
+        'recommendation_id': recommendationId,
+        'was_edited': wasEdited ? 1 : 0,
+      });
     } catch (_) {
       // Non-fatal
     }
@@ -177,13 +183,12 @@ class GeminiAiService implements IGeminiAiService {
   void _logAiError(String errorType, String mealType) {
     // PR36-CR-04: Attach unawaited and catch async exceptions to avoid unhandled async errors
     unawaited(
-      _analytics?.logEvent(
-        name: 'ai_error',
-        parameters: {
-          'error_type': errorType,
-          'meal_type': mealType.toLowerCase(),
-        },
-      ).catchError((_) {}),
+      _analytics
+          ?.logEvent('ai_error', {
+            'error_type': errorType,
+            'meal_type': mealType.toLowerCase(),
+          })
+          .catchError((_) {}),
     );
   }
 
@@ -245,7 +250,8 @@ YÊU CẦU ĐẶC BIỆT:
       final decoded = jsonDecode(cleaned) as Map<String, dynamic>;
 
       // PR36-CR-05: Strict validation of required fields to prevent fabricated defaults
-      final mealName = decoded['mealName'] as String? ?? decoded['meal_name'] as String?;
+      final mealName =
+          decoded['mealName'] as String? ?? decoded['meal_name'] as String?;
       final calories = (decoded['calories'] as num?)?.toInt();
       final ingredients = decoded['ingredients'] as List<dynamic>?;
 
@@ -254,7 +260,8 @@ YÊU CẦU ĐẶC BIỆT:
       if (ingredients == null || ingredients.isEmpty) return null;
 
       decoded['isAiGenerated'] = true;
-      decoded['sourceNote'] = 'Google Gemini Developer API (Level 2 Structured Output)';
+      decoded['sourceNote'] =
+          'Google Gemini Developer API (Level 2 Structured Output)';
       return AiMealRecommendation.fromJson(decoded);
     } catch (_) {
       return null;

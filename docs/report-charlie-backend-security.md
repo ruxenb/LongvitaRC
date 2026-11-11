@@ -94,7 +94,7 @@ stateDiagram-v2
     submitted --> rejected: staff hoac admin, kem ly do
 ```
 
-Source dùng **`submitted`**, không dùng `pending` trong một số mô tả task cũ. Ngoài draft, thực đơn phải đủ đúng 7 ngày. Owner không tự duyệt; reviewer chỉ đổi status/reason, không thay món hay UID. Rejected phải có lý do; approved/rejected là trạng thái cuối của document. Client hiện yêu cầu đủ 7 ngày ngay khi lưu, chặt hơn mức draft tối đa 7 ngày trong rules. [State contract](data-model.md), [DataService](../packages/core/lib/services/data_service.dart), [ReviewQueueItem](../packages/core/lib/models/review_queue_item.dart).
+Source dùng **`submitted`**, không dùng `pending` trong một số mô tả task cũ. Ngoài draft, thực đơn phải đủ đúng 7 ngày. Tài khoản role `user` không có quyền duyệt; reviewer chỉ đổi status/reason, không thay món hay UID. Rules hiện không yêu cầu UID reviewer khác UID owner, nên không khẳng định staff/admin bị chặn xét duyệt plan của chính mình. Rejected phải có lý do; approved/rejected là trạng thái cuối của document. Client hiện yêu cầu đủ 7 ngày ngay khi lưu, chặt hơn mức draft tối đa 7 ngày trong rules. [State contract](data-model.md), [DataService](../packages/core/lib/services/data_service.dart), [ReviewQueueItem](../packages/core/lib/models/review_queue_item.dart).
 
 ### 3.4. Bằng chứng kiểm thử và triển khai
 
@@ -103,8 +103,8 @@ Source dùng **`submitted`**, không dùng `pending` trong một số mô tả t
 | [CM-04 — matrix và ca biên](../evidence/rules/CM-04-20261109/README.md) | 42 ca R-01…R-42; thêm một coverage check thành 43 test. Bộ cũ chỉ đạt 37/42 ca, lệch đúng R-05/11/12/14/42 |
 | [Log Firestore canonical](../evidence/web/CM-07-20261110/rules.txt) | **103/103** trên Emulator, gồm matrix và ca biên. 42 ca đã nằm trong tổng, không cộng thêm lần nữa |
 | [Kết quả CM-04 ban đầu](../evidence/rules/CM-04-20261109/README.md) | **117 = 103 Firestore + 14 Storage Emulator**. Storage Emulator không chứng minh upload cloud |
-| [Rollout ngày 11/11](../evidence/firebase/CM-03-rollout-20261111/README.md) | CLI compile/upload/release thành công lúc **00:02:54 VN**; đọc lại active source khớp từng byte rules trên main |
-| [Kiểm client sau rollout](../evidence/firebase/CM-03-rollout-20261111/staff-dashboard-after.png) | Staff vào Web, Dashboard2/0/0, đọc2côngthức, mở queue trống không lỗi quyền; không ghi dữ liệu nghiệp vụ |
+| [Rollout ngày 11/11](../evidence/firebase/CM-03-rollout-20261111/README.md) | CLI compile/upload/release thành công lúc **00:02:54 VN**; active source đọc lại khớp từng byte deployment target và khớp canonical rules trên main sau chuẩn hóa CRLF/LF |
+| [Kiểm client sau rollout](../evidence/firebase/CM-03-rollout-20261111/staff-dashboard-after.png) | Staff vào Web; Dashboard có 2 công thức hoạt động, 0 thực đơn chờ duyệt, 0 đã duyệt; đọc 2 công thức và mở queue trống không lỗi quyền; không ghi dữ liệu nghiệp vụ |
 
 Rollout chỉ deploy Firestore rules cho `longvita-8da7e`, database `(default)`. Nguồn `aaae57d`, rules git blob `2c382be45b9ed55e0df40f6d01ba1b07230d00c1`; ruleset active khi kiểm là `7eb64fde-6ba7-461f-81c2-707a9ae2eb10`. [Verification và source readback](../evidence/firebase/CM-03-rollout-20261111/verification.json) lưu hash, thời gian và phạm vi. Role giữ nguyên; không deploy Hosting/Storage hoặc đổi billing. Snapshot phục hồi có lưu riêng; tài liệu chia sẻ không kèm dữ liệu tài khoản hay credential.
 

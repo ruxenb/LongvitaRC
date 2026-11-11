@@ -90,6 +90,30 @@ class HeldData extends FakeDataService {
   }
 }
 
+/// A valid weekly plan is needed to reach the held submit operation.
+class WeeklyHeldData extends HeldData {
+  @override
+  MealPlanModel generateLongevityMealPlan({
+    required String uid,
+    required double weightKg,
+    required int age,
+    required int mealsPerDay,
+    required List<RecipeModel> availableRecipes,
+  }) {
+    final plan = planFor(uid);
+    return plan.copyWith(
+      days: List.generate(
+        7,
+        (day) => DailyMeal(
+          dayIndex: day,
+          dayName: 'Day $day',
+          meals: plan.days.first.meals,
+        ),
+      ),
+    );
+  }
+}
+
 /// Real session wiring around the participants under test.
 class Session {
   final FakeAuthService auth = FakeAuthService();
@@ -427,13 +451,14 @@ void main() {
         });
 
         test('late submit is ignored', () async {
-          final data = HeldData();
+          final data = WeeklyHeldData();
           final plans = plansWith(data);
           await session.signIn('uid-a');
           await plans.generatePlan(uid: 'uid-a', weightKg: 60, age: 30);
 
           final submit = plans.submitForReview('plan-uid-a');
           await data.started.future;
+          expect(plans.submitState, isA<ViewStateLoading<bool>>());
           await switchTo(next);
 
           data.status!.complete();

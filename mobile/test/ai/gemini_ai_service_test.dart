@@ -43,7 +43,11 @@ void main() {
         expect(body.contains('user_id'), isFalse, reason: 'Must not send user ID');
         expect(body.contains('Thai An'), isFalse, reason: 'Must not send user name');
 
-        return http.Response(jsonEncode(mockResponse), 200);
+        return http.Response(
+          jsonEncode(mockResponse),
+          200,
+          headers: {'content-type': 'application/json; charset=utf-8'},
+        );
       });
 
       final service = GeminiAiService(
@@ -90,7 +94,11 @@ void main() {
         ]
       };
 
-      final client = MockClient((_) async => http.Response(jsonEncode(mockResponse), 200));
+      final client = MockClient((_) async => http.Response(
+        jsonEncode(mockResponse),
+        200,
+        headers: {'content-type': 'application/json; charset=utf-8'},
+      ));
       final service = GeminiAiService(
         httpClient: client,
         apiKey: 'test-api-key',

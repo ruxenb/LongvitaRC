@@ -13,7 +13,7 @@ Bằng chứng chia sẻ được rút từ audit deploy/readback thực tế. C
 | Thời gian release | `2026-11-10T17:02:54.186917Z` = **11/11/2026 00:02:54 VN** |
 | Source server đọc lại | SHA256 `66eb848da878959d106db3e4f4f1da1a557231f0a84d0618ea88b4a00da8dcb3`, khớp từng byte target |
 | Role trước/sau rollout | Giữ nguyên3admin/1user/1staff |
-| Staff Web sau rollout | Dashboard2/0/0, danh sách2côngthức, queue trống không lỗi quyền |
+| Staff Web sau rollout | Dashboard: 2 công thức hoạt động, 0 thực đơn chờ duyệt, 0 thực đơn đã duyệt; danh sách 2 công thức; queue trống không lỗi quyền |
 
 [verification.json](verification.json) ghi phạm vi và kết quả; [deployed-firestore.rules](deployed-firestore.rules) là source trả về từ active Firebase Rules ruleset sau deploy. Nó khớp [canonical rules](../../../firebase/firestore.rules) sau chuẩn hóa CRLF/LF của checkout Git; file readback giữ nguyên bytes để kiểm hash. [manifest.json](manifest.json) có hash của JSON, source readback và ảnh Dashboard.
 

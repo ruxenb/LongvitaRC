@@ -1,0 +1,52 @@
+{
+  "baseline": "17cbbd1170bc9f0c23b6573f599082ce7a7940a2",
+  "flutter": "3.47.6",
+  "dart": "3.13.5",
+  "tests": {
+    "core": 20,
+    "mobile": 483,
+    "web": 69
+  },
+  "totalFlutterTests": 572,
+  "analyzers": {
+    "core": "clean",
+    "mobile": "clean",
+    "web": "clean"
+  },
+  "builds": {
+    "apkDebug": {
+      "passed": true,
+      "seconds": 134.0,
+      "sha256": "9d0fa98e3e15df7d7769674ffce935a5fcf987634756b8869e53b151510b055b"
+    },
+    "webRelease": {
+      "passed": true,
+      "seconds": 61.2,
+      "wasmDryRun": "passed",
+      "mainDartJsSha256": "5a543359c016f075b45c557fa016a84720c1e34410d272c56cb731f8afecaa0a"
+    }
+  },
+  "sourceDigestsNormalizedLF": {
+    "mobile/lib/screens/recipe_flow_screens.dart": "84b6e41028a1e0a1a942e962117ad37f9db804ac47762856810583be0fc9e851",
+    "mobile/lib/services/gemini_ai_service.dart": "3d434b14b4cba85cc4b36229e2d22da32d0f74fdbf133f37430fa2d22fed0fbd",
+    "mobile/lib/widgets/ai_meal_recommendation_sheet.dart": "bca9d267c599c615fd95990f8e6bd3a300fa1cdbde3f3560e85cd11a0367eb8e",
+    "mobile/test/ai/ai_meal_recommendation_sheet_test.dart": "4870dcbe368d66445f1e7d25831dda8cce75da96eafbb10b9e72c25e47e725e0",
+    "mobile/test/ai/gemini_ai_service_test.dart": "e0804983eda8d4a757e1b151992a64dcecd9106b42963cba5deedb5ced67515f",
+    "mobile/test/ai/gemini_core_integration_test.dart": "6871bf3d99d2542eb4ecf323d78fbbe5ea804100a00dc710e2dc994d737941c7",
+    "mobile/test/auth/session_race_test.dart": "7925ccb4c6ccec5d3c2db7a85364b8c0ac36d239dbd7b458f54ae296fbafd968",
+    "packages/core/lib/firebase/remote_config_service.dart": "feaa49d954eb8d79734138c647e52134f8171f050afe88fb97272a7646e9617e",
+    "packages/core/lib/models/ai_meal_recommendation.dart": "8e1e9e4f82e0d8375989ff69f189314b7377536f69a954833e3ea4cb59b5cc9f"
+  },
+  "scope": {
+    "productionWrites": 0,
+    "rulesDeployed": false,
+    "hostingDeployed": false,
+    "geminiLiveCalled": false,
+    "artemisLiveRun": false
+  },
+  "limits": [
+    "Flutter unit/widget tests and fake HTTP only; no live AI, device flow or full cross-role acceptance.",
+    "No Gemini API key was injected for these builds.",
+    "No package or SDK upgrade; inherited Android plugin deprecation/Java8 warnings remain."
+  ]
+}
