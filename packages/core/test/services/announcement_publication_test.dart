@@ -26,7 +26,7 @@ void main() {
   });
 
   test(
-    'payload is exactly the existing four fields and round-trips to Mobile',
+    'payload includes target roles and round-trips to Mobile',
     () {
       final item = publication();
       item.validate();
@@ -35,6 +35,7 @@ void main() {
         'title',
         'content',
         'authorRole',
+        'targetRoles',
         'createdAt',
       });
       expect(payload['createdAt'], '2026-11-10T12:00:00.000Z');
@@ -42,6 +43,7 @@ void main() {
       expect(mobile.title, item.announcement.title);
       expect(mobile.content, item.announcement.content);
       expect(mobile.authorRole, 'staff');
+      expect(mobile.targetRoles, ['admin', 'staff', 'user']);
       expect(mobile.createdAt, item.announcement.createdAt);
     },
   );
@@ -56,6 +58,31 @@ void main() {
       throwsA(isA<DataFailure>()),
     );
     publication(role: 'admin').validate();
+  });
+
+  test('rejects empty, unknown or duplicated target roles', () {
+    AnnouncementPublication withTargets(List<String> roles) =>
+        AnnouncementPublication(
+          uid: 'test-user',
+          announcement: AnnouncementModel(
+            id: 'AbCdEf0123456789abcd',
+            title: 'Tin mới',
+            content: 'Nội dung',
+            authorRole: 'admin',
+            targetRoles: roles,
+            createdAt: DateTime.utc(2026, 11, 10, 12),
+          ),
+        );
+
+    expect(() => withTargets([]).validate(), throwsA(isA<DataFailure>()));
+    expect(
+      () => withTargets(['owner']).validate(),
+      throwsA(isA<DataFailure>()),
+    );
+    expect(
+      () => withTargets(['user', 'user']).validate(),
+      throwsA(isA<DataFailure>()),
+    );
   });
 
   test(

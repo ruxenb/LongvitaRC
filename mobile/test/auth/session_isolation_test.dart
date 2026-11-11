@@ -65,7 +65,8 @@ class FakeDataService implements IDataService {
   ];
 
   @override
-  Stream<List<AnnouncementModel>> streamAnnouncements() => const Stream.empty();
+  Stream<List<AnnouncementModel>> streamAnnouncements(String role) =>
+      const Stream.empty();
 
   @override
   dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);

@@ -100,11 +100,15 @@ service cloud.firestore {
     }
 
     function isValidAnnouncement(data) {
-      return data.keys().hasOnly(['title', 'content', 'authorRole', 'createdAt'])
-          && data.keys().hasAll(['title', 'content', 'authorRole', 'createdAt'])
+      return data.keys().hasOnly(['title', 'content', 'authorRole', 'targetRoles', 'createdAt'])
+          && data.keys().hasAll(['title', 'content', 'authorRole', 'targetRoles', 'createdAt'])
           && isNonEmptyBoundedString(data.title, 120)
           && isNonEmptyBoundedString(data.content, 2000)
           && data.authorRole == getUserData().role
+          && data.targetRoles is list
+          && data.targetRoles.size() > 0
+          && data.targetRoles.size() <= 3
+          && data.targetRoles.toSet().hasOnly(['admin', 'staff', 'user'])
           && data.createdAt is string;
     }
 
@@ -231,14 +235,14 @@ service cloud.firestore {
 
     // Collection: announcements/{id}
     match /announcements/{id} {
-      // All authenticated users can read announcements
-      allow read: if isAuthenticated();
+      // A signed-in account only receives announcements targeting its role.
+      allow read: if isAuthenticated() && getUserData().role in resource.data.targetRoles;
 
       // Only staff and admin can publish announcements
       allow create: if isStaffOrAdmin() && isValidAnnouncement(request.resource.data);
       allow update: if isStaffOrAdmin()
                     && isValidAnnouncement(request.resource.data)
-                    && changedKeys().hasOnly(['title', 'content']);
+                    && changedKeys().hasOnly(['title', 'content', 'targetRoles']);
       allow delete: if isStaffOrAdmin();
     }
   }

@@ -32,12 +32,15 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    _announcements = context.read<IDataService>().streamAnnouncements();
+    _announcements = _announcementStream();
   }
 
-  void _refreshAnnouncements() => setState(
-    () => _announcements = context.read<IDataService>().streamAnnouncements(),
-  );
+  void _refreshAnnouncements() =>
+      setState(() => _announcements = _announcementStream());
+
+  Stream<List<AnnouncementModel>> _announcementStream() => context
+      .read<IDataService>()
+      .streamAnnouncements(context.read<AuthViewModel>().currentUser!.role);
 
   void _navigateTo(int index) {
     final widget = switch (index) {
