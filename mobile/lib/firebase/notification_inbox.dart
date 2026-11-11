@@ -67,7 +67,8 @@ class NotificationInbox {
   /// Returns true when the message was added to the inbox as a new entry.
   bool receive(AppNotification notification, {bool tapped = false}) {
     final recipient = notification.recipientUid;
-    if (recipient == null) return false;
+    final isAnnouncement = notification.target?.type == 'announcement';
+    if (recipient == null && !isAnnouncement) return false;
 
     final uid = _uid;
     if (uid == null) {
@@ -75,7 +76,9 @@ class NotificationInbox {
       if (_held.length > maxHeld) _held.removeAt(0);
       return false;
     }
-    if (recipient != uid) return false;
+    if (recipient != null && recipient != 'all' && recipient != uid && !isAnnouncement) {
+      return false;
+    }
 
     final accepted = _accepted[notification.messageId];
     if (accepted == null) {

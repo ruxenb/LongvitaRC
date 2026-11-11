@@ -63,6 +63,7 @@ env/
 # Firebase rules tests
 /firebase/node_modules/
 /firebase/.firebase/
+/.firebase/
 
 # Symbolication & Obfuscation
 app.*.symbols

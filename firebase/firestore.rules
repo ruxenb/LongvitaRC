@@ -246,5 +246,10 @@ service cloud.firestore {
                     && changedKeys().hasOnly(['title', 'content', 'targetRoles']);
       allow delete: if isStaffOrAdmin();
     }
+
+    // Collection: fcm_broadcasts/{id} (Push notifications queue)
+    match /fcm_broadcasts/{id} {
+      allow read, create, update, delete: if isStaffOrAdmin();
+    }
   }
 }

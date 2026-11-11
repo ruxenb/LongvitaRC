@@ -23,7 +23,9 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
   if (kDebugMode) debugPrint('FCM background: ${message.messageId}');
   final notification = _parseMessage(message);
-  if (notification != null && notification.recipientUid != null) {
+  if (notification != null &&
+      (notification.recipientUid != null ||
+          notification.target?.type == 'announcement')) {
     await NotificationHistoryStore().addPending(notification);
   }
 }
@@ -161,6 +163,10 @@ class NotificationService {
     if (_inbox.boundUid != uid) _generation++;
     final generation = _generation;
     _inbox.bind(uid);
+    try {
+      await FirebaseMessaging.instance.subscribeToTopic('all_users');
+      await FirebaseMessaging.instance.subscribeToTopic('user_$uid');
+    } catch (_) {}
     await _loadHistory(uid, generation);
     if (generation != _generation) return;
     onChanged?.call();

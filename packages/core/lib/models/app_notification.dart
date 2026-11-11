@@ -93,8 +93,10 @@ class AppNotification {
     );
   }
 
-  /// True when the message names exactly [uid] as its recipient.
-  bool isFor(String uid) => recipientUid != null && recipientUid == uid;
+  /// True when the message names exactly [uid] as its recipient or is a broadcast.
+  bool isFor(String uid) =>
+      (recipientUid != null && (recipientUid == uid || recipientUid == 'all')) ||
+      target?.type == 'announcement';
 
   /// The form kept on the device. [source] stays out: it only lives in memory.
   Map<String, dynamic> toJson() => {
