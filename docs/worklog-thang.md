@@ -348,6 +348,10 @@ text files có prefix đường dẫn máy cũ; đã thay prefix bằng `<user-h
 
 ## 11. Yêu cầu leader xác nhận S6-1 và S7-4 ngày 10/11/2026
 
+> Đây là snapshot trước khi Leader phản hồi. Trạng thái hiện hành được chốt tại
+> mục 12 bên dưới; các dòng “chờ leader” trong mục này được giữ để bảo toàn lịch
+> sử quyết định, không phải blocker hiện tại.
+
 - Soạn yêu cầu gửi Thái An tại
   `docs/coordination/request-thai-an-s6-1-s7-4-20261110.md`, tách rõ hai quyết
   định: chọn SHA/tag/tiêu chí kiểm thử cho S6-1 và bổ sung hồ sơ AI review cá
@@ -358,3 +362,53 @@ text files có prefix đường dẫn máy cũ; đã thay prefix bằng `<user-h
   findings, quyết định, fix link và disclosure của Thái An.
 - Yêu cầu kèm điều kiện đóng task và mẫu phản hồi để quyết định của leader có
   thể truy vết trong repo/GitHub, tránh nghiệm thu bằng suy đoán.
+
+## 12. Đồng bộ trạng thái sau quyết định Leader và evidence Web — 11/11/2026
+
+- Leader đã duyệt feature freeze với baseline code `a4eaa27`. Tag `v1.0-rc`
+  thực tế trỏ tới `aeae4c3`, commit kế tiếp chỉ bổ sung văn bản quyết định;
+  không force-move tag đã phát hành. S6-1 được tính **Đã hoàn thành** với hai
+  mốc được ghi tách biệt để tránh hiểu sai SHA của code và SHA của tag.
+- S5-10 giữ **Đã hoàn thành có giới hạn**: sáu nhóm failure case đã có evidence
+  ở các mức cloud/emulator phù hợp; Storage Emulator không được ghi thành
+  Storage production.
+- Firebase Hosting TV-00 đã deploy tại `https://longvita-8da7e.web.app` và có
+  kiểm tra HTTP, ẩn danh, Admin vào Dashboard và role `user` bị từ chối. Lượt
+  deploy này không deploy Firestore Rules và không chứng minh cross-role live.
+- TV-04 còn thiếu ba lượt Mobile ↔ Web live; blocker hiện tại là HD-05, tài
+  khoản demo đúng role và xác nhận Rules production, không còn là Hosting.
+- TV-04B đã có sáu ảnh production trên trình duyệt điện thoại. Các ảnh xác nhận
+  một phần Sign-in/OAuth, Review Queue empty và Dashboard data; đồng thời phát
+  hiện Recipes bị cắt/overflow ở màn hình hẹp (WEB-18). Chưa đủ desktop
+  viewport, CRUD/review live, Analytics DebugView hoặc Remote Config live.
+- S9-2 đã đối chiếu project `longvita-8da7e`, project number và Android package;
+  task vẫn **Đang làm** cho tới khi rà toàn bộ ảnh được chọn vào PDF/slide cuối.
+- S9-5-VLQ giữ **Đã hoàn thành** theo bài nói, Remote Config live ngày 06/11 và
+  TC-11 ARTEMIS pass ngày 07/11.
+- `main` được đối chiếu tại `aaae57d`; report PDF, slide PDF, video public, ba
+  lượt cross-role và lượt security/access audit cuối vẫn chưa hoàn thành.
+
+## 13. WEB-18 và audit S9-1 — 11/11/2026
+
+- WEB-18 được sửa ở source: Recipes dùng card list dưới 720 px, header xếp dọc
+  dưới 560 px và giảm padding trên màn hình hẹp. Widget test mới dùng viewport
+  412×915. `flutter analyze` sạch, 27/27 test trực tiếp và 69/69 toàn package
+  Web pass; `flutter build web --release` thành công. Chưa deploy hoặc tự ghi
+  production pass; Thắng sẽ kiểm tra bản deploy và bổ sung ảnh sau.
+- Gitleaks quét lại cây hiện tại ở chế độ redacted. Ba Storage download token
+  và email/tên/UID trong `evidence/artemis/raw/runs.jsonl` đã được thay bằng
+  placeholder; script sanitize được lưu tại
+  `scripts/sanitize-artemis-evidence.mjs` để kiểm soát lần cập nhật sau.
+- Sau sanitize, source tree được theo dõi còn ba Firebase client keys trong
+  cấu hình Android/Mobile/Web và một false positive là SHA-256 trong hồ sơ test.
+  Các build/cache generated cũng chứa client config nhưng không thuộc file Git.
+- Quét toàn lịch sử vẫn thấy ba token ở các commit cũ cùng Firebase client
+  config. Không rewrite history trong lượt này. S9-1 tiếp tục **Đang làm** cho
+  tới khi owner xác minh/revoke token cũ và xác nhận API restrictions cùng
+  Firestore/Storage Rules.
+- S8-5/TV-06 bắt đầu bằng `report/Lab03_STUDENTID_DRAFT.pdf`: 10 trang A4,
+  tổng hợp phạm vi, design, MVVM, Firebase, Web Admin, cross-role, review và
+  security. Toàn bộ 10 trang đã render để kiểm tra; bản nháp giữ rõ các giới hạn
+  chưa nghiệm thu. Chưa đổi sang tên MSSV hoặc đánh dấu hoàn thành.
+- Theo quyết định của Thắng, S8-10/TV-07 để Thắng và nhóm tự làm; lượt này không
+  tạo hoặc chỉnh slide deck.

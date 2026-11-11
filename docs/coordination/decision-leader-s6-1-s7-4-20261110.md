@@ -11,7 +11,8 @@
 
 ### S6-1: Feature Freeze & Release Candidate
 - **Quyết định:** **Đồng ý feature freeze**
-- **Release candidate SHA:** `a4eaa2767ecb810730b572c083a47ad565179ed1` (rút gọn: `a4eaa27`)
+- **Baseline code được duyệt:** `a4eaa2767ecb810730b572c083a47ad565179ed1` (rút gọn: `a4eaa27`).
+- **Tag thực tế:** `v1.0-rc` trỏ tới `aeae4c350e3de53bc1c0c26afb6806062f6b1e89`, là commit kế tiếp chỉ bổ sung văn bản quyết định này; không có thay đổi mã nguồn ứng dụng so với baseline đã duyệt.
 - **Kiểm thử phải chạy lại:** Toàn bộ test suite tự động của Workspace (`scripts/check-workspace.ps1` hoặc `python scripts/check-monorepo.py`), scoped Web Admin tests và Mobile unit/widget tests.
 - **Blocker hoặc giới hạn còn lại:** 
   - Đóng băng toàn bộ việc thêm tính năng mới ngoài phạm vi đề bài Final Assignment.
@@ -32,6 +33,6 @@
 ---
 
 ## 2. Kế hoạch triển khai tiếp theo
-1. Tạo và push tag `v1.0-rc` lên GitHub remote.
-2. Cập nhật trạng thái task S6-1 thành Hoàn thành trong tracker.
+1. Tag `v1.0-rc` đã được tạo tại commit tài liệu `aeae4c3`; giữ nguyên tag đã phát hành và ghi tách biệt baseline code `a4eaa27`.
+2. Trạng thái task S6-1 đã được cập nhật thành Hoàn thành trong tracker.
 3. Thái An triển khai nhánh `feature/thai-an-ai-gemini` để lấy review CodeRabbit hoàn tất S7-4.

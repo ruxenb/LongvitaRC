@@ -1,9 +1,10 @@
 # TV-04 — Luồng liên vai trò Mobile ↔ Web Admin
 
-> **Cập nhật:** 10/11/2026
+> **Cập nhật:** 11/11/2026
 > **Owner:** Thắng VLQ; phối hợp Hoàng DV
-> **Trạng thái:** đặc tả và quy trình đo đã hoàn thành; ba lượt chạy live còn
-> chờ Mobile HD-05, Firebase Hosting TV-00 và tài khoản demo đúng role.
+> **Trạng thái:** đặc tả và quy trình đo đã hoàn thành; Firebase Hosting TV-00
+> đã hoạt động. Ba lượt chạy live còn chờ Mobile HD-05, Rules production đúng
+> bản và tài khoản demo đúng role.
 
 ## 1. Mục tiêu và phạm vi
 
@@ -66,7 +67,9 @@ sequenceDiagram
 | `approved`/`rejected` | trạng thái khác | không ai | trạng thái cuối; rules từ chối |
 
 Nguồn chuẩn: `docs/data-model.md`, `firebase/firestore.rules`,
-`lib/viewmodels/meal_plan_viewmodel.dart` và `lib/admin/admin_service.dart`.
+`mobile/lib/viewmodels/meal_plan_viewmodel.dart` và
+`packages/core/lib/services/admin_service.dart` (được Web sử dụng qua shared
+core).
 
 ## 5. Kịch bản chạy live
 
@@ -96,9 +99,9 @@ Thời gian ghi bằng millisecond từ cùng một clock. Nếu một mốc kh�
 
 | Lượt | Quyết định | Submit ack (ms) | Mobile→Web (ms) | Review ack (ms) | Web→Mobile (ms) | E2E (ms) | Kết quả | Evidence |
 |---:|---|---:|---:|---:|---:|---:|---|---|
-| 1 | Approve | — | — | — | — | — | Chưa chạy | Chờ TV-00/HD-05 |
-| 2 | Reject | — | — | — | — | — | Chưa chạy | Chờ TV-00/HD-05 |
-| 3 | Approve | — | — | — | — | — | Chưa chạy | Chờ TV-00/HD-05 |
+| 1 | Approve | — | — | — | — | — | Chưa chạy | Chờ HD-05/tài khoản/Rules production |
+| 2 | Reject | — | — | — | — | — | Chưa chạy | Chờ HD-05/tài khoản/Rules production |
+| 3 | Approve | — | — | — | — | — | Chưa chạy | Chờ HD-05/tài khoản/Rules production |
 
 Chỉ thay dấu `—` bằng số đo quan sát được và dẫn file trong
 `evidence/cross_role/`. Không đánh dấu TV-04 hoàn thành khi chưa đủ ba lượt hợp
@@ -115,9 +118,11 @@ lệ trên hệ thống deploy.
 
 ## 9. Giới hạn hiện tại
 
-- Hosting production chưa deploy do tài khoản CLI thiếu quyền
-  `serviceusage.services.use`; chưa có live/incognito URL evidence.
+- Hosting production đã deploy tại `https://longvita-8da7e.web.app`; HTTP 200,
+  mở ẩn danh, đăng nhập Admin và từ chối role `user` đã được kiểm tra. Lượt
+  deploy chỉ gồm Hosting, không chứng minh Firestore Rules production đã đúng
+  bản hoặc luồng cross-role đã chạy.
 - Chưa chạy ba lượt cross-role live và chưa ghi production Firestore trong bước
-  soạn tài liệu này.
+  đo TV-04.
 - `publish_announcement` thuộc CM-07, không phải điều kiện của luồng duyệt thực
   đơn TV-04.

@@ -285,6 +285,34 @@ void main() {
     expect(service.saved, hasLength(1));
   });
 
+  testWidgets('recipe screen uses compact cards without overflow at 412px', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(412, 915);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+    final service = FakeAdminService();
+    final vm = RecipeAdminViewModel(service);
+    await tester.pumpWidget(
+      MultiProvider(
+        providers: [ChangeNotifierProvider.value(value: vm)],
+        child: app(const RecipeManagementScreen()),
+      ),
+    );
+    await tester.pump();
+    service.recipes.add([recipe()]);
+    await tester.pump();
+
+    expect(tester.takeException(), isNull);
+    expect(find.byKey(const ValueKey('recipe-compact-list')), findsOneWidget);
+    expect(find.byKey(const ValueKey('recipe-desktop-table')), findsNothing);
+    expect(find.text('Món mẫu'), findsOneWidget);
+    expect(find.textContaining('kcal'), findsOneWidget);
+    expect(find.byTooltip('Chỉnh sửa'), findsOneWidget);
+    expect(find.byTooltip('Lưu trữ'), findsOneWidget);
+  });
+
   testWidgets('review queue approves and rejects with reason', (tester) async {
     final service = FakeAdminService();
     final events = <String>[];

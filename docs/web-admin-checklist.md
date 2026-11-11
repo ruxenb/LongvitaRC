@@ -39,7 +39,7 @@
 | WEB-15 | Analytics | approve/reject trong DebugView | Có unit/widget test event | ảnh DebugView thật |
 | WEB-16 | Announcement | publish thành công + Analytics | Chờ CM-07 | ảnh form, Inbox Mobile, DebugView |
 | WEB-17 | Hosting | SPA reload và mở ẩn danh | Pass một phần: URL/ẩn danh đạt, chưa có SPA route reload production | chụp reload production + metadata route |
-| WEB-18 | A11y/layout | keyboard, focus, text scale, overflow | Fail mobile-width ở Recipes; desktop/a11y còn thiếu | sửa overflow rồi kiểm tra lại |
+| WEB-18 | A11y/layout | keyboard, focus, text scale, overflow | Source đã sửa responsive Recipes ngày 11/11; widget test 412×915 pass, production chưa retest | Deploy rồi chụp lại 412×915; kiểm desktop, keyboard và zoom 200% |
 
 ## 3. Viewport bắt buộc
 
