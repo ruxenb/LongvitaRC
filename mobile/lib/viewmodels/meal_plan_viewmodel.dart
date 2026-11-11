@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:longvita_core/firebase/analytics_service.dart';
 import 'package:longvita/firebase/crashlytics_service.dart';
 import 'package:longvita_core/firebase/remote_config_service.dart';
@@ -28,6 +30,10 @@ class MealPlanViewModel extends BaseViewModel implements SessionScoped {
   ViewState<List<RecipeModel>> _alternativesState = const ViewStateIdle();
   ViewState<bool> _saveState = const ViewStateIdle();
   ViewState<bool> _replaceState = const ViewStateIdle();
+  ViewState<bool> _submitState = const ViewStateIdle();
+  StreamSubscription<List<MealPlanModel>>? _reviewSubscription;
+  int _reviewListenGeneration = 0;
+  String? _reviewSyncError;
 
   MealPlanViewModel({
     required this.dataService,
@@ -42,17 +48,121 @@ class MealPlanViewModel extends BaseViewModel implements SessionScoped {
   ViewState<List<RecipeModel>> get alternativesState => _alternativesState;
   ViewState<bool> get saveState => _saveState;
   ViewState<bool> get replaceState => _replaceState;
+  ViewState<bool> get submitState => _submitState;
+  String? get reviewSyncError => _reviewSyncError;
   MealPlanModel? get activePlan => _activePlan;
 
   /// S4-3: ReportService can consume the same immutable MealPlanModel.
   MealPlanModel? get reportablePlan => _activePlan;
 
   @override
-  void onSessionStarted(UserModel user) => _sessionUid = user.uid;
+  void onSessionStarted(UserModel user) {
+    if (_sessionUid != user.uid) _stopReviewSync();
+    _sessionUid = user.uid;
+    if (_activePlan?.uid == user.uid && _activePlan!.id.isNotEmpty) {
+      _watchSelectedPlan();
+    }
+  }
+
+  void _stopReviewSync() {
+    _reviewListenGeneration++;
+    final old = _reviewSubscription;
+    _reviewSubscription = null;
+    if (old != null) unawaited(old.cancel());
+    _reviewSyncError = null;
+  }
+
+  /// HD-05: follow only the current user's saved plan. Update review status,
+  /// never replace a locally edited draft with a stale Firestore cache event.
+  void _watchSelectedPlan() {
+    _stopReviewSync();
+    final plan = _activePlan;
+    final uid = _sessionUid;
+    if (uid == null || plan == null || plan.id.isEmpty || plan.uid != uid) {
+      return;
+    }
+    final epoch = _epoch.current;
+    final generation = _reviewListenGeneration;
+    try {
+      _reviewSubscription = dataService
+          .streamUserMealPlans(uid)
+          .listen(
+            (plans) {
+              if (_epoch.isStale(epoch) ||
+                  generation != _reviewListenGeneration) {
+                return;
+              }
+              final current = _activePlan;
+              if (current == null ||
+                  current.id != plan.id ||
+                  current.uid != uid) {
+                return;
+              }
+              for (final remote in plans) {
+                if (remote.id != current.id || remote.uid != uid) continue;
+                if (current.status == 'submitted' && remote.status == 'draft') {
+                  return;
+                }
+                if ((current.isApproved || current.isRejected) &&
+                    remote.status != current.status) {
+                  return;
+                }
+                if (current.status != remote.status ||
+                    current.reviewerReason != remote.reviewerReason) {
+                  final updated = current.copyWith(
+                    status: remote.status,
+                    reviewerReason: remote.reviewerReason,
+                  );
+                  _activePlan = updated;
+                  _currentPlanState = ViewStateSuccess(updated);
+                  _reviewSyncError = null;
+                  notifyListeners();
+                } else if (_reviewSyncError != null) {
+                  _reviewSyncError = null;
+                  notifyListeners();
+                }
+                return;
+              }
+            },
+            onError: (Object error, StackTrace trace) {
+              if (_epoch.isStale(epoch) ||
+                  generation != _reviewListenGeneration) {
+                return;
+              }
+              _reviewSyncError =
+                  'Không thể đồng bộ trạng thái xét duyệt. '
+                  '${DataFailure.from(error).message}';
+              notifyListeners();
+              unawaited(
+                crashlytics.recordError(
+                  error,
+                  trace,
+                  reason: 'Failed to watch plan review',
+                ),
+              );
+            },
+          );
+    } catch (error) {
+      _reviewSyncError = DataFailure.from(error).message;
+      notifyListeners();
+    }
+  }
+
+  void retryReviewSync() {
+    _watchSelectedPlan();
+    notifyListeners();
+  }
+
+  @override
+  void dispose() {
+    _stopReviewSync();
+    super.dispose();
+  }
 
   @override
   void clearSession() {
     _epoch.advance();
+    _stopReviewSync();
     _searchSeq++;
     _alternativeSeq++;
     _sessionUid = null;
@@ -63,6 +173,7 @@ class MealPlanViewModel extends BaseViewModel implements SessionScoped {
     _alternativesState = const ViewStateIdle();
     _saveState = const ViewStateIdle();
     _replaceState = const ViewStateIdle();
+    _submitState = const ViewStateIdle();
     notifyListeners();
   }
 
@@ -78,7 +189,9 @@ class MealPlanViewModel extends BaseViewModel implements SessionScoped {
     _currentPlanState = ViewStateSuccess(plan);
     _saveState = const ViewStateIdle();
     _replaceState = const ViewStateIdle();
+    _submitState = const ViewStateIdle();
     notifyListeners();
+    _watchSelectedPlan();
   }
 
   Future<void> generatePlan({
@@ -106,6 +219,7 @@ class MealPlanViewModel extends BaseViewModel implements SessionScoped {
       return;
     }
 
+    _stopReviewSync();
     _activePlan = null;
     _currentPlanState = const ViewStateLoading(
       'Đang tải công thức từ Firestore và lập thực đơn 7 ngày…',
@@ -162,7 +276,9 @@ class MealPlanViewModel extends BaseViewModel implements SessionScoped {
 
   Future<bool> saveActivePlan() async {
     final plan = _activePlan;
-    if (plan == null || (_sessionUid != null && plan.uid != _sessionUid)) {
+    if (plan == null ||
+        !plan.isDraft ||
+        (_sessionUid != null && plan.uid != _sessionUid)) {
       _saveState = const ViewStateError('Chưa có thực đơn hợp lệ để lưu.');
       notifyListeners();
       return false;
@@ -177,6 +293,7 @@ class MealPlanViewModel extends BaseViewModel implements SessionScoped {
       _activePlan = saved;
       _currentPlanState = ViewStateSuccess(saved);
       _saveState = const ViewStateSuccess(true);
+      _watchSelectedPlan();
       notifyListeners();
       await analytics.logSaveMealPlan(planId: id, status: plan.status);
       return !_epoch.isStale(epoch);
@@ -400,18 +517,36 @@ class MealPlanViewModel extends BaseViewModel implements SessionScoped {
   }
 
   Future<bool> submitForReview(String planId) async {
+    final active = _activePlan;
+    if (active == null ||
+        active.id.isEmpty ||
+        active.id != planId ||
+        _sessionUid == null ||
+        active.uid != _sessionUid ||
+        !active.isDraft ||
+        active.days.length != 7) {
+      _submitState = const ViewStateError(
+        'Chỉ gửi được thực đơn 7 ngày đã lưu, còn là bản nháp và thuộc tài khoản của bạn.',
+      );
+      notifyListeners();
+      return false;
+    }
+    if (_submitState is ViewStateLoading<bool>) return false;
     final epoch = _epoch.current;
+    _submitState = const ViewStateLoading('Đang gửi thực đơn xét duyệt…');
+    notifyListeners();
     try {
       await dataService.updateMealPlanStatus(planId, 'submitted');
-      if (_epoch.isStale(epoch)) return false;
-      if (_activePlan?.id == planId) {
-        _activePlan = _activePlan!.copyWith(status: 'submitted');
-        _currentPlanState = ViewStateSuccess(_activePlan!);
-        notifyListeners();
-      }
+      if (_epoch.isStale(epoch) || _activePlan?.id != planId) return false;
+      _activePlan = _activePlan!.copyWith(status: 'submitted');
+      _currentPlanState = ViewStateSuccess(_activePlan!);
+      _submitState = const ViewStateSuccess(true);
+      notifyListeners();
       return true;
     } catch (error, trace) {
       if (_epoch.isStale(epoch)) return false;
+      _submitState = ViewStateError(DataFailure.from(error).message, error);
+      notifyListeners();
       await crashlytics.recordError(
         error,
         trace,

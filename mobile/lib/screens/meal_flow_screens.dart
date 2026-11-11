@@ -264,6 +264,14 @@ class _CreatePlanScreenState extends State<CreatePlanScreen> {
   }
 }
 
+String _planStatusLabel(String raw) => switch (raw) {
+  'draft' => 'Bản nháp',
+  'submitted' => 'Chờ xét duyệt',
+  'approved' => 'Đã duyệt',
+  'rejected' => 'Bị từ chối',
+  _ => 'Chưa xác định',
+};
+
 /// S04: full seven-day result; save with honest error handling.
 class WeeklyPlanScreen extends StatefulWidget {
   const WeeklyPlanScreen({super.key});
@@ -303,6 +311,24 @@ class _WeeklyPlanScreenState extends State<WeeklyPlanScreen> {
     );
   }
 
+  Future<void> _submit(BuildContext context) async {
+    final vm = context.read<MealPlanViewModel>();
+    final id = vm.activePlan?.id;
+    if (id == null || id.isEmpty) return;
+    final ok = await vm.submitForReview(id);
+    if (!context.mounted) return;
+    flowSnack(
+      context,
+      ok
+          ? 'Đã gửi thực đơn đến chuyên gia. Trạng thái sẽ cập nhật tự động.'
+          : (vm.submitState is ViewStateError<bool>
+                ? (vm.submitState as ViewStateError<bool>).message
+                : 'Chưa thể gửi thực đơn. Hãy thử lại.'),
+      actionLabel: ok ? null : 'Thử lại',
+      onAction: ok ? null : () => _submit(context),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final vm = context.watch<MealPlanViewModel>();
@@ -335,6 +361,15 @@ class _WeeklyPlanScreenState extends State<WeeklyPlanScreen> {
                       style: AppTypography.headingM,
                     ),
                     const SizedBox(height: AppSpacing.s12),
+                    Semantics(
+                      header: true,
+                      headingLevel: 2,
+                      child: const Text(
+                        'Chọn ngày trong tuần',
+                        style: AppTypography.title,
+                      ),
+                    ),
+                    const SizedBox(height: AppSpacing.s8),
                     SizedBox(
                       height: 72,
                       child: ListView.separated(
@@ -396,6 +431,7 @@ class _WeeklyPlanScreenState extends State<WeeklyPlanScreen> {
                       ) ...[
                         _MealPlanCard(
                           recipe: selected.meals[index],
+                          mealIndex: index + 1,
                           primary: index == 0,
                           onTap: () => Navigator.of(context).push(
                             MaterialPageRoute(
@@ -445,6 +481,49 @@ class _WeeklyPlanScreenState extends State<WeeklyPlanScreen> {
                           style: const TextStyle(color: Colors.red),
                         ),
                       ),
+                    if (plan.id.isNotEmpty && plan.isDraft) ...[
+                      const SizedBox(height: 12),
+                      AppButton(
+                        key: const Key('submit-plan-review'),
+                        text: 'Gửi chuyên gia xét duyệt',
+                        icon: Icons.send_outlined,
+                        isLoading: vm.submitState is ViewStateLoading<bool>,
+                        onPressed:
+                            vm.submitState is ViewStateLoading<bool> ||
+                                    vm.saveState is ViewStateLoading<bool>
+                                ? null
+                                : () => _submit(context),
+                      ),
+                    ],
+                    if (plan.isSubmitted)
+                      const Padding(
+                        padding: EdgeInsets.only(top: 12),
+                        child: Text(
+                          'Đang chờ chuyên gia xét duyệt. Kết quả sẽ tự cập nhật.',
+                        ),
+                      ),
+                    if (plan.isRejected &&
+                        (plan.reviewerReason?.isNotEmpty ?? false))
+                      Padding(
+                        padding: const EdgeInsets.only(top: 12),
+                        child: Text('Lý do từ chối: ${plan.reviewerReason}'),
+                      ),
+                    if (plan.isApproved)
+                      const Padding(
+                        padding: EdgeInsets.only(top: 12),
+                        child: Text(
+                          'Đã duyệt: Thực đơn đã được chuyên gia thông qua.',
+                        ),
+                      ),
+                    if (vm.reviewSyncError != null) ...[
+                      const SizedBox(height: 12),
+                      Text(vm.reviewSyncError!),
+                      TextButton.icon(
+                        onPressed: vm.retryReviewSync,
+                        icon: const Icon(Icons.refresh),
+                        label: const Text('Kết nối lại'),
+                      ),
+                    ],
                     const SizedBox(height: 12),
                     AppButton(
                       text: 'Xem nguyên liệu',
@@ -642,11 +721,13 @@ class _ReadOnlyResult extends StatelessWidget {
 
 class _MealPlanCard extends StatelessWidget {
   final RecipeModel recipe;
+  final int? mealIndex;
   final bool primary;
   final VoidCallback onTap;
 
   const _MealPlanCard({
     required this.recipe,
+    this.mealIndex,
     required this.primary,
     required this.onTap,
   });
@@ -682,7 +763,12 @@ class _MealPlanCard extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(recipe.name, style: AppTypography.labelStrong),
+                      Text(
+                        mealIndex != null
+                            ? 'Bữa $mealIndex: ${recipe.name}'
+                            : recipe.name,
+                        style: AppTypography.labelStrong,
+                      ),
                       const SizedBox(height: AppSpacing.s4),
                       if (recipe.sourceNote.isNotEmpty)
                         Text(
@@ -746,7 +832,7 @@ class _SavedPlanCard extends StatelessWidget {
       ),
       title: Text(plan.title, style: AppTypography.labelStrong),
       subtitle: Text(
-        '${plan.createdAt.toLocal().toString().split(' ').first} • 7 days',
+        '${_planStatusLabel(plan.status)} • ${plan.createdAt.toLocal().toString().split(' ').first} • 7 ngày',
         style: AppTypography.supporting,
       ),
       trailing: Text(
