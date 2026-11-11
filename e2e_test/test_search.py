@@ -1,5 +1,9 @@
 """Hoàng S6-5 — real ARTEMIS search; no fabricated Firestore recipes."""
 
+import pytest
+
+
+@pytest.mark.signed_in
 async def test_search_empty_state_and_retry(run_case):
     output = await run_case(
         "Open signed-in Longvita, tap 'Dinh dưỡng' to open "
@@ -15,6 +19,7 @@ async def test_search_empty_state_and_retry(run_case):
     assert "Thử lại" in output.after("zzzx_nonexistent")
 
 
+@pytest.mark.signed_in
 async def test_search_real_recipe_and_open_details(run_case):
     output = await run_case(
         "Open signed-in Longvita, tap 'Dinh dưỡng' then "
