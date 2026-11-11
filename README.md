@@ -229,7 +229,9 @@ Các màn hình Web hiện có:
 ## 6. Video Demo & Bằng Chứng Trực Tuyến
 
 - **Demo Video Link:** `[Đường link YouTube / Google Drive mở công khai]` *(Sẽ cập nhật trước hạn nộp tại Task S8-15)*
-- **Báo cáo PDF:** [`report/Lab03_<StudentID>.pdf`](report/)
+- **Bản nháp báo cáo Lab 3:**
+  [`report/Lab03_SE184739_draft.md`](report/Lab03_SE184739_draft.md) — chưa phải
+  PDF nộp cuối.
 - **Slide Deck PDF:** [`slides/Lab03_<StudentID>_slides.pdf`](slides/)
 
 ### Final Assignment deliverables
@@ -254,7 +256,8 @@ Các màn hình Web hiện có:
 - **Nội dung báo cáo của Thắng:** [`docs/report-drafts/s8-1-thang.md`](docs/report-drafts/s8-1-thang.md).
 - **Nội dung slide của Thắng:** [`docs/report-drafts/s8-9-slides-thang.md`](docs/report-drafts/s8-9-slides-thang.md); đã chốt nội dung/evidence ngày 08/11, chưa phải deck PDF cuối.
 - **Kịch bản clip của Thắng:** [`docs/report-drafts/s8-14-thang-clip-script.md`](docs/report-drafts/s8-14-thang-clip-script.md); chưa quay clip thật.
-- **Audit bảo mật/Git/Project ID gần nhất:** [`evidence/audit/S9-1-S9-4-20261108/`](evidence/audit/S9-1-S9-4-20261108/README.md).
+- **Audit bảo mật/Git/Project ID gần nhất:**
+  [`evidence/audit/S9-1-S9-4-20261110/`](evidence/audit/S9-1-S9-4-20261110/README.md).
 - Report PDF, slide PDF và video public vẫn là placeholder cho đến khi S8-5,
   S8-10 và S8-15 hoàn tất.
 - **Report draft:** [`report/Lab03_STUDENTID_DRAFT.pdf`](report/Lab03_STUDENTID_DRAFT.pdf)
@@ -279,6 +282,9 @@ nếu không có log, ảnh hoặc run tương ứng.
   ẩn danh, Google OAuth và role gate `admin`/`user` đã được kiểm tra.
 - TV-01, TV-02, TV-03 và TV-03B đã có implementation, test/evidence local trên
   PR #25, đã merge vào `main` tại `ea7b888`.
+- TV-04 đã hoàn thành phần đặc tả và quy trình đo; chưa có ba lượt live.
+- TV-04B đã có ảnh production trên desktop/mobile browser và checklist; vẫn
+  thiếu hành động ghi dữ liệu, staff, Console evidence và ảnh sau sửa responsive.
 - TV-04 đã hoàn thành phần đặc tả và quy trình đo; Hosting đã hoạt động nhưng
   chưa có ba lượt cross-role live hợp lệ.
 - TV-04B đã có sáu ảnh production trên trình duyệt điện thoại: Sign-in, OAuth
