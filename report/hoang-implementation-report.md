@@ -138,3 +138,7 @@ Firebase Emulator Rules 22/22 đạt; recipe offline safety gates 31/31 đạt n
 Sau khi PR42 merge, latest main 95b1c31 đã được phân tích và test lại hoàn toàn: Mobile Flutter 487/487, Core 20/20, Web 69/69, tổng 576/576 và Analyze không lỗi. Build APK debug, cài -r và mở được trên Samsung A15. Mở Dinh dưỡng → Tra cứu công thức → Chi tiết công thức → Kiến thức sách (S09): bốn nguyên tắc và nguồn web rõ; không khẳng định số trang sách hoặc giá trị dinh dưỡng đã được thẩm định y khoa. Có ảnh redacted bổ sung. Tổng 14 ảnh native mới, không chứa email/PII.
 
 Trên app thực Firebase đang trả 2 món; commit 29 recipe catalog chưa có bằng chứng phê duyệt và seed thật vào shared Firebase. ARTEMIS x3 và luồng xét duyệt Web Staff live vẫn chưa nghiệm thu.
+
+## 15. ARTEMIS installation và cổng an toàn (11/11/2026)
+
+Đã cài Google ARTEMIS pinned source 351ca842 trên ổ D và dịch vụ chạy loopback:8000; ArtemisClient.health() trả thành công, API trạng thái JSON idle. Angular Showcase UI đã được build bằng Node 24.15.0 portable (SHA256 xác minh). E2E pytest thu thập 18 case nhóm, 10 case Hoàng nhưng **0 E2E run mới đạt**. Hai blocker chính: Gemini model key và tài khoản thử chuyên dụng chưa cấu hình; không dùng tài khoản thật đang gọi điện. Công cụ preflight (scripts/hoang_artemis_preflight.py) kiểm trước E2E, 5/5 unit test pass, kết quả trung thực BLOCKED. Không ghi pass-rate giả. Báo cáo setup riêng: docs/hoang-artemis-runtime-setup-20261111.md.
