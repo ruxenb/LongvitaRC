@@ -70,3 +70,12 @@ PR #42 đã merge. Có bằng chứng native mới: S10 read-back; S07 edit/vali
 ## S09 thực tế và main build mới 17:38
 
 S09 từ S05 đã mở trên Samsung A15, UIAutomator xác nhận 4 nguyên tắc và nguồn URL rõ ràng. Main 95b1c31: 576/576 Flutter tests đạt, 0 issues Analyze Mobile/Core/Web, APK debug build và cài thành công. Hiện Firebase search chỉ trả 2 recipe; 29 recipe catalog code mới chưa phải là chứng cứ duyệt/publish. 14 ảnh native redacted ở evidence/hoang/android-a15-20261111.
+
+
+## Kiểm chứng lại tại main 3bdb9ea, 11/11/2026
+
+- `main` và `origin/main` trùng commit `3bdb9ea2fd5c96947f975388dc70844166e1d2c8`. PR #40–#45 đã merge; nội dung cũ ở phía trên mô tả trạng thái PR #40 còn mở là **lịch sử**, không phải hiện trạng.
+- **Tái chạy trên main**: `mobile` Flutter Analyze 0 issue, **487/487** tests; `packages/core` Analyze 0 issue, **20/20** tests; `web` Analyze 0 issue, **69/69** tests; tổng **576/576 tests**, tất cả lệnh kết thúc exit 0. Log local không commit: `D:\PRM393\hoang_latest_main_*_20261111.log`.
+- Galaxy A15 SM-A155F: ADB online. Kiểm kê UIAutomator **một màn hình đang hiển thị** thấy 8 clickable nodes có nhãn truy cập và kích thước chạm tối thiểu rộng 48.0dp/cao 48.4dp; không có hit target dưới 48dp trong cửa sổ này. **Không suy diễn đạt 10/10 màn hoặc TalkBack.**
+- ARTEMIS: 10 ca S6-5/S6-6 thêm tiền điều kiện tài khoản `signed_in`, thu thập 18/18 cases trong cả suite; 2 test search bị chặn đúng ở setup nếu thiếu `ARTEMIS_TEST_ACCOUNT`. Chưa có actual run mới trên daemon do thiếu tài khoản test và model API key. Không cộng 18 collect hoặc 2 setup errors thành pass rate.
+- Vẫn **chưa đủ điều kiện nghiệm thu 100%**: E2E ARTEMIS 3 lượt mỗi case + replay/assertions; live Web Staff→Mobile 3 lần; Firebase Console Analytics/Crashlytics/PDF metadata; offline/error/TalkBack đầy đủ; phê duyệt khoa học và quyền publish recipe; người phụ trách Figma duyệt toàn bộ sai lệch; video demo 3 flows.
