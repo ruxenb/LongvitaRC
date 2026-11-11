@@ -1,0 +1,21 @@
+{
+  "gate": "BLOCKED",
+  "checks": {
+    "pinned_artemis_sha": "PASS",
+    "python_sdk_pytest": "PASS",
+    "authorized_adb_phone": "BLOCKED",
+    "real_artemis_status_api": "PASS",
+    "google_model_key_configured": "BLOCKED",
+    "dedicated_test_account_configured": "BLOCKED",
+    "pytest_collection": "PASS"
+  },
+  "collected_group_cases": 18,
+  "collected_hoang_cases": 10,
+  "new_e2e_passes": 0,
+  "blockers": [
+    "authorized_adb_phone",
+    "google_model_key_configured",
+    "dedicated_test_account_configured"
+  ],
+  "note": "No device commands beyond adb devices; no test execution or Firebase writes. API key and account presence are not credential validity."
+}

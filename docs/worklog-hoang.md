@@ -121,3 +121,11 @@
 - Main 95b1c31 tích hợp PR #42 và catalog mới, Flutter Analyze 0 vấn đề (3 package); Mobile 487, Core 20, Web 69 = 576/576 tests đạt; APK debug build thành công.
 - Cài lại A15 giữ dữ liệu và thử S05→S09, thấy 4 nguyên tắc sách, nguồn URL và disclaimer USDA; ảnh redacted native-s09-book-knowledge.png.
 - Firebase search trên app hiện có 2 món; không tự seed 29 công thức mới vì chưa thẩm định nguồn. Vẫn giữ yêu cầu chạy ARTEMIS x3, dual-role và Figma.
+
+## 2026-11-11 20:20 — Runtime ARTEMIS pinned
+
+- Python client 3.12 và pinned Google ARTEMIS daemon 351ca842 cài vào D. ArtemisClient.health() đã kết nối local 127.0.0.1:8000; API JSON status idle.
+- Angular Showcase UI đã build với Node 24.15.0 portable được kiểm SHA256; HTML/JS HTTP 200.
+- Thu thập được 18 E2E test của nhóm, 10 thuộc Hoàng. Chưa có Gemini key và ARTEMIS_TEST_ACCOUNT; 0 E2E mới chạy/pass.
+- Read-only preflight có 5/5 unit tests pass và fail-closed BLOCKED đối với thiếu key/account. Không tự điều khiển điện thoại đang có lớp phủ cuộc gọi.
+- Xem docs/hoang-artemis-runtime-setup-20261111.md.

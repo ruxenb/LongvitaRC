@@ -23,9 +23,9 @@ Phép kiểm vừa chạy: **Flutter Analyze 0 issues; 487/487 Flutter tests; An
 | S4-16 | Có responsive tests; pending toàn bộ | 360/412dp, chữ 100/200%; thiết bị A15, contrast/TalkBack đầy đủ pending |
 | S4-17 | Có tài liệu; pending duyệt Figma | Traceability đã có, chưa được nhóm duyệt sai lệch của 10 màn |
 | S5-3 | Có code; thiếu Console | Analytics events có mã, DebugView live chưa có |
-| S6-5 | Có script; chưa có ARTEMIS run | e2e_test/test_flows.py và test_search.py; đã có vài runs thực nhưng chưa đủ 3 lượt mỗi case |
-| S6-6 | Có script; chưa có ARTEMIS run | test_detail.py đã có 3 runs trên 3 ca khác nhau (1 completed, 2 failed); không được lấy compileall làm test E2E |
-| S6-13 | Có regression fixes; chưa chứng minh ARTEMIS | Đã sửa UI phát hiện qua native; không có run ARTEMIS + retest |
+| S6-5 | ARTEMIS client, daemon 8000, ADB A15, 18/18 collect (10 ca Hoàng) đã sẵn sàng | Chưa có Gemini key và test account riêng; 0 lượt E2E mới pass, cần 3 lần/case sau khi đủ điều kiện |
+| S6-6 | test_detail.py đã được pytest collect; cài ARTEMIS commit pin thành công | Cần run/replay/goal assertion thực 3 lần/ca, không đổi completed thành pass |
+| S6-13 | Cổng read-only preflight có 5/5 unit tests, API ARTEMIS idle | Vẫn cần thực thi bug reproduction trên thiết bị rảnh và retest cùng trace, chưa có ARTEMIS pass mới |
 | S7-1-HD | Có đầu ra kỹ thuật | PR #20 từng merged và review AI; PR #40 mở chờ checks/review cuối |
 | S7-2-HD | Có đầu ra kỹ thuật | Bảng findings/quyết định trong docs/code-review.md |
 | S7-3-HD | Có đầu ra kỹ thuật | Các commit sửa nhận xét CodeRabbit đã có |
@@ -33,7 +33,7 @@ Phép kiểm vừa chạy: **Flutter Analyze 0 issues; 487/487 Flutter tests; An
 | S8-6 | Có slide 4 trang và ảnh thật | slides/Longvita_Hoang_4_Slides_Verified_20261111.pptx; chờ nhóm duyệt |
 | S8-11 | Chưa đủ bằng chứng | Không có video E2E 3 flows trên device được xác minh |
 | S8-17-HD | Có đầu ra kỹ thuật | docs/worklog-hoang.md cập nhật ngày 11/11 |
-| S9-5-HD | Chưa nghiệm thu | Chưa diễn tập live ARTEMIS + Remote Config + VModel + review |
+| S9-5-HD | Cài ARTEMIS pinned và kết nối daemon thật, bổ sung preflight | Chưa có Gemini key, account test và live ARTEMIS+Remote Config+ViewModel 3 lượt/case |
 
 ## 9 task HD trong Final Assignment
 
@@ -70,3 +70,13 @@ PR #42 đã merge. Có bằng chứng native mới: S10 read-back; S07 edit/vali
 ## S09 thực tế và main build mới 17:38
 
 S09 từ S05 đã mở trên Samsung A15, UIAutomator xác nhận 4 nguyên tắc và nguồn URL rõ ràng. Main 95b1c31: 576/576 Flutter tests đạt, 0 issues Analyze Mobile/Core/Web, APK debug build và cài thành công. Hiện Firebase search chỉ trả 2 recipe; 29 recipe catalog code mới chưa phải là chứng cứ duyệt/publish. 14 ảnh native redacted ở evidence/hoang/android-a15-20261111.
+
+## Bổ sung 19:53–20:20 ngày 11/11 — ARTEMIS chạy thật, không nhận sai số pass
+
+- Đã chuẩn bị Python 3.12 và uv sync môi trường **e2e_test/.venv** trên máy, artemis-client import thành công đúng commit 351ca842.
+- Clone mã nguồn daemon vào D:\Tools\ARTEMIS_351ca842, kiểm SHA commit và uv sync daemon. Dịch vụ ARTEMIS lắng nghe trên loopback:8000, API /api/status trả JSON idle và ArtemisClient.health() thành công.
+- Node 24.15.0 portable trên D được xác minh SHA256 và Angular Showcase UI build, HTML/JS trả 200. Không thay Node hệ thống.
+- Pytest --collect-only 18/18 test trong nhóm, 10 ca Hoàng; **chưa thực thi E2E mới** vì Gemini/Google model key chưa được cấu hình và ARTEMIS_TEST_ACCOUNT còn để trống.
+- Thêm scripts/hoang_artemis_preflight.py và test_support/test_hoang_artemis_preflight.py; 5/5 unit tests pass, preflight có kết quả BLOCKED trung thực, không điều khiển điện thoại hay đụng Firebase.
+- File .env thật đặt ở máy và bị Git ignore; daemon được cấu hình không tự cài Accessibility Helper và không giữ máy luôn sáng. Xem docs/hoang-artemis-runtime-setup-20261111.md.
+- PR #43, #44, #45 đã merge; main tại 3bdb9ea trước khi bắt đầu nhánh riêng. Các mục Figma còn thiếu ảnh full viewport, S07 Delete/Undo native, Web Staff live 3 lần và nutrition approval vẫn chờ thật.
