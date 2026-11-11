@@ -273,8 +273,13 @@ nếu không có log, ảnh hoặc run tương ứng.
   ẩn danh, Google OAuth và role gate `admin`/`user` đã được kiểm tra.
 - TV-01, TV-02, TV-03 và TV-03B đã có implementation, test/evidence local trên
   PR #25, đã merge vào `main` tại `ea7b888`.
-- TV-04 đã hoàn thành phần đặc tả và quy trình đo; chưa có ba lượt live.
-- TV-04B đã có checklist/evidence index; chưa có ảnh production.
+- TV-04 đã hoàn thành phần đặc tả và quy trình đo; Hosting đã hoạt động nhưng
+  chưa có ba lượt cross-role live hợp lệ.
+- TV-04B đã có sáu ảnh production trên trình duyệt điện thoại: Sign-in, OAuth
+  loading/cancel, Review Queue empty, Recipes data và Dashboard data. Evidence
+  hiện chỉ đạt một phần; ảnh Recipes phát hiện lỗi responsive WEB-18 và bộ ảnh
+  vẫn thiếu desktop viewport chuẩn, CRUD/review live, Analytics DebugView và
+  Remote Config live.
 - TV-05 đã cập nhật URL, hướng dẫn chạy, roles, tài khoản demo, phiên bản, AI
   disclosure và deliverable map. Task còn chờ nhóm cấp tài khoản `staff` riêng,
   cùng link video, report PDF và slide PDF cuối trước khi đánh dấu hoàn thành.
