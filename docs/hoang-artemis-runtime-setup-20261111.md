@@ -53,3 +53,14 @@ Hai file .env này được Git bỏ qua. Các cờ an toàn trên daemon đã �
 Sau khi tạo file cấu hình không chứa bí mật, lần chạy preflight cuối cùng có **PASS** cho pinned SHA, client SDK/pytest, API JSON daemon, pytest collection; **BLOCKED** cho ADB (điện thoại đã ngắt phiên USB sau lúc được cấp quyền), key mô hình và test account. Kết quả chính xác đã được lưu tại evidence/hoang/artemis-readiness-20261111/preflight.json. Đây là trạng thái ở thời điểm chạy, không hạ các kết quả cài đặt đã hoàn tất.
 
 Có thêm script scripts/hoang-start-artemis.ps1 để khởi động lại dịch vụ loopback an toàn; không tự cài Accessibility Helper, không đánh thức điện thoại liên tục và không mở trình duyệt.
+
+## Bổ sung scrcpy (công cụ tùy chọn) và Artemis Doctor
+
+Đã tải bản phát hành chính thức scrcpy **5.0.1** từ Genymobile, xác minh SHA256 của file ZIP với SHA256SUMS công bố kèm release, giải nén ở D:\Tools\scrcpyPortable\scrcpy-win64-v5.0.1. Không cài hoặc thay thế PATH toàn máy. Lệnh ARTEMIS Doctor (chạy **không** có --fix) với PATH thêm thư mục portable xác nhận:
+- python_runtime: pass; system_config: pass; integration_host: pass; android_adb: pass.
+- toolchain: **pass, Ready (FFmpeg + scrcpy)**.
+- extra nodejs_npm: pass; showcase_ui: pass.
+- **gemini_api_key: fail (required)**; verdict blocked.
+- Không có repair/fix tự động, không quay hay phản chiếu nội dung cuộc gọi riêng tư.
+
+scripts/hoang-start-artemis.ps1 sẽ thêm scrcpy portable vào PATH **của phiên chạy duy nhất** khi file có tồn tại, giữ nguyên PATH toàn hệ thống.

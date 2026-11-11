@@ -129,3 +129,9 @@
 - Thu thập được 18 E2E test của nhóm, 10 thuộc Hoàng. Chưa có Gemini key và ARTEMIS_TEST_ACCOUNT; 0 E2E mới chạy/pass.
 - Read-only preflight có 5/5 unit tests pass và fail-closed BLOCKED đối với thiếu key/account. Không tự điều khiển điện thoại đang có lớp phủ cuộc gọi.
 - Xem docs/hoang-artemis-runtime-setup-20261111.md.
+
+## 2026-11-11 20:30 — scrcpy và Artemis Doctor
+
+- Cài scrcpy 5.0.1 portable vào ổ D, xác minh SHA256 bản phát hành chính thức.
+- Artemis Doctor read-only: Python, system config, integration host, ADB, FFmpeg+scrcpy, Node/npm và Showcase UI đều pass; GEMINI_API_KEY fail (required). Chưa thực thi E2E trên tài khoản thật, không mirror màn hình cuộc gọi.
+- Khởi động ARTEMIS giữ PATH cục bộ của process và chỉ nhận scrcpy portable nếu có.

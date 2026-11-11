@@ -11,7 +11,9 @@ $sha=(git -C $ArtemisRoot rev-parse HEAD)
 if($sha -ne '351ca8422f7b5b54e80a9c1ce03a222e02415b6b'){
   throw 'ARTEMIS source does not match the version pinned by LongvitaRC.'
 }
-if(Test-Path (Join-Path $NodeRoot 'node.exe')){$env:PATH="$NodeRoot;$env:PATH"}
+if(Test-Path (Join-Path $NodeRoot 'node.exe')){$env:PATH="$NodeRoot;$env:PATH"
+$scrcpyDir='D:\Tools\scrcpyPortable\scrcpy-win64-v5.0.1'
+if(Test-Path (Join-Path $scrcpyDir 'scrcpy.exe')){$env:PATH="$scrcpyDir;$env:PATH"}}
 $env:ANDROID_HOME='D:\Tools\AndroidSDK'
 $env:ANDROID_SDK_ROOT=$env:ANDROID_HOME
 $env:PATH="$env:ANDROID_HOME\platform-tools;$env:PATH"
