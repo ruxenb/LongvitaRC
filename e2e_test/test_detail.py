@@ -1,5 +1,9 @@
 """Hoàng S6-6 — real ARTEMIS recipe and Vietnamese navigation checks."""
 
+import pytest
+
+
+@pytest.mark.signed_in
 async def test_recipe_detail_book_knowledge(run_case):
     output = await run_case(
         "Open signed-in Longvita and tap 'Dinh dưỡng', opening "
@@ -15,6 +19,7 @@ async def test_recipe_detail_book_knowledge(run_case):
     assert "Nguồn tham khảo" in output.after("Kiến thức sách")
 
 
+@pytest.mark.signed_in
 async def test_meal_alternatives_and_original_preserved_on_error(run_case):
     output = await run_case(
         "Open signed-in Longvita. On 'Tùy chọn' pick age group/weight, "
@@ -38,6 +43,7 @@ async def test_meal_alternatives_and_original_preserved_on_error(run_case):
              ("Không thể đổi món" in text and "Thử lại" in text)))
 
 
+@pytest.mark.signed_in
 async def test_top_level_navigation_tabs(run_case):
     output = await run_case(
         "Open signed-in Longvita home screen. Tap 'Thực đơn' "

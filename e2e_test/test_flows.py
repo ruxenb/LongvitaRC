@@ -5,6 +5,10 @@ daemon, authenticated test account, Firestore recipes, and run evidence they
 must fail setup; never claim the 3-run assignment requirement is complete.
 """
 
+import pytest
+
+
+@pytest.mark.signed_in
 async def test_tc02_create_seven_day_plan(run_case):
     """S01 -> S02 -> S03 -> S04 with actual Vietnamese choices."""
     observation = await run_case(
@@ -26,6 +30,7 @@ async def test_tc02_create_seven_day_plan(run_case):
     assert all(day in after_generation for day in ("T2","T3","T4","T5","T6","T7","CN"))
 
 
+@pytest.mark.signed_in
 async def test_tc03_generation_offline_retry(run_case):
     """S03 offline failure and real retry after restoring connectivity."""
     observation = await run_case(
@@ -44,6 +49,7 @@ async def test_tc03_generation_offline_retry(run_case):
     assert "Thực đơn tuần" in observation.after("Thử lại")
 
 
+@pytest.mark.signed_in
 async def test_tc04_save_and_reopen_firestore_plan(run_case):
     """S04 saved document must reappear through S10 Firestore fetch."""
     observation = await run_case(
@@ -65,6 +71,7 @@ async def test_tc04_save_and_reopen_firestore_plan(run_case):
     assert __import__("re").search(r"\d{4}-\d{2}-\d{2}", observation.last)
 
 
+@pytest.mark.signed_in
 async def test_tc05_edit_quantity_validation_and_undo(run_case):
     """S04 -> S07 edit dialog validation and explicit Undo."""
     observation = await run_case(
@@ -85,6 +92,7 @@ async def test_tc05_edit_quantity_validation_and_undo(run_case):
     assert "Hoàn tác" in str(observation)
 
 
+@pytest.mark.signed_in
 async def test_tc06_shopping_checklist_persists(run_case):
     """S04 -> S07 -> S08 -> S07 -> S08, persisted per actual account."""
     observation = await run_case(

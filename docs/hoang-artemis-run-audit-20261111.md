@@ -20,3 +20,16 @@ Những ca chưa có bản ghi: bất kỳ test_search.py nào; đây không ph�
 Các log ARTEMIS đã ghi sẵn trong Git từ nhóm; Hoàng không tự tạo thêm run để cải thiện chỉ số. Một số replay chứa thông tin tài khoản đã redacted trong nguồn; bảng chỉ trích dẫn tên test và số lần, không sao chép replay hay PII.
 
 **Điều kiện hoàn tất:** Có daemon, tài khoản test và môi trường phù hợp; chạy đủ >=3 mỗi test case, kiểm tra assertion/replay thực sự đúng; lưu kết quả lần chạy, thời gian, failure root cause và pass rate có định nghĩa vào docs/test-report.md.
+
+
+## Kiểm tra an toàn tài khoản khi chạy lại (11/11, sau PR #45)
+
+Đã cập nhật **10 ca của Hoàng** (5 trong `test_flows.py`, 3 trong `test_detail.py`, 2 trong `test_search.py`) để yêu cầu marker `signed_in` trước mọi lệnh ARTEMIS. Fixture buộc cung cấp `ARTEMIS_TEST_ACCOUNT`, đối chiếu tài khoản ở Profile và đóng app trước khi bắt đầu ca thử. Mục đích: tránh tự động sinh/sửa/lưu dữ liệu bằng một tài khoản bất kỳ đang đăng nhập trên điện thoại.
+
+- Samsung Galaxy A15 `RF8X8017T5N`: ADB báo `device`, Longvita đang chạy.
+- ARTEMIS pinned runtime: dependency sync và import `artemis`, `uvicorn`, `uiautomator2` thành công.
+- `python -m compileall -q e2e_test`: đạt. `pytest --collect-only -q e2e_test`: **18 tests collected**; đây không phải 18 tests passed.
+- Khi chưa có cấu hình test account, `pytest -q e2e_test/test_search.py` trả **2 setup errors** `precondition: set ARTEMIS_TEST_ACCOUNT`, trước khi gọi daemon/thiết bị. Log local (không commit): `D:\PRM393\hoang_e2e_auth_precondition.log`.
+- Local `e2e_test/.env` chưa có; GEMINI_API_KEY và các model API key trong cấu hình ARTEMIS chưa được cấp; cổng 8000 chưa có daemon health. **Không có lượt chạy ARTEMIS thành công mới; không thay đổi pass rate**.
+
+Điều kiện nghiệm thu: cấu hình tài khoản kiểm thử riêng trong `.env` được Git ignore, cấp model API key chỉ ở máy local, khởi chạy ARTEMIS và xác minh `/health`, thực hiện mỗi ca ít nhất 3 lượt, xem từng replay/assertion, cập nhật kết quả thực vào `docs/test-report.md`. Thiếu điều kiện thì ghi BLOCKED, không ghi PASS.
