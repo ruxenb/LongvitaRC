@@ -1184,7 +1184,7 @@ void main() {
 
       for (final (text, level) in [
         ('Hồ sơ', 1),
-        ('Firebase Demo Area', 2),
+        ('Tiện ích Firebase', 2),
         ('Báo cáo PDF', 3),
         ('Thông báo', 3),
         ('Cấu hình từ xa', 3),

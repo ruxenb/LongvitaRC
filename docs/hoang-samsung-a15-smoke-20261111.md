@@ -50,3 +50,10 @@
 - \`flutter analyze --no-pub\` toàn ứng dụng trên baseline \`origin/main\` phát hiện **19 vấn đề** ở các file ngoài thay đổi Hoàng, đặc biệt lỗi gọi API trong \`lib/services/gemini_ai_service.dart\`. Cần người phụ trách AI xử lý trước khi coi build monorepo toàn hệ thống đạt.
 - Bộ **484/484 unit/widget tests** và Android APK build thành công trước đó thuộc **cây mã mobile cũ** trước khi nhóm chuyển sang monorepo. Không được đồng nhất với việc toàn bộ monorepo đã đạt 484/484 hay APK mới đã được cài trên điện thoại.
 - Samsung A15 không còn được Windows phát hiện qua USB ở cuối lượt kiểm thử, nên chưa thể cài lại APK và chụp giao diện đã Việt hóa mới trực tiếp trên điện thoại.
+
+## Cập nhật kiểm thử build mới sau khi đồng bộ main (11/11/2026)
+
+- Sau khi sửa nốt tiêu đề `Firebase Demo Area` thành `Khu vực minh họa Firebase`, bản APK debug monorepo đã **build thành công**, cài đè trên Samsung Galaxy A15 **thành công** (`APK_INSTALL=0`) và mở app có PID. Ảnh trực tiếp xác nhận nhãn Việt hóa mới.
+- Flutter Mobile: Analyze 0 vấn đề, 483/483 test đạt. Shared Core: Analyze 0 vấn đề, 20/20 test đạt. Web: Analyze 0 vấn đề, 69/69 test đạt.
+- Ảnh có thông tin cá nhân chỉ lưu tại `D:\PRM393\Longvita_phone_evidence\20261111_merged_main`, không upload vào repo.
+- Bằng chứng full test là tự động chạy local, không thay cho ARTEMIS 3 lần, Firebase cross-role production 3 lần, kiểm chứng recipe và Video Demo.

@@ -65,7 +65,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 header: true,
                 headingLevel: 2,
                 child: const Text(
-                  'Firebase Demo Area',
+                  'Tiện ích Firebase',
                   style: AppTypography.headingM,
                 ),
               ),
