@@ -311,24 +311,6 @@ class _WeeklyPlanScreenState extends State<WeeklyPlanScreen> {
     );
   }
 
-  Future<void> _submit(BuildContext context) async {
-    final vm = context.read<MealPlanViewModel>();
-    final id = vm.activePlan?.id;
-    if (id == null || id.isEmpty) return;
-    final ok = await vm.submitForReview(id);
-    if (!context.mounted) return;
-    flowSnack(
-      context,
-      ok
-          ? 'Đã gửi thực đơn đến chuyên gia. Trạng thái sẽ cập nhật tự động.'
-          : (vm.submitState is ViewStateError<bool>
-                ? (vm.submitState as ViewStateError<bool>).message
-                : 'Chưa thể gửi thực đơn. Hãy thử lại.'),
-      actionLabel: ok ? null : 'Thử lại',
-      onAction: ok ? null : () => _submit(context),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     final vm = context.watch<MealPlanViewModel>();
@@ -481,20 +463,6 @@ class _WeeklyPlanScreenState extends State<WeeklyPlanScreen> {
                           style: const TextStyle(color: Colors.red),
                         ),
                       ),
-                    if (plan.id.isNotEmpty && plan.isDraft) ...[
-                      const SizedBox(height: 12),
-                      AppButton(
-                        key: const Key('submit-plan-review'),
-                        text: 'Gửi chuyên gia xét duyệt',
-                        icon: Icons.send_outlined,
-                        isLoading: vm.submitState is ViewStateLoading<bool>,
-                        onPressed:
-                            vm.submitState is ViewStateLoading<bool> ||
-                                vm.saveState is ViewStateLoading<bool>
-                            ? null
-                            : () => _submit(context),
-                      ),
-                    ],
                     if (plan.isSubmitted)
                       const Padding(
                         padding: EdgeInsets.only(top: 12),

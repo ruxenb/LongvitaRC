@@ -59,7 +59,7 @@ void main() {
     await tester.drag(find.byType(ListView).first, const Offset(400, 0));
     await tester.pump();
     expect(find.text('Chọn ngày trong tuần'), findsOneWidget);
-    expect(find.text('Gửi chuyên gia xét duyệt'), findsOneWidget);
+    expect(find.byKey(const Key('submit-plan-review')), findsNothing);
 
     await tester.tap(find.byKey(const Key('weekly-day-0')));
     await tester.pump();
@@ -67,40 +67,21 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
-  testWidgets(
-    'HD-05: gửi xét duyệt và cập nhật được trạng thái trên giao diện',
-    (tester) async {
-      tester.view.physicalSize = const Size(412, 860);
-      tester.view.devicePixelRatio = 1;
-      addTearDown(tester.view.resetPhysicalSize);
-      addTearDown(tester.view.resetDevicePixelRatio);
-      await tester.pumpWidget(app());
-      await tester.pump();
+  testWidgets('S04: thực đơn nháp không hiển thị nút gửi chuyên gia', (
+    tester,
+  ) async {
+    tester.view.physicalSize = const Size(412, 860);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+    await tester.pumpWidget(app());
+    await tester.pump();
 
-      // Wait for fake Firestore async* stream to attach.
-      await tester.runAsync(() async {
-        await Future<void>.delayed(const Duration(milliseconds: 20));
-      });
-      final button = find.byKey(const Key('submit-plan-review'));
-      await tester.ensureVisible(button);
-      await tester.tap(button);
-      await tester.pump();
-      await tester.pump(const Duration(milliseconds: 80));
-      expect(vm.activePlan?.status, 'submitted');
-      expect(
-        find.textContaining('Đang chờ chuyên gia xét duyệt'),
-        findsOneWidget,
-      );
-
-      await data.updateMealPlanStatus('review-ui', 'approved');
-      await tester.runAsync(() async {
-        await Future<void>.delayed(const Duration(milliseconds: 20));
-      });
-      await tester.pump(const Duration(milliseconds: 80));
-      expect(vm.activePlan?.status, 'approved');
-      expect(find.textContaining('Đã duyệt'), findsOneWidget);
-      expect(find.byKey(const Key('submit-plan-review')), findsNothing);
-      expect(tester.takeException(), isNull);
-    },
-  );
+    expect(vm.activePlan?.status, 'draft');
+    expect(find.byKey(const Key('submit-plan-review')), findsNothing);
+    expect(find.text('Gửi chuyên gia xét duyệt'), findsNothing);
+    expect(find.text('Lưu thay đổi'), findsOneWidget);
+    expect(find.text('Xem nguyên liệu'), findsOneWidget);
+    expect(tester.takeException(), isNull);
+  });
 }
