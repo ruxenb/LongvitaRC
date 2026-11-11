@@ -770,11 +770,10 @@ class _MealPlanCard extends StatelessWidget {
                         style: AppTypography.labelStrong,
                       ),
                       const SizedBox(height: AppSpacing.s4),
-                      if (recipe.sourceNote.isNotEmpty)
-                        Text(
-                          recipe.sourceNote,
-                          style: AppTypography.supporting,
-                        ),
+                      Text(
+                        '${recipe.calories.round()} kcal • ${recipe.proteinGrams.toStringAsFixed(1)}g đạm',
+                        style: AppTypography.supporting,
+                      ),
                     ],
                   ),
                 ),
@@ -786,22 +785,16 @@ class _MealPlanCard extends StatelessWidget {
             ),
             if (recipe.isBookCitation) ...[
               const SizedBox(height: AppSpacing.s8),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: AppSpacing.s8,
-                      vertical: AppSpacing.s4,
-                    ),
-                    decoration: const BoxDecoration(
-                      color: AppColors.bgSelected,
-                      borderRadius: AppRadius.roundedFull,
-                    ),
-                    child: const Text('Từ sách', style: AppTypography.label),
-                  ),
-                  const Text('Đang chờ', style: AppTypography.supporting),
-                ],
+              Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: AppSpacing.s8,
+                  vertical: AppSpacing.s4,
+                ),
+                decoration: const BoxDecoration(
+                  color: AppColors.bgSelected,
+                  borderRadius: AppRadius.roundedFull,
+                ),
+                child: const Text('Từ sách', style: AppTypography.label),
               ),
             ],
           ],
