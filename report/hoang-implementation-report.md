@@ -92,3 +92,26 @@ Phần lịch sử trước mục này ghi tình hình tới 09/11; việc thi�
 - **Xung đột Git:** main cục bộ đã đồng bộ origin/main tại 53d7fc5; file Git theo dõi không có trạng thái unmerged hoặc thay đổi chưa commit. PR40 và PR41 thử merge với nhau không có xung đột văn bản; cần kiểm thử chung và review lại khi merge thật.
 
 Các ảnh chứa thông tin tài khoản cá nhân, token, UID hoặc tài liệu nội bộ chưa qua duyệt không đưa vào repo.
+
+
+## 10. Bổ sung nghiệm thu thực tế và số liệu mới nhất (11/11/2026)
+
+**Các thống kê 305/398/483 ở phần lịch sử là kết quả snapshot cũ.** Bản báo cáo hiện tại được cập nhật bằng phép kiểm thử trực tiếp Samsung A15 SM-A155F Android 16.
+
+**Flow 1 (S01–S04 và lưu):** Đã mở S02, S03, bấm Tạo thực đơn tuần, nhận công thức có ghi chú nguồn của hệ thống trên S04. Sau khi bấm Lưu thực đơn, ứng dụng thông báo Đã lưu kế hoạch lên Firestore. Ảnh đã loại vùng nhận diện: evidence/hoang/android-a15-20261111/s02-options-no-pii.png, s03-setup-no-pii.png, s04-generated-preview-before-polish.png, firestore-save-confirmation.png. Chưa xác minh read-back S10 sau khởi động lại.
+
+**Flow 3 (S05–S06):** Đã mở S05 từ thẻ món, quan sát nguyên liệu và hướng dẫn. S06 hiển thị Chưa có dữ liệu khi không có món thay thế, có Thử lại và Điều chỉnh sở thích. Đã kiểm chứng S06 quay về S02. Ảnh an toàn: s06-empty-and-retry.png, s06-recovery-to-s02-no-pii.png. Không tự tạo món thay thế giả.
+
+**Inbox (HD-04):** S01 hiển thị thông báo CM-07 được mô tả là từ Web Admin. Ảnh: inbox-web-admin-notification-no-pii.png. Đây là chứng cứ đọc dữ liệu hiện có, chưa đo realtime của một thông báo mới.
+
+**Sửa lỗi từ Android thật:** Tên món dài bị nhãn Đang chờ không đại diện trạng thái plan chen lấn ở S04, sourceNote chiếm quá nhiều dòng; S05 còn nhãn tiếng Anh và hàng nguyên liệu có chiều cao cố định. Đã sửa: bỏ nhãn không đúng nghĩa, giới hạn nguồn 2 dòng (nguồn đầy đủ tại S05), Việt hóa các nhãn Nguyên liệu, Các bước thực hiện, khẩu phần và đạm, row nguyên liệu tự giãn ở chữ 200%, sửa S02/S03/S06. Thêm hai regression widget tests cho tên dài. Bốn expectation A11y cũ được cập nhật chính xác theo ngôn ngữ mới, không bỏ assertion.
+
+**Kiểm thử bản mới nhất:** Flutter Analyze 0 issues; Mobile Flutter Test serial 487/487 pass; build Android debug APK thành công. Sau khi USB kết nối lại, cài APK trên Galaxy A15 bằng ADB với Success, khởi chạy PID 28804, smoke logcat 0 dòng lỗi Flutter nghiêm trọng. Biên bản: docs/hoang-native-acceptance-20261111.md; logs: D:\PRM393\hoang_a15_final_*.
+
+**Giới hạn chưa nghiệm thu:** S10 read-back sau restart, S07/S08 edit/undo/persistence native, PDF metadata trên máy, hai vai trò Web Staff→Mobile 3 lần, Firebase Analytics/Crashlytics console, ARTEMIS >=3 lượt/ca (thiếu daemon và test account), Figma 10 màn, phê duyệt nguồn/định lượng recipe, demo video đầy đủ. Không xem số test Flutter tương đương ARTEMIS và không đánh dấu task 100% khi thiếu bằng chứng.
+
+**Slide Hoàng cập nhật:** slides/Longvita_Hoang_4_Slides_Verified_20261111.pptx, 4 trang với ảnh Android thật đã cắt PII và thống kê 487/487.
+
+### Cập nhật nguồn trích dẫn tại màn S05
+
+Sau kiểm tra bố cục S04, code đã giữ ghi chú nguồn trên thẻ ở tối đa hai dòng, đồng thời **hiển thị đầy đủ trường sourceNote trong S05 dưới nhãn Nguồn tham khảo**, không lược bỏ dữ liệu. Widget test kiểm tra chuỗi đầy đủ và chống tràn khi phóng chữ. Kết quả cuối chạy lại: Mobile Flutter Analyze 0 lỗi, 487/487 tests, APK debug build thành công. Việc cài lại APK của thay đổi S05 sau cùng cần ADB kết nối ổn định.

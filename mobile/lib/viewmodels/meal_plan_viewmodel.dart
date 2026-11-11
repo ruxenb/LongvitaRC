@@ -231,7 +231,7 @@ class MealPlanViewModel extends BaseViewModel implements SessionScoped {
       if (_epoch.isStale(epoch)) return;
       if (recipes.isEmpty) {
         _currentPlanState = const ViewStateEmpty(
-          message: 'Firestore chưa có công thức. Nhờ nhóm bổ sung recipes rồi thử lại.',
+          message: 'Firestore chưa có công thức. Nhờ nhóm bổ sung công thức rồi thử lại.',
         );
         notifyListeners();
         return;
@@ -409,7 +409,7 @@ class MealPlanViewModel extends BaseViewModel implements SessionScoped {
           .toList(growable: false);
       _alternativesState = candidates.isEmpty
           ? const ViewStateEmpty(
-              message: 'Chưa có món thay thế phù hợp. Hãy điều chỉnh sở thích hoặc bổ sung recipes.',
+              message: 'Chưa có món thay thế phù hợp. Hãy điều chỉnh sở thích hoặc bổ sung công thức.',
             )
           : ViewStateSuccess(candidates);
       notifyListeners();

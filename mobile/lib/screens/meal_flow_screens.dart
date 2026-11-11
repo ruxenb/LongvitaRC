@@ -99,7 +99,7 @@ class _PreferencesScreenState extends State<PreferencesScreen> {
                 title: 'Mục tiêu được tính toán',
                 value: kg == null || !kg.isFinite || kg < 25 || kg > 300
                     ? 'Nhập cân nặng hợp lệ để xem mục tiêu'
-                    : '${calculateProteinTargetForAgeGroup(kg, isOlderAdult: _isOlderAdult).round()} g protein/ngày • ${factor.toStringAsFixed(1).replaceAll('.', ',')} g/kg',
+                    : '${calculateProteinTargetForAgeGroup(kg, isOlderAdult: _isOlderAdult).round()} g đạm/ngày • ${factor.toStringAsFixed(1).replaceAll('.', ',')} g/kg',
               );
             },
           ),
@@ -237,7 +237,7 @@ class _CreatePlanScreenState extends State<CreatePlanScreen> {
             _ReadOnlyResult(
               title: 'Mục tiêu protein',
               value:
-                  '${calculateProteinTargetForAgeGroup(widget.weightKg, isOlderAdult: widget.isOlderAdult).round()} g protein/ngày',
+                  '${calculateProteinTargetForAgeGroup(widget.weightKg, isOlderAdult: widget.isOlderAdult).round()} g đạm/ngày',
             ),
             const SizedBox(height: AppSpacing.s8),
             const _ReadOnlyResult(
@@ -490,9 +490,9 @@ class _WeeklyPlanScreenState extends State<WeeklyPlanScreen> {
                         isLoading: vm.submitState is ViewStateLoading<bool>,
                         onPressed:
                             vm.submitState is ViewStateLoading<bool> ||
-                                    vm.saveState is ViewStateLoading<bool>
-                                ? null
-                                : () => _submit(context),
+                                vm.saveState is ViewStateLoading<bool>
+                            ? null
+                            : () => _submit(context),
                       ),
                     ],
                     if (plan.isSubmitted)
@@ -774,34 +774,26 @@ class _MealPlanCard extends StatelessWidget {
                         Text(
                           recipe.sourceNote,
                           style: AppTypography.supporting,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
                         ),
                     ],
                   ),
-                ),
-                Text(
-                  primary ? '' : 'Đang chờ',
-                  style: AppTypography.supporting,
                 ),
               ],
             ),
             if (recipe.isBookCitation) ...[
               const SizedBox(height: AppSpacing.s8),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: AppSpacing.s8,
-                      vertical: AppSpacing.s4,
-                    ),
-                    decoration: const BoxDecoration(
-                      color: AppColors.bgSelected,
-                      borderRadius: AppRadius.roundedFull,
-                    ),
-                    child: const Text('Từ sách', style: AppTypography.label),
-                  ),
-                  const Text('Đang chờ', style: AppTypography.supporting),
-                ],
+              Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: AppSpacing.s8,
+                  vertical: AppSpacing.s4,
+                ),
+                decoration: const BoxDecoration(
+                  color: AppColors.bgSelected,
+                  borderRadius: AppRadius.roundedFull,
+                ),
+                child: const Text('Từ sách', style: AppTypography.label),
               ),
             ],
           ],
