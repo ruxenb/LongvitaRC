@@ -22,7 +22,7 @@ async def test_meal_alternatives_and_original_preserved_on_error(run_case):
         "Save the actual seven-day plan on 'Thực đơn tuần' if generated. "
         "Choose a day using the horizontal 'Chọn ngày trong tuần' selector "
         "and open a meal card in 'Chi tiết công thức'. Tap 'Đổi món'. "
-        "On S06, if no alternatives exist, read the empty state and tap "
+        "On S06 titled 'Món thay thế', if no alternatives exist, read the empty state and tap "
         "'Điều chỉnh sở thích (S02)' to verify recovery. "
         "If alternatives exist, choose one, disconnect the network and "
         "attempt the shown 'Xác nhận: <tên món>' action. "

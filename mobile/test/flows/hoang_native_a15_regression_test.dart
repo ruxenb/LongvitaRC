@@ -101,6 +101,7 @@ void main() {
       await tester.pump();
 
       expect(find.textContaining('Bữa 2:'), findsOneWidget);
+      expect(find.text('375 kcal • 13.0 g đạm'), findsNWidgets(2));
       expect(find.text('Đang chờ'), findsNothing);
       final source = tester.widget<Text>(find.text(longSource).first);
       expect(source.maxLines, 2);

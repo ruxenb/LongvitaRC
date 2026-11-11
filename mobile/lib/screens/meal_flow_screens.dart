@@ -770,13 +770,19 @@ class _MealPlanCard extends StatelessWidget {
                         style: AppTypography.labelStrong,
                       ),
                       const SizedBox(height: AppSpacing.s4),
-                      if (recipe.sourceNote.isNotEmpty)
+                      Text(
+                        '${recipe.calories.round()} kcal • ${recipe.proteinGrams.toStringAsFixed(1)} g đạm',
+                        style: AppTypography.supporting,
+                      ),
+                      if (recipe.sourceNote.isNotEmpty) ...[
+                        const SizedBox(height: AppSpacing.s4),
                         Text(
                           recipe.sourceNote,
                           style: AppTypography.supporting,
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
                         ),
+                      ],
                     ],
                   ),
                 ),

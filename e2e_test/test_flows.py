@@ -32,11 +32,11 @@ async def test_tc03_generation_offline_retry(run_case):
         "Open signed-in Longvita, tap 'Tạo thực đơn tuần'. "
         "On S02 'Tùy chọn', keep 'Dưới 65 tuổi', enter weight 60 kg "
         "in 'Cân nặng của bạn' and tap 'Tiếp tục'. On S03 'Tạo thực đơn' "
-        "disconnect network via Android settings, then tap "
+        "enable Airplane mode via Android settings, then tap "
         "'Tạo thực đơn tuần'. Read the exact offline error and 'Thử lại'. "
-        "Restore network before retrying. Tap 'Thử lại' and check whether "
+        "Turn Airplane mode off, restore network, then tap 'Thử lại' and check whether "
         "'Thực đơn tuần' opens with real recipe data. "
-        "Always restore network even when the task fails.",
+        "Always turn Airplane mode off before ending, including after a failed task.",
         "Observed offline error, Retry and real S04 result after network "
         "restoration; no invented state.",
     )
