@@ -583,7 +583,7 @@ class _MealAlternativesScreenState extends State<MealAlternativesScreen> {
           onPressed: () => Navigator.of(context).maybePop(),
         ),
         title: const Text(
-          'Meal alternatives',
+          'Món thay thế',
           style: TextStyle(
             fontFamily: AppTypography.quicksand,
             fontSize: 16,
@@ -602,7 +602,7 @@ class _MealAlternativesScreenState extends State<MealAlternativesScreen> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   const Text(
-                    'Choose a replacement',
+                    'Chọn món thay thế',
                     style: TextStyle(
                       fontFamily: AppTypography.newsreader,
                       fontSize: 24,
@@ -612,7 +612,7 @@ class _MealAlternativesScreenState extends State<MealAlternativesScreen> {
                   ),
                   const SizedBox(height: 4),
                   const Text(
-                    'Your original meal stays unchanged until you confirm.',
+                    'Món hiện tại chỉ thay đổi sau khi bạn xác nhận.',
                     style: TextStyle(
                       fontFamily: AppTypography.quicksand,
                       fontSize: 14,
@@ -632,7 +632,7 @@ class _MealAlternativesScreenState extends State<MealAlternativesScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Original: ${widget.original.name}',
+                          'Món hiện tại: ${widget.original.name}',
                           style: const TextStyle(
                             fontFamily: AppTypography.quicksand,
                             fontSize: 14,
@@ -901,7 +901,7 @@ class _MealAlternativesScreenState extends State<MealAlternativesScreen> {
                     const AppBadge(kind: AppBadgeKind.appSuggestion),
                   const Spacer(),
                   Text(
-                    '${recipe.proteinGrams.toStringAsFixed(0)}g protein • ${recipe.calories.toStringAsFixed(0)} kcal',
+                    '${recipe.proteinGrams.toStringAsFixed(0)} g đạm • ${recipe.calories.toStringAsFixed(0)} kcal',
                     style: const TextStyle(
                       fontFamily: AppTypography.quicksand,
                       fontSize: 12,
