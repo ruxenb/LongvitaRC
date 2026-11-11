@@ -308,7 +308,7 @@ class _RecipeDetailsScreenState extends State<RecipeDetailsScreen> {
                         const AppBadge(kind: AppBadgeKind.fromBook),
                       ],
                       Text(
-                        '${recipe.proteinGrams.toStringAsFixed(0)} g protein · 1 serving',
+                        '${recipe.proteinGrams.toStringAsFixed(0)} g đạm · 1 khẩu phần',
                         style: const TextStyle(
                           fontFamily: AppTypography.quicksand,
                           fontSize: 14,
@@ -330,9 +330,31 @@ class _RecipeDetailsScreenState extends State<RecipeDetailsScreen> {
                       ),
                     ),
                   ],
+                  if (recipe.sourceNote.trim().isNotEmpty) ...[
+                    const SizedBox(height: 16),
+                    const Text(
+                      'Nguồn tham khảo',
+                      style: TextStyle(
+                        fontFamily: AppTypography.quicksand,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w700,
+                        color: AppColors.textPrimary,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      recipe.sourceNote,
+                      style: const TextStyle(
+                        fontFamily: AppTypography.quicksand,
+                        fontSize: 14,
+                        color: AppColors.textSecondary,
+                        height: 1.4,
+                      ),
+                    ),
+                  ],
                   const SizedBox(height: 24),
                   const Text(
-                    'Ingredients',
+                    'Nguyên liệu',
                     style: TextStyle(
                       fontFamily: AppTypography.quicksand,
                       fontSize: 16,
@@ -346,8 +368,8 @@ class _RecipeDetailsScreenState extends State<RecipeDetailsScreen> {
                   else
                     for (final item in recipe.ingredients)
                       Container(
-                        height: 44,
-                        padding: const EdgeInsets.symmetric(vertical: 4),
+                        constraints: const BoxConstraints(minHeight: 44),
+                        padding: const EdgeInsets.symmetric(vertical: 8),
                         decoration: const BoxDecoration(
                           border: Border(
                             bottom: BorderSide(
@@ -357,17 +379,20 @@ class _RecipeDetailsScreenState extends State<RecipeDetailsScreen> {
                           ),
                         ),
                         child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
-                              item.name,
-                              style: const TextStyle(
-                                fontFamily: AppTypography.quicksand,
-                                fontSize: 14,
-                                fontWeight: FontWeight.w500,
-                                color: AppColors.textPrimary,
+                            Expanded(
+                              child: Text(
+                                item.name,
+                                style: const TextStyle(
+                                  fontFamily: AppTypography.quicksand,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w500,
+                                  color: AppColors.textPrimary,
+                                ),
                               ),
                             ),
+                            const SizedBox(width: 12),
                             Text(
                               '${item.amount.toStringAsFixed(item.amount % 1 == 0 ? 0 : 1)} ${item.unit}',
                               style: const TextStyle(
@@ -382,7 +407,7 @@ class _RecipeDetailsScreenState extends State<RecipeDetailsScreen> {
                       ),
                   const SizedBox(height: 24),
                   const Text(
-                    'Steps',
+                    'Các bước thực hiện',
                     style: TextStyle(
                       fontFamily: AppTypography.quicksand,
                       fontSize: 16,
