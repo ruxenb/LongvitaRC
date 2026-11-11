@@ -60,5 +60,22 @@ thoại, không phải ứng dụng Flutter Mobile native.
   evidence này.
 - Chưa ghi production Firestore.
 
+## Sửa WEB-18 trong source ngày 11/11/2026
+
+- `RecipeManagementScreen` chuyển sang danh sách card khi content width dưới
+  720 px; desktop tiếp tục dùng DataTable đầy đủ.
+- Header chuyển action xuống dòng khi content width dưới 560 px; padding trang
+  Recipes giảm từ 32 px xuống 16 px ở chế độ compact.
+- Bổ sung widget test tại viewport `412 × 915`, xác nhận compact list xuất hiện,
+  desktop table không render và không phát sinh Flutter exception/overflow.
+- Kiểm chứng local: `flutter analyze` sạch; 27/27 test trong
+  `admin_web_test.dart` và `pr25_integration_test.dart` pass; Web release build
+  thành công, Wasm dry run thành công. Lượt kiểm tra toàn package Web sau đó đạt
+  69/69 test, gồm cả Auth và Announcement.
+
+Kết quả trên là kiểm chứng source/local. WEB-18 vẫn cần người kiểm thử mở bản
+deploy production sau lần release kế tiếp và chụp lại viewport CSS `412 × 915`;
+ảnh finding số 04 được giữ làm bằng chứng trước sửa.
+
 Mỗi ảnh bổ sung phải ghi commit SHA, môi trường, role, viewport và bước tái
 hiện; không lưu email, UID hoặc token.

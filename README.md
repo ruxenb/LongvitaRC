@@ -257,6 +257,12 @@ Các màn hình Web hiện có:
 - **Audit bảo mật/Git/Project ID gần nhất:** [`evidence/audit/S9-1-S9-4-20261108/`](evidence/audit/S9-1-S9-4-20261108/README.md).
 - Report PDF, slide PDF và video public vẫn là placeholder cho đến khi S8-5,
   S8-10 và S8-15 hoàn tất.
+- **Report draft:** [`report/Lab03_STUDENTID_DRAFT.pdf`](report/Lab03_STUDENTID_DRAFT.pdf)
+  gồm 10 trang và đã render kiểm tra ngày 11/11. Đây là bản nháp S8-5/TV-06;
+  chưa thay đầu ra cuối vì còn thiếu MSSV, Gemini/test report, cross-role live và
+  evidence production sau sửa WEB-18.
+- Phần S8-10/TV-07 không được tạo hoặc chỉnh trong lượt 11/11; Thắng và nhóm sẽ
+  tự thực hiện slide deck.
 
 AI đã được dùng có kiểm soát; output AI không được tính là bằng chứng runtime
 nếu không có log, ảnh hoặc run tương ứng.
@@ -280,6 +286,10 @@ nếu không có log, ảnh hoặc run tương ứng.
   hiện chỉ đạt một phần; ảnh Recipes phát hiện lỗi responsive WEB-18 và bộ ảnh
   vẫn thiếu desktop viewport chuẩn, CRUD/review live, Analytics DebugView và
   Remote Config live.
+- Source WEB-18 đã được sửa ngày 11/11 bằng compact recipe cards dưới 720 px;
+  analyzer sạch, 27/27 test trực tiếp và 69/69 toàn package Web pass; release
+  build thành công. Chưa ghi production pass cho tới khi deploy và chụp lại
+  viewport CSS 412×915.
 - TV-05 đã cập nhật URL, hướng dẫn chạy, roles, tài khoản demo, phiên bản, AI
   disclosure và deliverable map. Task còn chờ nhóm cấp tài khoản `staff` riêng,
   cùng link video, report PDF và slide PDF cuối trước khi đánh dấu hoàn thành.

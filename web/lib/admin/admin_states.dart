@@ -78,22 +78,35 @@ class AdminPageHeader extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) => Row(
-    children: [
-      Expanded(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+  Widget build(BuildContext context) => LayoutBuilder(
+    builder: (context, constraints) {
+      final compact = constraints.maxWidth < 560;
+      final heading = Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(title, style: Theme.of(context).textTheme.headlineMedium),
+          const SizedBox(height: 4),
+          Text(
+            subtitle,
+            style: const TextStyle(color: AppColors.textSecondary),
+          ),
+        ],
+      );
+      if (compact) {
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Text(title, style: Theme.of(context).textTheme.headlineMedium),
-            const SizedBox(height: 4),
-            Text(
-              subtitle,
-              style: const TextStyle(color: AppColors.textSecondary),
-            ),
+            heading,
+            if (action != null) ...[const SizedBox(height: 12), action!],
           ],
-        ),
-      ),
-      ?action,
-    ],
+        );
+      }
+      return Row(
+        children: [
+          Expanded(child: heading),
+          ?action,
+        ],
+      );
+    },
   );
 }

@@ -372,3 +372,28 @@ text files có prefix đường dẫn máy cũ; đã thay prefix bằng `<user-h
   TC-11 ARTEMIS pass ngày 07/11.
 - `main` được đối chiếu tại `aaae57d`; report PDF, slide PDF, video public, ba
   lượt cross-role và lượt security/access audit cuối vẫn chưa hoàn thành.
+
+## 13. WEB-18 và audit S9-1 — 11/11/2026
+
+- WEB-18 được sửa ở source: Recipes dùng card list dưới 720 px, header xếp dọc
+  dưới 560 px và giảm padding trên màn hình hẹp. Widget test mới dùng viewport
+  412×915. `flutter analyze` sạch, 27/27 test trực tiếp và 69/69 toàn package
+  Web pass; `flutter build web --release` thành công. Chưa deploy hoặc tự ghi
+  production pass; Thắng sẽ kiểm tra bản deploy và bổ sung ảnh sau.
+- Gitleaks quét lại cây hiện tại ở chế độ redacted. Ba Storage download token
+  và email/tên/UID trong `evidence/artemis/raw/runs.jsonl` đã được thay bằng
+  placeholder; script sanitize được lưu tại
+  `scripts/sanitize-artemis-evidence.mjs` để kiểm soát lần cập nhật sau.
+- Sau sanitize, source tree được theo dõi còn ba Firebase client keys trong
+  cấu hình Android/Mobile/Web và một false positive là SHA-256 trong hồ sơ test.
+  Các build/cache generated cũng chứa client config nhưng không thuộc file Git.
+- Quét toàn lịch sử vẫn thấy ba token ở các commit cũ cùng Firebase client
+  config. Không rewrite history trong lượt này. S9-1 tiếp tục **Đang làm** cho
+  tới khi owner xác minh/revoke token cũ và xác nhận API restrictions cùng
+  Firestore/Storage Rules.
+- S8-5/TV-06 bắt đầu bằng `report/Lab03_STUDENTID_DRAFT.pdf`: 10 trang A4,
+  tổng hợp phạm vi, design, MVVM, Firebase, Web Admin, cross-role, review và
+  security. Toàn bộ 10 trang đã render để kiểm tra; bản nháp giữ rõ các giới hạn
+  chưa nghiệm thu. Chưa đổi sang tên MSSV hoặc đánh dấu hoàn thành.
+- Theo quyết định của Thắng, S8-10/TV-07 để Thắng và nhóm tự làm; lượt này không
+  tạo hoặc chỉnh slide deck.

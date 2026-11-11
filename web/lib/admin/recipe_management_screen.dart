@@ -25,47 +25,51 @@ class _RecipeManagementScreenState extends State<RecipeManagementScreen> {
 
   @override
   Widget build(BuildContext context) => Consumer<RecipeAdminViewModel>(
-    builder: (context, vm, _) => Padding(
-      padding: const EdgeInsets.all(32),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          AdminPageHeader(
-            title: 'Quản lý công thức',
-            subtitle:
-                'Tạo, chỉnh sửa và lưu trữ món ăn dùng trên ứng dụng di động',
-            action: FilledButton.icon(
-              onPressed: vm.saving ? null : () => _openEditor(context, vm),
-              icon: const Icon(Icons.add),
-              label: const Text('Thêm công thức'),
-            ),
+    builder: (context, vm, _) => LayoutBuilder(
+      builder: (context, constraints) {
+        final compact = constraints.maxWidth < 720;
+        return Padding(
+          padding: EdgeInsets.all(compact ? 16 : 32),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              AdminPageHeader(
+                title: 'Quản lý công thức',
+                subtitle: 'Tạo, chỉnh sửa và lưu trữ món ăn dùng trên ứng dụng di động',
+                action: FilledButton.icon(
+                  onPressed: vm.saving ? null : () => _openEditor(context, vm),
+                  icon: const Icon(Icons.add),
+                  label: const Text('Thêm công thức'),
+                ),
+              ),
+              SizedBox(height: compact ? 16 : 24),
+              TextField(
+                onChanged: vm.search,
+                decoration: const InputDecoration(
+                  prefixIcon: Icon(Icons.search),
+                  hintText: 'Tìm theo tên hoặc danh mục',
+                ),
+              ),
+              const SizedBox(height: 20),
+              Expanded(
+                child: vm.state == AdminLoadState.ready
+                    ? _RecipeTable(
+                        vm: vm,
+                        compact: compact,
+                        onEdit: (recipe) => _openEditor(context, vm, recipe),
+                      )
+                    : AdminStateView(
+                        state: vm.state,
+                        error: vm.error,
+                        emptyTitle: 'Chưa có công thức',
+                        emptyMessage: 'Tạo công thức đầu tiên để Mobile có dữ liệu sử dụng.',
+                        retry: vm.start,
+                      ),
+              ),
+            ],
           ),
-          const SizedBox(height: 24),
-          TextField(
-            onChanged: vm.search,
-            decoration: const InputDecoration(
-              prefixIcon: Icon(Icons.search),
-              hintText: 'Tìm theo tên hoặc danh mục',
-            ),
-          ),
-          const SizedBox(height: 20),
-          Expanded(
-            child: vm.state == AdminLoadState.ready
-                ? _RecipeTable(
-                    vm: vm,
-                    onEdit: (recipe) => _openEditor(context, vm, recipe),
-                  )
-                : AdminStateView(
-                    state: vm.state,
-                    error: vm.error,
-                    emptyTitle: 'Chưa có công thức',
-                    emptyMessage:
-                        'Tạo công thức đầu tiên để Mobile có dữ liệu sử dụng.',
-                    retry: vm.start,
-                  ),
-          ),
-        ],
-      ),
+        );
+      },
     ),
   );
 
@@ -97,9 +101,14 @@ class _RecipeManagementScreenState extends State<RecipeManagementScreen> {
 
 class _RecipeTable extends StatelessWidget {
   final RecipeAdminViewModel vm;
+  final bool compact;
   final Future<void> Function(RecipeModel recipe) onEdit;
 
-  const _RecipeTable({required this.vm, required this.onEdit});
+  const _RecipeTable({
+    required this.vm,
+    required this.compact,
+    required this.onEdit,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -111,7 +120,17 @@ class _RecipeTable extends StatelessWidget {
         emptyMessage: 'Hãy thử từ khóa khác.',
       );
     }
+    if (compact) {
+      return ListView.separated(
+        key: const ValueKey('recipe-compact-list'),
+        itemCount: rows.length,
+        separatorBuilder: (_, _) => const SizedBox(height: 12),
+        itemBuilder: (context, index) =>
+            _CompactRecipeCard(recipe: rows[index], vm: vm, onEdit: onEdit),
+      );
+    }
     return Card(
+      key: const ValueKey('recipe-desktop-table'),
       child: SingleChildScrollView(
         child: SingleChildScrollView(
           scrollDirection: Axis.horizontal,
@@ -185,6 +204,91 @@ class _RecipeTable extends StatelessWidget {
       ),
     );
   }
+}
+
+class _CompactRecipeCard extends StatelessWidget {
+  final RecipeModel recipe;
+  final RecipeAdminViewModel vm;
+  final Future<void> Function(RecipeModel recipe) onEdit;
+
+  const _CompactRecipeCard({
+    required this.recipe,
+    required this.vm,
+    required this.onEdit,
+  });
+
+  @override
+  Widget build(BuildContext context) => Card(
+    child: Padding(
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      recipe.name,
+                      style: Theme.of(context).textTheme.titleMedium,
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      recipe.category,
+                      style: const TextStyle(color: AppColors.textSecondary),
+                    ),
+                  ],
+                ),
+              ),
+              Chip(
+                label: Text(recipe.isArchived ? 'Đã lưu trữ' : 'Đang dùng'),
+                backgroundColor: recipe.isArchived
+                    ? AppColors.disabledBg
+                    : AppColors.bgSelected,
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          Text(
+            '${recipe.calories.toStringAsFixed(0)} kcal  |  '
+            '${recipe.proteinGrams.toStringAsFixed(1)} g protein',
+          ),
+          const SizedBox(height: 8),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              IconButton(
+                tooltip: 'Chỉnh sửa',
+                onPressed: () => onEdit(recipe),
+                icon: const Icon(Icons.edit_outlined),
+              ),
+              IconButton(
+                tooltip: recipe.isArchived ? 'Khôi phục' : 'Lưu trữ',
+                onPressed: () async {
+                  final messenger = ScaffoldMessenger.of(context);
+                  try {
+                    await vm.archive(recipe);
+                  } catch (error) {
+                    messenger.showSnackBar(
+                      SnackBar(content: Text('Không thể cập nhật: $error')),
+                    );
+                  }
+                },
+                icon: Icon(
+                  recipe.isArchived
+                      ? Icons.unarchive_outlined
+                      : Icons.archive_outlined,
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    ),
+  );
 }
 
 class _RecipeEditor extends StatefulWidget {
