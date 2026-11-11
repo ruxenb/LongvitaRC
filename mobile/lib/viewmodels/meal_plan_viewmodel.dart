@@ -31,6 +31,7 @@ class MealPlanViewModel extends BaseViewModel implements SessionScoped {
   ViewState<bool> _saveState = const ViewStateIdle();
   ViewState<bool> _replaceState = const ViewStateIdle();
   ViewState<bool> _submitState = const ViewStateIdle();
+  String? _submittingPlanId;
   StreamSubscription<List<MealPlanModel>>? _reviewSubscription;
   int _reviewListenGeneration = 0;
   String? _reviewSyncError;
@@ -174,6 +175,7 @@ class MealPlanViewModel extends BaseViewModel implements SessionScoped {
     _saveState = const ViewStateIdle();
     _replaceState = const ViewStateIdle();
     _submitState = const ViewStateIdle();
+    _submittingPlanId = null;
     notifyListeners();
   }
 
@@ -190,6 +192,7 @@ class MealPlanViewModel extends BaseViewModel implements SessionScoped {
     _saveState = const ViewStateIdle();
     _replaceState = const ViewStateIdle();
     _submitState = const ViewStateIdle();
+    _submittingPlanId = null;
     notifyListeners();
     _watchSelectedPlan();
   }
@@ -533,15 +536,21 @@ class MealPlanViewModel extends BaseViewModel implements SessionScoped {
     }
     if (_submitState is ViewStateLoading<bool>) return false;
     final epoch = _epoch.current;
+    _submittingPlanId = planId;
     _submitState = const ViewStateLoading('Đang gửi thực đơn xét duyệt…');
     notifyListeners();
     try {
       await dataService.updateMealPlanStatus(planId, 'submitted');
-      if (_epoch.isStale(epoch) || _activePlan?.id != planId) {
-        _submitState = const ViewStateIdle();
-        notifyListeners();
+      if (_epoch.isStale(epoch)) return false;
+      if (_activePlan?.id != planId) {
+        if (_submittingPlanId == planId) {
+          _submittingPlanId = null;
+          _submitState = const ViewStateIdle();
+          notifyListeners();
+        }
         return false;
       }
+      _submittingPlanId = null;
       _activePlan = _activePlan!.copyWith(status: 'submitted');
       _currentPlanState = ViewStateSuccess(_activePlan!);
       _submitState = const ViewStateSuccess(true);
@@ -549,8 +558,11 @@ class MealPlanViewModel extends BaseViewModel implements SessionScoped {
       return true;
     } catch (error, trace) {
       if (_epoch.isStale(epoch)) return false;
-      _submitState = ViewStateError(DataFailure.from(error).message, error);
-      notifyListeners();
+      if (_submittingPlanId == planId) {
+        _submittingPlanId = null;
+        _submitState = ViewStateError(DataFailure.from(error).message, error);
+        notifyListeners();
+      }
       await crashlytics.recordError(
         error,
         trace,
