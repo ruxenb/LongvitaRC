@@ -80,3 +80,20 @@ Không sửa production Firestore, không đổi role tài khoản, không tạo
 - Logcat lần smoke gần nhất: **ERROR_MATCHES=0** với ba mẫu FATAL EXCEPTION, E/flutter, FlutterError trong 1.000 dòng cuối. Không suy rộng thành đảm bảo không crash.
 - Kiểm tra ghép PR #41 vào nhánh Hoàng bằng git merge-tree: **exit=0**. Main cục bộ tại D:\PRM393\LongvitaRC trùng origin/main commit 53d7fc5; index unmerged=0 và tracked diff=0. Các file untracked android/ và evidence/ui/CHARLIE-UI-01 được giữ nguyên.
 - ARTEMIS thực vẫn thiếu daemon/API key/test account, live cross-role và bộ recipe đã duyệt chưa có chứng cứ. **Chưa đạt nghiệm thu toàn bộ 100%.**
+
+## 8. Kịch bản ARTEMIS đã sửa theo giao diện mới
+
+- Đã cập nhật e2e_test/test_flows.py, test_search.py, test_detail.py để dùng chính xác S02 Tùy chọn (nhóm tuổi/cân nặng), S03 Tạo thực đơn tuần, S04 Thực đơn tuần và Lưu thực đơn, S07 Xem nguyên liệu, S10 Thực đơn đã lưu.
+- Điều hướng tab và kiểm tra chuyển sang nhãn tiếng Việt Thực đơn, Dinh dưỡng, Hồ sơ, Tra cứu công thức, Chi tiết công thức, Đổi món.
+- Giữ assertions đọc ngày thực của thẻ S10, đủ các ngày của tuần và thông báo Firestore; không chỉ kiểm tra mã S04/S10 vì chúng không xuất hiện trên màn hình.
+- Quan sát A15 mới: S02 và S03 hiển thị; nhưng điện thoại tự khóa (deviceLocked=1, isKeyguardShowing=true) trong lần nhấn S03. Không coi là lỗi tạo thực đơn hoặc lượt ARTEMIS đã đạt. Ảnh chỉ lưu ở D:/PRM393/Longvita_phone_evidence/20261111_merged_main, không upload vì có dữ liệu tài khoản.
+- ARTEMIS vẫn bị chặn vì daemon, tài khoản test và API key chưa được cấu hình. Chỉ xác nhận cú pháp script; không tính vào ba lượt chạy chính thức.
+
+## 9. Khắc phục S09 không Việt hóa và nguồn dự phòng không được xác minh
+
+- Khi đối chiếu `e2e_test` với code S09, phát hiện `Book knowledge`, `Source` và thông tin dự phòng `The Longevity Diet · Phụ lục A...` không có trích dẫn trang sách xác thực.
+- Đã sửa S09: tiêu đề `Kiến thức sách`, nhãn `Nguồn tham khảo` và nội dung dự phòng `Chưa có nguồn trích dẫn được xác minh cho nội dung này.`. Khi `recipe.sourceNote` có giá trị, vẫn dùng đúng dữ liệu nguồn được cung cấp, không tự thêm thông tin tài liệu.
+- Thêm bài kiểm thử `mobile/test/flows/hoang_s09_source_placeholder_test.dart`: xác minh màn nguồn trống không tự gán phụ lục; bài test riêng **đạt**.
+- Sau sửa S09, `flutter analyze --no-pub` tại `mobile/`: **No issues found**; `flutter test --no-pub --concurrency=1`: **484/484 đạt**. Log: `D:\PRM393\hoang_s09_full_analyze_20261111.log` và `D:\PRM393\hoang_s09_full_tests_20261111.log`.
+- Cú pháp Python `e2e_test/` đã qua `compileall`; script kiểm tra đúng các nhãn UI hiện tại trên máy (không phải chạy ARTEMIS). Bằng chứng chính thức ≥3 lượt và tài khoản test vẫn đang thiếu.
+- Web (69/69) và Core (20/20) đã đạt trước thay đổi S09, và hai thành phần này không bị sửa trong đợt cập nhật. Không được suy ra luồng live Firebase đã được nghiệm thu từ các test này.
