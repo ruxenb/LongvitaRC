@@ -420,6 +420,7 @@ describe('announcements', () => {
     await assertSucceeds(staff().doc('announcements/a2').set(announcement('staff')));
     await assertSucceeds(staff().doc('announcements/a1').update({ title: 'Tiêu đề mới' }));
     await assertSucceeds(staff().doc('announcements/a1').delete());
+    await assertSucceeds(staff().doc('announcements/uncreated-doc').get());
   });
 
   test('staff denied: posing as admin, bad shape, changing author or date', async () => {

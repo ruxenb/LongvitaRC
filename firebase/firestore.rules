@@ -236,7 +236,8 @@ service cloud.firestore {
     // Collection: announcements/{id}
     match /announcements/{id} {
       // A signed-in account only receives announcements targeting its role.
-      allow read: if isAuthenticated() && getUserData().role in resource.data.targetRoles;
+      // Checking existence (resource == null) is allowed during publish transactions.
+      allow read: if isAuthenticated() && (resource == null || getUserData().role in resource.data.targetRoles);
 
       // Only staff and admin can publish announcements
       allow create: if isStaffOrAdmin() && isValidAnnouncement(request.resource.data);
