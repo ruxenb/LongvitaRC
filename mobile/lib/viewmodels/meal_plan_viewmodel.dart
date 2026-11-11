@@ -537,7 +537,11 @@ class MealPlanViewModel extends BaseViewModel implements SessionScoped {
     notifyListeners();
     try {
       await dataService.updateMealPlanStatus(planId, 'submitted');
-      if (_epoch.isStale(epoch) || _activePlan?.id != planId) return false;
+      if (_epoch.isStale(epoch) || _activePlan?.id != planId) {
+        _submitState = const ViewStateIdle();
+        notifyListeners();
+        return false;
+      }
       _activePlan = _activePlan!.copyWith(status: 'submitted');
       _currentPlanState = ViewStateSuccess(_activePlan!);
       _submitState = const ViewStateSuccess(true);
