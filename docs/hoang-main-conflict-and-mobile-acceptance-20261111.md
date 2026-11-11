@@ -97,3 +97,11 @@ Không sửa production Firestore, không đổi role tài khoản, không tạo
 - Sau sửa S09, `flutter analyze --no-pub` tại `mobile/`: **No issues found**; `flutter test --no-pub --concurrency=1`: **484/484 đạt**. Log: `D:\PRM393\hoang_s09_full_analyze_20261111.log` và `D:\PRM393\hoang_s09_full_tests_20261111.log`.
 - Cú pháp Python `e2e_test/` đã qua `compileall`; script kiểm tra đúng các nhãn UI hiện tại trên máy (không phải chạy ARTEMIS). Bằng chứng chính thức ≥3 lượt và tài khoản test vẫn đang thiếu.
 - Web (69/69) và Core (20/20) đã đạt trước thay đổi S09, và hai thành phần này không bị sửa trong đợt cập nhật. Không được suy ra luồng live Firebase đã được nghiệm thu từ các test này.
+
+## 10. Cài lại bản S09 cuối cùng trên thiết bị Android
+
+- Đã chạy lại build Flutter debug APK từ monorepo sau chỉnh sửa S09: BUILD_EXIT=0.
+- APK SHA-256 trong log build: 67ED702454E89E63F2283FFDFF21E8A9681058351B7C62DB136B3102BBBB9414.
+- ADB Samsung SM-A155F Android 16 ở trạng thái device; cài đặt bằng install -r, không xóa dữ liệu, trả PHONE_INSTALL_EXIT=0 và app có PID sau khởi chạy.
+- Log build ở D:/PRM393/hoang_s09_apk_build_20261111.log. Đây là bằng chứng build/cài và khởi chạy, không phải ảnh nghiệm thu riêng S09, do điện thoại tự khóa trong đợt thao tác.
+- Code S09 mới có test riêng đạt và Flutter toàn bộ 484/484 đạt. ARTEMIS, ba lần cross-role Firebase thật, và đối chiếu ảnh Figma toàn bộ vẫn chưa có đủ bằng chứng để nhận 100%.
