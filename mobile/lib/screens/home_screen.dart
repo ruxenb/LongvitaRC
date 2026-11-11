@@ -32,11 +32,17 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    _announcements = context.read<IDataService>().streamAnnouncements();
+    _announcements = context
+        .read<IDataService>()
+        .streamAnnouncements()
+        .asBroadcastStream();
   }
 
   void _refreshAnnouncements() => setState(
-    () => _announcements = context.read<IDataService>().streamAnnouncements(),
+    () => _announcements = context
+        .read<IDataService>()
+        .streamAnnouncements()
+        .asBroadcastStream(),
   );
 
   void _navigateTo(int index) {

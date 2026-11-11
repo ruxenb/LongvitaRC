@@ -162,20 +162,20 @@ class DataService implements IDataService {
   }
 
   @override
-  Stream<List<AnnouncementModel>> streamAnnouncements() async* {
-    try {
-      await for (final snapshot
-          in _announcementsRef
-              .orderBy('createdAt', descending: true)
-              .limit(20)
-              .snapshots()) {
-        yield snapshot.docs
-            .map((doc) => AnnouncementModel.fromMap(doc.data(), doc.id))
-            .toList(growable: false);
-      }
-    } catch (error) {
-      throw DataFailure.from(error);
-    }
+  Stream<List<AnnouncementModel>> streamAnnouncements() {
+    return _announcementsRef
+        .orderBy('createdAt', descending: true)
+        .limit(20)
+        .snapshots()
+        .map(
+          (snapshot) => snapshot.docs
+              .map((doc) => AnnouncementModel.fromMap(doc.data(), doc.id))
+              .toList(growable: false),
+        )
+        .handleError((error) {
+          throw DataFailure.from(error);
+        })
+        .asBroadcastStream();
   }
 
   @override
