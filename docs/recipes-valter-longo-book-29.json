@@ -1,0 +1,2476 @@
+[
+  {
+    "id": "lv-book-w1d1-spinach-pine-nuts-raisins",
+    "name": "Rau bina xào hạt thông và nho khô dùng kèm bánh giòn spelt",
+    "description": "Bữa trưa thực đơn trường thọ: Rau bina giàu sắt xào dầu ô liu, kết hợp hạt thông giòn béo, nho khô ngọt dịu và bánh quy spelt nguyên cám.",
+    "category": "rau_cu",
+    "proteinGrams": 11,
+    "calories": 380,
+    "ingredients": [
+      {
+        "id": "w1d1-spinach-pine-nuts-raisins-ing-1",
+        "name": "Rau chân vịt (bina)",
+        "amount": 150,
+        "unit": "g",
+        "category": "rau củ",
+        "isPurchased": false
+      },
+      {
+        "id": "w1d1-spinach-pine-nuts-raisins-ing-2",
+        "name": "Hạt thông",
+        "amount": 9,
+        "unit": "g",
+        "category": "dầu hạt",
+        "isPurchased": false
+      },
+      {
+        "id": "w1d1-spinach-pine-nuts-raisins-ing-3",
+        "name": "Nho khô",
+        "amount": 9,
+        "unit": "g",
+        "category": "hoa quả",
+        "isPurchased": false
+      },
+      {
+        "id": "w1d1-spinach-pine-nuts-raisins-ing-4",
+        "name": "Dầu ô liu nguyên chất",
+        "amount": 12,
+        "unit": "mL",
+        "category": "dầu hạt",
+        "isPurchased": false
+      },
+      {
+        "id": "w1d1-spinach-pine-nuts-raisins-ing-5",
+        "name": "Bánh quy giòn spelt/farro",
+        "amount": 40,
+        "unit": "g",
+        "category": "ngũ cốc",
+        "isPurchased": false
+      }
+    ],
+    "instructions": [
+      "Rửa sạch rau bina, để ráo nước.",
+      "Làm nóng 12 mL dầu ô liu trên chảo, cho hạt thông vào rang thơm nhẹ rồi cho rau bina và nho khô vào đảo nhanh trong 2-3 phút.",
+      "Bày ra đĩa và thưởng thức cùng bánh quy giòn spelt."
+    ],
+    "imageUrl": null,
+    "sourceNote": "[book] Valter Longo, The Longevity Diet (2018), Phụ lục A: Thực đơn 2 tuần, Tuần 1 Ngày 1 (Bữa trưa). Dinh dưỡng theo công bố trong sách.",
+    "isArchived": false,
+    "_bookProvenance": {
+      "week": 1,
+      "day": 1,
+      "meal": "lunch",
+      "originalName": "Spinach with pine nuts and raisins + spelt crackers",
+      "kcal": 380,
+      "proteinGrams": 11
+    }
+  },
+  {
+    "id": "lv-book-w1d1-pasta-broccoli-black-beans",
+    "name": "Mì nguyên cám xào bông cải xanh và đậu đen",
+    "description": "Bữa tối giàu dinh dưỡng: Mì nguyên cám kết hợp bông cải xanh luộc và đậu đen giàu đạm thực vật, kèm quả óc chó và nam việt quất tráng miệng.",
+    "category": "dau",
+    "proteinGrams": 28,
+    "calories": 840,
+    "ingredients": [
+      {
+        "id": "w1d1-pasta-broccoli-black-beans-ing-1",
+        "name": "Đậu đen (đã nấu chín)",
+        "amount": 150,
+        "unit": "g",
+        "category": "đậu",
+        "isPurchased": false
+      },
+      {
+        "id": "w1d1-pasta-broccoli-black-beans-ing-2",
+        "name": "Bông cải xanh (luộc)",
+        "amount": 200,
+        "unit": "g",
+        "category": "rau củ",
+        "isPurchased": false
+      },
+      {
+        "id": "w1d1-pasta-broccoli-black-beans-ing-3",
+        "name": "Mì pasta ngũ cốc nguyên cám (cân khô)",
+        "amount": 40,
+        "unit": "g",
+        "category": "ngũ cốc",
+        "isPurchased": false
+      },
+      {
+        "id": "w1d1-pasta-broccoli-black-beans-ing-4",
+        "name": "Dầu ô liu nguyên chất",
+        "amount": 25,
+        "unit": "mL",
+        "category": "dầu hạt",
+        "isPurchased": false
+      },
+      {
+        "id": "w1d1-pasta-broccoli-black-beans-ing-5",
+        "name": "Phô mai Parmesan bào",
+        "amount": 5,
+        "unit": "g",
+        "category": "phô mai",
+        "isPurchased": false
+      },
+      {
+        "id": "w1d1-pasta-broccoli-black-beans-ing-6",
+        "name": "Quả óc chó",
+        "amount": 25,
+        "unit": "g",
+        "category": "dầu hạt",
+        "isPurchased": false
+      },
+      {
+        "id": "w1d1-pasta-broccoli-black-beans-ing-7",
+        "name": "Nam việt quất sấy khô",
+        "amount": 20,
+        "unit": "g",
+        "category": "hoa quả",
+        "isPurchased": false
+      }
+    ],
+    "instructions": [
+      "Luộc mì nguyên cám trong nước sôi có chút muối theo hướng dẫn gói (khoảng 8-10 phút), vớt ra để ráo.",
+      "Bông cải xanh chần chín tới. Đậu đen đã ninh mềm cho vào xào thơm cùng tỏi và 25 mL dầu ô liu.",
+      "Cho mì và bông cải xanh vào đảo đều, rắc phô mai Parmesan bào. Dùng kèm quả óc chó và nam việt quất."
+    ],
+    "imageUrl": null,
+    "sourceNote": "[book] Valter Longo, The Longevity Diet (2018), Phụ lục A: Thực đơn 2 tuần, Tuần 1 Ngày 1 (Bữa tối). Dinh dưỡng theo công bố trong sách.",
+    "isArchived": false,
+    "_bookProvenance": {
+      "week": 1,
+      "day": 1,
+      "meal": "dinner",
+      "originalName": "Pasta with broccoli and black beans (+ walnuts & dried cranberries)",
+      "kcal": 840,
+      "proteinGrams": 28
+    }
+  },
+  {
+    "id": "lv-book-w1d2-wild-rice-green-beans",
+    "name": "Cơm gạo lứt đậu cô ve sốt tỏi và cà chua tươi",
+    "description": "Bữa trưa thanh đạm: Cơm gạo lứt/gạo hoang thơm bùi kết hợp đậu cô ve giòn ngọt, sốt tỏi cà chua tươi và xà lách xanh mát.",
+    "category": "ngu_coc",
+    "proteinGrams": 13,
+    "calories": 360,
+    "ingredients": [
+      {
+        "id": "w1d2-wild-rice-green-beans-ing-1",
+        "name": "Gạo hoang/gạo lứt (cân khô)",
+        "amount": 40,
+        "unit": "g",
+        "category": "ngũ cốc",
+        "isPurchased": false
+      },
+      {
+        "id": "w1d2-wild-rice-green-beans-ing-2",
+        "name": "Đậu cô ve tươi",
+        "amount": 150,
+        "unit": "g",
+        "category": "rau củ",
+        "isPurchased": false
+      },
+      {
+        "id": "w1d2-wild-rice-green-beans-ing-3",
+        "name": "Cà chua tươi",
+        "amount": 150,
+        "unit": "g",
+        "category": "rau củ",
+        "isPurchased": false
+      },
+      {
+        "id": "w1d2-wild-rice-green-beans-ing-4",
+        "name": "Dầu ô liu nguyên chất",
+        "amount": 12,
+        "unit": "mL",
+        "category": "dầu hạt",
+        "isPurchased": false
+      },
+      {
+        "id": "w1d2-wild-rice-green-beans-ing-5",
+        "name": "Rau xanh các loại",
+        "amount": 200,
+        "unit": "g",
+        "category": "rau củ",
+        "isPurchased": false
+      }
+    ],
+    "instructions": [
+      "Nấu chín gạo lứt trong nồi với lượng nước vừa đủ (tỷ lệ 1 gạo : 2 nước).",
+      "Đậu cô ve cắt khúc vừa ăn, chần sơ. Phi thơm tỏi với dầu ô liu, cho cà chua xắt hạt lựu và đậu cô ve vào đảo chín.",
+      "Trộn đều với cơm gạo lứt và thưởng thức cùng đĩa rau xà lách tươi."
+    ],
+    "imageUrl": null,
+    "sourceNote": "[book] Valter Longo, The Longevity Diet (2018), Phụ lục A: Thực đơn 2 tuần, Tuần 1 Ngày 2 (Bữa trưa). Dinh dưỡng theo công bố trong sách.",
+    "isArchived": false,
+    "_bookProvenance": {
+      "week": 1,
+      "day": 2,
+      "meal": "lunch",
+      "originalName": "Wild rice and green beans with garlic and fresh tomato",
+      "kcal": 360,
+      "proteinGrams": 13
+    }
+  },
+  {
+    "id": "lv-book-w1d2-salmon-asparagus",
+    "name": "Cá hồi áp chảo măng tây và bánh mì nguyên cám",
+    "description": "Bữa tối giàu Omega-3 chuẩn phong cách Longevity: Phi lê cá hồi áp chảo thơm lừng cùng măng tây thanh ngọt, bánh mì đen và salad tráng miệng quả phỉ.",
+    "category": "ca",
+    "proteinGrams": 48,
+    "calories": 900,
+    "ingredients": [
+      {
+        "id": "w1d2-salmon-asparagus-ing-1",
+        "name": "Phi lê cá hồi tự nhiên",
+        "amount": 150,
+        "unit": "g",
+        "category": "cá",
+        "isPurchased": false
+      },
+      {
+        "id": "w1d2-salmon-asparagus-ing-2",
+        "name": "Măng tây",
+        "amount": 300,
+        "unit": "g",
+        "category": "rau củ",
+        "isPurchased": false
+      },
+      {
+        "id": "w1d2-salmon-asparagus-ing-3",
+        "name": "Dầu ô liu nguyên chất",
+        "amount": 12,
+        "unit": "mL",
+        "category": "dầu hạt",
+        "isPurchased": false
+      },
+      {
+        "id": "w1d2-salmon-asparagus-ing-4",
+        "name": "Bánh mì nguyên cám",
+        "amount": 60,
+        "unit": "g",
+        "category": "ngũ cốc",
+        "isPurchased": false
+      },
+      {
+        "id": "w1d2-salmon-asparagus-ing-5",
+        "name": "Xà lách trộn",
+        "amount": 200,
+        "unit": "g",
+        "category": "rau củ",
+        "isPurchased": false
+      },
+      {
+        "id": "w1d2-salmon-asparagus-ing-6",
+        "name": "Hạt phỉ (hazelnuts)",
+        "amount": 25,
+        "unit": "g",
+        "category": "dầu hạt",
+        "isPurchased": false
+      },
+      {
+        "id": "w1d2-salmon-asparagus-ing-7",
+        "name": "Nam việt quất sấy khô",
+        "amount": 30,
+        "unit": "g",
+        "category": "hoa quả",
+        "isPurchased": false
+      }
+    ],
+    "instructions": [
+      "Ướp cá hồi với chút muối biển và tiêu. Làm nóng dầu ô liu trên chảo, áp chảo cá hồi mỗi mặt 3-4 phút đến khi chín tới.",
+      "Măng tây rửa sạch, cắt bỏ gốc già, áp chảo cùng tỏi băm trên cùng chảo cá khoảng 3 phút.",
+      "Dọn cá hồi và măng tây ra đĩa cùng bánh mì nguyên cám, ăn kèm đĩa salad trộn dầu giấm, hạt phỉ và việt quất."
+    ],
+    "imageUrl": null,
+    "sourceNote": "[book] Valter Longo, The Longevity Diet (2018), Phụ lục A: Thực đơn 2 tuần, Tuần 1 Ngày 2 (Bữa tối). Dinh dưỡng theo công bố trong sách.",
+    "isArchived": false,
+    "_bookProvenance": {
+      "week": 1,
+      "day": 2,
+      "meal": "dinner",
+      "originalName": "Salmon fillet with asparagus (+ hazelnuts & dried cranberries)",
+      "kcal": 900,
+      "proteinGrams": 48
+    }
+  },
+  {
+    "id": "lv-book-w1d3-spelt-zucchini",
+    "name": "Hạt Spelt xào bí ngòi, tỏi, ô liu và mùi tây",
+    "description": "Bữa trưa nguyên hạt cổ truyền: Hạt farro/spelt dẻo bùi xào bí ngòi tươi mát, quả ô liu Địa Trung Hải và cà chua bi mọng nước.",
+    "category": "ngu_coc",
+    "proteinGrams": 14,
+    "calories": 390,
+    "ingredients": [
+      {
+        "id": "w1d3-spelt-zucchini-ing-1",
+        "name": "Hạt spelt/farro (cân khô)",
+        "amount": 40,
+        "unit": "g",
+        "category": "ngũ cốc",
+        "isPurchased": false
+      },
+      {
+        "id": "w1d3-spelt-zucchini-ing-2",
+        "name": "Bí ngòi xanh",
+        "amount": 300,
+        "unit": "g",
+        "category": "rau củ",
+        "isPurchased": false
+      },
+      {
+        "id": "w1d3-spelt-zucchini-ing-3",
+        "name": "Cà chua bi",
+        "amount": 100,
+        "unit": "g",
+        "category": "rau củ",
+        "isPurchased": false
+      },
+      {
+        "id": "w1d3-spelt-zucchini-ing-4",
+        "name": "Quả ô liu ngâm",
+        "amount": 25,
+        "unit": "g",
+        "category": "rau củ",
+        "isPurchased": false
+      },
+      {
+        "id": "w1d3-spelt-zucchini-ing-5",
+        "name": "Dầu ô liu nguyên chất",
+        "amount": 12,
+        "unit": "mL",
+        "category": "dầu hạt",
+        "isPurchased": false
+      },
+      {
+        "id": "w1d3-spelt-zucchini-ing-6",
+        "name": "Rau xanh các loại",
+        "amount": 200,
+        "unit": "g",
+        "category": "rau củ",
+        "isPurchased": false
+      }
+    ],
+    "instructions": [
+      "Luộc hạt spelt trong nước sôi khoảng 25-30 phút đến khi mềm dẻo, vớt ráo.",
+      "Bí ngòi thái lát mỏng, cà chua bi bổ đôi. Phi thơm tỏi với dầu ô liu, cho bí ngòi, cà chua bi và ô liu vào xào vừa chín tới.",
+      "Trộn spelt vào chảo, rắc mùi tây băm nhỏ, đảo đều và dọn kèm rau xanh."
+    ],
+    "imageUrl": null,
+    "sourceNote": "[book] Valter Longo, The Longevity Diet (2018), Phụ lục A: Thực đơn 2 tuần, Tuần 1 Ngày 3 (Bữa trưa). Dinh dưỡng theo công bố trong sách.",
+    "isArchived": false,
+    "_bookProvenance": {
+      "week": 1,
+      "day": 3,
+      "meal": "lunch",
+      "originalName": "Spelt and zucchini with garlic, olives, and parsley",
+      "kcal": 390,
+      "proteinGrams": 14
+    }
+  },
+  {
+    "id": "lv-book-w1d3-garbanzo-minestrone",
+    "name": "Súp Minestrone đậu gà nấu nui và rau củ",
+    "description": "Bữa tối ấm cúng truyền thống Ý: Súp rau củ minestrone ngọt tự nhiên kết hợp đậu gà bùi ngậy, nui ống và tráng miệng cherry cùng hạnh nhân.",
+    "category": "dau",
+    "proteinGrams": 28,
+    "calories": 820,
+    "ingredients": [
+      {
+        "id": "w1d3-garbanzo-minestrone-ing-1",
+        "name": "Rau củ hỗn hợp nấu súp minestrone",
+        "amount": 250,
+        "unit": "g",
+        "category": "rau củ",
+        "isPurchased": false
+      },
+      {
+        "id": "w1d3-garbanzo-minestrone-ing-2",
+        "name": "Đậu gà (đã nấu chín)",
+        "amount": 150,
+        "unit": "g",
+        "category": "đậu",
+        "isPurchased": false
+      },
+      {
+        "id": "w1d3-garbanzo-minestrone-ing-3",
+        "name": "Mì pasta/nui (cân khô)",
+        "amount": 40,
+        "unit": "g",
+        "category": "ngũ cốc",
+        "isPurchased": false
+      },
+      {
+        "id": "w1d3-garbanzo-minestrone-ing-4",
+        "name": "Dầu ô liu nguyên chất",
+        "amount": 25,
+        "unit": "mL",
+        "category": "dầu hạt",
+        "isPurchased": false
+      },
+      {
+        "id": "w1d3-garbanzo-minestrone-ing-5",
+        "name": "Phô mai Parmesan bào",
+        "amount": 5,
+        "unit": "g",
+        "category": "phô mai",
+        "isPurchased": false
+      },
+      {
+        "id": "w1d3-garbanzo-minestrone-ing-6",
+        "name": "Quả anh đào (cherry tươi)",
+        "amount": 100,
+        "unit": "g",
+        "category": "hoa quả",
+        "isPurchased": false
+      },
+      {
+        "id": "w1d3-garbanzo-minestrone-ing-7",
+        "name": "Hạnh nhân",
+        "amount": 25,
+        "unit": "g",
+        "category": "dầu hạt",
+        "isPurchased": false
+      }
+    ],
+    "instructions": [
+      "Nấu nước hầm rau củ cùng cà rốt, cần tây, khoai tây và bí ngòi cắt hạt lựu.",
+      "Khi rau củ gần mềm, cho đậu gà đã nấu chín và nui khô vào nấu tiếp 10 phút.",
+      "Múc súp ra bát, rưới dầu ô liu nguyên chất và rắc phô mai Parmesan. Tráng miệng với cherry tươi và hạnh nhân."
+    ],
+    "imageUrl": null,
+    "sourceNote": "[book] Valter Longo, The Longevity Diet (2018), Phụ lục A: Thực đơn 2 tuần, Tuần 1 Ngày 3 (Bữa tối). Dinh dưỡng theo công bố trong sách.",
+    "isArchived": false,
+    "_bookProvenance": {
+      "week": 1,
+      "day": 3,
+      "meal": "dinner",
+      "originalName": "Garbanzo bean minestrone with pasta (+ cherries & almonds)",
+      "kcal": 820,
+      "proteinGrams": 28
+    }
+  },
+  {
+    "id": "lv-book-w1d4-barley-salad-olives-nuts",
+    "name": "Salad đại mạch (barley) rau củ, quả ô liu và hạt hồ đào",
+    "description": "Bữa trưa giàu chất xơ beta-glucan: Lúa mạch luộc dẻo trộn cùng nấm, ớt chuông, ngô ngọt, dưa góp chua giòn và hạt hồ đào bùi béo.",
+    "category": "ngu_coc",
+    "proteinGrams": 13,
+    "calories": 455,
+    "ingredients": [
+      {
+        "id": "w1d4-barley-salad-olives-nuts-ing-1",
+        "name": "Lúa mạch đại mạch (cân khô)",
+        "amount": 40,
+        "unit": "g",
+        "category": "ngũ cốc",
+        "isPurchased": false
+      },
+      {
+        "id": "w1d4-barley-salad-olives-nuts-ing-2",
+        "name": "Cà chua",
+        "amount": 150,
+        "unit": "g",
+        "category": "rau củ",
+        "isPurchased": false
+      },
+      {
+        "id": "w1d4-barley-salad-olives-nuts-ing-3",
+        "name": "Nấm tươi",
+        "amount": 75,
+        "unit": "g",
+        "category": "rau củ",
+        "isPurchased": false
+      },
+      {
+        "id": "w1d4-barley-salad-olives-nuts-ing-4",
+        "name": "Ớt chuông tươi",
+        "amount": 150,
+        "unit": "g",
+        "category": "rau củ",
+        "isPurchased": false
+      },
+      {
+        "id": "w1d4-barley-salad-olives-nuts-ing-5",
+        "name": "Ngô ngọt",
+        "amount": 20,
+        "unit": "g",
+        "category": "rau củ",
+        "isPurchased": false
+      },
+      {
+        "id": "w1d4-barley-salad-olives-nuts-ing-6",
+        "name": "Rau củ ngâm chua giòn",
+        "amount": 150,
+        "unit": "g",
+        "category": "rau củ",
+        "isPurchased": false
+      },
+      {
+        "id": "w1d4-barley-salad-olives-nuts-ing-7",
+        "name": "Quả hồ đào (pecans)",
+        "amount": 9,
+        "unit": "g",
+        "category": "dầu hạt",
+        "isPurchased": false
+      },
+      {
+        "id": "w1d4-barley-salad-olives-nuts-ing-8",
+        "name": "Quả ô liu ngâm",
+        "amount": 12,
+        "unit": "g",
+        "category": "rau củ",
+        "isPurchased": false
+      },
+      {
+        "id": "w1d4-barley-salad-olives-nuts-ing-9",
+        "name": "Dầu ô liu nguyên chất",
+        "amount": 12,
+        "unit": "mL",
+        "category": "dầu hạt",
+        "isPurchased": false
+      }
+    ],
+    "instructions": [
+      "Luộc lúa mạch ngập nước sôi trong 30-35 phút đến khi chín mềm nhưng còn độ dai nhẹ, vớt xả nước lạnh để ráo.",
+      "Ớt chuông, nấm và cà chua cắt hạt lựu nhỏ; trộn cùng ngô ngọt, rau ngâm chua và quả ô liu thái lát.",
+      "Trộn lúa mạch với hỗn hợp rau củ, rưới dầu ô liu, rắc hạt hồ đào bẻ nhỏ lên trên."
+    ],
+    "imageUrl": null,
+    "sourceNote": "[book] Valter Longo, The Longevity Diet (2018), Phụ lục A: Thực đơn 2 tuần, Tuần 1 Ngày 4 (Bữa trưa). Dinh dưỡng theo công bố trong sách.",
+    "isArchived": false,
+    "_bookProvenance": {
+      "week": 1,
+      "day": 4,
+      "meal": "lunch",
+      "originalName": "Barley salad with olives and nuts",
+      "kcal": 455,
+      "proteinGrams": 13
+    }
+  },
+  {
+    "id": "lv-book-w1d4-pasta-lentil-soup",
+    "name": "Súp mì pasta đậu lăng kiểu Ý (Pasta e lenticchie)",
+    "description": "Món súp đậu lăng cổ điển miền nam Ý: Đậu lăng mềm sánh ngọt nấu cùng khoai tây, cà rốt, mì pasta, tráng miệng dứa thơm và quả óc chó.",
+    "category": "dau",
+    "proteinGrams": 26,
+    "calories": 860,
+    "ingredients": [
+      {
+        "id": "w1d4-pasta-lentil-soup-ing-1",
+        "name": "Đậu lăng (nấu chín, để ráo)",
+        "amount": 150,
+        "unit": "g",
+        "category": "đậu",
+        "isPurchased": false
+      },
+      {
+        "id": "w1d4-pasta-lentil-soup-ing-2",
+        "name": "Khoai tây",
+        "amount": 1,
+        "unit": "medium",
+        "category": "rau củ",
+        "isPurchased": false
+      },
+      {
+        "id": "w1d4-pasta-lentil-soup-ing-3",
+        "name": "Cà rốt",
+        "amount": 1,
+        "unit": "medium",
+        "category": "rau củ",
+        "isPurchased": false
+      },
+      {
+        "id": "w1d4-pasta-lentil-soup-ing-4",
+        "name": "Cà chua",
+        "amount": 1,
+        "unit": "medium",
+        "category": "rau củ",
+        "isPurchased": false
+      },
+      {
+        "id": "w1d4-pasta-lentil-soup-ing-5",
+        "name": "Mì pasta/nui (cân khô)",
+        "amount": 40,
+        "unit": "g",
+        "category": "ngũ cốc",
+        "isPurchased": false
+      },
+      {
+        "id": "w1d4-pasta-lentil-soup-ing-6",
+        "name": "Dầu ô liu nguyên chất",
+        "amount": 25,
+        "unit": "mL",
+        "category": "dầu hạt",
+        "isPurchased": false
+      },
+      {
+        "id": "w1d4-pasta-lentil-soup-ing-7",
+        "name": "Dứa (thơm) tươi",
+        "amount": 100,
+        "unit": "g",
+        "category": "hoa quả",
+        "isPurchased": false
+      },
+      {
+        "id": "w1d4-pasta-lentil-soup-ing-8",
+        "name": "Quả óc chó",
+        "amount": 25,
+        "unit": "g",
+        "category": "dầu hạt",
+        "isPurchased": false
+      }
+    ],
+    "instructions": [
+      "Cà rốt, khoai tây và cà chua xắt hạt lựu. Nấu sôi cùng đậu lăng và nước lọc trong khoảng 20 phút.",
+      "Thêm mì pasta vào nấu thêm 8-10 phút cho mì chín mềm và súp sánh sệt.",
+      "Rưới 25 mL dầu ô liu nguyên chất trước khi thưởng thức. Dùng kèm dứa tươi và quả óc chó."
+    ],
+    "imageUrl": null,
+    "sourceNote": "[book] Valter Longo, The Longevity Diet (2018), Phụ lục A: Thực đơn 2 tuần, Tuần 1 Ngày 4 (Bữa tối). Dinh dưỡng theo công bố trong sách.",
+    "isArchived": false,
+    "_bookProvenance": {
+      "week": 1,
+      "day": 4,
+      "meal": "dinner",
+      "originalName": "Pasta and lentil soup (pasta e lenticchie) (+ pineapple & walnuts)",
+      "kcal": 860,
+      "proteinGrams": 26
+    }
+  },
+  {
+    "id": "lv-book-w1d5-escarole-olives-tomatoes",
+    "name": "Rau diếp xoăn Escarole xào ô liu, cà chua sấy và hạt thông",
+    "description": "Bữa trưa thanh lọc Địa Trung Hải: Rau diếp xoăn bổ dưỡng xào cà chua sấy đậm đà, hạt thông, lá húng quế tươi và bánh mì đen nướng giòn.",
+    "category": "rau_cu",
+    "proteinGrams": 11,
+    "calories": 380,
+    "ingredients": [
+      {
+        "id": "w1d5-escarole-olives-tomatoes-ing-1",
+        "name": "Rau diếp xoăn escarole",
+        "amount": 150,
+        "unit": "g",
+        "category": "rau củ",
+        "isPurchased": false
+      },
+      {
+        "id": "w1d5-escarole-olives-tomatoes-ing-2",
+        "name": "Hạt thông",
+        "amount": 9,
+        "unit": "g",
+        "category": "dầu hạt",
+        "isPurchased": false
+      },
+      {
+        "id": "w1d5-escarole-olives-tomatoes-ing-3",
+        "name": "Dầu ô liu nguyên chất",
+        "amount": 12,
+        "unit": "mL",
+        "category": "dầu hạt",
+        "isPurchased": false
+      },
+      {
+        "id": "w1d5-escarole-olives-tomatoes-ing-4",
+        "name": "Cà chua sấy khô ngâm dầu",
+        "amount": 50,
+        "unit": "g",
+        "category": "rau củ",
+        "isPurchased": false
+      },
+      {
+        "id": "w1d5-escarole-olives-tomatoes-ing-5",
+        "name": "Lá húng quế tươi",
+        "amount": 5,
+        "unit": "leaves",
+        "category": "gia vị",
+        "isPurchased": false
+      },
+      {
+        "id": "w1d5-escarole-olives-tomatoes-ing-6",
+        "name": "Bánh mì đen nướng giòn",
+        "amount": 40,
+        "unit": "g",
+        "category": "ngũ cốc",
+        "isPurchased": false
+      },
+      {
+        "id": "w1d5-escarole-olives-tomatoes-ing-7",
+        "name": "Cà rốt tươi",
+        "amount": 150,
+        "unit": "g",
+        "category": "rau củ",
+        "isPurchased": false
+      }
+    ],
+    "instructions": [
+      "Rau diếp xoăn rửa sạch, cắt khúc vừa ăn, để ráo.",
+      "Phi thơm dầu ô liu trên chảo, cho hạt thông, cà chua sấy và quả ô liu vào đảo đều.",
+      "Cho rau diếp xoăn và lá húng quế vào xào chín mềm nhanh. Thưởng thức cùng cà rốt tươi và bánh mì nướng giòn."
+    ],
+    "imageUrl": null,
+    "sourceNote": "[book] Valter Longo, The Longevity Diet (2018), Phụ lục A: Thực đơn 2 tuần, Tuần 1 Ngày 5 (Bữa trưa). Dinh dưỡng theo công bố trong sách.",
+    "isArchived": false,
+    "_bookProvenance": {
+      "week": 1,
+      "day": 5,
+      "meal": "lunch",
+      "originalName": "Escarole, olives, tomatoes, and basil",
+      "kcal": 380,
+      "proteinGrams": 11
+    }
+  },
+  {
+    "id": "lv-book-w1d5-octopus-potato",
+    "name": "Bạch tuộc hấp khoai tây nghiền và cà chua bi (Polpo e patate)",
+    "description": "Bữa tối hải sản truyền thống: Bạch tuộc luộc chín mềm trộn cùng khoai tây hấp nghiền thô, cà chua bi, ô liu và tráng miệng hạnh nhân nam việt quất.",
+    "category": "ca",
+    "proteinGrams": 26,
+    "calories": 830,
+    "ingredients": [
+      {
+        "id": "w1d5-octopus-potato-ing-1",
+        "name": "Bạch tuộc tươi làm sạch",
+        "amount": 60,
+        "unit": "g",
+        "category": "cá",
+        "isPurchased": false
+      },
+      {
+        "id": "w1d5-octopus-potato-ing-2",
+        "name": "Khoai tây",
+        "amount": 1,
+        "unit": "medium",
+        "category": "rau củ",
+        "isPurchased": false
+      },
+      {
+        "id": "w1d5-octopus-potato-ing-3",
+        "name": "Cà chua bi",
+        "amount": 150,
+        "unit": "g",
+        "category": "rau củ",
+        "isPurchased": false
+      },
+      {
+        "id": "w1d5-octopus-potato-ing-4",
+        "name": "Quả ô liu ngâm",
+        "amount": 20,
+        "unit": "g",
+        "category": "rau củ",
+        "isPurchased": false
+      },
+      {
+        "id": "w1d5-octopus-potato-ing-5",
+        "name": "Dầu ô liu nguyên chất",
+        "amount": 25,
+        "unit": "mL",
+        "category": "dầu hạt",
+        "isPurchased": false
+      },
+      {
+        "id": "w1d5-octopus-potato-ing-6",
+        "name": "Bánh mì đen nướng giòn",
+        "amount": 40,
+        "unit": "g",
+        "category": "ngũ cốc",
+        "isPurchased": false
+      },
+      {
+        "id": "w1d5-octopus-potato-ing-7",
+        "name": "Xà lách trộn",
+        "amount": 200,
+        "unit": "g",
+        "category": "rau củ",
+        "isPurchased": false
+      },
+      {
+        "id": "w1d5-octopus-potato-ing-8",
+        "name": "Hạnh nhân",
+        "amount": 25,
+        "unit": "g",
+        "category": "dầu hạt",
+        "isPurchased": false
+      },
+      {
+        "id": "w1d5-octopus-potato-ing-9",
+        "name": "Nam việt quất sấy khô",
+        "amount": 20,
+        "unit": "g",
+        "category": "hoa quả",
+        "isPurchased": false
+      }
+    ],
+    "instructions": [
+      "Bạch tuộc làm sạch, luộc cùng chút muối trong 20-30 phút cho chín mềm rồi cắt miếng vừa ăn.",
+      "Khoai tây luộc chín, bóc vỏ và dùng nĩa nghiền thô.",
+      "Trộn bạch tuộc, khoai tây nghiền, cà chua bi bổ đôi, quả ô liu với dầu ô liu; dọn kèm bánh mì đen nướng, salad và hạnh nhân."
+    ],
+    "imageUrl": null,
+    "sourceNote": "[book] Valter Longo, The Longevity Diet (2018), Phụ lục A: Thực đơn 2 tuần, Tuần 1 Ngày 5 (Bữa tối). Dinh dưỡng theo công bố trong sách.",
+    "isArchived": false,
+    "_bookProvenance": {
+      "week": 1,
+      "day": 5,
+      "meal": "dinner",
+      "originalName": "Octopus with potato (polpo e patate schiacciate) (+ almonds & dried cranberries)",
+      "kcal": 830,
+      "proteinGrams": 26
+    }
+  },
+  {
+    "id": "lv-book-w1d6-grilled-eggplant-feta",
+    "name": "Cà tím nướng phô mai Feta và cà chua bi",
+    "description": "Bữa trưa đậm chất Địa Trung Hải: Cà tím nướng xém cạnh ngọt mềm, phủ phô mai Feta mặn mòi, cà chua bi mọng nước và bánh giòn rye.",
+    "category": "rau_cu",
+    "proteinGrams": 11,
+    "calories": 390,
+    "ingredients": [
+      {
+        "id": "w1d6-grilled-eggplant-feta-ing-1",
+        "name": "Cà tím",
+        "amount": 250,
+        "unit": "g",
+        "category": "rau củ",
+        "isPurchased": false
+      },
+      {
+        "id": "w1d6-grilled-eggplant-feta-ing-2",
+        "name": "Dầu ô liu nguyên chất",
+        "amount": 12,
+        "unit": "mL",
+        "category": "dầu hạt",
+        "isPurchased": false
+      },
+      {
+        "id": "w1d6-grilled-eggplant-feta-ing-3",
+        "name": "Cà chua bi",
+        "amount": 150,
+        "unit": "g",
+        "category": "rau củ",
+        "isPurchased": false
+      },
+      {
+        "id": "w1d6-grilled-eggplant-feta-ing-4",
+        "name": "Phô mai Feta",
+        "amount": 20,
+        "unit": "g",
+        "category": "phô mai",
+        "isPurchased": false
+      },
+      {
+        "id": "w1d6-grilled-eggplant-feta-ing-5",
+        "name": "Bánh quy lúa mạch đen rye",
+        "amount": 40,
+        "unit": "g",
+        "category": "ngũ cốc",
+        "isPurchased": false
+      }
+    ],
+    "instructions": [
+      "Cà tím cắt khoanh tròn dày khoảng 1 cm, quét đều dầu ô liu và chút muối.",
+      "Nướng cà tím trên chảo nướng hoặc nồi chiên không dầu ở 200°C trong 10-12 phút đến khi chín vàng thơm.",
+      "Bày cà tím ra đĩa, bóp vụn phô mai Feta lên trên cùng cà chua bi và thưởng thức kèm bánh quy lúa mạch đen rye."
+    ],
+    "imageUrl": null,
+    "sourceNote": "[book] Valter Longo, The Longevity Diet (2018), Phụ lục A: Thực đơn 2 tuần, Tuần 1 Ngày 6 (Bữa trưa). Dinh dưỡng theo công bố trong sách.",
+    "isArchived": false,
+    "_bookProvenance": {
+      "week": 1,
+      "day": 6,
+      "meal": "lunch",
+      "originalName": "Grilled eggplant with feta cheese and tomatoes",
+      "kcal": 390,
+      "proteinGrams": 11
+    }
+  },
+  {
+    "id": "lv-book-w1d6-pasta-e-vaianeia",
+    "name": "Mì Pasta e vaianeia hầm rau củ và đậu trắng kiểu Molochio",
+    "description": "Công thức nổi tiếng từ ngôi làng trường thọ Molochio (Calabria): Mì hầm đậu trắng, đậu cô ve tươi, bí ngòi, khoai tây và tráng miệng việt quất hạt phỉ.",
+    "category": "dau",
+    "proteinGrams": 32,
+    "calories": 1010,
+    "ingredients": [
+      {
+        "id": "w1d6-pasta-e-vaianeia-ing-1",
+        "name": "Đậu trắng tây navy (nấu chín)",
+        "amount": 150,
+        "unit": "g",
+        "category": "đậu",
+        "isPurchased": false
+      },
+      {
+        "id": "w1d6-pasta-e-vaianeia-ing-2",
+        "name": "Đậu cô ve tươi",
+        "amount": 150,
+        "unit": "g",
+        "category": "rau củ",
+        "isPurchased": false
+      },
+      {
+        "id": "w1d6-pasta-e-vaianeia-ing-3",
+        "name": "Cà rốt tươi",
+        "amount": 2,
+        "unit": "medium",
+        "category": "rau củ",
+        "isPurchased": false
+      },
+      {
+        "id": "w1d6-pasta-e-vaianeia-ing-4",
+        "name": "Khoai tây",
+        "amount": 1,
+        "unit": "medium",
+        "category": "rau củ",
+        "isPurchased": false
+      },
+      {
+        "id": "w1d6-pasta-e-vaianeia-ing-5",
+        "name": "Bí ngòi xanh",
+        "amount": 150,
+        "unit": "g",
+        "category": "rau củ",
+        "isPurchased": false
+      },
+      {
+        "id": "w1d6-pasta-e-vaianeia-ing-6",
+        "name": "Cà chua",
+        "amount": 1,
+        "unit": "large",
+        "category": "rau củ",
+        "isPurchased": false
+      },
+      {
+        "id": "w1d6-pasta-e-vaianeia-ing-7",
+        "name": "Mì pasta/nui (cân khô)",
+        "amount": 40,
+        "unit": "g",
+        "category": "ngũ cốc",
+        "isPurchased": false
+      },
+      {
+        "id": "w1d6-pasta-e-vaianeia-ing-8",
+        "name": "Dầu ô liu nguyên chất",
+        "amount": 25,
+        "unit": "mL",
+        "category": "dầu hạt",
+        "isPurchased": false
+      },
+      {
+        "id": "w1d6-pasta-e-vaianeia-ing-9",
+        "name": "Phô mai Parmesan bào",
+        "amount": 5,
+        "unit": "g",
+        "category": "phô mai",
+        "isPurchased": false
+      },
+      {
+        "id": "w1d6-pasta-e-vaianeia-ing-10",
+        "name": "Hạt phỉ (hazelnuts)",
+        "amount": 25,
+        "unit": "g",
+        "category": "dầu hạt",
+        "isPurchased": false
+      },
+      {
+        "id": "w1d6-pasta-e-vaianeia-ing-11",
+        "name": "Việt quất sấy khô",
+        "amount": 20,
+        "unit": "g",
+        "category": "hoa quả",
+        "isPurchased": false
+      }
+    ],
+    "instructions": [
+      "Cắt nhỏ cà rốt, khoai tây, bí ngòi, đậu cô ve và cà chua; cho vào nồi hầm cùng đậu trắng và nước dùng.",
+      "Khi rau củ đã mềm ngọt, cho mì pasta vào nấu chín tới.",
+      "Tắt bếp, rưới dầu ô liu nguyên chất và rắc phô mai Parmesan. Ăn kèm hạt phỉ và quả việt quất sấy."
+    ],
+    "imageUrl": null,
+    "sourceNote": "[book] Valter Longo, The Longevity Diet (2018), Phụ lục A: Thực đơn 2 tuần, Tuần 1 Ngày 6 (Bữa tối). Dinh dưỡng theo công bố trong sách.",
+    "isArchived": false,
+    "_bookProvenance": {
+      "week": 1,
+      "day": 6,
+      "meal": "dinner",
+      "originalName": "Pasta e vaianeia (Molochio recipe) (+ hazelnuts & dried blueberries)",
+      "kcal": 1010,
+      "proteinGrams": 32
+    }
+  },
+  {
+    "id": "lv-book-w1d7-brussels-sprouts",
+    "name": "Bắp cải tí hon Brussels xào tỏi, hạt thông và phô mai Parmesan",
+    "description": "Bữa trưa chống oxy hóa mạnh mẽ: Bắp cải tí hon áp chảo thơm lừng, hạt thông giòn ngậy, phô mai Parmesan và bánh mì nguyên cám.",
+    "category": "rau_cu",
+    "proteinGrams": 17,
+    "calories": 435,
+    "ingredients": [
+      {
+        "id": "w1d7-brussels-sprouts-ing-1",
+        "name": "Bắp cải tí hon Brussels",
+        "amount": 250,
+        "unit": "g",
+        "category": "rau củ",
+        "isPurchased": false
+      },
+      {
+        "id": "w1d7-brussels-sprouts-ing-2",
+        "name": "Hạt thông",
+        "amount": 9,
+        "unit": "g",
+        "category": "dầu hạt",
+        "isPurchased": false
+      },
+      {
+        "id": "w1d7-brussels-sprouts-ing-3",
+        "name": "Dầu ô liu nguyên chất",
+        "amount": 12,
+        "unit": "mL",
+        "category": "dầu hạt",
+        "isPurchased": false
+      },
+      {
+        "id": "w1d7-brussels-sprouts-ing-4",
+        "name": "Phô mai Parmesan bào",
+        "amount": 5,
+        "unit": "g",
+        "category": "phô mai",
+        "isPurchased": false
+      },
+      {
+        "id": "w1d7-brussels-sprouts-ing-5",
+        "name": "Bánh mì nguyên cám sẫm màu",
+        "amount": 40,
+        "unit": "g",
+        "category": "ngũ cốc",
+        "isPurchased": false
+      },
+      {
+        "id": "w1d7-brussels-sprouts-ing-6",
+        "name": "Xà lách trộn",
+        "amount": 200,
+        "unit": "g",
+        "category": "rau củ",
+        "isPurchased": false
+      }
+    ],
+    "instructions": [
+      "Bắp cải Brussels rửa sạch, cắt bỏ cuống, bổ đôi.",
+      "Làm nóng dầu ô liu trên chảo, cho mặt cắt của bắp cải áp chảo đến khi vàng xém, thêm tỏi đập dập và hạt thông đảo đều.",
+      "Cho một thìa nước nhỏ vào đậy nắp om 2-3 phút cho chín mềm. Dọn ra đĩa rắc phô mai Parmesan và ăn cùng bánh mì đen, salad."
+    ],
+    "imageUrl": null,
+    "sourceNote": "[book] Valter Longo, The Longevity Diet (2018), Phụ lục A: Thực đơn 2 tuần, Tuần 1 Ngày 7 (Bữa trưa). Dinh dưỡng theo công bố trong sách.",
+    "isArchived": false,
+    "_bookProvenance": {
+      "week": 1,
+      "day": 7,
+      "meal": "lunch",
+      "originalName": "Brussels sprouts with garlic, pine nuts, and Parmesan cheese",
+      "kcal": 435,
+      "proteinGrams": 17
+    }
+  },
+  {
+    "id": "lv-book-w1d7-spaghetti-clams-mussels",
+    "name": "Mì Ý spaghetti sốt nghêu, vẹm biển và vang trắng",
+    "description": "Bữa tối hải sản cuối tuần thanh lịch: Mì spaghetti dai ngon hòa quyện nước ngọt từ nghêu vẹm tươi hấp vang trắng, dầu ô liu và quả chà là óc chó.",
+    "category": "ca",
+    "proteinGrams": 21,
+    "calories": 720,
+    "ingredients": [
+      {
+        "id": "w1d7-spaghetti-clams-mussels-ing-1",
+        "name": "Nghêu và vẹm tươi",
+        "amount": 60,
+        "unit": "g",
+        "category": "cá",
+        "isPurchased": false
+      },
+      {
+        "id": "w1d7-spaghetti-clams-mussels-ing-2",
+        "name": "Rượu vang trắng nấu ăn",
+        "amount": 40,
+        "unit": "mL",
+        "category": "gia vị",
+        "isPurchased": false
+      },
+      {
+        "id": "w1d7-spaghetti-clams-mussels-ing-3",
+        "name": "Mì spaghetti (cân khô)",
+        "amount": 40,
+        "unit": "g",
+        "category": "ngũ cốc",
+        "isPurchased": false
+      },
+      {
+        "id": "w1d7-spaghetti-clams-mussels-ing-4",
+        "name": "Dầu ô liu nguyên chất",
+        "amount": 25,
+        "unit": "mL",
+        "category": "dầu hạt",
+        "isPurchased": false
+      },
+      {
+        "id": "w1d7-spaghetti-clams-mussels-ing-5",
+        "name": "Rau xanh các loại",
+        "amount": 200,
+        "unit": "g",
+        "category": "rau củ",
+        "isPurchased": false
+      },
+      {
+        "id": "w1d7-spaghetti-clams-mussels-ing-6",
+        "name": "Quả chà là sấy khô",
+        "amount": 20,
+        "unit": "g",
+        "category": "hoa quả",
+        "isPurchased": false
+      },
+      {
+        "id": "w1d7-spaghetti-clams-mussels-ing-7",
+        "name": "Quả óc chó",
+        "amount": 25,
+        "unit": "g",
+        "category": "dầu hạt",
+        "isPurchased": false
+      }
+    ],
+    "instructions": [
+      "Luộc mì spaghetti ngập nước sôi trong 8-9 phút vừa chín tới (al dente).",
+      "Phi thơm tỏi và ớt với dầu ô liu, cho nghêu và vẹm cùng vang trắng vào chảo, đậy nắp đun lửa lớn 3 phút đến khi nghêu vẹm mở miệng.",
+      "Trộn mì spaghetti vào chảo hải sản cho thấm nước sốt ngọt; dọn kèm đĩa rau xanh, quả chà là và quả óc chó."
+    ],
+    "imageUrl": null,
+    "sourceNote": "[book] Valter Longo, The Longevity Diet (2018), Phụ lục A: Thực đơn 2 tuần, Tuần 1 Ngày 7 (Bữa tối). Dinh dưỡng theo công bố trong sách.",
+    "isArchived": false,
+    "_bookProvenance": {
+      "week": 1,
+      "day": 7,
+      "meal": "dinner",
+      "originalName": "Spaghetti with clams and mussels (+ dates & walnuts)",
+      "kcal": 720,
+      "proteinGrams": 21
+    }
+  },
+  {
+    "id": "lv-book-w2d1-oats-almond-milk-berries",
+    "name": "Cháo yến mạch sữa hạnh nhân, sô-cô-la đen và quả mọng",
+    "description": "Bữa sáng trường thọ hoàn hảo: Yến mạch cắt thép nấu sữa hạnh nhân thơm bùi, ăn kèm sô-cô-la đen nguyên chất, hạt dinh dưỡng và quả mọng tươi.",
+    "category": "ngu_coc",
+    "proteinGrams": 16,
+    "calories": 560,
+    "ingredients": [
+      {
+        "id": "w2d1-oats-almond-milk-berries-ing-1",
+        "name": "Yến mạch cắt thép (cân khô)",
+        "amount": 80,
+        "unit": "g",
+        "category": "ngũ cốc",
+        "isPurchased": false
+      },
+      {
+        "id": "w2d1-oats-almond-milk-berries-ing-2",
+        "name": "Sữa hạnh nhân không đường",
+        "amount": 240,
+        "unit": "mL",
+        "category": "dầu hạt",
+        "isPurchased": false
+      },
+      {
+        "id": "w2d1-oats-almond-milk-berries-ing-3",
+        "name": "Quả mọng hỗn hợp (dâu tây, việt quất, mâm xôi)",
+        "amount": 150,
+        "unit": "g",
+        "category": "hoa quả",
+        "isPurchased": false
+      },
+      {
+        "id": "w2d1-oats-almond-milk-berries-ing-4",
+        "name": "Sô-cô-la đen kèm hạt",
+        "amount": 20,
+        "unit": "g",
+        "category": "khác",
+        "isPurchased": false
+      }
+    ],
+    "instructions": [
+      "Cho yến mạch cắt thép và sữa hạnh nhân vào nồi nhỏ, nấu lửa nhỏ trong 10-15 phút đến khi cháo sánh mịn.",
+      "Múc cháo ra bát, xếp quả mọng tươi (dâu tây, việt quất) lên bề mặt.",
+      "Rắc vụn sô-cô-la đen và hạt lên trên, dùng ấm."
+    ],
+    "imageUrl": null,
+    "sourceNote": "[book] Valter Longo, The Longevity Diet (2018), Phụ lục A: Thực đơn 2 tuần, Tuần 2 Ngày 1 (Bữa sáng). Dinh dưỡng theo công bố trong sách.",
+    "isArchived": false,
+    "_bookProvenance": {
+      "week": 2,
+      "day": 1,
+      "meal": "breakfast",
+      "originalName": "Oats with almond milk, chocolate, nuts, and berries",
+      "kcal": 560,
+      "proteinGrams": 16
+    }
+  },
+  {
+    "id": "lv-book-w2d1-greek-salad",
+    "name": "Salad Hy Lạp phô mai Feta, quả ô liu, ớt chuông và hành tây",
+    "description": "Bữa trưa tươi mát Địa Trung Hải: Rau xà lách giòn ngọt, phô mai Feta mặn béo, quả ô liu đen và sốt dầu ô liu nguyên chất ăn kèm bánh mì đen.",
+    "category": "rau_cu",
+    "proteinGrams": 12,
+    "calories": 410,
+    "ingredients": [
+      {
+        "id": "w2d1-greek-salad-ing-1",
+        "name": "Rau xà lách hỗn hợp",
+        "amount": 150,
+        "unit": "g",
+        "category": "rau củ",
+        "isPurchased": false
+      },
+      {
+        "id": "w2d1-greek-salad-ing-2",
+        "name": "Phô mai Feta",
+        "amount": 20,
+        "unit": "g",
+        "category": "phô mai",
+        "isPurchased": false
+      },
+      {
+        "id": "w2d1-greek-salad-ing-3",
+        "name": "Ớt chuông xanh và đỏ",
+        "amount": 200,
+        "unit": "g",
+        "category": "rau củ",
+        "isPurchased": false
+      },
+      {
+        "id": "w2d1-greek-salad-ing-4",
+        "name": "Cà chua bi",
+        "amount": 150,
+        "unit": "g",
+        "category": "rau củ",
+        "isPurchased": false
+      },
+      {
+        "id": "w2d1-greek-salad-ing-5",
+        "name": "Quả ô liu ngâm",
+        "amount": 20,
+        "unit": "g",
+        "category": "rau củ",
+        "isPurchased": false
+      },
+      {
+        "id": "w2d1-greek-salad-ing-6",
+        "name": "Dầu ô liu nguyên chất",
+        "amount": 12,
+        "unit": "mL",
+        "category": "dầu hạt",
+        "isPurchased": false
+      },
+      {
+        "id": "w2d1-greek-salad-ing-7",
+        "name": "Bánh mì đen lúa mạch",
+        "amount": 40,
+        "unit": "g",
+        "category": "ngu_coc",
+        "isPurchased": false
+      }
+    ],
+    "instructions": [
+      "Xà lách rửa sạch cắt vừa ăn; ớt chuông xanh đỏ thái dải mỏng; cà chua bi bổ đôi; hành tây thái lát mỏng ngâm nước đá.",
+      "Trộn các nguyên liệu rau củ và quả ô liu trong tô lớn.",
+      "Xếp phô mai Feta lên trên, rưới 12 mL dầu ô liu nguyên chất và dùng cùng bánh mì đen."
+    ],
+    "imageUrl": null,
+    "sourceNote": "[book] Valter Longo, The Longevity Diet (2018), Phụ lục A: Thực đơn 2 tuần, Tuần 2 Ngày 1 (Bữa trưa). Dinh dưỡng theo công bố trong sách.",
+    "isArchived": false,
+    "_bookProvenance": {
+      "week": 2,
+      "day": 1,
+      "meal": "lunch",
+      "originalName": "Greek salad with feta, olives, onion, and peppers",
+      "kcal": 410,
+      "proteinGrams": 12
+    }
+  },
+  {
+    "id": "lv-book-w2d1-garbanzo-salad-garbanzo-bread",
+    "name": "Salad đậu gà rau chân vịt luộc và bánh mì đậu gà",
+    "description": "Bữa tối giàu protein thực vật: Đậu gà bùi ngậy trộn dầu ô liu hành tây, ăn kèm rau chân vịt hấp ngọt lịm, bánh mì đậu gà và quả chà là hồ đào.",
+    "category": "dau",
+    "proteinGrams": 26,
+    "calories": 810,
+    "ingredients": [
+      {
+        "id": "w2d1-garbanzo-salad-garbanzo-bread-ing-1",
+        "name": "Đậu gà (đã nấu chín)",
+        "amount": 150,
+        "unit": "g",
+        "category": "đậu",
+        "isPurchased": false
+      },
+      {
+        "id": "w2d1-garbanzo-salad-garbanzo-bread-ing-2",
+        "name": "Hành tây",
+        "amount": 1,
+        "unit": "medium",
+        "category": "rau củ",
+        "isPurchased": false
+      },
+      {
+        "id": "w2d1-garbanzo-salad-garbanzo-bread-ing-3",
+        "name": "Dầu ô liu nguyên chất",
+        "amount": 25,
+        "unit": "mL",
+        "category": "dầu hạt",
+        "isPurchased": false
+      },
+      {
+        "id": "w2d1-garbanzo-salad-garbanzo-bread-ing-4",
+        "name": "Rau chân vịt luộc",
+        "amount": 200,
+        "unit": "g",
+        "category": "rau củ",
+        "isPurchased": false
+      },
+      {
+        "id": "w2d1-garbanzo-salad-garbanzo-bread-ing-5",
+        "name": "Bánh mì làm từ bột đậu gà",
+        "amount": 60,
+        "unit": "g",
+        "category": "đậu",
+        "isPurchased": false
+      },
+      {
+        "id": "w2d1-garbanzo-salad-garbanzo-bread-ing-6",
+        "name": "Quả hồ đào (pecans)",
+        "amount": 25,
+        "unit": "g",
+        "category": "dầu hạt",
+        "isPurchased": false
+      },
+      {
+        "id": "w2d1-garbanzo-salad-garbanzo-bread-ing-7",
+        "name": "Quả chà là sấy khô",
+        "amount": 20,
+        "unit": "g",
+        "category": "hoa quả",
+        "isPurchased": false
+      }
+    ],
+    "instructions": [
+      "Rau chân vịt luộc sơ trong nước sôi 1 phút, vớt ra vắt ráo nước.",
+      "Đậu gà trộn cùng hành tây thái mỏng và dầu ô liu nguyên chất.",
+      "Bày đậu gà và rau chân vịt ra đĩa cùng bánh mì đậu gà nướng giòn; thưởng thức tráng miệng với quả hồ đào và chà là."
+    ],
+    "imageUrl": null,
+    "sourceNote": "[book] Valter Longo, The Longevity Diet (2018), Phụ lục A: Thực đơn 2 tuần, Tuần 2 Ngày 1 (Bữa tối). Dinh dưỡng theo công bố trong sách.",
+    "isArchived": false,
+    "_bookProvenance": {
+      "week": 2,
+      "day": 1,
+      "meal": "dinner",
+      "originalName": "Garbanzo bean salad and vegetables with garbanzo bean bread (+ pecans & dates)",
+      "kcal": 810,
+      "proteinGrams": 26
+    }
+  },
+  {
+    "id": "lv-book-w2d2-pumpkin-soup",
+    "name": "Súp bí đỏ sánh mịn với bánh mì giòn croutons và hạt bí",
+    "description": "Bữa trưa ngọt lành giàu beta-carotene: Bí đỏ nấu mềm xay mịn cùng dầu ô liu, ăn kèm bánh mì nướng giòn rụm và hạt bí ngô thơm ngậy.",
+    "category": "rau_cu",
+    "proteinGrams": 15,
+    "calories": 505,
+    "ingredients": [
+      {
+        "id": "w2d2-pumpkin-soup-ing-1",
+        "name": "Bí đỏ / bí ngô",
+        "amount": 300,
+        "unit": "g",
+        "category": "rau củ",
+        "isPurchased": false
+      },
+      {
+        "id": "w2d2-pumpkin-soup-ing-2",
+        "name": "Dầu ô liu nguyên chất",
+        "amount": 12,
+        "unit": "mL",
+        "category": "dầu hạt",
+        "isPurchased": false
+      },
+      {
+        "id": "w2d2-pumpkin-soup-ing-3",
+        "name": "Bánh mì nướng cắt hạt lựu (croutons)",
+        "amount": 40,
+        "unit": "g",
+        "category": "ngũ cốc",
+        "isPurchased": false
+      },
+      {
+        "id": "w2d2-pumpkin-soup-ing-4",
+        "name": "Hạt bí ngô",
+        "amount": 9,
+        "unit": "g",
+        "category": "dầu hạt",
+        "isPurchased": false
+      },
+      {
+        "id": "w2d2-pumpkin-soup-ing-5",
+        "name": "Salad rau xanh và bánh mì nâu",
+        "amount": 40,
+        "unit": "g",
+        "category": "rau củ",
+        "isPurchased": false
+      }
+    ],
+    "instructions": [
+      "Bí đỏ gọt vỏ, cắt miếng nhỏ, hấp hoặc nấu cùng nước lọc và tỏi đến khi mềm nhừ.",
+      "Dùng máy xay sinh tố xay nhuyễn súp bí đỏ với dầu ô liu và chút muối tiêu.",
+      "Múc súp ra bát, rắc bánh mì croutons và hạt bí ngô lên trên, dùng cùng đĩa salad và bánh mì nâu."
+    ],
+    "imageUrl": null,
+    "sourceNote": "[book] Valter Longo, The Longevity Diet (2018), Phụ lục A: Thực đơn 2 tuần, Tuần 2 Ngày 2 (Bữa trưa). Dinh dưỡng theo công bố trong sách.",
+    "isArchived": false,
+    "_bookProvenance": {
+      "week": 2,
+      "day": 2,
+      "meal": "lunch",
+      "originalName": "Pumpkin soup with croutons",
+      "kcal": 505,
+      "proteinGrams": 15
+    }
+  },
+  {
+    "id": "lv-book-w2d2-pasta-tuna-olives-capers",
+    "name": "Mì pasta sốt cá ngừ, ô liu, nụ bạch hoa và cà chua",
+    "description": "Món mì biển miền Nam Ý: Mì pasta sốt cà chua tươi với cá ngừ thơm ngọt, nụ bạch hoa chua dịu, atisô và tráng miệng nho tươi hạt phỉ.",
+    "category": "ca",
+    "proteinGrams": 31,
+    "calories": 870,
+    "ingredients": [
+      {
+        "id": "w2d2-pasta-tuna-olives-capers-ing-1",
+        "name": "Mì pasta/nui (cân khô)",
+        "amount": 40,
+        "unit": "g",
+        "category": "ngũ cốc",
+        "isPurchased": false
+      },
+      {
+        "id": "w2d2-pasta-tuna-olives-capers-ing-2",
+        "name": "Cá ngừ",
+        "amount": 60,
+        "unit": "g",
+        "category": "cá",
+        "isPurchased": false
+      },
+      {
+        "id": "w2d2-pasta-tuna-olives-capers-ing-3",
+        "name": "Quả ô liu ngâm",
+        "amount": 20,
+        "unit": "g",
+        "category": "rau củ",
+        "isPurchased": false
+      },
+      {
+        "id": "w2d2-pasta-tuna-olives-capers-ing-4",
+        "name": "Cà chua",
+        "amount": 150,
+        "unit": "g",
+        "category": "rau củ",
+        "isPurchased": false
+      },
+      {
+        "id": "w2d2-pasta-tuna-olives-capers-ing-5",
+        "name": "Dầu ô liu nguyên chất",
+        "amount": 25,
+        "unit": "mL",
+        "category": "dầu hạt",
+        "isPurchased": false
+      },
+      {
+        "id": "w2d2-pasta-tuna-olives-capers-ing-6",
+        "name": "Bông atisô",
+        "amount": 150,
+        "unit": "g",
+        "category": "rau củ",
+        "isPurchased": false
+      },
+      {
+        "id": "w2d2-pasta-tuna-olives-capers-ing-7",
+        "name": "Bánh mì đen lúa mạch",
+        "amount": 40,
+        "unit": "g",
+        "category": "ngu_coc",
+        "isPurchased": false
+      },
+      {
+        "id": "w2d2-pasta-tuna-olives-capers-ing-8",
+        "name": "Hạt phỉ (hazelnuts)",
+        "amount": 25,
+        "unit": "g",
+        "category": "dầu hạt",
+        "isPurchased": false
+      },
+      {
+        "id": "w2d2-pasta-tuna-olives-capers-ing-9",
+        "name": "Nho tươi",
+        "amount": 100,
+        "unit": "g",
+        "category": "hoa quả",
+        "isPurchased": false
+      }
+    ],
+    "instructions": [
+      "Luộc mì pasta trong nước sôi có muối đến độ chín mềm mong muốn, vớt ráo.",
+      "Xào thơm tỏi và atisô với dầu ô liu, cho cà chua băm, cá ngừ, quả ô liu và nụ bạch hoa vào đun lửa nhỏ 5 phút tạo nước sốt.",
+      "Trộn mì vào nước sốt đảo đều 1 phút; ăn kèm bánh mì nguyên cám và tráng miệng nho ngọt, hạt phỉ."
+    ],
+    "imageUrl": null,
+    "sourceNote": "[book] Valter Longo, The Longevity Diet (2018), Phụ lục A: Thực đơn 2 tuần, Tuần 2 Ngày 2 (Bữa tối). Dinh dưỡng theo công bố trong sách.",
+    "isArchived": false,
+    "_bookProvenance": {
+      "week": 2,
+      "day": 2,
+      "meal": "dinner",
+      "originalName": "Pasta with tuna, olives, capers, and tomato (+ hazelnuts & grapes)",
+      "kcal": 870,
+      "proteinGrams": 31
+    }
+  },
+  {
+    "id": "lv-book-w2d3-rice-zucchini-peas",
+    "name": "Cơm gạo lứt xào bí ngòi và đậu Hà Lan ngọt",
+    "description": "Bữa trưa màu xanh tươi mát: Cơm gạo lứt dẻo thơm xào cùng bí ngòi bào sợi, đậu Hà Lan ngọt lịm, dầu ô liu và phô mai Parmesan.",
+    "category": "ngu_coc",
+    "proteinGrams": 14,
+    "calories": 430,
+    "ingredients": [
+      {
+        "id": "w2d3-rice-zucchini-peas-ing-1",
+        "name": "Gạo lứt/gạo tẻ (cân khô)",
+        "amount": 40,
+        "unit": "g",
+        "category": "ngũ cốc",
+        "isPurchased": false
+      },
+      {
+        "id": "w2d3-rice-zucchini-peas-ing-2",
+        "name": "Bí ngòi xanh",
+        "amount": 250,
+        "unit": "g",
+        "category": "rau củ",
+        "isPurchased": false
+      },
+      {
+        "id": "w2d3-rice-zucchini-peas-ing-3",
+        "name": "Đậu Hà Lan",
+        "amount": 100,
+        "unit": "g",
+        "category": "đậu",
+        "isPurchased": false
+      },
+      {
+        "id": "w2d3-rice-zucchini-peas-ing-4",
+        "name": "Hành tây",
+        "amount": 1,
+        "unit": "medium",
+        "category": "rau củ",
+        "isPurchased": false
+      },
+      {
+        "id": "w2d3-rice-zucchini-peas-ing-5",
+        "name": "Dầu ô liu nguyên chất",
+        "amount": 12,
+        "unit": "mL",
+        "category": "dầu hạt",
+        "isPurchased": false
+      },
+      {
+        "id": "w2d3-rice-zucchini-peas-ing-6",
+        "name": "Phô mai Parmesan hoặc xốt pesto",
+        "amount": 1,
+        "unit": "tbsp/tsp",
+        "category": "gia vị",
+        "isPurchased": false
+      }
+    ],
+    "instructions": [
+      "Nấu cơm gạo lứt chín mềm dẻo.",
+      "Phi thơm hành tây băm với dầu ô liu, cho bí ngòi thái hạt lựu và đậu Hà Lan vào xào chín tới trong 4-5 phút.",
+      "Đổ cơm gạo lứt vào chảo đảo đều tay, rắc phô mai Parmesan hoặc thìa xốt pesto và dọn ra đĩa."
+    ],
+    "imageUrl": null,
+    "sourceNote": "[book] Valter Longo, The Longevity Diet (2018), Phụ lục A: Thực đơn 2 tuần, Tuần 2 Ngày 3 (Bữa trưa). Dinh dưỡng theo công bố trong sách.",
+    "isArchived": false,
+    "_bookProvenance": {
+      "week": 2,
+      "day": 3,
+      "meal": "lunch",
+      "originalName": "Rice with zucchini and peas",
+      "kcal": 430,
+      "proteinGrams": 14
+    }
+  },
+  {
+    "id": "lv-book-w2d3-white-bean-salad-chicory",
+    "name": "Salad đậu trắng Cannellini hương thảo và rau diếp xoăn",
+    "description": "Bữa tối thanh nhẹ thanh lọc cơ thể: Đậu trắng mềm bùi trộn lá hương thảo thơm ngát, rau diếp xoăn cicoria giòn mát, bánh focaccia và cherry hạnh nhân.",
+    "category": "dau",
+    "proteinGrams": 23,
+    "calories": 775,
+    "ingredients": [
+      {
+        "id": "w2d3-white-bean-salad-chicory-ing-1",
+        "name": "Rau diếp xoăn cicoria",
+        "amount": 180,
+        "unit": "g",
+        "category": "rau củ",
+        "isPurchased": false
+      },
+      {
+        "id": "w2d3-white-bean-salad-chicory-ing-2",
+        "name": "Cà chua bi",
+        "amount": 50,
+        "unit": "g",
+        "category": "rau củ",
+        "isPurchased": false
+      },
+      {
+        "id": "w2d3-white-bean-salad-chicory-ing-3",
+        "name": "Hành tây",
+        "amount": 1,
+        "unit": "medium",
+        "category": "rau củ",
+        "isPurchased": false
+      },
+      {
+        "id": "w2d3-white-bean-salad-chicory-ing-4",
+        "name": "Đậu trắng cannellini (nấu chín)",
+        "amount": 150,
+        "unit": "g",
+        "category": "đậu",
+        "isPurchased": false
+      },
+      {
+        "id": "w2d3-white-bean-salad-chicory-ing-5",
+        "name": "Dầu ô liu nguyên chất",
+        "amount": 25,
+        "unit": "mL",
+        "category": "dầu hạt",
+        "isPurchased": false
+      },
+      {
+        "id": "w2d3-white-bean-salad-chicory-ing-6",
+        "name": "Bánh mì focaccia nguyên cám sấy giòn",
+        "amount": 40,
+        "unit": "g",
+        "category": "ngũ cốc",
+        "isPurchased": false
+      },
+      {
+        "id": "w2d3-white-bean-salad-chicory-ing-7",
+        "name": "Hạnh nhân",
+        "amount": 25,
+        "unit": "g",
+        "category": "dầu hạt",
+        "isPurchased": false
+      },
+      {
+        "id": "w2d3-white-bean-salad-chicory-ing-8",
+        "name": "Quả anh đào (cherry tươi)",
+        "amount": 80,
+        "unit": "g",
+        "category": "hoa quả",
+        "isPurchased": false
+      }
+    ],
+    "instructions": [
+      "Rau diếp xoăn rửa sạch để ráo; cà chua bi bổ đôi; hành tây thái mỏng.",
+      "Cho đậu trắng cannellini vào tô, trộn đều cùng rau diếp xoăn, cà chua, hành tây và lá hương thảo băm nhỏ.",
+      "Rưới dầu ô liu nguyên chất, ăn kèm bánh mì focaccia giòn tan và tráng miệng anh đào tươi, hạnh nhân."
+    ],
+    "imageUrl": null,
+    "sourceNote": "[book] Valter Longo, The Longevity Diet (2018), Phụ lục A: Thực đơn 2 tuần, Tuần 2 Ngày 3 (Bữa tối). Dinh dưỡng theo công bố trong sách.",
+    "isArchived": false,
+    "_bookProvenance": {
+      "week": 2,
+      "day": 3,
+      "meal": "dinner",
+      "originalName": "White bean salad with onion, rosemary, and chicory (+ almonds & cherries)",
+      "kcal": 775,
+      "proteinGrams": 23
+    }
+  },
+  {
+    "id": "lv-book-w2d4-fennel-salad",
+    "name": "Salad thì là tây (fennel) giòn mát với cà chua và ô liu",
+    "description": "Bữa trưa thơm mát thảo mộc: Củ thì là tây thái mỏng giòn sần sật trộn cà rốt, quả ô liu và rau diếp xoăn, ăn kèm bánh mì focaccia nướng.",
+    "category": "rau_cu",
+    "proteinGrams": 11,
+    "calories": 430,
+    "ingredients": [
+      {
+        "id": "w2d4-fennel-salad-ing-1",
+        "name": "Củ thì là tây (fennel bulb)",
+        "amount": 150,
+        "unit": "g",
+        "category": "rau củ",
+        "isPurchased": false
+      },
+      {
+        "id": "w2d4-fennel-salad-ing-2",
+        "name": "Cà chua bi",
+        "amount": 150,
+        "unit": "g",
+        "category": "rau củ",
+        "isPurchased": false
+      },
+      {
+        "id": "w2d4-fennel-salad-ing-3",
+        "name": "Cà rốt tươi",
+        "amount": 1,
+        "unit": "medium",
+        "category": "rau củ",
+        "isPurchased": false
+      },
+      {
+        "id": "w2d4-fennel-salad-ing-4",
+        "name": "Hành tây",
+        "amount": 1,
+        "unit": "medium",
+        "category": "rau củ",
+        "isPurchased": false
+      },
+      {
+        "id": "w2d4-fennel-salad-ing-5",
+        "name": "Quả ô liu ngâm",
+        "amount": 20,
+        "unit": "g",
+        "category": "rau củ",
+        "isPurchased": false
+      },
+      {
+        "id": "w2d4-fennel-salad-ing-6",
+        "name": "Dầu ô liu nguyên chất",
+        "amount": 12,
+        "unit": "mL",
+        "category": "dầu hạt",
+        "isPurchased": false
+      },
+      {
+        "id": "w2d4-fennel-salad-ing-7",
+        "name": "Bánh mì focaccia nguyên cám",
+        "amount": 40,
+        "unit": "g",
+        "category": "ngũ cốc",
+        "isPurchased": false
+      },
+      {
+        "id": "w2d4-fennel-salad-ing-8",
+        "name": "Rau diếp xoăn cicoria",
+        "amount": 200,
+        "unit": "g",
+        "category": "rau củ",
+        "isPurchased": false
+      }
+    ],
+    "instructions": [
+      "Củ thì là tây rửa sạch, dùng dao bào thái lát thật mỏng để giữ độ giòn.",
+      "Cà rốt bào sợi, cà chua bi bổ đôi, hành tây thái mỏng.",
+      "Trộn đều các loại rau củ với quả ô liu và dầu ô liu nguyên chất; thưởng thức cùng bánh focaccia nguyên cám."
+    ],
+    "imageUrl": null,
+    "sourceNote": "[book] Valter Longo, The Longevity Diet (2018), Phụ lục A: Thực đơn 2 tuần, Tuần 2 Ngày 4 (Bữa trưa). Dinh dưỡng theo công bố trong sách.",
+    "isArchived": false,
+    "_bookProvenance": {
+      "week": 2,
+      "day": 4,
+      "meal": "lunch",
+      "originalName": "Fennel salad with tomatoes, carrots, onions, and olives",
+      "kcal": 430,
+      "proteinGrams": 11
+    }
+  },
+  {
+    "id": "lv-book-w2d4-black-rice-zucchini-shrimp",
+    "name": "Cơm gạo đen Địa Trung Hải xào bí ngòi, tôm tươi và nhụy hoa nghệ tây",
+    "description": "Bữa tối hoàng gia giàu anthocyanin: Gạo đen Venus thơm lừng xào bí ngòi non, tôm tươi ngọt thịt, nhụy nghệ tây saffron và tráng miệng óc chó việt quất.",
+    "category": "ca",
+    "proteinGrams": 27,
+    "calories": 765,
+    "ingredients": [
+      {
+        "id": "w2d4-black-rice-zucchini-shrimp-ing-1",
+        "name": "Gạo đen hoàng gia Venus (cân khô)",
+        "amount": 40,
+        "unit": "g",
+        "category": "ngũ cốc",
+        "isPurchased": false
+      },
+      {
+        "id": "w2d4-black-rice-zucchini-shrimp-ing-2",
+        "name": "Bí ngòi xanh",
+        "amount": 250,
+        "unit": "g",
+        "category": "rau củ",
+        "isPurchased": false
+      },
+      {
+        "id": "w2d4-black-rice-zucchini-shrimp-ing-3",
+        "name": "Cà chua bi",
+        "amount": 150,
+        "unit": "g",
+        "category": "rau củ",
+        "isPurchased": false
+      },
+      {
+        "id": "w2d4-black-rice-zucchini-shrimp-ing-4",
+        "name": "Tôm tươi bóc vỏ",
+        "amount": 60,
+        "unit": "g",
+        "category": "cá",
+        "isPurchased": false
+      },
+      {
+        "id": "w2d4-black-rice-zucchini-shrimp-ing-5",
+        "name": "Phô mai Parmesan bào",
+        "amount": 5,
+        "unit": "g",
+        "category": "phô mai",
+        "isPurchased": false
+      },
+      {
+        "id": "w2d4-black-rice-zucchini-shrimp-ing-6",
+        "name": "Nhụy hoa nghệ tây (saffron)",
+        "amount": 4,
+        "unit": "g",
+        "category": "gia vị",
+        "isPurchased": false
+      },
+      {
+        "id": "w2d4-black-rice-zucchini-shrimp-ing-7",
+        "name": "Dầu ô liu nguyên chất",
+        "amount": 25,
+        "unit": "mL",
+        "category": "dầu hạt",
+        "isPurchased": false
+      },
+      {
+        "id": "w2d4-black-rice-zucchini-shrimp-ing-8",
+        "name": "Xà lách trộn",
+        "amount": 200,
+        "unit": "g",
+        "category": "rau củ",
+        "isPurchased": false
+      },
+      {
+        "id": "w2d4-black-rice-zucchini-shrimp-ing-9",
+        "name": "Quả óc chó",
+        "amount": 25,
+        "unit": "g",
+        "category": "dầu hạt",
+        "isPurchased": false
+      },
+      {
+        "id": "w2d4-black-rice-zucchini-shrimp-ing-10",
+        "name": "Nam việt quất sấy khô",
+        "amount": 20,
+        "unit": "g",
+        "category": "hoa quả",
+        "isPurchased": false
+      }
+    ],
+    "instructions": [
+      "Luộc gạo đen ngập nước sôi trong 30-35 phút đến khi chín dẻo bùi, chắt ráo nước.",
+      "Hòa nhụy nghệ tây (saffron) vào 2 thìa nước ấm. Tôm bóc vỏ, áp chảo nhanh cùng tỏi và dầu ô liu rồi cho bí ngòi, cà chua bi và nước saffron vào đảo chín.",
+      "Trộn gạo đen vào chảo tôm bí ngòi, rắc phô mai Parmesan; dùng kèm đĩa salad rau xanh, quả óc chó và nam việt quất."
+    ],
+    "imageUrl": null,
+    "sourceNote": "[book] Valter Longo, The Longevity Diet (2018), Phụ lục A: Thực đơn 2 tuần, Tuần 2 Ngày 4 (Bữa tối). Dinh dưỡng theo công bố trong sách.",
+    "isArchived": false,
+    "_bookProvenance": {
+      "week": 2,
+      "day": 4,
+      "meal": "dinner",
+      "originalName": "Black/venus rice with zucchini and shrimp (+ walnuts & dried cranberries)",
+      "kcal": 765,
+      "proteinGrams": 27
+    }
+  },
+  {
+    "id": "lv-book-w2d5-mediterranean-spelt-salad",
+    "name": "Salad hạt spelt Địa Trung Hải trộn bông atisô và nấm tươi",
+    "description": "Bữa trưa ngũ cốc thanh nhẹ: Hạt spelt/farro dẻo thơm kết hợp nấm tươi xào, atisô ngâm dầu chua nhẹ, cà rốt giòn ngọt và quả ô liu đen.",
+    "category": "ngu_coc",
+    "proteinGrams": 15,
+    "calories": 410,
+    "ingredients": [
+      {
+        "id": "w2d5-mediterranean-spelt-salad-ing-1",
+        "name": "Hạt spelt/farro (cân khô)",
+        "amount": 40,
+        "unit": "g",
+        "category": "ngũ cốc",
+        "isPurchased": false
+      },
+      {
+        "id": "w2d5-mediterranean-spelt-salad-ing-2",
+        "name": "Atisô ngâm dầu",
+        "amount": 80,
+        "unit": "g",
+        "category": "rau củ",
+        "isPurchased": false
+      },
+      {
+        "id": "w2d5-mediterranean-spelt-salad-ing-3",
+        "name": "Cà rốt",
+        "amount": 1,
+        "unit": "medium",
+        "category": "rau củ",
+        "isPurchased": false
+      },
+      {
+        "id": "w2d5-mediterranean-spelt-salad-ing-4",
+        "name": "Cà chua bi",
+        "amount": 150,
+        "unit": "g",
+        "category": "rau củ",
+        "isPurchased": false
+      },
+      {
+        "id": "w2d5-mediterranean-spelt-salad-ing-5",
+        "name": "Quả ô liu ngâm",
+        "amount": 20,
+        "unit": "g",
+        "category": "rau củ",
+        "isPurchased": false
+      },
+      {
+        "id": "w2d5-mediterranean-spelt-salad-ing-6",
+        "name": "Dầu ô liu nguyên chất",
+        "amount": 12,
+        "unit": "g",
+        "category": "dầu hạt",
+        "isPurchased": false
+      },
+      {
+        "id": "w2d5-mediterranean-spelt-salad-ing-7",
+        "name": "Nấm mỡ / nấm hương tươi",
+        "amount": 150,
+        "unit": "g",
+        "category": "rau củ",
+        "isPurchased": false
+      }
+    ],
+    "instructions": [
+      "Luộc hạt spelt trong nước sôi 25 phút cho chín tới, vớt ráo.",
+      "Nấm tươi thái lát, áp chảo nhanh với 1 thìa dầu ô liu và tỏi băm.",
+      "Trộn spelt, nấm xào, bông atisô ngâm dầu, cà chua bi và quả ô liu trong tô; dọn dùng ngay ở nhiệt độ phòng."
+    ],
+    "imageUrl": null,
+    "sourceNote": "[book] Valter Longo, The Longevity Diet (2018), Phụ lục A: Thực đơn 2 tuần, Tuần 2 Ngày 5 (Bữa trưa). Dinh dưỡng theo công bố trong sách.",
+    "isArchived": false,
+    "_bookProvenance": {
+      "week": 2,
+      "day": 5,
+      "meal": "lunch",
+      "originalName": "Mediterranean spelt salad with artichokes and mushrooms",
+      "kcal": 410,
+      "proteinGrams": 15
+    }
+  },
+  {
+    "id": "lv-book-w2d5-ligurian-minestrone",
+    "name": "Súp Minestrone kiểu Liguria với xốt pesto và đậu trắng",
+    "description": "Món súp trứ danh miền Tây Bắc nước Ý: Hỗn hợp rau củ vườn nhà hầm nhừ cùng đậu cannellini, mì pasta và thìa xốt pesto húng quế dậy mùi thơm ngát.",
+    "category": "dau",
+    "proteinGrams": 29,
+    "calories": 865,
+    "ingredients": [
+      {
+        "id": "w2d5-ligurian-minestrone-ing-1",
+        "name": "Đậu trắng cannellini (nấu chín)",
+        "amount": 150,
+        "unit": "g",
+        "category": "đậu",
+        "isPurchased": false
+      },
+      {
+        "id": "w2d5-ligurian-minestrone-ing-2",
+        "name": "Khoai tây",
+        "amount": 1,
+        "unit": "medium",
+        "category": "rau củ",
+        "isPurchased": false
+      },
+      {
+        "id": "w2d5-ligurian-minestrone-ing-3",
+        "name": "Cà tím",
+        "amount": 1,
+        "unit": "medium",
+        "category": "rau củ",
+        "isPurchased": false
+      },
+      {
+        "id": "w2d5-ligurian-minestrone-ing-4",
+        "name": "Bí ngòi xanh",
+        "amount": 1,
+        "unit": "medium",
+        "category": "rau củ",
+        "isPurchased": false
+      },
+      {
+        "id": "w2d5-ligurian-minestrone-ing-5",
+        "name": "Bắp cải tươi",
+        "amount": 1,
+        "unit": "medium",
+        "category": "rau củ",
+        "isPurchased": false
+      },
+      {
+        "id": "w2d5-ligurian-minestrone-ing-6",
+        "name": "Đậu Hà Lan",
+        "amount": 1,
+        "unit": "handful",
+        "category": "đậu",
+        "isPurchased": false
+      },
+      {
+        "id": "w2d5-ligurian-minestrone-ing-7",
+        "name": "Đậu cô ve tươi",
+        "amount": 150,
+        "unit": "g",
+        "category": "rau củ",
+        "isPurchased": false
+      },
+      {
+        "id": "w2d5-ligurian-minestrone-ing-8",
+        "name": "Mì pasta/nui (cân khô)",
+        "amount": 40,
+        "unit": "g",
+        "category": "ngũ cốc",
+        "isPurchased": false
+      },
+      {
+        "id": "w2d5-ligurian-minestrone-ing-9",
+        "name": "Dầu ô liu nguyên chất",
+        "amount": 25,
+        "unit": "mL",
+        "category": "dầu hạt",
+        "isPurchased": false
+      },
+      {
+        "id": "w2d5-ligurian-minestrone-ing-10",
+        "name": "Xốt pesto húng quế Ý",
+        "amount": 1,
+        "unit": "tsp",
+        "category": "gia vị",
+        "isPurchased": false
+      },
+      {
+        "id": "w2d5-ligurian-minestrone-ing-11",
+        "name": "Bánh mì nguyên cám",
+        "amount": 40,
+        "unit": "g",
+        "category": "ngũ cốc",
+        "isPurchased": false
+      },
+      {
+        "id": "w2d5-ligurian-minestrone-ing-12",
+        "name": "Nho tươi",
+        "amount": 150,
+        "unit": "g",
+        "category": "hoa quả",
+        "isPurchased": false
+      }
+    ],
+    "instructions": [
+      "Khoai tây, cà tím, bí ngòi, bắp cải và đậu cô ve cắt khúc vừa ăn.",
+      "Cho rau củ và đậu cannellini vào nồi hầm với nước dùng khoảng 25 phút đến khi rau củ mềm nhừ, thêm mì pasta nấu chín tới.",
+      "Múc súp ra bát, khuấy đều 1 thìa xốt pesto tươi và dầu ô liu; thưởng thức cùng bánh mì đen và tráng miệng nho tươi."
+    ],
+    "imageUrl": null,
+    "sourceNote": "[book] Valter Longo, The Longevity Diet (2018), Phụ lục A: Thực đơn 2 tuần, Tuần 2 Ngày 5 (Bữa tối). Dinh dưỡng theo công bố trong sách.",
+    "isArchived": false,
+    "_bookProvenance": {
+      "week": 2,
+      "day": 5,
+      "meal": "dinner",
+      "originalName": "Ligurian minestrone (minestrone alla Genovese) (+ grapes)",
+      "kcal": 865,
+      "proteinGrams": 29
+    }
+  },
+  {
+    "id": "lv-book-w2d6-tomato-soup-pesto-croutons",
+    "name": "Súp cà chua húng quế thơm ngậy với xốt pesto và bánh mì giòn",
+    "description": "Bữa trưa giàu lycopene chống lão hóa: Cà chua chín mọng nấu mềm cùng cần tây khoai tây, xay nhuyễn mịn, điểm thêm xốt pesto và bánh mì giòn rụm.",
+    "category": "rau_cu",
+    "proteinGrams": 18,
+    "calories": 705,
+    "ingredients": [
+      {
+        "id": "w2d6-tomato-soup-pesto-croutons-ing-1",
+        "name": "Cà chua",
+        "amount": 500,
+        "unit": "g",
+        "category": "rau củ",
+        "isPurchased": false
+      },
+      {
+        "id": "w2d6-tomato-soup-pesto-croutons-ing-2",
+        "name": "Cà rốt",
+        "amount": 1,
+        "unit": "medium",
+        "category": "rau củ",
+        "isPurchased": false
+      },
+      {
+        "id": "w2d6-tomato-soup-pesto-croutons-ing-3",
+        "name": "Cần tây tây",
+        "amount": 1,
+        "unit": "medium",
+        "category": "rau củ",
+        "isPurchased": false
+      },
+      {
+        "id": "w2d6-tomato-soup-pesto-croutons-ing-4",
+        "name": "Khoai tây",
+        "amount": 1,
+        "unit": "medium",
+        "category": "rau củ",
+        "isPurchased": false
+      },
+      {
+        "id": "w2d6-tomato-soup-pesto-croutons-ing-5",
+        "name": "Hành tím Địa Trung Hải",
+        "amount": 0.5,
+        "unit": "medium",
+        "category": "rau củ",
+        "isPurchased": false
+      },
+      {
+        "id": "w2d6-tomato-soup-pesto-croutons-ing-6",
+        "name": "Dầu ô liu nguyên chất",
+        "amount": 12,
+        "unit": "g",
+        "category": "dầu hạt",
+        "isPurchased": false
+      },
+      {
+        "id": "w2d6-tomato-soup-pesto-croutons-ing-7",
+        "name": "Xốt pesto húng quế Ý",
+        "amount": 5,
+        "unit": "g",
+        "category": "gia vị",
+        "isPurchased": false
+      },
+      {
+        "id": "w2d6-tomato-soup-pesto-croutons-ing-8",
+        "name": "Bánh mì nướng cắt hạt lựu (croutons)",
+        "amount": 40,
+        "unit": "g",
+        "category": "ngũ cốc",
+        "isPurchased": false
+      },
+      {
+        "id": "w2d6-tomato-soup-pesto-croutons-ing-9",
+        "name": "Salad rau xanh và bánh mì nâu",
+        "amount": 40,
+        "unit": "g",
+        "category": "rau củ",
+        "isPurchased": false
+      }
+    ],
+    "instructions": [
+      "Cà chua khía chữ thập, chần nước sôi lột vỏ. Cà rốt, cần tây, khoai tây và hành tím thái nhỏ.",
+      "Xào thơm rau củ với dầu ô liu rồi cho cà chua vào ninh nhừ trong 20 phút. Dùng máy xay cầm tay xay nhuyễn mịn.",
+      "Múc súp nóng ra bát, rưới xốt pesto lên trên, rắc bánh mì croutons giòn rụm và ăn cùng salad rau xanh."
+    ],
+    "imageUrl": null,
+    "sourceNote": "[book] Valter Longo, The Longevity Diet (2018), Phụ lục A: Thực đơn 2 tuần, Tuần 2 Ngày 6 (Bữa trưa). Dinh dưỡng theo công bố trong sách.",
+    "isArchived": false,
+    "_bookProvenance": {
+      "week": 2,
+      "day": 6,
+      "meal": "lunch",
+      "originalName": "Tomato soup with basil, pesto, and croutons",
+      "kcal": 705,
+      "proteinGrams": 18
+    }
+  },
+  {
+    "id": "lv-book-w2d6-cream-garbanzo-broccoli",
+    "name": "Súp kem đậu gà ăn kèm bông cải xanh hấp và bánh mì đậu gà",
+    "description": "Bữa tối ấm cúng nhẹ bụng: Đậu gà xay kem sánh mịn rưới dầu ô liu nguyên chất, ăn cùng bông cải xanh hấp giòn ngọt, mơ khô và hạt hạnh nhân.",
+    "category": "dau",
+    "proteinGrams": 27,
+    "calories": 775,
+    "ingredients": [
+      {
+        "id": "w2d6-cream-garbanzo-broccoli-ing-1",
+        "name": "Đậu gà (đã nấu chín)",
+        "amount": 150,
+        "unit": "g",
+        "category": "đậu",
+        "isPurchased": false
+      },
+      {
+        "id": "w2d6-cream-garbanzo-broccoli-ing-2",
+        "name": "Dầu ô liu nguyên chất",
+        "amount": 25,
+        "unit": "mL",
+        "category": "dầu hạt",
+        "isPurchased": false
+      },
+      {
+        "id": "w2d6-cream-garbanzo-broccoli-ing-3",
+        "name": "broccoli",
+        "amount": 150,
+        "unit": "g",
+        "category": "khác",
+        "isPurchased": false
+      },
+      {
+        "id": "w2d6-cream-garbanzo-broccoli-ing-4",
+        "name": "Bánh mì đậu gà hoặc bánh mì focaccia nguyên cám",
+        "amount": 60,
+        "unit": "g",
+        "category": "ngũ cốc",
+        "isPurchased": false
+      },
+      {
+        "id": "w2d6-cream-garbanzo-broccoli-ing-5",
+        "name": "Mơ sấy khô",
+        "amount": 20,
+        "unit": "g",
+        "category": "hoa quả",
+        "isPurchased": false
+      },
+      {
+        "id": "w2d6-cream-garbanzo-broccoli-ing-6",
+        "name": "Hạnh nhân",
+        "amount": 25,
+        "unit": "g",
+        "category": "dầu hạt",
+        "isPurchased": false
+      }
+    ],
+    "instructions": [
+      "Đậu gà luộc chín mềm xay nhuyễn cùng chút nước luộc và dầu ô liu tạo thành lớp kem mịn mượt như súp.",
+      "Bông cải xanh cắt miếng vừa ăn, hấp cách thủy trong 5-6 phút để giữ màu xanh tươi và độ giòn ngọt.",
+      "Dọn súp kem đậu gà ra đĩa sâu lòng, rắc tiêu và dầu ô liu; chấm cùng bông cải xanh hấp, bánh mì đậu gà; tráng miệng mơ sấy và hạnh nhân."
+    ],
+    "imageUrl": null,
+    "sourceNote": "[book] Valter Longo, The Longevity Diet (2018), Phụ lục A: Thực đơn 2 tuần, Tuần 2 Ngày 6 (Bữa tối). Dinh dưỡng theo công bố trong sách.",
+    "isArchived": false,
+    "_bookProvenance": {
+      "week": 2,
+      "day": 6,
+      "meal": "dinner",
+      "originalName": "Cream of garbanzo beans + steamed broccoli (+ dried apricots & almonds)",
+      "kcal": 775,
+      "proteinGrams": 27
+    }
+  },
+  {
+    "id": "lv-book-w2d7-barley-salad-broccoli-feta",
+    "name": "Salad đại mạch (barley) bông cải xanh, phô mai Feta và cà chua",
+    "description": "Bữa trưa dồi dào năng lượng sạch: Hạt đại mạch dẻo dai trộn bông cải xanh chần giòn, phô mai Feta Hy Lạp béo mặn và cà rốt bào sợi.",
+    "category": "ngu_coc",
+    "proteinGrams": 19,
+    "calories": 525,
+    "ingredients": [
+      {
+        "id": "w2d7-barley-salad-broccoli-feta-ing-1",
+        "name": "Lúa mạch đại mạch (cân khô)",
+        "amount": 40,
+        "unit": "g",
+        "category": "ngũ cốc",
+        "isPurchased": false
+      },
+      {
+        "id": "w2d7-barley-salad-broccoli-feta-ing-2",
+        "name": "broccoli",
+        "amount": 150,
+        "unit": "g",
+        "category": "khác",
+        "isPurchased": false
+      },
+      {
+        "id": "w2d7-barley-salad-broccoli-feta-ing-3",
+        "name": "Cà chua bi",
+        "amount": 100,
+        "unit": "g",
+        "category": "rau củ",
+        "isPurchased": false
+      },
+      {
+        "id": "w2d7-barley-salad-broccoli-feta-ing-4",
+        "name": "Cà rốt tươi",
+        "amount": 1,
+        "unit": "medium",
+        "category": "rau củ",
+        "isPurchased": false
+      },
+      {
+        "id": "w2d7-barley-salad-broccoli-feta-ing-5",
+        "name": "Phô mai Feta",
+        "amount": 20,
+        "unit": "g",
+        "category": "phô mai",
+        "isPurchased": false
+      },
+      {
+        "id": "w2d7-barley-salad-broccoli-feta-ing-6",
+        "name": "Dầu ô liu nguyên chất",
+        "amount": 12,
+        "unit": "mL",
+        "category": "dầu hạt",
+        "isPurchased": false
+      },
+      {
+        "id": "w2d7-barley-salad-broccoli-feta-ing-7",
+        "name": "Rau lá xanh và bánh mì nâu",
+        "amount": 40,
+        "unit": "g",
+        "category": "rau củ",
+        "isPurchased": false
+      }
+    ],
+    "instructions": [
+      "Luộc đại mạch trong nước sôi 30 phút đến khi mềm dẻo, xả nước lạnh để ráo.",
+      "Bông cải xanh chần nhanh qua nước sôi có muối trong 2 phút rồi ngâm nước đá cho giòn xanh.",
+      "Trộn đại mạch, bông cải xanh, cà chua bi, cà rốt bào và phô mai Feta bẻ vụn; rưới dầu ô liu và thưởng thức cùng bánh mì nâu."
+    ],
+    "imageUrl": null,
+    "sourceNote": "[book] Valter Longo, The Longevity Diet (2018), Phụ lục A: Thực đơn 2 tuần, Tuần 2 Ngày 7 (Bữa trưa). Dinh dưỡng theo công bố trong sách.",
+    "isArchived": false,
+    "_bookProvenance": {
+      "week": 2,
+      "day": 7,
+      "meal": "lunch",
+      "originalName": "Barley salad with broccoli, feta, and tomatoes",
+      "kcal": 525,
+      "proteinGrams": 19
+    }
+  },
+  {
+    "id": "lv-book-w2d7-pizza-vegetables-anchovies-sardines",
+    "name": "Bánh Pizza rau củ Địa Trung Hải với cá mòi và cá cơm (không phô mai)",
+    "description": "Bữa tối pizza trường thọ độc đáo: Đế bánh ngũ cốc phủ sốt cà chua, cá mòi cá cơm biển giàu khoáng chất, atisô, nấm, ớt chuông, tráng miệng hạt dẻ cười.",
+    "category": "ca",
+    "proteinGrams": 35,
+    "calories": 795,
+    "ingredients": [
+      {
+        "id": "w2d7-pizza-vegetables-anchovies-sardines-ing-1",
+        "name": "Đế bánh pizza nguyên cám chế biến sẵn",
+        "amount": 100,
+        "unit": "g",
+        "category": "ngũ cốc",
+        "isPurchased": false
+      },
+      {
+        "id": "w2d7-pizza-vegetables-anchovies-sardines-ing-2",
+        "name": "Cá mòi và cá cơm biển tươi",
+        "amount": 90,
+        "unit": "g",
+        "category": "cá",
+        "isPurchased": false
+      },
+      {
+        "id": "w2d7-pizza-vegetables-anchovies-sardines-ing-3",
+        "name": "Cà chua bi",
+        "amount": 80,
+        "unit": "g",
+        "category": "rau củ",
+        "isPurchased": false
+      },
+      {
+        "id": "w2d7-pizza-vegetables-anchovies-sardines-ing-4",
+        "name": "Atisô đóng hộp",
+        "amount": 50,
+        "unit": "g",
+        "category": "rau củ",
+        "isPurchased": false
+      },
+      {
+        "id": "w2d7-pizza-vegetables-anchovies-sardines-ing-5",
+        "name": "Nấm mỡ / nấm hương tươi",
+        "amount": 100,
+        "unit": "g",
+        "category": "rau củ",
+        "isPurchased": false
+      },
+      {
+        "id": "w2d7-pizza-vegetables-anchovies-sardines-ing-6",
+        "name": "Rau chân vịt (bina)",
+        "amount": 100,
+        "unit": "g",
+        "category": "rau củ",
+        "isPurchased": false
+      },
+      {
+        "id": "w2d7-pizza-vegetables-anchovies-sardines-ing-7",
+        "name": "Ớt chuông ngọt",
+        "amount": 100,
+        "unit": "g",
+        "category": "rau củ",
+        "isPurchased": false
+      },
+      {
+        "id": "w2d7-pizza-vegetables-anchovies-sardines-ing-8",
+        "name": "Quả ô liu đen",
+        "amount": 20,
+        "unit": "g",
+        "category": "rau củ",
+        "isPurchased": false
+      },
+      {
+        "id": "w2d7-pizza-vegetables-anchovies-sardines-ing-9",
+        "name": "Dầu ô liu nguyên chất",
+        "amount": 25,
+        "unit": "g",
+        "category": "dầu hạt",
+        "isPurchased": false
+      },
+      {
+        "id": "w2d7-pizza-vegetables-anchovies-sardines-ing-10",
+        "name": "Hạt dẻ cười (pistachios)",
+        "amount": 25,
+        "unit": "g",
+        "category": "dầu hạt",
+        "isPurchased": false
+      },
+      {
+        "id": "w2d7-pizza-vegetables-anchovies-sardines-ing-11",
+        "name": "Nam việt quất sấy khô",
+        "amount": 20,
+        "unit": "g",
+        "category": "hoa quả",
+        "isPurchased": false
+      }
+    ],
+    "instructions": [
+      "Làm nóng lò nướng ở 220°C. Phết một lớp dầu ô liu mỏng lên đế bánh pizza nguyên cám.",
+      "Xếp đều cà chua bi bổ đôi, nấm thái lát, rau chân vịt, ớt chuông, atisô và quả ô liu lên mặt bánh.",
+      "Đặt cá mòi và cá cơm biển lên trên cùng, nướng trong 10-12 phút đến khi đế bánh giòn rụm và nhân chín thơm. Rắc hạt dẻ cười và nam việt quất ăn kèm."
+    ],
+    "imageUrl": null,
+    "sourceNote": "[book] Valter Longo, The Longevity Diet (2018), Phụ lục A: Thực đơn 2 tuần, Tuần 2 Ngày 7 (Bữa tối). Dinh dưỡng theo công bố trong sách.",
+    "isArchived": false,
+    "_bookProvenance": {
+      "week": 2,
+      "day": 7,
+      "meal": "dinner",
+      "originalName": "Pizza with vegetables, anchovies, and sardines (no cheese) (+ pistachios & dried cranberries)",
+      "kcal": 795,
+      "proteinGrams": 35
+    }
+  }
+]

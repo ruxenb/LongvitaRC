@@ -1,0 +1,450 @@
+[
+  {
+    "week": 1, "day": 1, "meal": "lunch",
+    "id": "w1d1-spinach-pine-nuts-raisins",
+    "name": "Spinach with pine nuts and raisins + spelt crackers",
+    "ingredients": [
+      { "item": "spinach", "amount": 150, "unit": "g" },
+      { "item": "pine nuts", "amount": 9, "unit": "g" },
+      { "item": "raisins", "amount": 9, "unit": "g" },
+      { "item": "olive oil", "amount": 12, "unit": "mL" },
+      { "item": "spelt crackers", "amount": 40, "unit": "g" }
+    ],
+    "nutrition": { "kcal": 380, "protein_g": 11 }
+  },
+  {
+    "week": 1, "day": 1, "meal": "dinner",
+    "id": "w1d1-pasta-broccoli-black-beans",
+    "name": "Pasta with broccoli and black beans (+ walnuts & dried cranberries)",
+    "ingredients": [
+      { "item": "black beans, cooked", "amount": 150, "unit": "g" },
+      { "item": "broccoli, boiled", "amount": 200, "unit": "g" },
+      { "item": "whole-grain pasta, dry", "amount": 40, "unit": "g" },
+      { "item": "olive oil", "amount": 25, "unit": "mL" },
+      { "item": "Parmesan", "amount": 5, "unit": "g" },
+      { "item": "walnuts", "amount": 25, "unit": "g" },
+      { "item": "dried cranberries", "amount": 20, "unit": "g" }
+    ],
+    "nutrition": { "kcal": 840, "protein_g": 28 }
+  },
+  {
+    "week": 1, "day": 2, "meal": "lunch",
+    "id": "w1d2-wild-rice-green-beans",
+    "name": "Wild rice and green beans with garlic and fresh tomato",
+    "ingredients": [
+      { "item": "wild rice, dry", "amount": 40, "unit": "g" },
+      { "item": "green beans", "amount": 150, "unit": "g" },
+      { "item": "fresh tomato", "amount": 150, "unit": "g" },
+      { "item": "olive oil", "amount": 12, "unit": "mL" },
+      { "item": "leafy greens", "amount": 200, "unit": "g" }
+    ],
+    "nutrition": { "kcal": 360, "protein_g": 13 }
+  },
+  {
+    "week": 1, "day": 2, "meal": "dinner",
+    "id": "w1d2-salmon-asparagus",
+    "name": "Salmon fillet with asparagus (+ hazelnuts & dried cranberries)",
+    "ingredients": [
+      { "item": "wild salmon fillet", "amount": 150, "unit": "g" },
+      { "item": "asparagus", "amount": 300, "unit": "g" },
+      { "item": "olive oil", "amount": 12, "unit": "mL" },
+      { "item": "whole-wheat bread", "amount": 60, "unit": "g" },
+      { "item": "mixed salad", "amount": 200, "unit": "g" },
+      { "item": "hazelnuts", "amount": 25, "unit": "g" },
+      { "item": "dried cranberries", "amount": 30, "unit": "g" }
+    ],
+    "nutrition": { "kcal": 900, "protein_g": 48 }
+  },
+  {
+    "week": 1, "day": 3, "meal": "lunch",
+    "id": "w1d3-spelt-zucchini",
+    "name": "Spelt and zucchini with garlic, olives, and parsley",
+    "ingredients": [
+      { "item": "spelt, dry", "amount": 40, "unit": "g" },
+      { "item": "zucchini", "amount": 300, "unit": "g" },
+      { "item": "cherry tomatoes", "amount": 100, "unit": "g" },
+      { "item": "olives", "amount": 25, "unit": "g" },
+      { "item": "olive oil", "amount": 12, "unit": "mL" },
+      { "item": "leafy greens", "amount": 200, "unit": "g" }
+    ],
+    "nutrition": { "kcal": 390, "protein_g": 14 }
+  },
+  {
+    "week": 1, "day": 3, "meal": "dinner",
+    "id": "w1d3-garbanzo-minestrone",
+    "name": "Garbanzo bean minestrone with pasta (+ cherries & almonds)",
+    "ingredients": [
+      { "item": "mixed minestrone vegetables", "amount": 250, "unit": "g" },
+      { "item": "garbanzo beans, cooked", "amount": 150, "unit": "g" },
+      { "item": "pasta, dry", "amount": 40, "unit": "g" },
+      { "item": "olive oil", "amount": 25, "unit": "mL" },
+      { "item": "Parmesan", "amount": 5, "unit": "g" },
+      { "item": "cherries", "amount": 100, "unit": "g" },
+      { "item": "almonds", "amount": 25, "unit": "g" }
+    ],
+    "nutrition": { "kcal": 820, "protein_g": 28 }
+  },
+  {
+    "week": 1, "day": 4, "meal": "lunch",
+    "id": "w1d4-barley-salad-olives-nuts",
+    "name": "Barley salad with olives and nuts",
+    "ingredients": [
+      { "item": "barley, dry", "amount": 40, "unit": "g" },
+      { "item": "tomatoes", "amount": 150, "unit": "g" },
+      { "item": "mushrooms, raw", "amount": 75, "unit": "g" },
+      { "item": "peppers, raw", "amount": 150, "unit": "g" },
+      { "item": "corn", "amount": 20, "unit": "g" },
+      { "item": "pickled vegetables", "amount": 150, "unit": "g" },
+      { "item": "pecans", "amount": 9, "unit": "g" },
+      { "item": "olives", "amount": 12, "unit": "g" },
+      { "item": "olive oil", "amount": 12, "unit": "mL" }
+    ],
+    "nutrition": { "kcal": 455, "protein_g": 13 }
+  },
+  {
+    "week": 1, "day": 4, "meal": "dinner",
+    "id": "w1d4-pasta-lentil-soup",
+    "name": "Pasta and lentil soup (pasta e lenticchie) (+ pineapple & walnuts)",
+    "ingredients": [
+      { "item": "lentils, cooked/drained", "amount": 150, "unit": "g" },
+      { "item": "potato", "amount": 1, "unit": "medium" },
+      { "item": "carrot", "amount": 1, "unit": "medium" },
+      { "item": "tomato", "amount": 1, "unit": "medium" },
+      { "item": "pasta, dry", "amount": 40, "unit": "g" },
+      { "item": "olive oil", "amount": 25, "unit": "mL" },
+      { "item": "pineapple", "amount": 100, "unit": "g" },
+      { "item": "walnuts", "amount": 25, "unit": "g" }
+    ],
+    "nutrition": { "kcal": 860, "protein_g": 26 }
+  },
+  {
+    "week": 1, "day": 5, "meal": "lunch",
+    "id": "w1d5-escarole-olives-tomatoes",
+    "name": "Escarole, olives, tomatoes, and basil",
+    "ingredients": [
+      { "item": "escarole", "amount": 150, "unit": "g" },
+      { "item": "pine nuts", "amount": 9, "unit": "g" },
+      { "item": "olive oil", "amount": 12, "unit": "mL" },
+      { "item": "sun-dried tomatoes", "amount": 50, "unit": "g" },
+      { "item": "basil", "amount": 5, "unit": "leaves" },
+      { "item": "brown bread, toasted", "amount": 40, "unit": "g" },
+      { "item": "carrots", "amount": 150, "unit": "g" }
+    ],
+    "nutrition": { "kcal": 380, "protein_g": 11 }
+  },
+  {
+    "week": 1, "day": 5, "meal": "dinner",
+    "id": "w1d5-octopus-potato",
+    "name": "Octopus with potato (polpo e patate schiacciate) (+ almonds & dried cranberries)",
+    "ingredients": [
+      { "item": "octopus", "amount": 60, "unit": "g" },
+      { "item": "potato", "amount": 1, "unit": "medium" },
+      { "item": "cherry tomatoes", "amount": 150, "unit": "g" },
+      { "item": "olives", "amount": 20, "unit": "g" },
+      { "item": "olive oil", "amount": 25, "unit": "mL" },
+      { "item": "brown bread, toasted", "amount": 40, "unit": "g" },
+      { "item": "mixed salad", "amount": 200, "unit": "g" },
+      { "item": "almonds", "amount": 25, "unit": "g" },
+      { "item": "dried cranberries", "amount": 20, "unit": "g" }
+    ],
+    "nutrition": { "kcal": 830, "protein_g": 26 }
+  },
+  {
+    "week": 1, "day": 6, "meal": "lunch",
+    "id": "w1d6-grilled-eggplant-feta",
+    "name": "Grilled eggplant with feta cheese and tomatoes",
+    "ingredients": [
+      { "item": "eggplant", "amount": 250, "unit": "g" },
+      { "item": "olive oil", "amount": 12, "unit": "mL" },
+      { "item": "cherry tomatoes", "amount": 150, "unit": "g" },
+      { "item": "feta cheese", "amount": 20, "unit": "g" },
+      { "item": "rye crackers", "amount": 40, "unit": "g" }
+    ],
+    "nutrition": { "kcal": 390, "protein_g": 11 }
+  },
+  {
+    "week": 1, "day": 6, "meal": "dinner",
+    "id": "w1d6-pasta-e-vaianeia",
+    "name": "Pasta e vaianeia (Molochio recipe) (+ hazelnuts & dried blueberries)",
+    "ingredients": [
+      { "item": "navy beans, cooked", "amount": 150, "unit": "g" },
+      { "item": "green beans", "amount": 150, "unit": "g" },
+      { "item": "carrots", "amount": 2, "unit": "medium" },
+      { "item": "potato", "amount": 1, "unit": "medium" },
+      { "item": "zucchini", "amount": 150, "unit": "g" },
+      { "item": "tomato", "amount": 1, "unit": "large" },
+      { "item": "pasta, dry", "amount": 40, "unit": "g" },
+      { "item": "olive oil", "amount": 25, "unit": "mL" },
+      { "item": "Parmesan", "amount": 5, "unit": "g" },
+      { "item": "hazelnuts", "amount": 25, "unit": "g" },
+      { "item": "dried blueberries", "amount": 20, "unit": "g" }
+    ],
+    "nutrition": { "kcal": 1010, "protein_g": 32 }
+  },
+  {
+    "week": 1, "day": 7, "meal": "lunch",
+    "id": "w1d7-brussels-sprouts",
+    "name": "Brussels sprouts with garlic, pine nuts, and Parmesan cheese",
+    "ingredients": [
+      { "item": "brussels sprouts", "amount": 250, "unit": "g" },
+      { "item": "pine nuts", "amount": 9, "unit": "g" },
+      { "item": "olive oil", "amount": 12, "unit": "mL" },
+      { "item": "Parmesan", "amount": 5, "unit": "g" },
+      { "item": "dark whole-grain bread", "amount": 40, "unit": "g" },
+      { "item": "mixed salad", "amount": 200, "unit": "g" }
+    ],
+    "nutrition": { "kcal": 435, "protein_g": 17 }
+  },
+  {
+    "week": 1, "day": 7, "meal": "dinner",
+    "id": "w1d7-spaghetti-clams-mussels",
+    "name": "Spaghetti with clams and mussels (+ dates & walnuts)",
+    "ingredients": [
+      { "item": "clams and mussels", "amount": 60, "unit": "g" },
+      { "item": "white wine", "amount": 40, "unit": "mL" },
+      { "item": "spaghetti, dry", "amount": 40, "unit": "g" },
+      { "item": "olive oil", "amount": 25, "unit": "mL" },
+      { "item": "leafy greens", "amount": 200, "unit": "g" },
+      { "item": "dates", "amount": 20, "unit": "g" },
+      { "item": "walnuts", "amount": 25, "unit": "g" }
+    ],
+    "nutrition": { "kcal": 720, "protein_g": 21 }
+  },
+
+  {
+    "week": 2, "day": 1, "meal": "breakfast",
+    "id": "w2d1-oats-almond-milk-berries",
+    "name": "Oats with almond milk, chocolate, nuts, and berries",
+    "ingredients": [
+      { "item": "steel-cut oats, dry", "amount": 80, "unit": "g" },
+      { "item": "almond milk, unsweetened", "amount": 240, "unit": "mL" },
+      { "item": "mixed berries", "amount": 150, "unit": "g" },
+      { "item": "dark chocolate + nuts", "amount": 20, "unit": "g" }
+    ],
+    "nutrition": { "kcal": 560, "protein_g": 16 }
+  },
+  {
+    "week": 2, "day": 1, "meal": "lunch",
+    "id": "w2d1-greek-salad",
+    "name": "Greek salad with feta, olives, onion, and peppers",
+    "ingredients": [
+      { "item": "mixed lettuce", "amount": 150, "unit": "g" },
+      { "item": "feta cheese", "amount": 20, "unit": "g" },
+      { "item": "green and red peppers", "amount": 200, "unit": "g" },
+      { "item": "cherry tomatoes", "amount": 150, "unit": "g" },
+      { "item": "olives", "amount": 20, "unit": "g" },
+      { "item": "olive oil", "amount": 12, "unit": "mL" },
+      { "item": "brown bread", "amount": 40, "unit": "g" }
+    ],
+    "nutrition": { "kcal": 410, "protein_g": 12 }
+  },
+  {
+    "week": 2, "day": 1, "meal": "dinner",
+    "id": "w2d1-garbanzo-salad-garbanzo-bread",
+    "name": "Garbanzo bean salad and vegetables with garbanzo bean bread (+ pecans & dates)",
+    "ingredients": [
+      { "item": "garbanzo beans, cooked", "amount": 150, "unit": "g" },
+      { "item": "onion", "amount": 1, "unit": "medium" },
+      { "item": "olive oil", "amount": 25, "unit": "mL" },
+      { "item": "spinach, boiled", "amount": 200, "unit": "g" },
+      { "item": "garbanzo bean bread", "amount": 60, "unit": "g" },
+      { "item": "pecans", "amount": 25, "unit": "g" },
+      { "item": "dates", "amount": 20, "unit": "g" }
+    ],
+    "nutrition": { "kcal": 810, "protein_g": 26 }
+  },
+  {
+    "week": 2, "day": 2, "meal": "lunch",
+    "id": "w2d2-pumpkin-soup",
+    "name": "Pumpkin soup with croutons",
+    "ingredients": [
+      { "item": "pumpkin/squash", "amount": 300, "unit": "g" },
+      { "item": "olive oil", "amount": 12, "unit": "mL" },
+      { "item": "croutons", "amount": 40, "unit": "g" },
+      { "item": "pumpkin seeds", "amount": 9, "unit": "g" },
+      { "item": "mixed salad + brown bread", "amount": 40, "unit": "g" }
+    ],
+    "nutrition": { "kcal": 505, "protein_g": 15 }
+  },
+  {
+    "week": 2, "day": 2, "meal": "dinner",
+    "id": "w2d2-pasta-tuna-olives-capers",
+    "name": "Pasta with tuna, olives, capers, and tomato (+ hazelnuts & grapes)",
+    "ingredients": [
+      { "item": "pasta, dry", "amount": 40, "unit": "g" },
+      { "item": "tuna", "amount": 60, "unit": "g" },
+      { "item": "olives", "amount": 20, "unit": "g" },
+      { "item": "tomatoes", "amount": 150, "unit": "g" },
+      { "item": "olive oil", "amount": 25, "unit": "mL" },
+      { "item": "artichokes", "amount": 150, "unit": "g" },
+      { "item": "brown bread", "amount": 40, "unit": "g" },
+      { "item": "hazelnuts", "amount": 25, "unit": "g" },
+      { "item": "grapes", "amount": 100, "unit": "g" }
+    ],
+    "nutrition": { "kcal": 870, "protein_g": 31 }
+  },
+  {
+    "week": 2, "day": 3, "meal": "lunch",
+    "id": "w2d3-rice-zucchini-peas",
+    "name": "Rice with zucchini and peas",
+    "ingredients": [
+      { "item": "rice, dry", "amount": 40, "unit": "g" },
+      { "item": "zucchini", "amount": 250, "unit": "g" },
+      { "item": "peas", "amount": 100, "unit": "g" },
+      { "item": "onion", "amount": 1, "unit": "medium" },
+      { "item": "olive oil", "amount": 12, "unit": "mL" },
+      { "item": "Parmesan or pesto", "amount": 1, "unit": "tbsp/tsp" }
+    ],
+    "nutrition": { "kcal": 430, "protein_g": 14 }
+  },
+  {
+    "week": 2, "day": 3, "meal": "dinner",
+    "id": "w2d3-white-bean-salad-chicory",
+    "name": "White bean salad with onion, rosemary, and chicory (+ almonds & cherries)",
+    "ingredients": [
+      { "item": "chicory", "amount": 180, "unit": "g" },
+      { "item": "cherry tomatoes", "amount": 50, "unit": "g" },
+      { "item": "onion", "amount": 1, "unit": "medium" },
+      { "item": "white cannellini beans, cooked", "amount": 150, "unit": "g" },
+      { "item": "olive oil", "amount": 25, "unit": "mL" },
+      { "item": "dried whole-wheat focaccia", "amount": 40, "unit": "g" },
+      { "item": "almonds", "amount": 25, "unit": "g" },
+      { "item": "cherries", "amount": 80, "unit": "g" }
+    ],
+    "nutrition": { "kcal": 775, "protein_g": 23 }
+  },
+  {
+    "week": 2, "day": 4, "meal": "lunch",
+    "id": "w2d4-fennel-salad",
+    "name": "Fennel salad with tomatoes, carrots, onions, and olives",
+    "ingredients": [
+      { "item": "fennel bulb", "amount": 150, "unit": "g" },
+      { "item": "cherry tomatoes", "amount": 150, "unit": "g" },
+      { "item": "carrots", "amount": 1, "unit": "medium" },
+      { "item": "onion", "amount": 1, "unit": "medium" },
+      { "item": "olives", "amount": 20, "unit": "g" },
+      { "item": "olive oil", "amount": 12, "unit": "mL" },
+      { "item": "whole-wheat focaccia", "amount": 40, "unit": "g" },
+      { "item": "chicory", "amount": 200, "unit": "g" }
+    ],
+    "nutrition": { "kcal": 430, "protein_g": 11 }
+  },
+  {
+    "week": 2, "day": 4, "meal": "dinner",
+    "id": "w2d4-black-rice-zucchini-shrimp",
+    "name": "Black/venus rice with zucchini and shrimp (+ walnuts & dried cranberries)",
+    "ingredients": [
+      { "item": "black/venus rice, dry", "amount": 40, "unit": "g" },
+      { "item": "zucchini", "amount": 250, "unit": "g" },
+      { "item": "cherry tomatoes", "amount": 150, "unit": "g" },
+      { "item": "shrimp", "amount": 60, "unit": "g" },
+      { "item": "Parmesan", "amount": 5, "unit": "g" },
+      { "item": "saffron", "amount": 4, "unit": "g" },
+      { "item": "olive oil", "amount": 25, "unit": "mL" },
+      { "item": "mixed salad", "amount": 200, "unit": "g" },
+      { "item": "walnuts", "amount": 25, "unit": "g" },
+      { "item": "dried cranberries", "amount": 20, "unit": "g" }
+    ],
+    "nutrition": { "kcal": 765, "protein_g": 27 }
+  },
+  {
+    "week": 2, "day": 5, "meal": "lunch",
+    "id": "w2d5-mediterranean-spelt-salad",
+    "name": "Mediterranean spelt salad with artichokes and mushrooms",
+    "ingredients": [
+      { "item": "spelt, dry", "amount": 40, "unit": "g" },
+      { "item": "artichokes in oil", "amount": 80, "unit": "g" },
+      { "item": "carrot", "amount": 1, "unit": "medium" },
+      { "item": "cherry tomatoes", "amount": 150, "unit": "g" },
+      { "item": "olives", "amount": 20, "unit": "g" },
+      { "item": "olive oil", "amount": 12, "unit": "g" },
+      { "item": "mushrooms", "amount": 150, "unit": "g" }
+    ],
+    "nutrition": { "kcal": 410, "protein_g": 15 }
+  },
+  {
+    "week": 2, "day": 5, "meal": "dinner",
+    "id": "w2d5-ligurian-minestrone",
+    "name": "Ligurian minestrone (minestrone alla Genovese) (+ grapes)",
+    "ingredients": [
+      { "item": "cannellini beans, cooked", "amount": 150, "unit": "g" },
+      { "item": "potato", "amount": 1, "unit": "medium" },
+      { "item": "eggplant", "amount": 1, "unit": "medium" },
+      { "item": "zucchini", "amount": 1, "unit": "medium" },
+      { "item": "cabbage", "amount": 1, "unit": "medium" },
+      { "item": "peas", "amount": 1, "unit": "handful" },
+      { "item": "green beans", "amount": 150, "unit": "g" },
+      { "item": "pasta, dry", "amount": 40, "unit": "g" },
+      { "item": "olive oil", "amount": 25, "unit": "mL" },
+      { "item": "pesto", "amount": 1, "unit": "tsp" },
+      { "item": "whole-wheat bread", "amount": 40, "unit": "g" },
+      { "item": "grapes", "amount": 150, "unit": "g" }
+    ],
+    "nutrition": { "kcal": 865, "protein_g": 29 }
+  },
+  {
+    "week": 2, "day": 6, "meal": "lunch",
+    "id": "w2d6-tomato-soup-pesto-croutons",
+    "name": "Tomato soup with basil, pesto, and croutons",
+    "ingredients": [
+      { "item": "tomatoes", "amount": 500, "unit": "g" },
+      { "item": "carrot", "amount": 1, "unit": "medium" },
+      { "item": "celery", "amount": 1, "unit": "medium" },
+      { "item": "potato", "amount": 1, "unit": "medium" },
+      { "item": "red onion", "amount": 0.5, "unit": "medium" },
+      { "item": "olive oil", "amount": 12, "unit": "g" },
+      { "item": "pesto", "amount": 5, "unit": "g" },
+      { "item": "croutons", "amount": 40, "unit": "g" },
+      { "item": "mixed salad + brown bread", "amount": 40, "unit": "g" }
+    ],
+    "nutrition": { "kcal": 705, "protein_g": 18 }
+  },
+  {
+    "week": 2, "day": 6, "meal": "dinner",
+    "id": "w2d6-cream-garbanzo-broccoli",
+    "name": "Cream of garbanzo beans + steamed broccoli (+ dried apricots & almonds)",
+    "ingredients": [
+      { "item": "garbanzo beans, cooked", "amount": 150, "unit": "g" },
+      { "item": "olive oil", "amount": 25, "unit": "mL" },
+      { "item": "broccoli", "amount": 150, "unit": "g" },
+      { "item": "garbanzo bean bread or whole-wheat focaccia", "amount": 60, "unit": "g" },
+      { "item": "dried apricots", "amount": 20, "unit": "g" },
+      { "item": "almonds", "amount": 25, "unit": "g" }
+    ],
+    "nutrition": { "kcal": 775, "protein_g": 27 }
+  },
+  {
+    "week": 2, "day": 7, "meal": "lunch",
+    "id": "w2d7-barley-salad-broccoli-feta",
+    "name": "Barley salad with broccoli, feta, and tomatoes",
+    "ingredients": [
+      { "item": "barley, dry", "amount": 40, "unit": "g" },
+      { "item": "broccoli", "amount": 150, "unit": "g" },
+      { "item": "cherry tomatoes", "amount": 100, "unit": "g" },
+      { "item": "carrots", "amount": 1, "unit": "medium" },
+      { "item": "feta cheese", "amount": 20, "unit": "g" },
+      { "item": "olive oil", "amount": 12, "unit": "mL" },
+      { "item": "leafy greens + brown bread", "amount": 40, "unit": "g" }
+    ],
+    "nutrition": { "kcal": 525, "protein_g": 19 }
+  },
+  {
+    "week": 2, "day": 7, "meal": "dinner",
+    "id": "w2d7-pizza-vegetables-anchovies-sardines",
+    "name": "Pizza with vegetables, anchovies, and sardines (no cheese) (+ pistachios & dried cranberries)",
+    "ingredients": [
+      { "item": "pizza crust, ready-made", "amount": 100, "unit": "g" },
+      { "item": "sardines and anchovies", "amount": 90, "unit": "g" },
+      { "item": "cherry tomatoes", "amount": 80, "unit": "g" },
+      { "item": "artichokes, canned", "amount": 50, "unit": "g" },
+      { "item": "mushrooms", "amount": 100, "unit": "g" },
+      { "item": "spinach", "amount": 100, "unit": "g" },
+      { "item": "pepper", "amount": 100, "unit": "g" },
+      { "item": "black olives", "amount": 20, "unit": "g" },
+      { "item": "olive oil", "amount": 25, "unit": "g" },
+      { "item": "pistachios", "amount": 25, "unit": "g" },
+      { "item": "dried cranberries", "amount": 20, "unit": "g" }
+    ],
+    "nutrition": { "kcal": 795, "protein_g": 35 }
+  }
+]

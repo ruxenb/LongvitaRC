@@ -332,7 +332,7 @@ class _RecipeDetailsScreenState extends State<RecipeDetailsScreen> {
                   ],
                   const SizedBox(height: 24),
                   const Text(
-                    'Ingredients',
+                    'Nguyên liệu',
                     style: TextStyle(
                       fontFamily: AppTypography.quicksand,
                       fontSize: 16,
@@ -382,7 +382,7 @@ class _RecipeDetailsScreenState extends State<RecipeDetailsScreen> {
                       ),
                   const SizedBox(height: 24),
                   const Text(
-                    'Steps',
+                    'Các bước thực hiện',
                     style: TextStyle(
                       fontFamily: AppTypography.quicksand,
                       fontSize: 16,
