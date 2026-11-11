@@ -77,3 +77,18 @@ docs/tasks/task-hoang.md; docs/design-traceability.md; docs/hoang-firestore-sche
 - `firebase projects:list --json` chưa xác thực được. Không sửa Firebase production, không triển khai rules, không nhập batch recipes chưa thẩm định. Việc đánh giá và quyền publish batch recipe được theo dõi tại [issue #16](https://github.com/ruxenb/LongvitaRC/issues/16).
 - Không có ảnh chụp Android thực tế hay video demo 3 flows của Hoàng. Những khác biệt Figma (S02/S03/S04/S09 và các màn khác) còn cần review theo `docs/hoang-figma-deviation-audit.md`.
 - Đối chiếu 26 task: **5 có bằng chứng kỹ thuật, 18 đã triển khai hoặc triển khai một phần nhưng thiếu nghiệm thu, 3 bị chặn/chưa đủ artifact**. Không xác nhận 26/26 hoàn tất. Tham khảo `docs/hoang-acceptance-audit-20261106.md` để biết yêu cầu nghiệm thu cho từng ID.
+
+
+## 9. Kiểm chứng trên Android thật và monorepo (cập nhật 11/11/2026)
+
+Phần lịch sử trước mục này ghi tình hình tới 09/11; việc thiếu Android SDK và ảnh thực tế đã được khắc phục trong ngày 11/11. Báo cáo nộp chính thức phải dẫn phiên bản mới nhất thay vì chỉ đọc các thống kê 305/398 tests cũ.
+
+- **Môi trường thật:** Flutter 3.47.2 / Dart 3.13.2, Android SDK/NDK và Samsung Galaxy A15 SM-A155F, Android 16. Ứng dụng đã build APK debug và cài lại qua ADB thành công, giữ nguyên dữ liệu trên máy.
+- **Đo kiểm lập trình:** Trên monorepo kết hợp origin/main và nhánh Hoàng, Flutter Analyze không có lỗi; bộ Mobile widget/unit tests chạy serial đạt **483/483**. Sau khi thay tiêu đề Firebase tiếng Việt, đã clean build, test lại toàn bộ và xác nhận trực tiếp trên A15.
+- **Các màn hình đọc-only đã kiểm:** S01 Trang chủ, S02 Sở thích và validation thiếu dữ liệu, tra cứu công thức, S05 Chi tiết công thức, S10 Kế hoạch đã lưu và Hồ sơ. Chưa xem các màn đó là ba luồng E2E hoàn tất.
+- **Dữ liệu quan sát:** ứng dụng đã trả về hai công thức trong lúc test. Nhãn nguồn sách và số ước tính USDA chưa chứng minh dữ liệu toàn bộ recipe đã được chuyên gia thẩm định.
+- **Bằng chứng hình ảnh loại bỏ PII:** [Hồ sơ A15 — Tiện ích Firebase](../evidence/hoang/android-a15-20261111/profile-vietnamese-no-pii.png). Ảnh tên/email thật chỉ lưu ở D:\PRM393\Longvita_phone_evidence\20261111_clean_rebuild.
+- **Giới hạn:** không tự nhận đã có 3 lượt ARTEMIS đạt cho mỗi test, đối chiếu Figma cả 10 màn, xác nhận Firebase liên vai trò bằng hai tài khoản thực, hoặc hoàn tất video demo. File evidences trên máy thành viên khác có một batch ARTEMIS 7/7 đạt, nhưng chưa đủ chuẩn >=3 lượt/ca và không thay thế live cross-role.
+- **Xung đột Git:** main cục bộ đã đồng bộ origin/main tại 53d7fc5; file Git theo dõi không có trạng thái unmerged hoặc thay đổi chưa commit. PR40 và PR41 thử merge với nhau không có xung đột văn bản; cần kiểm thử chung và review lại khi merge thật.
+
+Các ảnh chứa thông tin tài khoản cá nhân, token, UID hoặc tài liệu nội bộ chưa qua duyệt không đưa vào repo.
