@@ -308,7 +308,7 @@ class _RecipeDetailsScreenState extends State<RecipeDetailsScreen> {
                         const AppBadge(kind: AppBadgeKind.fromBook),
                       ],
                       Text(
-                        '${recipe.proteinGrams.toStringAsFixed(0)} g protein · 1 serving',
+                        '${recipe.proteinGrams.toStringAsFixed(0)} g đạm · 1 khẩu phần',
                         style: const TextStyle(
                           fontFamily: AppTypography.quicksand,
                           fontSize: 14,
@@ -322,6 +322,28 @@ class _RecipeDetailsScreenState extends State<RecipeDetailsScreen> {
                     const SizedBox(height: 12),
                     Text(
                       recipe.description,
+                      style: const TextStyle(
+                        fontFamily: AppTypography.quicksand,
+                        fontSize: 14,
+                        color: AppColors.textSecondary,
+                        height: 1.4,
+                      ),
+                    ),
+                  ],
+                  if (recipe.sourceNote.trim().isNotEmpty) ...[
+                    const SizedBox(height: 16),
+                    const Text(
+                      'Nguồn tham khảo',
+                      style: TextStyle(
+                        fontFamily: AppTypography.quicksand,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w700,
+                        color: AppColors.textPrimary,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      recipe.sourceNote,
                       style: const TextStyle(
                         fontFamily: AppTypography.quicksand,
                         fontSize: 14,
@@ -346,8 +368,8 @@ class _RecipeDetailsScreenState extends State<RecipeDetailsScreen> {
                   else
                     for (final item in recipe.ingredients)
                       Container(
-                        height: 44,
-                        padding: const EdgeInsets.symmetric(vertical: 4),
+                        constraints: const BoxConstraints(minHeight: 44),
+                        padding: const EdgeInsets.symmetric(vertical: 8),
                         decoration: const BoxDecoration(
                           border: Border(
                             bottom: BorderSide(
@@ -357,17 +379,20 @@ class _RecipeDetailsScreenState extends State<RecipeDetailsScreen> {
                           ),
                         ),
                         child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
-                              item.name,
-                              style: const TextStyle(
-                                fontFamily: AppTypography.quicksand,
-                                fontSize: 14,
-                                fontWeight: FontWeight.w500,
-                                color: AppColors.textPrimary,
+                            Expanded(
+                              child: Text(
+                                item.name,
+                                style: const TextStyle(
+                                  fontFamily: AppTypography.quicksand,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w500,
+                                  color: AppColors.textPrimary,
+                                ),
                               ),
                             ),
+                            const SizedBox(width: 12),
                             Text(
                               '${item.amount.toStringAsFixed(item.amount % 1 == 0 ? 0 : 1)} ${item.unit}',
                               style: const TextStyle(
@@ -583,7 +608,7 @@ class _MealAlternativesScreenState extends State<MealAlternativesScreen> {
           onPressed: () => Navigator.of(context).maybePop(),
         ),
         title: const Text(
-          'Meal alternatives',
+          'Món thay thế',
           style: TextStyle(
             fontFamily: AppTypography.quicksand,
             fontSize: 16,
@@ -602,7 +627,7 @@ class _MealAlternativesScreenState extends State<MealAlternativesScreen> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   const Text(
-                    'Choose a replacement',
+                    'Chọn món thay thế',
                     style: TextStyle(
                       fontFamily: AppTypography.newsreader,
                       fontSize: 24,
@@ -612,7 +637,7 @@ class _MealAlternativesScreenState extends State<MealAlternativesScreen> {
                   ),
                   const SizedBox(height: 4),
                   const Text(
-                    'Your original meal stays unchanged until you confirm.',
+                    'Món hiện tại chỉ thay đổi sau khi bạn xác nhận.',
                     style: TextStyle(
                       fontFamily: AppTypography.quicksand,
                       fontSize: 14,
@@ -632,7 +657,7 @@ class _MealAlternativesScreenState extends State<MealAlternativesScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Original: ${widget.original.name}',
+                          'Món hiện tại: ${widget.original.name}',
                           style: const TextStyle(
                             fontFamily: AppTypography.quicksand,
                             fontSize: 14,
@@ -710,8 +735,8 @@ class _MealAlternativesScreenState extends State<MealAlternativesScreen> {
                                   mealType: widget.original.category == 'ca'
                                       ? 'lunch'
                                       : 'dinner',
-                                  targetCalories:
-                                      widget.original.calories.round(),
+                                  targetCalories: widget.original.calories
+                                      .round(),
                                   originalRecipe: widget.original,
                                 );
                             if (aiRecipe != null && context.mounted) {
@@ -901,7 +926,7 @@ class _MealAlternativesScreenState extends State<MealAlternativesScreen> {
                     const AppBadge(kind: AppBadgeKind.appSuggestion),
                   const Spacer(),
                   Text(
-                    '${recipe.proteinGrams.toStringAsFixed(0)}g protein • ${recipe.calories.toStringAsFixed(0)} kcal',
+                    '${recipe.proteinGrams.toStringAsFixed(0)} g đạm • ${recipe.calories.toStringAsFixed(0)} kcal',
                     style: const TextStyle(
                       fontFamily: AppTypography.quicksand,
                       fontSize: 12,
@@ -919,7 +944,7 @@ class _MealAlternativesScreenState extends State<MealAlternativesScreen> {
   }
 }
 
-/// S09: Book knowledge principles and verified source citation from Figma (108:332).
+/// S09: Book principles with only the source note actually available on the recipe.
 class BookKnowledgeScreen extends StatelessWidget {
   final RecipeModel? recipe;
   const BookKnowledgeScreen({super.key, this.recipe});
@@ -938,7 +963,7 @@ class BookKnowledgeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final sourceText = recipe != null && recipe!.sourceNote.trim().isNotEmpty
         ? recipe!.sourceNote
-        : 'The Longevity Diet · Phụ lục A và các nguyên tắc dinh dưỡng Longvita sử dụng.';
+        : 'Chưa có nguồn trích dẫn được xác minh cho nội dung này.';
 
     return Scaffold(
       backgroundColor: AppColors.bgCanvas,
@@ -952,7 +977,7 @@ class BookKnowledgeScreen extends StatelessWidget {
           onPressed: () => Navigator.of(context).maybePop(),
         ),
         title: const Text(
-          'Book knowledge',
+          'Kiến thức sách',
           style: TextStyle(
             fontFamily: AppTypography.quicksand,
             fontSize: 16,
@@ -1047,7 +1072,7 @@ class BookKnowledgeScreen extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         const Text(
-                          'Source',
+                          'Nguồn tham khảo',
                           style: TextStyle(
                             fontFamily: AppTypography.quicksand,
                             fontSize: 14,

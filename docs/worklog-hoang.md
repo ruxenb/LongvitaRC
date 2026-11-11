@@ -85,3 +85,25 @@
 - Kiểm tra lại S0-3: JDK Temurin D: sử dụng được nếu nạp `scripts/project-env.ps1`; Android SDK platforms/build-tools/emulator/licenses đều trống, ADB không có thiết bị. Firebase CLI vẫn hết xác thực. Không chấp nhận thay người dùng giấy phép SDK và không chạm production Firebase.
 - Cập nhật `report/hoang-implementation-report.md` để sửa trạng thái cũ của PR #10, SHA debug/Firebase và thêm bằng chứng đúng của PR20; không tự chấp nhận 18 task còn chờ nghiệm thu hoặc 3 task bị chặn.
 - Bổ sung `uv` bản 0.13.7 tại `D:\Tools\uv` và Python virtualenv của `e2e_test` (không đưa vào Git); `uv sync --python 3.12` cài thành công ARTEMIS client pinned commit `351ca84` và các phụ thuộc. `pytest --collect-only -q` thu thập đủ 18 test, không chạy E2E thật. Thêm tìm kiếm thư mục `uv` vào `scripts/project-env.ps1` để sử dụng được CLI trong những phiên PowerShell mới.
+
+
+## 2026-11-11 — Native QA Samsung A15 và sửa lỗi giao diện từ chứng cứ thật
+
+- Kết nối Samsung A15 Android 16, kiểm tra ứng dụng trên tài khoản user thực. Mở S02 → S03 → S04, tạo thực đơn dùng công thức hệ thống có ghi chú nguồn, bấm lưu thành công theo phản hồi client Firestore; chưa xác minh S10 read-back.
+- Mở S05 chi tiết, S06 thay món. S06 không có phương án phù hợp hiển thị Empty/Thử lại, bấm Điều chỉnh sở thích trở về S02. S01 hiển thị thông báo CM-07 có sẵn từ Web Admin, chưa đo thông báo mới realtime.
+- Phát hiện UI: S04 nhãn Đang chờ chen tên món và sourceNote quá dài; S05 có nhãn English và row nguyên liệu chiều cao cố định. Sửa 3 file mobile/lib/screens/meal_flow_screens.dart, recipe_flow_screens.dart và viewmodels/meal_plan_viewmodel.dart; không sửa schema/record production.
+- Thêm 2 widget regression tests cho S04/S05 tên dài ở 360dp, chữ 200%. Chỉnh 4 expectation A11y cũ sang nhãn tiếng Việt mới, vẫn giữ assertion.
+- Kiểm tra: Flutter Analyze 0 vấn đề; Mobile tests 487/487 đạt; Android APK build thành công. Cài đè APK mới bằng ADB thành công, PID 28804, logcat smoke 0 dòng báo lỗi Flutter nghiêm trọng.
+- Ảnh đã cắt danh tính tại evidence/hoang/android-a15-20261111; biên bản docs/hoang-native-acceptance-20261111.md; logs D:\PRM393\hoang_a15_final_*. Ảnh raw PII không commit.
+- Tạo lại 4 slide minh chứng thực tế: slides/Longvita_Hoang_4_Slides_Verified_20261111.pptx.
+- Còn thiếu ARTEMIS live 3 lần/ca, Web Staff review realtime, Figma đủ 10 màn, PDF/video và kiểm định recipe; không ghi 26/26 hoàn thành.
+
+- Bổ sung riêng nhãn Nguồn tham khảo và toàn văn sourceNote ở S05 khi S04 đã cắt ghi chú quá dài. Chạy lại full suite 487/487, analyze 0 vấn đề, build APK thành công. Tại lần kiểm tra cuối USB ADB mất kết nối, chưa chụp/cài APK của thay đổi S05 sau cùng.
+
+
+## 2026-11-11 — Hợp nhất PR #41 đã merge main và audit ARTEMIS thực
+
+- Khi push commit Hoàng 4aa85ff, Git từ chối non-fast-forward do remote PR40 đã cập nhật main, gồm PR41 merge 706ffef. Không force push, fetch và đối chiếu đầy đủ ba phía.
+- Giải quyết hunk S04, bảo tồn calo/đạm từ PR41 và sourceNote 2 dòng của Hoàng; merge commit 4030f63. Không có unmerged files.
+- Kiểm thử bản ghép: Mobile 487/487, Core 20/20, Web 69/69; tổng **576/576 pass**, Flutter Analyze 0 vấn đề cả ba, Python compileall e2e_test thành công. Logs lưu D:\PRM393\hoang_pr41_merged_*.
+- Phân tích 45 run log ARTEMIS từ main: 11 bản ghi thuộc Hoàng, 8 completed/3 failed, chưa ca nào có >=3 completed. Không gọi completed là pass nếu replay/goal chưa xác nhận; xem docs/hoang-artemis-run-audit-20261111.md.

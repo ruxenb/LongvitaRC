@@ -77,3 +77,52 @@ docs/tasks/task-hoang.md; docs/design-traceability.md; docs/hoang-firestore-sche
 - `firebase projects:list --json` chưa xác thực được. Không sửa Firebase production, không triển khai rules, không nhập batch recipes chưa thẩm định. Việc đánh giá và quyền publish batch recipe được theo dõi tại [issue #16](https://github.com/ruxenb/LongvitaRC/issues/16).
 - Không có ảnh chụp Android thực tế hay video demo 3 flows của Hoàng. Những khác biệt Figma (S02/S03/S04/S09 và các màn khác) còn cần review theo `docs/hoang-figma-deviation-audit.md`.
 - Đối chiếu 26 task: **5 có bằng chứng kỹ thuật, 18 đã triển khai hoặc triển khai một phần nhưng thiếu nghiệm thu, 3 bị chặn/chưa đủ artifact**. Không xác nhận 26/26 hoàn tất. Tham khảo `docs/hoang-acceptance-audit-20261106.md` để biết yêu cầu nghiệm thu cho từng ID.
+
+
+## 9. Kiểm chứng trên Android thật và monorepo (cập nhật 11/11/2026)
+
+Phần lịch sử trước mục này ghi tình hình tới 09/11; việc thiếu Android SDK và ảnh thực tế đã được khắc phục trong ngày 11/11. Báo cáo nộp chính thức phải dẫn phiên bản mới nhất thay vì chỉ đọc các thống kê 305/398 tests cũ.
+
+- **Môi trường thật:** Flutter 3.47.2 / Dart 3.13.2, Android SDK/NDK và Samsung Galaxy A15 SM-A155F, Android 16. Ứng dụng đã build APK debug và cài lại qua ADB thành công, giữ nguyên dữ liệu trên máy.
+- **Đo kiểm lập trình:** Trên monorepo kết hợp origin/main và nhánh Hoàng, Flutter Analyze không có lỗi; bộ Mobile widget/unit tests chạy serial đạt **483/483**. Sau khi thay tiêu đề Firebase tiếng Việt, đã clean build, test lại toàn bộ và xác nhận trực tiếp trên A15.
+- **Các màn hình đọc-only đã kiểm:** S01 Trang chủ, S02 Sở thích và validation thiếu dữ liệu, tra cứu công thức, S05 Chi tiết công thức, S10 Kế hoạch đã lưu và Hồ sơ. Chưa xem các màn đó là ba luồng E2E hoàn tất.
+- **Dữ liệu quan sát:** ứng dụng đã trả về hai công thức trong lúc test. Nhãn nguồn sách và số ước tính USDA chưa chứng minh dữ liệu toàn bộ recipe đã được chuyên gia thẩm định.
+- **Bằng chứng hình ảnh loại bỏ PII:** [Hồ sơ A15 — Tiện ích Firebase](../evidence/hoang/android-a15-20261111/profile-vietnamese-no-pii.png). Ảnh tên/email thật chỉ lưu ở D:\PRM393\Longvita_phone_evidence\20261111_clean_rebuild.
+- **Giới hạn:** không tự nhận đã có 3 lượt ARTEMIS đạt cho mỗi test, đối chiếu Figma cả 10 màn, xác nhận Firebase liên vai trò bằng hai tài khoản thực, hoặc hoàn tất video demo. File evidences trên máy thành viên khác có một batch ARTEMIS 7/7 đạt, nhưng chưa đủ chuẩn >=3 lượt/ca và không thay thế live cross-role.
+- **Xung đột Git:** main cục bộ đã đồng bộ origin/main tại 53d7fc5; file Git theo dõi không có trạng thái unmerged hoặc thay đổi chưa commit. PR40 và PR41 thử merge với nhau không có xung đột văn bản; cần kiểm thử chung và review lại khi merge thật.
+
+Các ảnh chứa thông tin tài khoản cá nhân, token, UID hoặc tài liệu nội bộ chưa qua duyệt không đưa vào repo.
+
+
+## 10. Bổ sung nghiệm thu thực tế và số liệu mới nhất (11/11/2026)
+
+**Các thống kê 305/398/483 ở phần lịch sử là kết quả snapshot cũ.** Bản báo cáo hiện tại được cập nhật bằng phép kiểm thử trực tiếp Samsung A15 SM-A155F Android 16.
+
+**Flow 1 (S01–S04 và lưu):** Đã mở S02, S03, bấm Tạo thực đơn tuần, nhận công thức có ghi chú nguồn của hệ thống trên S04. Sau khi bấm Lưu thực đơn, ứng dụng thông báo Đã lưu kế hoạch lên Firestore. Ảnh đã loại vùng nhận diện: evidence/hoang/android-a15-20261111/s02-options-no-pii.png, s03-setup-no-pii.png, s04-generated-preview-before-polish.png, firestore-save-confirmation.png. Chưa xác minh read-back S10 sau khởi động lại.
+
+**Flow 3 (S05–S06):** Đã mở S05 từ thẻ món, quan sát nguyên liệu và hướng dẫn. S06 hiển thị Chưa có dữ liệu khi không có món thay thế, có Thử lại và Điều chỉnh sở thích. Đã kiểm chứng S06 quay về S02. Ảnh an toàn: s06-empty-and-retry.png, s06-recovery-to-s02-no-pii.png. Không tự tạo món thay thế giả.
+
+**Inbox (HD-04):** S01 hiển thị thông báo CM-07 được mô tả là từ Web Admin. Ảnh: inbox-web-admin-notification-no-pii.png. Đây là chứng cứ đọc dữ liệu hiện có, chưa đo realtime của một thông báo mới.
+
+**Sửa lỗi từ Android thật:** Tên món dài bị nhãn Đang chờ không đại diện trạng thái plan chen lấn ở S04, sourceNote chiếm quá nhiều dòng; S05 còn nhãn tiếng Anh và hàng nguyên liệu có chiều cao cố định. Đã sửa: bỏ nhãn không đúng nghĩa, giới hạn nguồn 2 dòng (nguồn đầy đủ tại S05), Việt hóa các nhãn Nguyên liệu, Các bước thực hiện, khẩu phần và đạm, row nguyên liệu tự giãn ở chữ 200%, sửa S02/S03/S06. Thêm hai regression widget tests cho tên dài. Bốn expectation A11y cũ được cập nhật chính xác theo ngôn ngữ mới, không bỏ assertion.
+
+**Kiểm thử bản mới nhất:** Flutter Analyze 0 issues; Mobile Flutter Test serial 487/487 pass; build Android debug APK thành công. Sau khi USB kết nối lại, cài APK trên Galaxy A15 bằng ADB với Success, khởi chạy PID 28804, smoke logcat 0 dòng lỗi Flutter nghiêm trọng. Biên bản: docs/hoang-native-acceptance-20261111.md; logs: D:\PRM393\hoang_a15_final_*.
+
+**Giới hạn chưa nghiệm thu:** S10 read-back sau restart, S07/S08 edit/undo/persistence native, PDF metadata trên máy, hai vai trò Web Staff→Mobile 3 lần, Firebase Analytics/Crashlytics console, ARTEMIS >=3 lượt/ca (thiếu daemon và test account), Figma 10 màn, phê duyệt nguồn/định lượng recipe, demo video đầy đủ. Không xem số test Flutter tương đương ARTEMIS và không đánh dấu task 100% khi thiếu bằng chứng.
+
+**Slide Hoàng cập nhật:** slides/Longvita_Hoang_4_Slides_Verified_20261111.pptx, 4 trang với ảnh Android thật đã cắt PII và thống kê 487/487.
+
+### Cập nhật nguồn trích dẫn tại màn S05
+
+Sau kiểm tra bố cục S04, code đã giữ ghi chú nguồn trên thẻ ở tối đa hai dòng, đồng thời **hiển thị đầy đủ trường sourceNote trong S05 dưới nhãn Nguồn tham khảo**, không lược bỏ dữ liệu. Widget test kiểm tra chuỗi đầy đủ và chống tràn khi phóng chữ. Kết quả cuối chạy lại: Mobile Flutter Analyze 0 lỗi, 487/487 tests, APK debug build thành công. Việc cài lại APK của thay đổi S05 sau cùng cần ADB kết nối ổn định.
+
+
+## 11. Hợp nhất main và kết quả ARTEMIS theo log mới (11/11/2026)
+
+Trong lúc sửa S04/S05, main đã cập nhật tới 733aa7a (PR #41 merge 706ffef), và nhánh PR40 nhận main vào e4ec827. Sau khi commit thay đổi Hoàng 4aa85ff, đã merge nhánh remote mới vào local tại 4030f63. Xung đột duy nhất của lượt này là thẻ món ở mobile/lib/screens/meal_flow_screens.dart. Bản giải quyết giữ cả chỉ số kcal/đạm của PR41 và ghi chú nguồn tối đa hai dòng trên S04; S05 có toàn văn nguồn và không có nhãn Đang chờ chen vào tên món.
+
+Kiểm thử lại chính bản ghép tại 4030f63: Mobile Flutter tests **487/487**, Core **20/20**, Web **69/69**, tổng **576/576 đạt**; Flutter Analyze 0 vấn đề trên cả ba; Python compileall e2e_test/ đạt. Đây là kiểm thử code/mock, không phải ARTEMIS hay Firestore cross-role live.
+
+Từ evidence/artemis/raw/runs.jsonl mới trên main, có **45 bản ghi của nhóm / 15 tên test**, trong đó **11 bản ghi** thuộc test_flows.py và test_detail.py của Hoàng (8 completed, 3 failed). Không có test case Hoàng nào đạt ba completed. Trạng thái completed không mặc nhiên là pass về nội dung. Xem docs/hoang-artemis-run-audit-20261111.md để biết từng ca và yêu cầu kiểm tra lại.
+
+Bảng 26 task Lab3 và 9 task HD đã đối chiếu theo bằng chứng thực: docs/hoang-task-matrix-20261111.md. Không tự nhận hoàn tất 100% các task còn thiếu ARTEMIS 3 lần, cross-role Web Staff live, native S10/S07/S08/PDF và phê duyệt nutritional recipe.

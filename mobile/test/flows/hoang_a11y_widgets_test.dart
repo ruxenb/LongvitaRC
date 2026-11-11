@@ -84,7 +84,7 @@ void main() {
         // 'loading' is not a proof of accessibility: test actual labels.
         expect(
           find.text(
-            '${beans.proteinGrams.toStringAsFixed(0)} g protein · 1 serving',
+            '${beans.proteinGrams.toStringAsFixed(0)} g đạm · 1 khẩu phần',
           ),
           findsOneWidget,
         );
