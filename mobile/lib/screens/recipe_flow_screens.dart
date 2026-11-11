@@ -17,6 +17,7 @@ import 'package:longvita_core/widgets/app_button.dart';
 import 'package:longvita_core/widgets/state_views.dart';
 import 'package:longvita/screens/flow_ui.dart';
 import 'package:longvita/screens/meal_flow_screens.dart';
+import 'package:longvita/widgets/ai_meal_recommendation_sheet.dart';
 
 /// S05: show only a bounded, HTTPS-loaded Firestore image without
 /// following redirects or inventing stock assets when an image is absent.
@@ -460,6 +461,33 @@ class _RecipeDetailsScreenState extends State<RecipeDetailsScreen> {
                     },
                   ),
                   const SizedBox(height: 12),
+                  // Button Direct Gemini AI Recommendation
+                  AppButton(
+                    key: const Key('gemini-ai-direct-btn'),
+                    text: 'Gợi ý món mới từ Gemini AI',
+                    icon: Icons.auto_awesome,
+                    variant: AppButtonVariant.primary,
+                    onPressed: () async {
+                      final aiRecipe = await AiMealRecommendationSheet.show(
+                        context: context,
+                        mealType: recipe.category == 'ca' ? 'lunch' : 'dinner',
+                        targetCalories: recipe.calories.round(),
+                        originalRecipe: recipe,
+                      );
+                      if (aiRecipe != null && mounted) {
+                        final vm = context.read<MealPlanViewModel>();
+                        final success = await vm.replaceMeal(
+                          dayIndex: widget.dayIndex ?? 0,
+                          originalId: recipe.id,
+                          replacement: aiRecipe,
+                        );
+                        if (success && mounted) {
+                          Navigator.of(context).pop();
+                        }
+                      }
+                    },
+                  ),
+                  const SizedBox(height: 12),
                   // Secondary: Sách
                   TextButton.icon(
                     style: TextButton.styleFrom(
@@ -621,6 +649,76 @@ class _MealAlternativesScreenState extends State<MealAlternativesScreen> {
                             fontWeight: FontWeight.w500,
                             color: AppColors.textSecondary,
                           ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  // Gemini AI Replacement Card (Level 2 Structured Output)
+                  Container(
+                    padding: const EdgeInsets.all(AppSpacing.s12),
+                    decoration: BoxDecoration(
+                      color: AppColors.bgSelected,
+                      borderRadius: AppRadius.rounded12,
+                      border: Border.all(
+                        color: AppColors.actionPrimary.withOpacity(0.4),
+                      ),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        const Row(
+                          children: [
+                            Icon(
+                              Icons.auto_awesome,
+                              color: AppColors.actionPrimary,
+                              size: 20,
+                            ),
+                            SizedBox(width: 8),
+                            Expanded(
+                              child: Text(
+                                'Gợi ý món thay thế bằng Gemini AI',
+                                style: TextStyle(
+                                  fontFamily: AppTypography.quicksand,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w700,
+                                  color: AppColors.actionPrimary,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 4),
+                        const Text(
+                          'Tạo món thay thế chuẩn TS. Longo tương đồng calo và dinh dưỡng.',
+                          style: TextStyle(
+                            fontFamily: AppTypography.quicksand,
+                            fontSize: 12,
+                            color: AppColors.textSecondary,
+                          ),
+                        ),
+                        const SizedBox(height: 10),
+                        AppButton(
+                          key: const Key('gemini-ai-alternative-btn'),
+                          text: 'Nhận gợi ý từ Gemini AI',
+                          icon: Icons.auto_awesome,
+                          variant: AppButtonVariant.primary,
+                          onPressed: () async {
+                            final aiRecipe =
+                                await AiMealRecommendationSheet.show(
+                                  context: context,
+                                  mealType: widget.original.category == 'ca'
+                                      ? 'lunch'
+                                      : 'dinner',
+                                  targetCalories:
+                                      widget.original.calories.round(),
+                                  originalRecipe: widget.original,
+                                );
+                            if (aiRecipe != null && mounted) {
+                              setState(() => _selected = aiRecipe);
+                              await _replace();
+                            }
+                          },
                         ),
                       ],
                     ),

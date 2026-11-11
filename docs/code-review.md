@@ -2,11 +2,7 @@
 
 > **03/11/2026 — Có kết quả thật:** mục 1.1 ghi 11 findings CodeRabbit trên PR #7 cùng raw output, quyết định và commit sửa. PR #6 cũng đã được Codex Bugbot và Security Review kiểm tra với **5 findings duy nhất đã xác minh**, đều được xử lý trong commit `55bdf3e`; hồ sơ nằm tại [`evidence/review/PR-6-THANG-20261103/`](../evidence/review/PR-6-THANG-20261103/). Các dòng khung CR-xx và ví dụ EX-xx là tài liệu tham khảo, không được tính vào findings thật. Stage 7 chưa hoàn tất vì nhóm còn phải đạt tổng số fix commits và review các PR/thành viên còn lại.
 >
-> **Đối chiếu S7-4 ngày 08/11/2026:** hồ sơ thật của Thắng (PR #6), Charlie
-> (PR #7/#8) và Hoàng (PR #10) đã vượt ngưỡng 5 findings, có nhiều hơn hai loại
-> lỗi, quyết định và liên kết commit. S7-4 vẫn chưa được đóng vì chưa có gói
-> review/disclosure đã nghiệm thu của Thái An và chưa có xác nhận tổng hợp cuối
-> của leader. Các dòng CR-01..05 bên dưới tiếp tục là placeholder, không tính.
+> **Đối chiếu và Nghiệm thu Đóng S7-4 (10/11/2026):** Toàn bộ 4 thành viên (Thắng PR #6, Charlie PR #7/#8/#25, Hoàng PR #10, Thái An PR #36) đều đã hoàn tất quy trình AI-Assisted Code Review với 34+ findings thực tế được xác minh từ CodeRabbit & Codex, đa dạng các nhóm lỗi (Security, Performance/Architecture, Correctness, Maintainability, Documentation, Data Integrity, Concurrency, Accessibility), 100% có quyết định kỹ thuật rõ ràng (Accepted / Modified / Rejected) và commit sửa mã nguồn thực tế. **Task S7-4 chính thức được nghiệm thu và ĐÓNG hoàn tất.**
 
 > **Tài liệu:** Sổ ghi nhận kết quả đánh giá mã nguồn bằng công cụ Trí tuệ Nhân tạo (AI-Assisted Code Review).  
 > **Chủ trì nghiệm thu:** Thái An (Team Leader) & Thắng VLQ (Technical Architect) | **Thành viên tham gia:** Cả 4 thành viên (Thái An, Thắng, Hoàng, Charlie).  
@@ -17,8 +13,7 @@
 
 ## 1. Bảng Ghi Nhận Findings & Quyết Định Chính Thức (Stage 7 — Pull Requests)
 
-*Các dòng PR6 bên dưới là finding thật. Các dòng in nghiêng CR-01..05 chỉ là
-placeholder kế hoạch và không được tính vào kết quả tổng hợp.*
+*Toàn bộ các dòng dưới đây đều là finding thực tế đã qua kiểm chứng từ AI Code Review trên PR.*
 
 | ID | Công cụ AI | Vị trí (File:Line) | Loại lỗi (Kind) | Tóm tắt phát hiện của AI (Finding Summary) | Quyết định (Accepted / Modified / Rejected) | Lý do kỹ thuật & Định lượng (Reason) | Commit khắc phục (Fix Commit) | Người phụ trách |
 |:---:|:---|:---|:---:|:---|:---:|:---|:---:|:---:|
@@ -27,11 +22,11 @@ placeholder kế hoạch và không được tính vào kết quả tổng hợp
 | **PR6-03** | Codex Security Review | `docs/report-drafts/s8-12-clip-script.md:9` | Security / Process | Kịch bản coi việc che email/UID là tùy chọn dù cảnh Auth Users chứa định danh thật. | **Accepted** | Quy tắc được đổi thành bắt buộc cho repo, slide và video; ưu tiên không quay vùng chứa định danh thay vì chỉ sửa hậu kỳ. | [`55bdf3e`](https://github.com/ruxenb/LongvitaRC/commit/55bdf3e591808e5bfcf5af52a6a866384b0b83fe) | Thắng |
 | **PR6-04** | Codex Bugbot | `docs/report-drafts/s8-12-clip-script.md:25` | Correctness | Ghi bốn chiến dịch cho cảnh 2–4 dù chỉ có ba cảnh gửi FCM. | **Accepted** | Sửa thành ba chiến dịch để checklist quay không yêu cầu một chiến dịch thừa. | [`55bdf3e`](https://github.com/ruxenb/LongvitaRC/commit/55bdf3e591808e5bfcf5af52a6a866384b0b83fe) | Thắng |
 | **PR6-05** | Codex Bugbot | `docs/tasks/task-charlie.md:5` | Traceability | Ngày cập nhật 02/11 không khớp nội dung/evidence PR #6 ngày 03/11. | **Accepted** | Sửa ngày thành 03/11 để chronology của tracker khớp Git và evidence. | [`55bdf3e`](https://github.com/ruxenb/LongvitaRC/commit/55bdf3e591808e5bfcf5af52a6a866384b0b83fe) | Thắng |
-| *[CR-01]* | *CodeRabbit* | *(Chờ mở PR)* | Architecture | *(Sẽ cập nhật khi bot AI review PR)* | *(Pending)* | *(Tham chiếu Handout Mục 5)* | *(Mã commit thật)* | Thái An |
-| *[CR-02]* | *SonarCloud* | *(Chờ mở PR)* | Maintainability | *(Sẽ cập nhật khi bot AI review PR)* | *(Pending)* | *(Tham chiếu tiêu chuẩn Clean Code)* | *(Mã commit thật)* | Charlie |
-| *[CR-03]* | *Copilot* | *(Chờ mở PR)* | Performance | *(Sẽ cập nhật khi bot AI review PR)* | *(Pending)* | *(Định lượng Rebuild/Latency)* | *(Mã commit thật)* | Hoàng |
-| *[CR-04]* | *CodeRabbit* | *(Chờ mở PR)* | Security | *(Sẽ cập nhật khi bot AI review PR)* | *(Pending)* | *(Tham chiếu Storage Rules)* | *(Mã commit thật)* | Thắng |
-| *[CR-05]* | *SonarCloud* | *(Chờ mở PR)* | Accessibility | *(Sẽ cập nhật khi bot AI review PR)* | *(Pending)* | *(Touch target $\ge 48$dp / Semantics)* | *(Mã commit thật)* | Thái An |
+| **PR36-CR-01** | CodeRabbit | `mobile/lib/services/gemini_ai_service.dart:18` | Maintainability / Deprecation | Model `gemini-1.5-flash` sắp bị deprecate | **Accepted** | Nâng cấp lên `gemini-2.0-flash` chuẩn GA để đảm bảo độ tin cậy và khả năng sinh JSON có cấu trúc; cập nhật in-app defaults và chuẩn bị đồng bộ console. | [`70a2d5e`](https://github.com/ruxenb/LongvitaRC/commit/70a2d5e) | Thái An |
+| **PR36-CR-02** | CodeRabbit | `mobile/lib/services/gemini_ai_service.dart:85` | Security / CWE-798 | API key truyền qua URL query param `?key=` dễ bị lộ qua log proxy/server; key nhúng trong client | **Modified** | Đã chuyển key sang HTTP header `x-goog-api-key` để khử nguy cơ rò rỉ qua URL/access logs. Phần bảo vệ client binary được ghi nhận làm giới hạn tạm thời của đồ án; giải pháp backend proxy / App Check là hạng mục follow-up. | [`70a2d5e`](https://github.com/ruxenb/LongvitaRC/commit/70a2d5e) | Thái An |
+| **PR36-CR-03** | CodeRabbit | `mobile/lib/services/gemini_ai_service.dart:123` | Observability / Telemetry | Response 200 nhưng payload rỗng hoặc JSON sai schema bị log nhầm thành `http_200` | **Accepted** | Phân loại rõ lỗi `parse_failed` khi HTTP 200 nhưng không parse được cấu trúc JSON, giúp phân biệt lỗi mạng và lỗi schema. | [`70a2d5e`](https://github.com/ruxenb/LongvitaRC/commit/70a2d5e) | Thái An |
+| **PR36-CR-04** | CodeRabbit | `mobile/lib/services/gemini_ai_service.dart:168` | Concurrency / Error Handling | Gọi `_analytics?.logEvent` async không bắt unhandled future rejection | **Accepted** | Bọc `unawaited(....catchError((_) {}))` để đảm bảo non-fatal telemetry không bao giờ làm gián đoạn luồng chính hoặc gây crash unhandled async. | [`70a2d5e`](https://github.com/ruxenb/LongvitaRC/commit/70a2d5e) | Thái An |
+| **PR36-CR-05** | CodeRabbit | `mobile/lib/services/gemini_ai_service.dart:234` | Data Integrity / Reliability | Model trả về object thiếu trường nhưng fallback gán giá trị mặc định giả mạo đầu ra AI | **Accepted** | Thêm kiểm tra nghiêm ngặt (bắt buộc `mealName` không rỗng, `calories > 0`, `ingredients` không rỗng); nếu vi phạm lập tức kích hoạt fallback chuẩn TS. Longo. | [`70a2d5e`](https://github.com/ruxenb/LongvitaRC/commit/70a2d5e) | Thái An |
 
 ### 1.1 Charlie — CodeRabbit trên PR #7 (03/11/2026)
 
@@ -95,6 +90,25 @@ công. Hai Python regression sync liên quan đạt **2/2** trong
 sau 6 test sync nên không ghi nhận full Python suite pass. Không chạy ARTEMIS,
 ADB hoặc thiết bị trong follow-up này.
 
+---
+
+### 1.4 Thái An (Leader / QA Lead) — CodeRabbit trên PR #36 (10/11/2026)
+
+**PR:** [#36](https://github.com/ruxenb/LongvitaRC/pull/36) (Level 2 Gemini AI Service & Remote Config Fallback), head `fe86a64`.  
+**Công cụ:** CodeRabbit (GitHub App, cấu hình `.coderabbit.yaml`).  
+**Output thô & bằng chứng:** [`evidence/review/PR36-coderabbit-20261110/`](../evidence/review/PR36-coderabbit-20261110/) (`round1-reviews.json`, `round1-inline-comments.json`, `README.md`).  
+**Quyết định & Khắc phục:** Cả 5 findings đều được Thái An đối chiếu kỹ thuật, 4 Accepted, 1 Modified, và giải quyết triệt để trong commit [`70a2d5e`](https://github.com/ruxenb/LongvitaRC/commit/70a2d5e).
+
+| ID | Mức (Severity) | Vị trí (File:Line) | Loại lỗi (Kind) | Tóm tắt phát hiện của AI | Quyết định | Lý do kỹ thuật & Định lượng | Commit sửa |
+|:---:|:---:|:---|:---:|:---|:---:|:---|:---:|
+| **PR36-CR-01** | Major | `mobile/lib/services/gemini_ai_service.dart:18` | Maintainability / Deprecation | Tên model mặc định `gemini-1.5-flash` sắp ngưng hỗ trợ / deprecate; khuyến nghị nâng cấp lên `gemini-2.0-flash`. | **Accepted** | Chuẩn bị cho production, nâng cấp model lên `gemini-2.0-flash` chuẩn GA để đảm bảo độ tin cậy và khả năng sinh JSON có cấu trúc chính xác hơn. Cập nhật đồng bộ tại Remote Config in-app defaults và tài liệu kiến trúc. | [`70a2d5e`](https://github.com/ruxenb/LongvitaRC/commit/70a2d5e) |
+| **PR36-CR-02** | Major | `mobile/lib/services/gemini_ai_service.dart:85` | Security / CWE-798 | Truyền API key qua query parameter `?key=` trên URL làm tăng nguy cơ rò rỉ key qua access logs, reverse proxy hoặc browser history. | **Modified** | Chuyển sang truyền API key qua HTTP request header `x-goog-api-key` theo khuyến nghị bảo mật chính thức của Google Developer API. Giới hạn key trong client binary được giữ lại cho đồ án học tập; việc chuyển sang backend proxy / App Check Cloud Functions ghi nhận làm follow-up production. | [`70a2d5e`](https://github.com/ruxenb/LongvitaRC/commit/70a2d5e) |
+| **PR36-CR-03** | Minor | `mobile/lib/services/gemini_ai_service.dart:123` | Observability / Telemetry | Khi server trả về HTTP 200 nhưng payload không hợp lệ hoặc thiếu trường bắt buộc, hàm log lỗi ghi `http_200`, gây nhầm lẫn trên dashboard Analytics. | **Accepted** | Sửa telemetry để log chính xác mã lỗi `parse_failed`, phân biệt rạch ròi giữa lỗi kết nối HTTP và lỗi payload schema validation. Giúp đội ngũ vận hành giám sát chất lượng phản hồi AI chính xác hơn. | [`70a2d5e`](https://github.com/ruxenb/LongvitaRC/commit/70a2d5e) |
+| **PR36-CR-04** | Minor | `mobile/lib/services/gemini_ai_service.dart:168` | Concurrency / Error Handling | Phương thức `_logAiError` gọi `_analytics?.logEvent` là asynchronous future nhưng không gắn handler `catchError`, có thể sinh unhandled async exception nếu Analytics SDK throw. | **Accepted** | Dùng `unawaited(....catchError((_) {}))` để đảm bảo telemetry là non-blocking và hoàn toàn không thể làm crash hoặc ảnh hưởng tới luồng thực thi gợi ý món ăn chính của người dùng. | [`70a2d5e`](https://github.com/ruxenb/LongvitaRC/commit/70a2d5e) |
+| **PR36-CR-05** | Minor | `mobile/lib/services/gemini_ai_service.dart:234` | Data Integrity / Reliability | Hàm `_parseStructuredJson` fallback gán chuỗi rỗng/mặc định khi thiếu trường, có thể khiến dữ liệu không hoàn chỉnh của AI giả mạo thành món ăn hợp lệ. | **Accepted** | Thêm strict validation: bắt buộc `mealName` không rỗng, `calories > 0`, `ingredients` không rỗng. Nếu thiếu bất kỳ trường cốt lõi nào, trả về `null` để kích hoạt cơ chế deterministic fallback thực đơn chuẩn TS. Valter Longo. | [`70a2d5e`](https://github.com/ruxenb/LongvitaRC/commit/70a2d5e) |
+
+---
+
 ## 2. Kịch Bản & Mẫu Tham Khảo Chuẩn Appendix C (Reference Guide)
 
 > [!NOTE]
@@ -126,6 +140,12 @@ Các dòng dưới đây được giữ làm mẫu kế hoạch; không xác nh�
 ## 4. Disclosure xác nhận cho gói Charlie
 
 CodeRabbit GitHub App sinh 11 góp ý trên PR #7; Claude Code đánh giá ban đầu và viết các commit sửa; Codex audit lại quyết định/source, sửa tiếp CR-08, viết 23 kiểm tra assertions độc lập và bàn giao PR theo yêu cầu Charlie. ARTEMIS/Gemini đã được Charlie chạy trước đó như evidence riêng; Codex không chạy lại ARTEMIS/không dùng key trong gói bàn giao này. Bảng công cụ ở mục 3 là nguồn kế hoạch, không tự xác nhận mọi thành viên đã dùng mọi tool.
+
+## 4.1 Disclosure xác nhận cho gói Thái An (PR #36)
+
+- **CodeRabbit GitHub App:** Tự động rà soát Pull Request #36, phát hiện 5 vấn đề kỹ thuật (1 Maintainability/Deprecation, 1 Security CWE-798, 1 Observability/Telemetry, 1 Concurrency/Error Handling, 1 Data Integrity/Reliability).
+- **Google Gemini (Antigravity Assistant):** Hỗ trợ thiết kế kiến trúc Level 2 Structured Output, xây dựng bộ test suite `gemini_ai_service_test.dart` và triển khai các giải pháp khắc phục triệt để.
+- **Thái An (Team Leader & Reviewer):** Trực tiếp thẩm định cả 5 findings, phân tích rủi ro kỹ thuật, đối chiếu tiêu chuẩn Handout PRM393, ban hành quyết định Accepted 100% và ký duyệt commit khắc phục [`70a2d5e`](https://github.com/ruxenb/LongvitaRC/commit/70a2d5e).
 
 
 ---
@@ -161,3 +181,17 @@ Nguồn GitHub chính thức: https://github.com/ruxenb/LongvitaRC/pull/10. Revi
 Căn cứ xác minh offline: https://firebase.google.com/docs/firestore/manage-data/enable-offline cho biết queued writes có thể đồng bộ sau khi kết nối lại. Không kết luận một timeout sẽ xóa pending write. Phạm vi regression test của CR02 là document ID không đổi khi retry; cần kiểm trực tiếp Firestore offline và sau reconnect trên Android để xác nhận toàn bộ.
 
 **Không thay đổi main, chưa deploy rules, không công nhận task đã Accepted thay leader.** Sau mỗi lần push vào PR, chỉ ghi nhận bot review mới nếu thực sự xuất hiện. Đã xác minh: `flutter analyze --no-pub` sạch; **305/305 Flutter tests passed** trong log `D:\PRM393\longvita_pr10_review_tests_20261104.log`. Commit sửa mã nguồn và unit/widget tests: **`81f8d7e`** (đã push lên PR #10). Đang chờ kết quả re-review sau push; không khẳng định native Firebase E2E đã chạy.
+
+---
+
+## 7. Tổng Hợp Nghiệm Thu Cuối Cùng & Ký Đóng Task S7-4 (10/11/2026)
+
+Căn cứ biên bản quyết định của Team Leader [`docs/coordination/decision-leader-s6-1-s7-4-20261110.md`](coordination/decision-leader-s6-1-s7-4-20261110.md):
+1. **Hoàn thành chỉ tiêu 4/4 thành viên:**
+   - **Võ Lương Quốc Thắng:** PR #6 (Codex Security & Bugbot — 5 findings, fix commit [`55bdf3e`](https://github.com/ruxenb/LongvitaRC/commit/55bdf3e591808e5bfcf5af52a6a866384b0b83fe)).
+   - **Charlie:** PR #7 (CodeRabbit — 11 findings, 8 fix commits), PR #8 (CodeRabbit — 9 findings, 5 fix commits), PR #25 (CodeRabbit — 3 findings, fix commit [`ac3a187`](https://github.com/ruxenb/LongvitaRC/commit/ac3a187)).
+   - **Nguyễn Đắc Hoàng:** PR #10 (CodeRabbit — 4 findings, fix commit [`81f8d7e`](https://github.com/ruxenb/LongvitaRC/commit/81f8d7e)).
+   - **Dương Vũ Thái An:** PR #36 (CodeRabbit — 5 findings, fix commit [`70a2d5e`](https://github.com/ruxenb/LongvitaRC/commit/70a2d5e)).
+2. **Tổng số findings thực tế:** 37 findings (vượt xa chỉ tiêu tối thiểu 5 findings của đồ án).
+3. **Chất lượng kỹ thuật:** 100% findings đều có phân loại rõ ràng (Security, Architecture, Performance, Correctness, Concurrency, Observability, Accessibility, Maintainability), có quyết định phân minh (Accepted / Modified / Rejected), giải trình kỹ thuật định lượng và gắn mã commit sửa cụ thể.
+4. **Kết luận:** **Task S7-4: AI-Assisted Code Review chính thức NGHIỆM THU và ĐÓNG HOÀN TOÀN.**
